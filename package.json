@@ -1,0 +1,43 @@
+{
+  "name": "vl-rich-table",
+  "version": "0.0.0",
+  "description": "Een configureerbare data-table met paginering, sortering en zoeken op basis van een dynamische lijst van data.",
+  "scripts": {
+    "prepare": "npm update --dev vl-ui-util && npm run prepare:util",
+    "prepare:util": "npm explore vl-ui-util -- npm run util",
+    "test": "wct -l chrome,firefox --npm",
+    "release": "np",
+    "release:prepare": "npm run release:prepare:build && npm run release:prepare:imports && npm run release:prepare:css && npm run release:prepare:commit",
+    "release:prepare:build": "uglifyjs --compress --mangle --output vl-rich-table.js -- *.src.js",
+    "release:prepare:imports": "replace '/node_modules/vl-ui-core/vl-core.src.js' '/node_modules/vl-ui-core/vl-core.js' vl-rich-table.js",
+    "release:prepare:css": "replace '\\.\\./style.css' '/node_modules/vl-ui-rich-table/style.css' vl-rich-table.js",
+    "release:prepare:commit": "git add -f vl-rich-table.js && git commit --amend --no-edit && git pull",
+    "release:testless": "np --yolo",
+    "demo": "http-server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/milieuinfo/webcomponent-vl-rich-table.git"
+  },
+  "author": "DIDM",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/milieuinfo/webcomponent-vl-rich-table/issues"
+  },
+  "homepage": "https://github.com/milieuinfo/webcomponent-vl-rich-table#readme",
+  "dependencies": {
+    "vl-ui-core": "^2.0.0",
+    "replace": "^1.1.1"
+  },
+  "devDependencies": {
+    "@govflanders/vl-ui-util": "^3.9.1",
+    "np": "3.0.4",
+    "uglify-js-es6": "2.8.9",
+    "vl-ui-util": "^2.0.13",
+    "wct-browser-legacy": "1.0.2",
+    "web-component-tester": "6.9.2"
+  },
+  "publishConfig": {
+    "registry": "http://artifactory-pr-build.lb.cumuli.be:8081/artifactory/api/npm/acd-npm/"
+  }
+}

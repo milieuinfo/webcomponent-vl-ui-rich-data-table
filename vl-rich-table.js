@@ -1,0 +1,1 @@
+import{VlElement,define}from"/node_modules/vl-ui-core/vl-core.js";export class VlRichTable extends VlElement(HTMLElement){};define("vl-rich-table",VlRichTable);
