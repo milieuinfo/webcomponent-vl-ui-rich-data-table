@@ -10,6 +10,23 @@
 </head>
 
 <body>
+
+  <test-fixture id="vl-rich-table-fixture">
+    <template>
+      <vl-rich-table>
+        <vl-rich-table-field data-value="test" label="Test"></vl-rich-table-field>
+      </vl-rich-table>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="vl-rich-table-data-fixture">
+    <template>
+      <vl-rich-table data='[{"test": "Dit is testdata."}]'>
+        <vl-rich-table-field data-value="test" label="Test"></vl-rich-table-field>
+      </vl-rich-table>
+    </template>
+  </test-fixture>
+
   <test-fixture id="vl-rich-table-pager-fixture">
     <template>
       <vl-rich-table>
@@ -22,10 +39,44 @@
     suite('vl-rich-table', () => {
       const should = chai.should();
 
+      test('met een vl-rich-table-field wordt een table header cell gemaakt', () => {
+        const table = fixture('vl-rich-table-fixture');
+
+        assert.isNotNull(table.shadowRoot.querySelector("table > thead > tr > th"));
+        assert.equal(table.shadowRoot.querySelector("table > thead > tr > th").textContent, 'Test');
+      });
+
+      test('bij het toevoegen van data wordt een rij gemaakt met de data op basis van de data-value van de field', () => {
+        const table = fixture('vl-rich-table-fixture');
+
+        table.data = [{test: "Dit is testdata."}];
+
+        assert.isNotNull(table.shadowRoot.querySelector("table > tbody > tr > td"));
+        assert.equal(table.shadowRoot.querySelector("table > tbody > tr > td").textContent, 'Dit is testdata.');
+      });
+
+      test('bij voorgedefinieerde data zal de tabel inhoud de testdata bevatten', async () => {
+        const table = fixture('vl-rich-table-data-fixture');
+
+        await flush();
+
+        assert.isNotNull(table.shadowRoot.querySelector("table > tbody > tr > td"));
+        assert.equal(table.shadowRoot.querySelector("table > tbody > tr > td").textContent, 'Dit is testdata.');
+      });
+
+      test('bij het wijzigen van data via het attribuut zal de tabel inhoud ook veranderen', () => {
+        const table = fixture('vl-rich-table-data-fixture');
+
+        table.setAttribute('data', '[{"test": "Dit is andere data."}]');
+
+        assert.isNotNull(table.shadowRoot.querySelector("table > tbody > tr > td"));
+        assert.equal(table.shadowRoot.querySelector("table > tbody > tr > td").textContent, 'Dit is andere data.');
+      });
+
       test('pager wordt in de footer toegevoegd', () => {
         const table = fixture('vl-rich-table-pager-fixture');
-      assert.isNotNull(table.shadowRoot.querySelector("table > tfoot > tr >td >vl-rich-table-pager"));
-      })
+        assert.isNotNull(table.shadowRoot.querySelector("table > tfoot > tr >td >vl-rich-table-pager"));
+      });
     });
   </script>
 </body>
