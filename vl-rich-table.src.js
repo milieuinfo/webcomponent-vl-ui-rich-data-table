@@ -2,6 +2,8 @@ import {VlElement, define} from '/node_modules/vl-ui-core/vl-core.js';
 
 import {VlDataTable} from '/node_modules/vl-ui-data-table/vl-data-table.js';
 
+import {VlPager} from '/node_modules/vl-ui-pager/vl-pager.js';
+
 /**
  * VlRichTable
  * @class
@@ -34,6 +36,10 @@ export class VlRichTable extends VlElement(HTMLElement) {
             <tr>
             </tr>
           </thead>
+          <tfoot>
+            <tr>
+            </tr>
+          </tfoot>
           <tbody>
           </tbody>
         </table>
@@ -47,7 +53,10 @@ export class VlRichTable extends VlElement(HTMLElement) {
     Array.from(this._tableBody.children).forEach(child => child.remove());
     this._data.forEach(data => {
       let row = document.createElement("tr");
-      Array.from(this.children).forEach(field => {
+      Array.from(this.children).filter(child => {
+        return child.tagName.toLowerCase()
+            === 'vl-rich-table-field'
+      }).forEach(field => {
         row.appendChild(
             this.__createTd(data[field.getAttribute('data-value')]));
       });
@@ -85,10 +94,20 @@ export class VlRichTable extends VlElement(HTMLElement) {
     return this.shadowRoot.querySelector('tbody');
   }
 
+  get _tableFooterRow() {
+    return this.shadowRoot.querySelector('tfoot > tr');
+  }
+
   addTableHeaderCell(cell) {
     this._tableHeaderRow.appendChild(cell);
   }
 
+  addTableFooterCell(cell) {
+    let td = document.createElement("td");
+    td.setAttribute("colspan", 9999);
+    td.appendChild(cell);
+    this._tableFooterRow.append(td);
+  }
 }
 
 define('vl-rich-table', VlRichTable);
@@ -125,7 +144,8 @@ export class VlRichTableField extends VlElement(HTMLElement) {
       // }
       this.richTable.addTableHeaderCell(headerCell);
     } else {
-      console.log('Een VlRichTableField moet altijd als parent een vl-rich-table hebben.')
+      console.log(
+          'Een VlRichTableField moet altijd als parent een vl-rich-table hebben.')
     }
   }
 
@@ -138,3 +158,40 @@ export class VlRichTableField extends VlElement(HTMLElement) {
 }
 
 define('vl-rich-table-field', VlRichTableField);
+
+/**
+ * VlRichTablePager
+ * @class
+ * @classdesc
+ *
+ * @extends VlPager
+ *
+ * @see {@link https://www.github.com/milieuinfo/webcomponent-vl-ui-pager/releases/latest|Release notes}
+ * @see {@link https://www.github.com/milieuinfo/webcomponent-vl-ui-pager/issues|Issues}
+ * @see {@link https://webcomponenten.omgeving.vlaanderen.be/demo/vl-pager.html|Demo}
+ *
+ * @see {@link https://www.github.com/milieuinfo/webcomponent-vl-ui-rich-table/releases/latest|Release notes}
+ * @see {@link https://www.github.com/milieuinfo/webcomponent-vl-ui-rich-table/issues|Issues}
+ * @see {@link https://webcomponenten.omgeving.vlaanderen.be/demo/vl-rich-table.html|Demo}
+ **/
+export class VlRichTablePager extends VlPager {
+
+  connectedCallback() {
+    super.connectedCallback();
+    if (this.richTable) {
+      this.richTable.addTableFooterCell(this);
+    } else {
+      console.log(
+          'Een VlRichTablePager moet altijd als parent een vl-rich-table hebben.')
+    }
+  }
+
+  get richTable() {
+    if (this.parentNode && this.parentNode.tagName.toLowerCase()
+        === 'vl-rich-table') {
+      return this.parentNode;
+    }
+  }
+}
+
+define('vl-rich-table-pager', VlRichTablePager);
