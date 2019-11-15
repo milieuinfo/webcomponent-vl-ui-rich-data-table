@@ -10,9 +10,11 @@
 </head>
 
 <body>
-  <test-fixture id="vl-rich-table-fixture">
+  <test-fixture id="vl-rich-table-pager-fixture">
     <template>
-      
+      <vl-rich-table>
+        <vl-rich-table-pager align-right total-items="100" items-per-page="10" current-page="1"></vl-rich-table-pager>
+      </vl-rich-table>
     </template>
   </test-fixture>
 
@@ -20,10 +22,10 @@
     suite('vl-rich-table', () => {
       const should = chai.should();
 
-      test('vl-rich-table test', () => {
-        const richTable = fixture('vl-rich-table-fixture');
-        assert.isTrue(true);
-      });
+      test('pager wordt in de footer toegevoegd', () => {
+        const table = fixture('vl-rich-table-pager-fixture');
+      assert.isNotNull(table.shadowRoot.querySelector("table > tfoot > tr >td >vl-rich-table-pager"));
+      })
     });
   </script>
 </body>

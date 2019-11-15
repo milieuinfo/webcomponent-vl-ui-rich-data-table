@@ -53,15 +53,17 @@ export class VlRichTable extends VlElement(HTMLElement) {
     Array.from(this._tableBody.children).forEach(child => child.remove());
     this._data.forEach(data => {
       let row = document.createElement("tr");
-      Array.from(this.children).filter(child =>{return child.tagName.toLowerCase()
-          === 'vl-rich-table-field'}).forEach(field => {
+      Array.from(this.children).filter(child => {
+        return child.tagName.toLowerCase()
+            === 'vl-rich-table-field'
+      }).forEach(field => {
         row.appendChild(
             this.__createTd(data[field.getAttribute('data-value')]));
       });
       this._tableBody.appendChild(row);
     });
   }
-  
+
   _dataChangedCallback(oldValue, newValue) {
     this.data = JSON.parse(newValue);
   }
@@ -102,7 +104,7 @@ export class VlRichTable extends VlElement(HTMLElement) {
 
   addTableFooterCell(cell) {
     let td = document.createElement("td");
-    td.setAttribute("colspan",9999);
+    td.setAttribute("colspan", 9999);
     td.appendChild(cell);
     this._tableFooterRow.append(td);
   }
@@ -157,7 +159,22 @@ export class VlRichTableField extends VlElement(HTMLElement) {
 
 define('vl-rich-table-field', VlRichTableField);
 
-export class VlRichTablePager extends VlPager{
+/**
+ * VlRichTablePager
+ * @class
+ * @classdesc
+ *
+ * @extends VlPager
+ *
+ * @see {@link https://www.github.com/milieuinfo/webcomponent-vl-ui-pager/releases/latest|Release notes}
+ * @see {@link https://www.github.com/milieuinfo/webcomponent-vl-ui-pager/issues|Issues}
+ * @see {@link https://webcomponenten.omgeving.vlaanderen.be/demo/vl-pager.html|Demo}
+ *
+ * @see {@link https://www.github.com/milieuinfo/webcomponent-vl-ui-rich-table/releases/latest|Release notes}
+ * @see {@link https://www.github.com/milieuinfo/webcomponent-vl-ui-rich-table/issues|Issues}
+ * @see {@link https://webcomponenten.omgeving.vlaanderen.be/demo/vl-rich-table.html|Demo}
+ **/
+export class VlRichTablePager extends VlPager {
 
   connectedCallback() {
     super.connectedCallback();
