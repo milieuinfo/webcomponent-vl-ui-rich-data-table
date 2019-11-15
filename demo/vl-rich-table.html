@@ -69,5 +69,25 @@
         </vl-rich-table>
       </div>
     </div>
+
+    <div>
+      <h2>Sortable</h2>
+      <pre>
+        <code class="line-numbers language-markup">
+          &#x3C;vl-rich-table data=&#x27;[{&#x22;id&#x22;: 1, &#x22;name&#x22;: &#x22;Lorem ipsum&#x22;, &#x22;description&#x22;: &#x22;Lorem ipsum dolor sit amet, consectetur adipisicing elit.&#x22;}, {&#x22;id&#x22;: 2, &#x22;name&#x22;: &#x22;Amet aut&#x22;, &#x22;description&#x22;: &#x22;Amet aut, blanditiis dignissimos, earum et eveniet explicabo in labore minus odio odit optio, perferendis provident quas quis quod totam vel vero.&#x22;}]&#x27;&#x3E;
+            &#x3C;vl-rich-table-field data-value=&#x22;name&#x22; label=&#x22;Naam&#x22;&#x3E;&#x3C;/vl-rich-table-field&#x3E;
+            &#x3C;vl-rich-table-field data-value=&#x22;description&#x22; label=&#x22;Omschrijving&#x22;&#x3E;&#x3C;/vl-rich-table-field&#x3E;
+            &#x3c;vl-pager align-right total-items=&#x22;100&#x22; items-per-page=&#x22;10&#x22; current-page=&#x22;1&#x22;&#x3E;&#x3c;/vl-pager&#x3E;
+          &#x3C;/vl-rich-table&#x3E;
+        </code>
+      </pre>
+      <div class="demo">
+        <vl-rich-table data='[{"id": 1, "name": "Lorem ipsum", "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit."}, {"id": 2, "name": "Amet aut", "description": "Amet aut, blanditiis dignissimos, earum et eveniet explicabo in labore minus odio odit optio, perferendis provident quas quis quod totam vel vero."}]'>
+          <vl-rich-table-field sortable data-value="name" label="Naam"></vl-rich-table-field>
+          <vl-rich-table-field data-value="description" label="Omschrijving"></vl-rich-table-field>
+          <vl-rich-table-pager align-right total-items="100" items-per-page="10" current-page="1"></vl-rich-table-pager>
+        </vl-rich-table>
+      </div>
+    </div>
   </body>
 </html>

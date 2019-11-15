@@ -130,15 +130,18 @@ define('vl-rich-table', VlRichTable);
  * @see {@link https://webcomponenten.omgeving.vlaanderen.be/demo/vl-rich-table.html|Demo}
  */
 export class VlRichTableField extends VlElement(HTMLElement) {
+  static get _observedAttributes() {
+    return ['order'];
+  }
 
   connectedCallback() {
     if (this.richTable) {
       let headerCell = document.createElement("th");
       headerCell.appendChild(
           document.createTextNode(this.getAttribute('label')));
-      // if (this.hasAttribute('sortable')) {
-      // todo add sort UIG-256
-      // }
+      if (this.hasAttribute('sortable')) {
+        headerCell.addEventListener("click",(e) => {console.log("e",e.target)});
+      }
       // if (this.hasAttribute('searchable')) {
       // todo add search UIG-255
       // }
@@ -147,6 +150,12 @@ export class VlRichTableField extends VlElement(HTMLElement) {
       console.log(
           'Een VlRichTableField moet altijd als parent een vl-rich-table hebben.')
     }
+  }
+
+
+
+  _sort() {
+
   }
 
   get richTable() {
@@ -195,3 +204,7 @@ export class VlRichTablePager extends VlPager {
 }
 
 define('vl-rich-table-pager', VlRichTablePager);
+
+export class VlRichTableSort extends VlElement(HTMLElement) {
+
+}
