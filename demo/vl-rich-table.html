@@ -7,5 +7,47 @@
     </head>
 
 	<body>
-    </body>
+
+    <h1>vl-ui-rich-table demo</h1>
+
+    <div>
+      <h2>Rich table met dynamische data</h2>
+      <pre>
+        <code class="line-numbers language-markup">
+        &#x3C;vl-rich-table id=&#x22;dynamic-data&#x22;&#x3E;
+          &#x3C;vl-rich-table-field data-value=&#x22;id&#x22; label=&#x22;ID&#x22;&#x3E;&#x3C;/vl-rich-table-field&#x3E;
+          &#x3C;vl-rich-table-field data-value=&#x22;name&#x22; label=&#x22;Naam&#x22;&#x3E;&#x3C;/vl-rich-table-field&#x3E;
+        &#x3C;/vl-rich-table&#x3E;
+        &#x3C;button type=&#x22;button&#x22; onclick=&#x27;document.getElementById(&#x22;dynamic-data&#x22;).data = [{id: 1, name:&#x22;Test&#x22;}, {id: 2, name:&#x22;Test2&#x22;}, {id: 3, name:&#x22;Test3&#x22;}]&#x27;&#x3E;Voeg testdata toe&#x3C;/button&#x3E;
+        &#x3C;button type=&#x22;button&#x22; onclick=&#x27;document.getElementById(&#x22;dynamic-data&#x22;).data = []&#x27;&#x3E;Verwijder data&#x3C;/button&#x3E;
+        </code>
+      </pre>
+      <div class="demo">
+        <vl-rich-table id="dynamic-data">
+          <vl-rich-table-field data-value="id" label="ID"></vl-rich-table-field>
+          <vl-rich-table-field data-value="name" label="Naam"></vl-rich-table-field>
+        </vl-rich-table>
+        <button type="button" onclick='document.getElementById("dynamic-data").data = [{id: 1, name:"Test"}, {id: 2, name:"Test2"}, {id: 3, name:"Test3"}]'>Voeg testdata toe</button>
+        <button type="button" onclick='document.getElementById("dynamic-data").data = []'>Verwijder data</button>
+      </div>
+    </div>
+
+    <div>
+      <h2>Rich table met voorgedefinieerde data</h2>
+      <pre>
+        <code class="line-numbers language-markup">
+          &#x3C;vl-rich-table data=&#x27;[{&#x22;id&#x22;: 1, &#x22;name&#x22;: &#x22;Lorem ipsum&#x22;, &#x22;description&#x22;: &#x22;Lorem ipsum dolor sit amet, consectetur adipisicing elit.&#x22;}, {&#x22;id&#x22;: 2, &#x22;name&#x22;: &#x22;Amet aut&#x22;, &#x22;description&#x22;: &#x22;Amet aut, blanditiis dignissimos, earum et eveniet explicabo in labore minus odio odit optio, perferendis provident quas quis quod totam vel vero.&#x22;}]&#x27;&#x3E;
+            &#x3C;vl-rich-table-field data-value=&#x22;name&#x22; label=&#x22;Naam&#x22;&#x3E;&#x3C;/vl-rich-table-field&#x3E;
+            &#x3C;vl-rich-table-field data-value=&#x22;description&#x22; label=&#x22;Omschrijving&#x22;&#x3E;&#x3C;/vl-rich-table-field&#x3E;
+          &#x3C;/vl-rich-table&#x3E;
+        </code>
+      </pre>
+      <div class="demo">
+        <vl-rich-table data='[{"id": 1, "name": "Lorem ipsum", "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit."}, {"id": 2, "name": "Amet aut", "description": "Amet aut, blanditiis dignissimos, earum et eveniet explicabo in labore minus odio odit optio, perferendis provident quas quis quod totam vel vero."}]'>
+          <vl-rich-table-field data-value="name" label="Naam"></vl-rich-table-field>
+          <vl-rich-table-field data-value="description" label="Omschrijving"></vl-rich-table-field>
+        </vl-rich-table>
+      </div>
+    </div>
+  </body>
 </html>
