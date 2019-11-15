@@ -1,8 +1,7 @@
 import {VlElement, define} from '/node_modules/vl-ui-core/vl-core.js';
-
 import {VlDataTable} from '/node_modules/vl-ui-data-table/vl-data-table.js';
-
 import {VlPager} from '/node_modules/vl-ui-pager/vl-pager.js';
+import {VlIcon} from '/node_modules/vl-ui-icon/vl-icon.js';
 
 /**
  * VlRichTable
@@ -28,6 +27,7 @@ export class VlRichTable extends VlElement(HTMLElement) {
     super(`
         <style>
           @import "/node_modules/vl-ui-data-table/style.css";
+          @import "../style.css";
         </style>
 
         <slot></slot>
@@ -144,7 +144,13 @@ export class VlRichTableField extends VlElement(HTMLElement) {
       headerCell.appendChild(
           document.createTextNode(this.getAttribute('label')));
       if (this.hasAttribute('sortable')) {
-        headerCell.addEventListener("click",(e) => {console.log("e",e.target)});
+        headerCell.classList.add('vl-sortable');
+        let icon = document.createElement('span','vl-icon');
+        icon.setAttribute("icon","sort")
+        headerCell.appendChild(icon);
+        icon.addEventListener("click", (e) => {
+          this._sort(e.target);
+        });
       }
       // if (this.hasAttribute('searchable')) {
       // todo add search UIG-255
@@ -156,10 +162,29 @@ export class VlRichTableField extends VlElement(HTMLElement) {
     }
   }
 
+  get order() {
+    return this.getAttribute('order');
+  }
 
+  _sort(th) {
+    if (this.order) {
+      if (this.order === 'desc') {
+        this.setAttribute('order','asc');
+        th.setAttribute("icon","nav-up")
+      } else if (this.order === 'asc') {
+        this.removeAttribute('order');
+        th.setAttribute("icon","sort")
+      }
+    } else {
+      this.setAttribute('order','desc');
+      th.setAttribute("icon","nav-down")
+    }
+  }
 
-  _sort() {
-
+  _orderChangedCallback(oldValue, newValue) {
+    this.richTable.dispatchEvent(new CustomEvent('sort', {
+      detail: {field: this.getAttribute('data-value'), oldValue: oldValue, newValue: newValue}
+    }))
   }
 
   get richTable() {
@@ -208,7 +233,3 @@ export class VlRichTablePager extends VlPager {
 }
 
 define('vl-rich-table-pager', VlRichTablePager);
-
-export class VlRichTableSort extends VlElement(HTMLElement) {
-
-}
