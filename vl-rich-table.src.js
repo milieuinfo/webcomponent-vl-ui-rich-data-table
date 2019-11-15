@@ -74,9 +74,13 @@ export class VlRichTable extends VlElement(HTMLElement) {
 
   set data(data) {
     this._data = data;
-    if (Array.from(this.children).every(child => child.richTable === this)) {
+    if (this._isReady()) {
       this._createRows();
     }
+  }
+
+  _isReady() {
+    return Array.from(this.children).every(child => child.richTable === this);
   }
 
   __createTd(textContent) {
