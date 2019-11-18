@@ -90,6 +90,10 @@
         <script>
           document.querySelector('#sortableTable').addEventListener('sort',(e) => {
             console.log("sort:",e);
+          });
+
+          document.querySelector('#sortableTable').addEventListener('pagechange',(e) => {
+            console.log("pagechange:",e);
           })
         </script>
       </div>

@@ -145,8 +145,8 @@ export class VlRichTableField extends VlElement(HTMLElement) {
           document.createTextNode(this.getAttribute('label')));
       if (this.hasAttribute('sortable')) {
         headerCell.classList.add('vl-sortable');
-        let icon = document.createElement('span','vl-icon');
-        icon.setAttribute("icon","sort")
+        let icon = document.createElement('span', 'vl-icon');
+        icon.setAttribute("icon", "sort");
         headerCell.appendChild(icon);
         icon.addEventListener("click", (e) => {
           this._sort(e.target);
@@ -169,21 +169,25 @@ export class VlRichTableField extends VlElement(HTMLElement) {
   _sort(th) {
     if (this.order) {
       if (this.order === 'desc') {
-        this.setAttribute('order','asc');
-        th.setAttribute("icon","nav-up")
+        this.setAttribute('order', 'asc');
+        th.setAttribute("icon", "nav-up")
       } else if (this.order === 'asc') {
         this.removeAttribute('order');
-        th.setAttribute("icon","sort")
+        th.setAttribute("icon", "sort")
       }
     } else {
-      this.setAttribute('order','desc');
-      th.setAttribute("icon","nav-down")
+      this.setAttribute('order', 'desc');
+      th.setAttribute("icon", "nav-down")
     }
   }
 
   _orderChangedCallback(oldValue, newValue) {
     this.richTable.dispatchEvent(new CustomEvent('sort', {
-      detail: {field: this.getAttribute('data-value'), oldValue: oldValue, newValue: newValue}
+      detail: {
+        field: this.getAttribute('data-value'),
+        oldValue: oldValue,
+        newValue: newValue
+      }
     }))
   }
 
@@ -216,18 +220,30 @@ export class VlRichTablePager extends VlPager {
 
   connectedCallback() {
     super.connectedCallback();
-    if (this.richTable) {
-      this.richTable.addTableFooterCell(this);
+    if (this._tableToInsert) {
+      this._tableToInsert.addTableFooterCell(this);
+      this.addEventListener('changed', (e) => {
+        this.richTable.dispatchEvent(new CustomEvent('pagechange',
+            {detail: e.detail}));
+      });
     } else {
       console.log(
           'Een VlRichTablePager moet altijd als parent een vl-rich-table hebben.')
     }
   }
 
-  get richTable() {
+  get _tableToInsert() {
     if (this.parentNode && this.parentNode.tagName.toLowerCase()
         === 'vl-rich-table') {
       return this.parentNode;
+    }
+  }
+
+  get richTable() {
+    if (this.getRootNode() && this.getRootNode().host
+        && this.getRootNode().host.tagName.toLowerCase()
+        === 'vl-rich-table') {
+      return this.getRootNode().host;
     }
   }
 }
