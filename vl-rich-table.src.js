@@ -168,36 +168,40 @@ export class VlRichTableField extends VlElement(HTMLElement) {
   connectedCallback() {
     if (this.richTable) {
       const headerCell = document.createElement("th");
+      this._headerCell = headerCell;
       headerCell.appendChild(
           document.createTextNode(this.getAttribute('label')));
       if (this.hasAttribute('sortable')) {
-        headerCell.classList.add('vl-sortable');
-        const span = document.createElement('span', 'vl-icon');
-        span.setAttribute('before', '');
-        span.setAttribute('icon', 'sort');
-        span.setAttribute('name', 'sortable-span');
-        const text = document.createElement('label');
-        text.setAttribute('name', 'sortable-text');
-        headerCell.appendChild(span);
-        headerCell.appendChild(text);
-        span.addEventListener("click", () => {
-          this._sortButtonClicked();
-        });
-
-        this.richTable.addEventListener('sort', () => {
-          console.log("sort", this);
-          this._updateSortableHeader();
-        });
+        this._dressSortableHeader();
       }
       // if (this.hasAttribute('searchable')) {
       // todo add search UIG-255
       // }
-      this._headerCell = headerCell;
       this.richTable.addTableHeaderCell(headerCell);
     } else {
       console.log(
           'Een VlRichTableField moet altijd als parent een vl-rich-table hebben.')
     }
+  }
+
+  _dressSortableHeader() {
+    const headerCell = this._headerCell;
+    headerCell.classList.add('vl-sortable');
+    const span = document.createElement('span', 'vl-icon');
+    span.setAttribute('before', '');
+    span.setAttribute('icon', 'sort');
+    span.setAttribute('name', 'sortable-span');
+    const text = document.createElement('label');
+    text.setAttribute('name', 'sortable-text');
+    headerCell.appendChild(span);
+    headerCell.appendChild(text);
+    span.addEventListener("click", () => {
+      this._sortButtonClicked();
+    });
+
+    this.richTable.addEventListener('sort', () => {
+      this._updateSortableHeader();
+    });
   }
 
   get direction() {
@@ -214,17 +218,14 @@ export class VlRichTableField extends VlElement(HTMLElement) {
       if (this.direction === desc) {
         this.richTable.sortCriterias.forEach(criteria => {
           if (criteria.name === this.fieldName) {
-            console.log("desc");
             criteria.direction = asc;
           }
         });
       } else if (this.direction === asc) {
-        console.log("asc");
         this.richTable.sortCriterias = this.richTable.sortCriterias.filter(
             criteria => criteria.name !== this.fieldName);
       }
     } else {
-      console.log("remove");
       this.richTable.sortCriterias.push(
           {name: this.fieldName, direction: 'desc'});
     }
@@ -243,7 +244,6 @@ export class VlRichTableField extends VlElement(HTMLElement) {
         sortableSpan = this._headerCell.querySelector(
             '[name="sortable-span"]'),
         sortableText = this._headerCell.querySelector('[name="sortable-text"]');
-    console.log("priority:",priority,"critertia:",criteria);
     if (criteria) {
       switch (criteria.direction) {
         case asc:
@@ -255,7 +255,6 @@ export class VlRichTableField extends VlElement(HTMLElement) {
           this.setAttribute('direction', desc);
           sortableText.innerHTML = priority + 1;
           sortableSpan.setAttribute("icon", "nav-down");
-          console.log('nav-down', this, this._headerCell);
           break;
         default:
           console.error(
@@ -265,7 +264,6 @@ export class VlRichTableField extends VlElement(HTMLElement) {
       this.removeAttribute('direction');
       sortableText.innerHTML ='';
       sortableSpan.setAttribute("icon", "sort");
-      console.log("default");
     }
   }
 
