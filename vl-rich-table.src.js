@@ -128,6 +128,13 @@ export class VlRichTable extends VlElement(HTMLElement) {
 
 define('vl-rich-table', VlRichTable);
 
+export const SortDirections = {
+  DESCENDING: 'desc', ASCENDING: 'asc'
+};
+
+const asc = SortDirections.ASCENDING,
+    desc = SortDirections.DESCENDING;
+
 /**
  * VlRichTableField
  * @class
@@ -150,23 +157,42 @@ export class VlRichTableField extends VlElement(HTMLElement) {
     return ['direction', 'priority'];
   }
 
+  get _headerCell() {
+    return this.__headerCell;
+  }
+
+  set _headerCell(headerCell) {
+    this.__headerCell = headerCell;
+  }
+
   connectedCallback() {
     if (this.richTable) {
-      let headerCell = document.createElement("th");
+      const headerCell = document.createElement("th");
       headerCell.appendChild(
           document.createTextNode(this.getAttribute('label')));
       if (this.hasAttribute('sortable')) {
         headerCell.classList.add('vl-sortable');
-        let icon = document.createElement('span', 'vl-icon');
-        icon.setAttribute("icon", "sort");
-        headerCell.appendChild(icon);
-        icon.addEventListener("click", (e) => {
-          this._sort(e.target);
+        const span = document.createElement('span', 'vl-icon');
+        span.setAttribute('before', '');
+        span.setAttribute('icon', 'sort');
+        span.setAttribute('name', 'sortable-span');
+        const text = document.createElement('label');
+        text.setAttribute('name', 'sortable-text');
+        headerCell.appendChild(span);
+        headerCell.appendChild(text);
+        span.addEventListener("click", () => {
+          this._sortButtonClicked();
+        });
+
+        this.richTable.addEventListener('sort', () => {
+          console.log("sort", this);
+          this._updateSortableHeader();
         });
       }
       // if (this.hasAttribute('searchable')) {
       // todo add search UIG-255
       // }
+      this._headerCell = headerCell;
       this.richTable.addTableHeaderCell(headerCell);
     } else {
       console.log(
@@ -174,44 +200,33 @@ export class VlRichTableField extends VlElement(HTMLElement) {
     }
   }
 
-  calculatePriority() {
-    let priority = 0;
-    this.richTable.headers.forEach(
-        header => {
-          if (priority > header.getAttribute('priority')) {
-            priority = header.getAttribute('priority') + 1
-          }
-        }
-    );
-    return priority;
-  }
-
   get direction() {
     return this.getAttribute('direction');
   }
 
+  get fieldName() {
+    return this.getAttribute('data-value');
+  }
+
   //null -> des -> asc -> null
-  _sort(th) {
-    const field = this.getAttribute('data-value');
+  _sortButtonClicked(e) {
     if (this.direction) {
-      if (this.direction === 'desc') {
-        this.setAttribute('direction', 'asc');
+      if (this.direction === desc) {
         this.richTable.sortCriterias.forEach(criteria => {
-          if (criteria.name === field) {
-            criteria.direction = 'asc';
+          if (criteria.name === this.fieldName) {
+            console.log("desc");
+            criteria.direction = asc;
           }
         });
-        th.setAttribute("icon", "nav-up")
-      } else if (this.direction === 'asc') {
-        this.removeAttribute('direction');
+      } else if (this.direction === asc) {
+        console.log("asc");
         this.richTable.sortCriterias = this.richTable.sortCriterias.filter(
-            criteria => criteria.name !== field);
-        th.setAttribute("icon", "sort");
+            criteria => criteria.name !== this.fieldName);
       }
     } else {
-      this.setAttribute('direction', 'desc');
-      this.richTable.sortCriterias.push({name: field, direction: 'desc'});
-      th.setAttribute("icon", "nav-down")
+      console.log("remove");
+      this.richTable.sortCriterias.push(
+          {name: this.fieldName, direction: 'desc'});
     }
 
     this.richTable.dispatchEvent(new CustomEvent('sort', {
@@ -220,6 +235,38 @@ export class VlRichTableField extends VlElement(HTMLElement) {
           }
         }
     ));
+  }
+
+  _updateSortableHeader() {
+    const priority = this.richTable.sortCriterias.findIndex(criteria => criteria.name === this.fieldName),
+        criteria = priority > -1 ? this.richTable.sortCriterias[priority] : null,
+        sortableSpan = this._headerCell.querySelector(
+            '[name="sortable-span"]'),
+        sortableText = this._headerCell.querySelector('[name="sortable-text"]');
+    console.log("priority:",priority,"critertia:",criteria);
+    if (criteria) {
+      switch (criteria.direction) {
+        case asc:
+          this.setAttribute('direction', asc);
+          sortableText.innerHTML = priority + 1;
+          sortableSpan.setAttribute("icon", "nav-up");
+          break;
+        case desc:
+          this.setAttribute('direction', desc);
+          sortableText.innerHTML = priority + 1;
+          sortableSpan.setAttribute("icon", "nav-down");
+          console.log('nav-down', this, this._headerCell);
+          break;
+        default:
+          console.error(
+              `${criteria.direction} is niet een geldige sort direction`);
+      }
+    } else {
+      this.removeAttribute('direction');
+      sortableText.innerHTML ='';
+      sortableSpan.setAttribute("icon", "sort");
+      console.log("default");
+    }
   }
 
   get richTable() {
