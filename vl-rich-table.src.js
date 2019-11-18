@@ -18,6 +18,13 @@ import {VlIcon} from '/node_modules/vl-ui-icon/vl-icon.js';
  * @see {@link https://webcomponenten.omgeving.vlaanderen.be/demo/vl-rich-table.html|Demo}
  */
 export class VlRichTable extends VlElement(HTMLElement) {
+  get sortCriterias() {
+    return this._sortCriterias;
+  }
+
+  set sortCriterias(criterias) {
+    this._sortCriterias = criterias;
+  }
 
   static get _observedAttributes() {
     return ['data'];
@@ -45,6 +52,7 @@ export class VlRichTable extends VlElement(HTMLElement) {
         </table>
         `);
     this._data = [];
+    this._sortCriterias = [];
     const slot = this.shadowRoot.querySelector('slot');
     slot.addEventListener('slotchange', () => this._createRows());
   }
@@ -77,6 +85,10 @@ export class VlRichTable extends VlElement(HTMLElement) {
     if (this._isReady()) {
       this._createRows();
     }
+  }
+
+  get headers() {
+    return this.shadowRoot.querySelectorAll('th');
   }
 
   _isReady() {
@@ -135,7 +147,7 @@ define('vl-rich-table', VlRichTable);
  */
 export class VlRichTableField extends VlElement(HTMLElement) {
   static get _observedAttributes() {
-    return ['order'];
+    return ['direction', 'priority'];
   }
 
   connectedCallback() {
@@ -162,33 +174,52 @@ export class VlRichTableField extends VlElement(HTMLElement) {
     }
   }
 
-  get order() {
-    return this.getAttribute('order');
+  calculatePriority() {
+    let priority = 0;
+    this.richTable.headers.forEach(
+        header => {
+          if (priority > header.getAttribute('priority')) {
+            priority = header.getAttribute('priority') + 1
+          }
+        }
+    );
+    return priority;
   }
 
+  get direction() {
+    return this.getAttribute('direction');
+  }
+
+  //null -> des -> asc -> null
   _sort(th) {
-    if (this.order) {
-      if (this.order === 'desc') {
-        this.setAttribute('order', 'asc');
+    const field = this.getAttribute('data-value');
+    if (this.direction) {
+      if (this.direction === 'desc') {
+        this.setAttribute('direction', 'asc');
+        this.richTable.sortCriterias.forEach(criteria => {
+          if (criteria.name === field) {
+            criteria.direction = 'asc';
+          }
+        });
         th.setAttribute("icon", "nav-up")
-      } else if (this.order === 'asc') {
-        this.removeAttribute('order');
-        th.setAttribute("icon", "sort")
+      } else if (this.direction === 'asc') {
+        this.removeAttribute('direction');
+        this.richTable.sortCriterias = this.richTable.sortCriterias.filter(
+            criteria => criteria.name !== field);
+        th.setAttribute("icon", "sort");
       }
     } else {
-      this.setAttribute('order', 'desc');
+      this.setAttribute('direction', 'desc');
+      this.richTable.sortCriterias.push({name: field, direction: 'desc'});
       th.setAttribute("icon", "nav-down")
     }
-  }
 
-  _orderChangedCallback(oldValue, newValue) {
     this.richTable.dispatchEvent(new CustomEvent('sort', {
-      detail: {
-        field: this.getAttribute('data-value'),
-        oldValue: oldValue,
-        newValue: newValue
-      }
-    }))
+          detail: {
+            sortCriterias: this.richTable.sortCriterias
+          }
+        }
+    ));
   }
 
   get richTable() {
