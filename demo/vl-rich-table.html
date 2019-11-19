@@ -11,24 +11,26 @@
     <h1>vl-ui-rich-table demo</h1>
 
     <div>
-      <h2>Rich table met dynamische data</h2>
+      <h2>Rich table met dynamische data en custom renderer</h2>
       <pre>
         <code class="line-numbers language-markup">
         &#x3C;vl-rich-table id=&#x22;dynamic-data&#x22;&#x3E;
           &#x3C;vl-rich-table-field data-value=&#x22;id&#x22; label=&#x22;ID&#x22;&#x3E;&#x3C;/vl-rich-table-field&#x3E;
-          &#x3C;vl-rich-table-field data-value=&#x22;name&#x22; label=&#x22;Naam&#x22;&#x3E;&#x3C;/vl-rich-table-field&#x3E;
+          &#x3C;vl-rich-table-field id=&#x22;strong-field&#x22; data-value=&#x22;name&#x22; label=&#x22;Naam&#x22;&#x3E;&#x3C;/vl-rich-table-field&#x3E;
         &#x3C;/vl-rich-table&#x3E;
         &#x3C;button type=&#x22;button&#x22; onclick=&#x27;document.getElementById(&#x22;dynamic-data&#x22;).data = [{id: 1, name:&#x22;Test&#x22;}, {id: 2, name:&#x22;Test2&#x22;}, {id: 3, name:&#x22;Test3&#x22;}]&#x27;&#x3E;Voeg testdata toe&#x3C;/button&#x3E;
         &#x3C;button type=&#x22;button&#x22; onclick=&#x27;document.getElementById(&#x22;dynamic-data&#x22;).data = []&#x27;&#x3E;Verwijder data&#x3C;/button&#x3E;
+        &#x3C;button type=&#x22;button&#x22; onclick=&#x27;document.getElementById(&#x22;strong-field&#x22;).renderTableData = function(content) {const div = document.createElement(&#x22;div&#x22;); div.innerHTML = &#x22;&#x3C;strong&#x3E;&#x22;+content+&#x22;&#x3C;/strong&#x3E;&#x22;; return div;}&#x27;&#x3E;Verander renderer voor naam&#x3C;/button&#x3E;
         </code>
       </pre>
       <div class="demo">
         <vl-rich-table id="dynamic-data">
           <vl-rich-table-field data-value="id" label="ID"></vl-rich-table-field>
-          <vl-rich-table-field data-value="name" label="Naam"></vl-rich-table-field>
+          <vl-rich-table-field id="strong-field" data-value="name" label="Naam"></vl-rich-table-field>
         </vl-rich-table>
         <button type="button" onclick='document.getElementById("dynamic-data").data = [{id: 1, name:"Test"}, {id: 2, name:"Test2"}, {id: 3, name:"Test3"}]'>Voeg testdata toe</button>
         <button type="button" onclick='document.getElementById("dynamic-data").data = []'>Verwijder data</button>
+        <button type="button" onclick='document.getElementById("strong-field").renderTableData = function(content) {const div = document.createElement("div"); div.innerHTML = "<strong>"+content+"</strong>"; return div;}'>Verander renderer voor naam</button>
       </div>
     </div>
 

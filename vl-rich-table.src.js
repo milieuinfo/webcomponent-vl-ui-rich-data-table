@@ -67,40 +67,13 @@ export class VlRichTable extends VlElement(HTMLElement) {
       Array.from(this.children).filter(child => {
         return child.tagName.toLowerCase()
             === 'vl-rich-table-field'
-      }).forEach(field => row.appendChild(this._createTd(field, data)));
+      }).forEach(field => {
+        const tableData = document.createElement("td");
+        tableData.appendChild(field.renderTableData(data[field.getAttribute('data-value')]));
+        row.appendChild(tableData);
+      });
       this._tableBody.appendChild(row);
     });
-  }
-
-  _createTd(field, data) {
-    const tableData = document.createElement("td");
-    tableData.appendChild(this._createTdChild(field, data));
-    return tableData;
-  }
-
-  _createTdChild(field, data) {
-    const render = this._renderFunctions[this._validDataType(field)];
-    return render(data[field.getAttribute('data-value')]);
-  }
-
-  _validDataType(field) {
-    const dataType = field.getAttribute('data-type');
-    if (dataType != null && this._renderFunctions.hasOwnProperty(dataType)) {
-      return dataType;
-    } else {
-      return 'default';
-    }
-  }
-
-  get _renderFunctions() {
-    return {
-      'string': content => {
-        return document.createTextNode(content)
-      },
-      'default': content => {
-        return document.createTextNode(content)
-      }
-    }
   }
 
   _dataChangedCallback(oldValue, newValue) {
@@ -209,6 +182,15 @@ export const SortDirections = {
 const asc = SortDirections.ASCENDING,
     desc = SortDirections.DESCENDING;
 
+export const RenderFunctions = {
+  'string': content => {
+    return document.createTextNode(content)
+  },
+  'default': content => {
+    return document.createTextNode(content)
+  }
+};
+
 /**
  * VlRichTableField
  * @class
@@ -255,6 +237,25 @@ export class VlRichTableField extends VlElement(HTMLElement) {
     } else {
       console.log(
           'Een VlRichTableField moet altijd als parent een vl-rich-table hebben.')
+    }
+  }
+
+  /**
+   * Manier om de data in de tabel te renderen. Kan overschreven worden om eigen renderer mee te geven vooraleer de data te tonen in de tabel.
+   *
+   * @param content de content die hoort in de te renderen cell van de tabel
+   * @returns {Node} een node om in de td van de tabel te voegen
+   */
+  renderTableData(content) {
+    return RenderFunctions[this._validDataType()](content);
+  }
+
+  _validDataType() {
+    const dataType = this.getAttribute('data-type');
+    if (dataType != null && RenderFunctions.hasOwnProperty(dataType)) {
+      return dataType;
+    } else {
+      return 'default';
     }
   }
 
