@@ -119,6 +119,36 @@ export class VlRichTable extends VlElement(HTMLElement) {
     this._table.setAttribute('lined', newValue);
   }
 
+  updateSortCriteria(criteria) {
+    customElements.whenDefined('vl-rich-table-field').then(() => {
+      if (criteria.direction && (criteria.direction === asc
+          || criteria.direction
+          === desc)) {
+        if (criteria.priority) {
+          this.sortCriterias[criteria.priority] = criteria;
+        } else {
+          const existentCriteria = this.sortCriterias.find(
+              sc => sc.name === criteria.name);
+          if (existentCriteria) {
+            existentCriteria.direction = criteria.direction;
+          } else {
+            this.sortCriterias.push(criteria);
+          }
+        }
+      } else {
+        this.sortCriterias = this.sortCriterias.filter(
+            sc => sc.name !== criteria.name);
+      }
+
+      this.dispatchEvent(new CustomEvent('sort', {
+            detail: {
+              sortCriterias: this.sortCriterias
+            }
+          }
+      ));
+    });
+  }
+
   get data() {
     return this._data;
   }
@@ -128,6 +158,10 @@ export class VlRichTable extends VlElement(HTMLElement) {
     if (this._isReady()) {
       this._createRows();
     }
+  }
+
+  get pageInfo() {
+    return this._data.pageable;
   }
 
   get headers() {
@@ -184,7 +218,7 @@ const asc = SortDirections.ASCENDING,
  *
  * @property {boolean} sortable - ...
  * @property {boolean} searchable - ...
- * @property {string} data-value - Attribuut om aan te duiden op welke sleutel van de data deze waarde moet gekoppeld worden. Verplicht.
+ * @property {string} data-value - Attribuut om aan te duiden op welke sleutel van de data deze waarde moet gekoppeld worden. Verplicht en unique.
  * @property {string} data-type - Attribuut om te bepalen welk type data in de kolom moet komen en hoe de formattering moet gebeuren. Mogelijke waarden: string, ... //todo voeg meer toe
  *                                Default waarde: string
  *
@@ -248,52 +282,54 @@ export class VlRichTableField extends VlElement(HTMLElement) {
     return this.getAttribute('direction');
   }
 
+  get priority() {
+    return this.getAttribute('priority');
+  }
+
   get fieldName() {
     return this.getAttribute('data-value');
   }
 
   //null -> des -> asc -> null
   _sortButtonClicked(e) {
-    if (this.direction) {
-      if (this.direction === desc) {
-        this.richTable.sortCriterias.forEach(criteria => {
-          if (criteria.name === this.fieldName) {
-            criteria.direction = asc;
-          }
-        });
-      } else if (this.direction === asc) {
-        this.richTable.sortCriterias = this.richTable.sortCriterias.filter(
-            criteria => criteria.name !== this.fieldName);
-      }
-    } else {
-      this.richTable.sortCriterias.push(
-          {name: this.fieldName, direction: 'desc'});
+    let direction;
+    switch (this.direction) {
+      case asc:
+        direction = null;
+        break;
+      case desc:
+        direction = asc;
+        break;
+      default:
+        direction = desc;
     }
-
-    this.richTable.dispatchEvent(new CustomEvent('sort', {
-          detail: {
-            sortCriterias: this.richTable.sortCriterias
-          }
-        }
-    ));
+    this.richTable.updateSortCriteria(
+        {name: this.fieldName, direction: direction});
   }
 
   _updateSortableHeader() {
-    const priority = this.richTable.sortCriterias.findIndex(criteria => criteria.name === this.fieldName),
-        criteria = priority > -1 ? this.richTable.sortCriterias[priority] : null,
+    this._priority = this.richTable.sortCriterias.findIndex(
+        criteria => criteria && criteria.name === this.fieldName);
+    this._priority = this._priority > -1 ? this._priority : null;
+    const criteria = this._priority !== null
+        ? this.richTable.sortCriterias[this._priority]
+        : null,
         sortableSpan = this._headerCell.querySelector(
             '[name="sortable-span"]'),
         sortableText = this._headerCell.querySelector('[name="sortable-text"]');
     if (criteria) {
+      this._direction = criteria.direction;
       switch (criteria.direction) {
         case asc:
           this.setAttribute('direction', asc);
-          sortableText.innerHTML = priority + 1;
+          this.setAttribute('priority', this._priority);
+          sortableText.innerHTML = this._priority + 1;
           sortableSpan.setAttribute("icon", "nav-up");
           break;
         case desc:
           this.setAttribute('direction', desc);
-          sortableText.innerHTML = priority + 1;
+          this.setAttribute('priority', this._priority);
+          sortableText.innerHTML = this._priority + 1;
           sortableSpan.setAttribute("icon", "nav-down");
           break;
         default:
@@ -301,9 +337,32 @@ export class VlRichTableField extends VlElement(HTMLElement) {
               `${criteria.direction} is niet een geldige sort direction`);
       }
     } else {
+      this._direction = null;
       this.removeAttribute('direction');
-      sortableText.innerHTML ='';
+      this.removeAttribute('priority');
+      sortableText.innerHTML = '';
       sortableSpan.setAttribute("icon", "sort");
+    }
+  }
+
+  _directionChangedCallback(oldValue, newValue) {
+    if (this.priority && newValue !== this._direction) {
+      this.richTable.updateSortCriteria(
+          {
+            name: this.fieldName,
+            direction: newValue,
+            priority: this.priority
+          });
+    }
+  };
+
+  _priorityChangedCallback(oldValue, newValue) {
+    if (this.direction && parseInt(newValue) !== this._priority) {
+      this.richTable.updateSortCriteria({
+        name: this.fieldName,
+        direction: this.direction,
+        priority: newValue
+      });
     }
   }
 
@@ -337,12 +396,13 @@ export class VlRichTablePager extends VlPager {
   connectedCallback() {
     super.connectedCallback();
     if (this._tableToInsert) {
+      this._appended = true;
       this._tableToInsert.addTableFooterCell(this);
       this.addEventListener('pagechanged', (e) => {
         this.richTable.dispatchEvent(new CustomEvent('pagechanged',
             {detail: e.detail}));
       });
-    } else {
+    } else if(!this._appended){
       console.log(
           'Een VlRichTablePager moet altijd als parent een vl-rich-table hebben.')
     }
