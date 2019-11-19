@@ -11,6 +11,9 @@ import {VlIcon} from '/node_modules/vl-ui-icon/vl-icon.js';
  * @extends VlElement
  *
  * @property {object[]} data - Attribuut die de data bevat.
+ * @property {boolean} hover - Attribuut wordt gebruikt om een rij te highlighten waneer de gebruiker erover hovert met muiscursor. Zie ook {@link https://webcomponenten.omgeving.vlaanderen.be/demo/vl-data-table.html|vl-data-table}
+ * @property {boolean} lined - Variant met een lijn tussen elke rij en kolom. Zie ook {@link https://webcomponenten.omgeving.vlaanderen.be/demo/vl-data-table.html|vl-data-table}
+ * @property {boolean} zebra - Variant waarin de rijen afwisslend een andere achtergrondkleur krijgen. Dit maakt de tabel makkelijker leesbaar. Zie ook {@link https://webcomponenten.omgeving.vlaanderen.be/demo/vl-data-table.html|vl-data-table}
  * @property {string} pageable - ...
  *
  * @see {@link https://www.github.com/milieuinfo/webcomponent-vl-ui-rich-table/releases/latest|Release notes}
@@ -27,7 +30,7 @@ export class VlRichTable extends VlElement(HTMLElement) {
   }
 
   static get _observedAttributes() {
-    return ['data'];
+    return ['data', 'hover', 'lined', 'zebra'];
   }
 
   constructor() {
@@ -38,7 +41,7 @@ export class VlRichTable extends VlElement(HTMLElement) {
         </style>
 
         <slot></slot>
-        <table is="vl-data-table" zebra>
+        <table is="vl-data-table">
           <thead>
             <tr>
             </tr>
@@ -76,6 +79,18 @@ export class VlRichTable extends VlElement(HTMLElement) {
     this.data = JSON.parse(newValue);
   }
 
+  _hoverChangedCallback(oldValue, newValue) {
+    this._table.setAttribute('hover', newValue);
+  }
+
+  _zebraChangedCallback(oldValue, newValue) {
+    this._table.setAttribute('zebra', newValue);
+  }
+
+  _linedChangedCallback(oldValue, newValue) {
+    this._table.setAttribute('lined', newValue);
+  }
+
   get data() {
     return this._data;
   }
@@ -102,16 +117,20 @@ export class VlRichTable extends VlElement(HTMLElement) {
     return tableData;
   }
 
+  get _table() {
+    return this.shadowRoot.querySelector('table');
+  }
+
   get _tableHeaderRow() {
-    return this.shadowRoot.querySelector('thead > tr');
+    return this._table.querySelector('thead > tr');
   }
 
   get _tableBody() {
-    return this.shadowRoot.querySelector('tbody');
+    return this._table.querySelector('tbody');
   }
 
   get _tableFooterRow() {
-    return this.shadowRoot.querySelector('tfoot > tr');
+    return this._table.querySelector('tfoot > tr');
   }
 
   addTableHeaderCell(cell) {

@@ -46,6 +46,17 @@
         assert.equal(table.shadowRoot.querySelector("table > thead > tr > th").textContent, 'Test');
       });
 
+      test('als zebra lined of hover op de vl-rich-table wordt gezet, wordt die ook op vl-data-table gezet', () => {
+        const richTable = fixture('vl-rich-table-fixture');
+        richTable.setAttribute('zebra', '');
+        richTable.setAttribute('lined', '');
+        richTable.setAttribute('hover', '');
+
+        assert.equal(richTable._table.getAttribute('zebra'), '');
+        assert.equal(richTable._table.getAttribute('lined'), '');
+        assert.equal(richTable._table.getAttribute('hover'), '');
+      });
+
       test('bij het toevoegen van data wordt een rij gemaakt met de data op basis van de data-value van de field', () => {
         const table = fixture('vl-rich-table-fixture');
 
