@@ -64,15 +64,21 @@ export class VlRichTable extends VlElement(HTMLElement) {
     Array.from(this._tableBody.children).forEach(child => child.remove());
     this._data.forEach(data => {
       const row = document.createElement("tr");
+      let showRow = true;
       Array.from(this.children).filter(child => {
         return child.tagName.toLowerCase()
             === 'vl-rich-table-field'
       }).forEach(field => {
         const tableData = document.createElement("td");
-        tableData.appendChild(field.renderTableData(data[field.getAttribute('data-value')]));
+        tableData.appendChild(field.renderTableData(data[field.fieldName]));
+        if (field.searchable && !field.matchesSearch(data[field.fieldName])){
+          showRow = false;
+        }
         row.appendChild(tableData);
       });
-      this._tableBody.appendChild(row);
+      if(showRow){
+        this._tableBody.appendChild(row);
+      }
     });
   }
 
@@ -209,6 +215,12 @@ export class VlRichTableField extends VlElement(HTMLElement) {
     return ['direction', 'priority'];
   }
 
+  constructor() {
+    super();
+    this._searchValue;
+
+  }
+
   get _headerCell() {
     return this.__headerCell;
   }
@@ -226,9 +238,9 @@ export class VlRichTableField extends VlElement(HTMLElement) {
       if (this.hasAttribute('sortable')) {
         this._dressSortableHeader();
       }
-      // if (this.hasAttribute('searchable')) {
-      // todo add search UIG-255
-      // }
+      if (this.searchable) {
+        this._createSearch(this,headerCell);
+      }
       this.richTable.addTableHeaderCell(headerCell);
     } else {
       console.log(
@@ -328,6 +340,7 @@ export class VlRichTableField extends VlElement(HTMLElement) {
           this.setAttribute('priority', this._priority);
           sortableText.innerHTML = this._priority + 1;
           sortableSpan.setAttribute("icon", "nav-down");
+          console.log('nav-down', this, this._headerCell);
           break;
         default:
           console.error(
@@ -363,11 +376,44 @@ export class VlRichTableField extends VlElement(HTMLElement) {
     }
   }
 
+  matchesSearch(dataValue){
+    console.log(this._searchValue);
+    console.log(dataValue);
+    if(!this._searchValue) {
+      return true;
+    }
+    return (dataValue.startsWith(this._searchValue));
+  }
+
+  _createSearch(field, cell){
+    if (field){
+      const search = document.createElement('input');
+      search.setAttribute('is','vl-input-field');
+      search.setAttribute("block","");
+      search.setAttribute("style", "display: block;");
+      search.addEventListener("input", (e) => {
+        this._search(field, search.value);
+      });
+      cell.appendChild(search);
+    }
+  }
+
+  _search(field, value){
+    console.log("Searching for "+value);
+    this._searchValue = value;
+    this.richTable._createRows();
+  }
+
   get richTable() {
     if (this.parentNode && this.parentNode.tagName.toLowerCase()
         === 'vl-rich-table') {
       return this.parentNode;
     }
+  }
+
+  get searchable() {
+    console.log(this.hasAttribute('searchable'));
+    return this.hasAttribute('searchable');
   }
 }
 
