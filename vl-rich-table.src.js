@@ -133,10 +133,6 @@ export class VlRichTable extends VlElement(HTMLElement) {
     }
   }
 
-  get pageInfo() {
-    return this._data.pageable;
-  }
-
   get headers() {
     return this.shadowRoot.querySelectorAll('th');
   }
