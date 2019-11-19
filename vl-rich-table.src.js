@@ -101,18 +101,16 @@ export class VlRichTable extends VlElement(HTMLElement) {
   updateSortCriteria(criteria) {
     customElements.whenDefined('vl-rich-table-field').then(() => {
       if (criteria.direction && (criteria.direction === asc
-          || criteria.direction
-          === desc)) {
+          || criteria.direction === desc)) {
         if (criteria.priority) {
-          this.sortCriterias[criteria.priority] = criteria;
+          this.sortCriterias[criteria.priority] = {
+            name: criteria.name,
+            direction: criteria.direction
+          };
         } else {
-          const existentCriteria = this.sortCriterias.find(
-              sc => sc.name === criteria.name);
-          if (existentCriteria) {
-            existentCriteria.direction = criteria.direction;
-          } else {
-            this.sortCriterias.push(criteria);
-          }
+          this.sortCriterias = this.sortCriterias.filter(
+              sc => sc.name !== criteria.name);
+          this.sortCriterias.push(criteria);
         }
       } else {
         this.sortCriterias = this.sortCriterias.filter(
@@ -340,7 +338,6 @@ export class VlRichTableField extends VlElement(HTMLElement) {
           this.setAttribute('priority', this._priority);
           sortableText.innerHTML = this._priority + 1;
           sortableSpan.setAttribute("icon", "nav-down");
-          console.log('nav-down', this, this._headerCell);
           break;
         default:
           console.error(
@@ -445,7 +442,7 @@ export class VlRichTablePager extends VlPager {
         this.richTable.dispatchEvent(new CustomEvent('pagechanged',
             {detail: e.detail}));
       });
-    } else if(!this._appended){
+    } else if (!this._appended) {
       console.log(
           'Een VlRichTablePager moet altijd als parent een vl-rich-table hebben.')
     }
