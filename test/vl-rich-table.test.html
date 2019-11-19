@@ -66,6 +66,20 @@
         assert.equal(table.shadowRoot.querySelector("table > tbody > tr > td").textContent, 'Dit is testdata.');
       });
 
+      test('na het veranderen van de render functie zal die gebruikt worden om data te renderen', () => {
+        const table = fixture('vl-rich-table-fixture');
+
+        table.children[0].renderTableData = function(content) {
+          const div = document.createElement("div");
+          div.innerHTML = "<strong>" + content + "</strong>";
+          return div;
+        };
+        table.data = [{test: "Dit is testdata."}];
+
+        assert.isNotNull(table.shadowRoot.querySelector("table > tbody > tr > td > div > strong"));
+        assert.equal(table.shadowRoot.querySelector("table > tbody > tr > td > div > strong").textContent, 'Dit is testdata.');
+      });
+
       test('bij voorgedefinieerde data zal de tabel inhoud de testdata bevatten', async () => {
         const table = fixture('vl-rich-table-data-fixture');
 
