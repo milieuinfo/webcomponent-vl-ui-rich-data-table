@@ -63,16 +63,44 @@ export class VlRichTable extends VlElement(HTMLElement) {
   _createRows() {
     Array.from(this._tableBody.children).forEach(child => child.remove());
     this._data.forEach(data => {
-      let row = document.createElement("tr");
+      const row = document.createElement("tr");
       Array.from(this.children).filter(child => {
         return child.tagName.toLowerCase()
             === 'vl-rich-table-field'
-      }).forEach(field => {
-        row.appendChild(
-            this.__createTd(data[field.getAttribute('data-value')]));
-      });
+      }).forEach(field => row.appendChild(this._createTd(field, data)));
       this._tableBody.appendChild(row);
     });
+  }
+
+  _createTd(field, data) {
+    const tableData = document.createElement("td");
+    tableData.appendChild(this._createTdChild(field, data));
+    return tableData;
+  }
+
+  _createTdChild(field, data) {
+    const render = this._renderFunctions[this._validDataType(field)];
+    return render(data[field.getAttribute('data-value')]);
+  }
+
+  _validDataType(field) {
+    const dataType = field.getAttribute('data-type');
+    if (dataType != null && this._renderFunctions.hasOwnProperty(dataType)) {
+      return dataType;
+    } else {
+      return 'default';
+    }
+  }
+
+  get _renderFunctions() {
+    return {
+      'string': content => {
+        return document.createTextNode(content)
+      },
+      'default': content => {
+        return document.createTextNode(content)
+      }
+    }
   }
 
   _dataChangedCallback(oldValue, newValue) {
@@ -110,13 +138,6 @@ export class VlRichTable extends VlElement(HTMLElement) {
     return Array.from(this.children).every(child => child.richTable === this);
   }
 
-  __createTd(textContent) {
-    let tableData = document.createElement("td");
-    let text = document.createTextNode(textContent);
-    tableData.appendChild(text);
-    return tableData;
-  }
-
   get _table() {
     return this.shadowRoot.querySelector('table');
   }
@@ -138,7 +159,7 @@ export class VlRichTable extends VlElement(HTMLElement) {
   }
 
   addTableFooterCell(cell) {
-    let td = document.createElement("td");
+    const td = document.createElement("td");
     td.setAttribute("colspan", 9999);
     td.appendChild(cell);
     this._tableFooterRow.append(td);
