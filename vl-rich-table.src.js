@@ -2,6 +2,7 @@ import {VlElement, define} from '/node_modules/vl-ui-core/vl-core.js';
 import {VlDataTable} from '/node_modules/vl-ui-data-table/vl-data-table.js';
 import {VlPager} from '/node_modules/vl-ui-pager/vl-pager.js';
 import {VlIcon} from '/node_modules/vl-ui-icon/vl-icon.js';
+import {VlInputField} from '/node_modules/vl-ui-input-field/vl-input-field.js';
 
 /**
  * VlRichTable
@@ -58,6 +59,7 @@ export class VlRichTable extends VlElement(HTMLElement) {
     this._sortCriterias = [];
     const slot = this.shadowRoot.querySelector('slot');
     slot.addEventListener('slotchange', () => this._createRows());
+    this.addEventListener('searchValueChange',() => this._createRows(), true);
   }
 
   _createRows() {
@@ -216,7 +218,6 @@ export class VlRichTableField extends VlElement(HTMLElement) {
   constructor() {
     super();
     this._searchValue;
-
   }
 
   get _headerCell() {
@@ -237,7 +238,7 @@ export class VlRichTableField extends VlElement(HTMLElement) {
         this._dressSortableHeader();
       }
       if (this.searchable) {
-        this._createSearch(this,headerCell);
+        this._dressSearchableHeader();
       }
       this.richTable.addTableHeaderCell(headerCell);
     } else {
@@ -382,23 +383,21 @@ export class VlRichTableField extends VlElement(HTMLElement) {
     return (dataValue.startsWith(this._searchValue));
   }
 
-  _createSearch(field, cell){
-    if (field){
-      const search = document.createElement('input');
-      search.setAttribute('is','vl-input-field');
-      search.setAttribute("block","");
-      search.setAttribute("style", "display: block;");
-      search.addEventListener("input", (e) => {
-        this._search(field, search.value);
-      });
-      cell.appendChild(search);
-    }
+  _dressSearchableHeader(){
+    const search = document.createElement('input');
+    search.setAttribute('is','vl-input-field');
+    search.setAttribute("block","");
+    search.setAttribute("style", "display: block;");//TODO
+    search.addEventListener("input", (e) => {
+      this._search(search.value);
+    });
+    this._headerCell.appendChild(search);
   }
 
-  _search(field, value){
+  _search(value){
     console.log("Searching for "+value);
     this._searchValue = value;
-    this.richTable._createRows();
+    this.dispatchEvent(new CustomEvent('searchValueChange'));
   }
 
   get richTable() {
@@ -409,7 +408,6 @@ export class VlRichTableField extends VlElement(HTMLElement) {
   }
 
   get searchable() {
-    console.log(this.hasAttribute('searchable'));
     return this.hasAttribute('searchable');
   }
 }

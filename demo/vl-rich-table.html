@@ -117,7 +117,11 @@
         </code>
       </pre>
       <div class="demo">
-        <vl-rich-table id="searchableTable" data='[{"id": 1, "name": "Lorem ipsum", "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit."}, {"id": 2, "name": "Amet aut", "description": "Amet aut, blanditiis dignissimos, earum et eveniet explicabo in labore minus odio odit optio, perferendis provident quas quis quod totam vel vero."}]'>
+        <vl-rich-table id="searchableTable" data='[
+        {"id": 1, "name": "Lorem ipsum", "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit."},
+        {"id": 2, "name": "Amet aut", "description": "Amet aut, blanditiis dignissimos, earum et eveniet explicabo in labore minus odio odit optio, perferendis provident quas quis quod totam vel vero."},
+        {"id": 3, "name": "Lorem ipsum", "description": "Amet aut, blanditiis dignissimos"}
+        ]'>
           <vl-rich-table-field searchable data-value="name" label="Naam"></vl-rich-table-field>
           <vl-rich-table-field searchable data-value="description" label="Omschrijving"></vl-rich-table-field>
           <vl-rich-table-pager align-right total-items="100" items-per-page="10" current-page="1"></vl-rich-table-pager>

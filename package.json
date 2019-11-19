@@ -29,6 +29,7 @@
     "vl-ui-core": "^2.0.0",
     "vl-ui-data-table": "1.0.7",
     "vl-ui-icon": "2.1.0",
+    "vl-ui-input-field": "1.1.2",
     "replace": "^1.1.1"
   },
   "devDependencies": {
