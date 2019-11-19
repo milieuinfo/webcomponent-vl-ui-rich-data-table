@@ -317,8 +317,8 @@ export class VlRichTablePager extends VlPager {
     super.connectedCallback();
     if (this._tableToInsert) {
       this._tableToInsert.addTableFooterCell(this);
-      this.addEventListener('changed', (e) => {
-        this.richTable.dispatchEvent(new CustomEvent('pagechange',
+      this.addEventListener('pagechanged', (e) => {
+        this.richTable.dispatchEvent(new CustomEvent('pagechanged',
             {detail: e.detail}));
       });
     } else {
