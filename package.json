@@ -36,7 +36,7 @@
     "@govflanders/vl-ui-util": "^3.9.1",
     "np": "3.0.4",
     "uglify-js-es6": "2.8.9",
-    "sass": "1.23.0",
+    "sass": "1.23.6",
     "vl-ui-util": "^2.0.13",
     "vl-ui-pager": "git://github.com/milieuinfo/webcomponent-vl-ui-pager.git",
     "wct-browser-legacy": "1.0.2",
