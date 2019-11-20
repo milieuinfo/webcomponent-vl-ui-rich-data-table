@@ -27,6 +27,16 @@
   </template>
 </test-fixture>
 
+<test-fixture id="vl-rich-table-data-type-fixture">
+  <template>
+    <vl-rich-table data='[{"tekst": "Dit is testdata.", "datum": "2012-04-03", "tijdstip": "2012-04-03T18:05:43.511" }]'>
+      <vl-rich-table-field data-value="tekst" data-type="string" label="Tekst"></vl-rich-table-field>
+      <vl-rich-table-field data-value="datum" data-type="date" label="Datum"></vl-rich-table-field>
+      <vl-rich-table-field data-value="tijdstip" data-type="datetime" label="Tijdstip"></vl-rich-table-field>
+    </vl-rich-table>
+  </template>
+</test-fixture>
+
 <test-fixture id="vl-rich-table-pager-fixture">
   <template>
     <vl-rich-table>
@@ -75,6 +85,32 @@
 
       assert.isNotNull(table.shadowRoot.querySelector("table > tbody > tr > td"));
       assert.equal(table.shadowRoot.querySelector("table > tbody > tr > td").textContent, 'Dit is testdata.');
+    });
+
+    test('bij het toevoegen van ongeldige data is er een fout', () => {
+      const table = fixture('vl-rich-table-fixture');
+      assert.throws(() => table.data = "invalid", Error, "geen geldige array");
+      table.data = [];
+    });
+
+    test('bij het toevoegen van data wordt deze getoond volgens het gedefinieerde data type', async () => {
+      const table = fixture('vl-rich-table-data-type-fixture');
+
+      await flush();
+      const tds = [...table.shadowRoot.querySelectorAll("table > tbody > tr > td")];
+      assert.equal(tds[0].textContent, 'Dit is testdata.');
+      assert.equal(tds[1].textContent, '03.04.2012');
+      assert.equal(tds[2].textContent, '03.04.2012 18:05:43');
+    });
+
+    test('bij het toevoegen van data met verkeerd datum en tijd datatype verschijnt Invalid Date', async () => {
+      const table = fixture('vl-rich-table-data-type-fixture');
+      table.data =[{"tekst": "0", "datum": "abc", "tijdstip": "def" }];
+      await flush();
+      const tds = [...table.shadowRoot.querySelectorAll("table > tbody > tr > td")];
+      assert.equal(tds[0].textContent, '0');
+      assert.equal(tds[1].textContent, 'Invalid Date');
+      assert.equal(tds[2].textContent, 'Invalid Date');
     });
 
     test('na het veranderen van de render functie zal die gebruikt worden om data te renderen', () => {

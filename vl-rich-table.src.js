@@ -68,6 +68,9 @@ export class VlRichTable extends VlElement(HTMLElement) {
 
   _createRows() {
     Array.from(this._tableBody.children).forEach(child => child.remove());
+    if (!Array.isArray(this._data)) {
+      throw new Error("data is geen geldige array van objecten");
+    }
     this._data.forEach(data => {
       const row = document.createElement("tr");
       Array.from(this.children).filter(child => {
