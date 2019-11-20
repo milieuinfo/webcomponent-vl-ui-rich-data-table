@@ -109,21 +109,65 @@
       <h2>Search</h2>
       <pre>
         <code class="line-numbers language-markup">
-          &#x3C;vl-rich-table data=&#x27;[{&#x22;id&#x22;: 1, &#x22;name&#x22;: &#x22;Lorem ipsum&#x22;, &#x22;description&#x22;: &#x22;Lorem ipsum dolor sit amet, consectetur adipisicing elit.&#x22;}, {&#x22;id&#x22;: 2, &#x22;name&#x22;: &#x22;Amet aut&#x22;, &#x22;description&#x22;: &#x22;Amet aut, blanditiis dignissimos, earum et eveniet explicabo in labore minus odio odit optio, perferendis provident quas quis quod totam vel vero.&#x22;}]&#x27;&#x3E;
-            &#x3C;vl-rich-table-field searchable data-value=&#x22;name&#x22; label=&#x22;Naam&#x22;&#x3E;&#x3C;/vl-rich-table-field&#x3E;
-            &#x3C;vl-rich-table-field searchable data-value=&#x22;description&#x22; label=&#x22;Omschrijving&#x22;&#x3E;&#x3C;/vl-rich-table-field&#x3E;
-            &#x3c;vl-pager align-right total-items=&#x22;100&#x22; items-per-page=&#x22;10&#x22; current-page=&#x22;1&#x22;&#x3E;&#x3c;/vl-pager&#x3E;
-          &#x3C;/vl-rich-table&#x3E;
+          &lt;vl-rich-table id=&quot;searchableTable&quot; data=&#39;[
+            {
+              &quot;id&quot;: 1,
+              &quot;name&quot;: &quot;Lorem ipsum&quot;,
+              &quot;description&quot;: &quot;Lorem ipsum dolor sit amet, consectetur adipisicing elit.&quot;,
+              &quot;tijdstip&quot;: &quot;2019-11-15T08:34:47.444633&quot;,
+              &quot;datum&quot;: &quot;2019-11-15&quot;
+            },
+            {
+              &quot;id&quot;: 2,
+              &quot;name&quot;: &quot;Amet aut&quot;,
+              &quot;description&quot;: &quot;Amet aut, blanditiis dignissimos, earum et eveniet explicabo in labore minus odio odit optio, perferendis provident quas quis quod totam vel vero.&quot;,
+              &quot;tijdstip&quot;: &quot;2018-10-01T12:01:55.654321&quot;,
+              &quot;datum&quot;: &quot;2018-10-01&quot;
+            },
+            {
+              &quot;id&quot;: 3,
+              &quot;name&quot;: &quot;Lorem ipsum&quot;,
+              &quot;description&quot;: &quot;Amet aut, blanditiis dignissimos&quot;,
+              &quot;tijdstip&quot;: &quot;2020-01-31T17:22:33.123456&quot;,
+              &quot;datum&quot;: &quot;2020-01-31&quot;
+            }
+          ]&#39;&gt;
+            &lt;vl-rich-table-field searchable data-value=&quot;name&quot; label=&quot;Naam&quot;&gt;&lt;/vl-rich-table-field&gt;
+            &lt;vl-rich-table-field searchable data-value=&quot;description&quot; label=&quot;Omschrijving&quot;&gt;&lt;/vl-rich-table-field&gt;
+            &lt;vl-rich-table-field searchable data-value=&quot;tijdstip&quot; data-type=&quot;datetime&quot; label=&quot;Tijdstip&quot;&gt;&lt;/vl-rich-table-field&gt;
+            &lt;vl-rich-table-field searchable data-value=&quot;datum&quot; data-type=&quot;date&quot; label=&quot;Datum&quot;&gt;&lt;/vl-rich-table-field&gt;
+            &lt;vl-rich-table-pager align-right total-items=&quot;100&quot; items-per-page=&quot;10&quot; current-page=&quot;1&quot;&gt;&lt;/vl-rich-table-pager&gt;
+          &lt;/vl-rich-table&gt;
         </code>
       </pre>
       <div class="demo">
         <vl-rich-table id="searchableTable" data='[
-        {"id": 1, "name": "Lorem ipsum", "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit."},
-        {"id": 2, "name": "Amet aut", "description": "Amet aut, blanditiis dignissimos, earum et eveniet explicabo in labore minus odio odit optio, perferendis provident quas quis quod totam vel vero."},
-        {"id": 3, "name": "Lorem ipsum", "description": "Amet aut, blanditiis dignissimos"}
+          {
+            "id": 1,
+            "name": "Lorem ipsum",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
+            "tijdstip": "2019-11-15T08:34:47.444633",
+            "datum": "2019-11-15"
+          },
+          {
+            "id": 2,
+            "name": "Amet aut",
+            "description": "Amet aut, blanditiis dignissimos, earum et eveniet explicabo in labore minus odio odit optio, perferendis provident quas quis quod totam vel vero.",
+            "tijdstip": "2018-10-01T12:01:55.654321",
+            "datum": "2018-10-01"
+          },
+          {
+            "id": 3,
+            "name": "Lorem ipsum",
+            "description": "Amet aut, blanditiis dignissimos",
+            "tijdstip": "2020-01-31T17:22:33.123456",
+            "datum": "2020-01-31"
+          }
         ]'>
           <vl-rich-table-field searchable data-value="name" label="Naam"></vl-rich-table-field>
           <vl-rich-table-field searchable data-value="description" label="Omschrijving"></vl-rich-table-field>
+          <vl-rich-table-field searchable data-value="tijdstip" data-type="datetime" label="Tijdstip"></vl-rich-table-field>
+          <vl-rich-table-field searchable data-value="datum" data-type="date" label="Datum"></vl-rich-table-field>
           <vl-rich-table-pager align-right total-items="100" items-per-page="10" current-page="1"></vl-rich-table-pager>
         </vl-rich-table>
         Search value:<p id="searchValueChanged"></p>

@@ -213,13 +213,27 @@ export const SortDirections = {
 const asc = SortDirections.ASCENDING,
     desc = SortDirections.DESCENDING;
 
+const formatDate = (datestring) => {
+  return new Date(datestring).toLocaleDateString('nl-BE',
+      {year: 'numeric', month: '2-digit', day: '2-digit'}).replace(/\//g, '.');
+};
+
+const formatDatetime = (datetimestring) => {
+  return new Date(datetimestring).toLocaleString('nl-BE', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit'
+  }).replace(/\//g, '.');
+};
+
 export const RenderFunctions = {
-  'string': content => {
-    return document.createTextNode(content)
-  },
-  'default': content => {
-    return document.createTextNode(content)
-  }
+  'string': content => document.createTextNode(content),
+  'datetime': content => document.createTextNode(formatDatetime(content)),
+  'date': content => document.createTextNode(formatDate(content)),
+  'default': content => document.createTextNode(content)
 };
 
 /**
@@ -232,7 +246,11 @@ export const RenderFunctions = {
  * @property {boolean} sortable - ...
  * @property {boolean} searchable - ...
  * @property {string} data-value - Attribuut om aan te duiden op welke sleutel van de data deze waarde moet gekoppeld worden. Verplicht en unique.
- * @property {string} data-type - Attribuut om te bepalen welk type data in de kolom moet komen en hoe de formattering moet gebeuren. Mogelijke waarden: string, ... //todo voeg meer toe
+ * @property {string} data-type - Attribuut om te bepalen welk type data in de kolom moet komen en hoe de formattering moet gebeuren.
+ *                                Mogelijke waarden:
+ *                                - string : de waarde wordt als tekst getoond
+ *                                - date : de datum wordt getoond volgens de BIN norm dd.mm.jjjj
+ *                                - datetime : de datum + tijd wordt getoond volgens BIN norm dd.mm.jjjj hh:mi:ss
  *                                Default waarde: string
  * @property {asc | desc} direction - Te combineren met een 'priority' attribute om een sorteercriteria te bepalen.
  * @property {number} priority -Te combineren met een 'direction' attribute om een sorteercriteria te bepalen.
