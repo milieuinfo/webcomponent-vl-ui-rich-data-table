@@ -60,30 +60,26 @@ export class VlRichTable extends VlElement(HTMLElement) {
         `);
     this._data = [];
     this._sortCriterias = [];
+    this._searchCriteria = {};
     const slot = this.shadowRoot.querySelector('slot');
     slot.addEventListener('slotchange', () => this._createRows());
-    this.addEventListener('searchValueChange',() => this._createRows(), true);
+    this.addEventListener('searchValueChange',() => this.updateSearchFields(), true);
   }
 
   _createRows() {
     Array.from(this._tableBody.children).forEach(child => child.remove());
     this._data.forEach(data => {
       const row = document.createElement("tr");
-      let showRow = true;
       Array.from(this.children).filter(child => {
         return child.tagName.toLowerCase()
             === 'vl-rich-table-field'
       }).forEach(field => {
         const tableData = document.createElement("td");
         tableData.appendChild(field.renderTableData(data[field.fieldName]));
-        if (field.searchable && !field.matchesSearch(data[field.fieldName])){
-          showRow = false;
-        }
+
         row.appendChild(tableData);
       });
-      if(showRow){
-        this._tableBody.appendChild(row);
-      }
+      this._tableBody.appendChild(row);
     });
   }
 
@@ -129,6 +125,36 @@ export class VlRichTable extends VlElement(HTMLElement) {
           }
       ));
     });
+  }
+
+  get fields(){
+    return Array.from(this.children).filter(child => {
+      return child.tagName.toLowerCase()
+          === 'vl-rich-table-field'
+    })
+  }
+
+  updateSearchFields(){
+    this.fields.forEach(field => {
+      if (field.searchable){
+        if (field.searchValue){
+          this._searchCriteria[field.fieldName] = field.searchValue;
+        }else{
+          if (this._searchCriteria[field.fieldName]) {
+            delete this._searchCriteria[field.fieldName];
+          }
+        }
+
+      }
+    });
+    const searchEvent = new CustomEvent('search', {
+          detail: {
+            searchCriteria: this._searchCriteria
+          }
+        }
+    );
+    this.dispatchEvent(searchEvent);
+    console.log("Searching for:" +JSON.stringify(searchEvent.detail));
   }
 
   get data() {
@@ -378,15 +404,6 @@ export class VlRichTableField extends VlElement(HTMLElement) {
     }
   }
 
-  matchesSearch(dataValue){
-    console.log(this._searchValue);
-    console.log(dataValue);
-    if(!this._searchValue) {
-      return true;
-    }
-    return (dataValue.startsWith(this._searchValue));
-  }
-
   _dressSearchableHeader(){
     const search = document.createElement('input');
     search.setAttribute('is','vl-input-field');
@@ -399,7 +416,7 @@ export class VlRichTableField extends VlElement(HTMLElement) {
   }
 
   _search(value){
-    console.log("Searching for "+value);
+    console.log("SearchValue for "+this.fieldName +": "+value);
     this._searchValue = value;
     this.dispatchEvent(new CustomEvent('searchValueChange'));
   }
@@ -413,6 +430,10 @@ export class VlRichTableField extends VlElement(HTMLElement) {
 
   get searchable() {
     return this.hasAttribute('searchable');
+  }
+
+  get searchValue() {
+    return this._searchValue;
   }
 }
 
