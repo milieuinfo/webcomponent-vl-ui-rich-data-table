@@ -17,6 +17,9 @@ import {VlInputField} from '/node_modules/vl-ui-input-field/vl-input-field.js';
  * @property {boolean} zebra - Variant waarin de rijen afwisslend een andere achtergrondkleur krijgen. Dit maakt de tabel makkelijker leesbaar. Zie ook {@link https://webcomponenten.omgeving.vlaanderen.be/demo/vl-data-table.html|vl-data-table}
  * @property {string} pageable - ...
  *
+ * @event pagechanged - De geselecteerd pagina is verandert.
+ * @event sort - De sorteercriteria is verandert.
+ *
  * @see {@link https://www.github.com/milieuinfo/webcomponent-vl-ui-rich-table/releases/latest|Release notes}
  * @see {@link https://www.github.com/milieuinfo/webcomponent-vl-ui-rich-table/issues|Issues}
  * @see {@link https://webcomponenten.omgeving.vlaanderen.be/demo/vl-rich-table.html|Demo}
@@ -205,6 +208,8 @@ export const RenderFunctions = {
  * @property {string} data-value - Attribuut om aan te duiden op welke sleutel van de data deze waarde moet gekoppeld worden. Verplicht en unique.
  * @property {string} data-type - Attribuut om te bepalen welk type data in de kolom moet komen en hoe de formattering moet gebeuren. Mogelijke waarden: string, ... //todo voeg meer toe
  *                                Default waarde: string
+ * @property {asc | desc} direction - Te combineren met een 'priority' attribute om een sorteercriteria te bepalen.
+ * @property {number} priority -Te combineren met een 'direction' attribute om een sorteercriteria te bepalen.
  *
  * @see {@link https://www.github.com/milieuinfo/webcomponent-vl-ui-rich-table/releases/latest|Release notes}
  * @see {@link https://www.github.com/milieuinfo/webcomponent-vl-ui-rich-table/issues|Issues}
@@ -298,7 +303,6 @@ export class VlRichTableField extends VlElement(HTMLElement) {
     return this.getAttribute('data-value');
   }
 
-  //null -> des -> asc -> null
   _sortButtonClicked(e) {
     let direction;
     switch (this.direction) {
