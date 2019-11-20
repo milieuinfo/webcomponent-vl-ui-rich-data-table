@@ -45,11 +45,32 @@
   </template>
 </test-fixture>
 
+<test-fixture id="vl-rich-table-pager-met-data-in-object-formaat-fixture">
+  <template>
+    <vl-rich-table data='{"content":[
+        {"id": 1, "name": "Lorem ipsum", "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit."},
+        {"id": 2, "name": "Amet aut", "description": "Amet aut, blanditiis dignissimos, earum et eveniet explicabo in labore minus odio odit optio, perferendis provident quas quis quod totam vel vero."},
+        {"id": 3, "name": "Lorem ipsum", "description": "Amet aut, blanditiis dignissimos"}
+        ],"totalElements":20,"size":2,"number":3}'>
+      <vl-rich-table-pager align-right></vl-rich-table-pager>
+    </vl-rich-table>
+  </template>
+</test-fixture>
+
 <test-fixture id="vl-rich-table-sortable-fixture">
   <template>
     <vl-rich-table>
       <vl-rich-table-field sortable data-value="name" label="Naam"></vl-rich-table-field>
       <vl-rich-table-field sortable data-value="description" label="Omschrijving"></vl-rich-table-field>
+    </vl-rich-table>
+  </template>
+</test-fixture>
+
+<test-fixture id="vl-rich-table-sortable-met-default-waard-fixture">
+  <template>
+    <vl-rich-table>
+      <vl-rich-table-field sortable direction="desc" priority="1" data-value="name" label="Naam"></vl-rich-table-field>
+      <vl-rich-table-field sortable direction="asc" priority="0" data-value="description" label="Omschrijving"></vl-rich-table-field>
     </vl-rich-table>
   </template>
 </test-fixture>
@@ -78,7 +99,7 @@
       assert.equal(richTable._table.getAttribute('hover'), '');
     });
 
-    test('bij het toevoegen van data wordt een rij gemaakt met de data op basis van de data-value van de field', () => {
+    test('bij het toevoegen van data in "array" formaat,wordt een rij gemaakt met de data op basis van de data-value van de field', () => {
       const table = fixture('vl-rich-table-fixture');
 
       table.data = [{test: "Dit is testdata."}];
@@ -86,6 +107,19 @@
       assert.isNotNull(table.shadowRoot.querySelector("table > tbody > tr > td"));
       assert.equal(table.shadowRoot.querySelector("table > tbody > tr > td").textContent, 'Dit is testdata.');
     });
+
+    test('bij het toevoegen van data in "object" formaat,wordt een rij gemaakt met de data op basis van de data-value van de field en triggert ' +
+        'een "data_update_from_object" event'
+        , (done) => {
+          const table = fixture('vl-rich-table-fixture');
+          table.addEventListener('data_update_from_object', (e) => {
+            assert.isNotNull(table.shadowRoot.querySelector("table > tbody > tr > td"));
+            assert.equal(table.shadowRoot.querySelector("table > tbody > tr > td").textContent, 'Dit is testdata.');
+            done();
+          });
+
+          table.data = {content: [{test: "Dit is testdata."}]};
+        });
 
     test('bij het toevoegen van ongeldige data is er een fout', () => {
       const table = fixture('vl-rich-table-fixture');
@@ -146,9 +180,21 @@
       assert.equal(table.shadowRoot.querySelector("table > tbody > tr > td").textContent, 'Dit is andere data.');
     });
 
-    test('pager wordt in de footer toegevoegd', () => {
+    test('pager wordt in de footer-caption toegevoegd', () => {
       const table = fixture('vl-rich-table-pager-fixture');
-      assert.isNotNull(table.shadowRoot.querySelector("table > tfoot > tr >td >vl-rich-table-pager"));
+      assert.isNotNull(table.shadowRoot.querySelector("table >caption >vl-rich-table-pager"));
+    });
+
+    test('kunnen de pager initialen door de juiste json input', (done) => {
+      const table = fixture('vl-rich-table-pager-met-data-in-object-formaat-fixture');
+      const pager = table.shadowRoot.querySelector("vl-rich-table-pager");
+      flush(() => {
+        console.log("pager",pager.getAttributeNames());
+        assert.equal(pager.getAttribute('total-items'),"20");
+        assert.equal(pager.getAttribute('items-per-page'),"2");
+        assert.equal(pager.getAttribute('current-page'),"4");
+        done();
+      });
     });
 
     test('de sortable kolom header heeft de juiste style', (done) => {
@@ -167,7 +213,7 @@
       const column1 = table.shadowRoot.querySelectorAll('table > thead > tr >th >span[name="sortable-span"]')[0];
       let i = 0;
 
-      table.addEventListener('sort',(e) => {
+      table.addEventListener('sort', (e) => {
         i++;
       });
       column1.click();
@@ -200,13 +246,13 @@
       });
     });
 
-    test('de laaste geklikt kolom krijgt de laagste prioriteit',(done) => {
+    test('de laaste geklikt kolom krijgt de laagste prioriteit', (done) => {
       const table = fixture('vl-rich-table-sortable-fixture');
       const column1 = table.shadowRoot.querySelectorAll('table > thead > tr >th >span[name="sortable-span"]')[0];
       const column2 = table.shadowRoot.querySelectorAll('table > thead > tr >th >span[name="sortable-span"]')[1];
       let i = 0;
 
-      table.addEventListener('sort',(e) => {
+      table.addEventListener('sort', (e) => {
         i++;
       });
       column1.click();
@@ -282,17 +328,17 @@
       });
     });
 
-    test('de sort criterias veranderen door de veld attributes',(done) => {
+    test('de sort criterias veranderen door de veld attributes', (done) => {
       const table = fixture('vl-rich-table-sortable-fixture');
 
       let nameColumn = table.querySelector("vl-rich-table-field[data-value='name']");
       let descriptionColumn = table.querySelector("vl-rich-table-field[data-value='description']");
 
-      nameColumn.setAttribute("direction","asc");
-      nameColumn.setAttribute("priority","0");
+      nameColumn.setAttribute("direction", "asc");
+      nameColumn.setAttribute("priority", "0");
 
-      descriptionColumn.setAttribute("direction","desc");
-      descriptionColumn.setAttribute("priority","1");
+      descriptionColumn.setAttribute("direction", "desc");
+      descriptionColumn.setAttribute("priority", "1");
 
       flush(() => {
         assert.equal(table.sortCriterias.length, 2);
@@ -309,16 +355,16 @@
       })
     });
 
-    test('om een sort criteria te bepalen,attributes "direction" en "priority" zijn beide verplichten',(done) => {
+    test('om een sort criteria te bepalen,attributes "direction" en "priority" zijn beide verplichten', (done) => {
       const table = fixture('vl-rich-table-sortable-fixture');
 
       let nameColumn = table.querySelector("vl-rich-table-field[data-value='name']");
       let descriptionColumn = table.querySelector("vl-rich-table-field[data-value='description']");
 
-      nameColumn.setAttribute("direction","asc");
-      nameColumn.setAttribute("priority","0");
+      nameColumn.setAttribute("direction", "asc");
+      nameColumn.setAttribute("priority", "0");
 
-      descriptionColumn.setAttribute("direction","desc");
+      descriptionColumn.setAttribute("direction", "desc");
 
       flush(() => {
         assert.equal(table.sortCriterias.length, 1);
@@ -328,6 +374,22 @@
         assert.equal(table.sortCriterias[0].direction, 'asc');
 
         assert.equal(table.shadowRoot.querySelectorAll("table > thead > tr >th >span[name='sortable-span']")[1].getAttribute('icon'), 'sort');
+        done();
+      })
+    });
+
+    test('kunnen de sort criteria bepalen door de default waarde te aanduiden', (done) => {
+      const table = fixture('vl-rich-table-sortable-met-default-waard-fixture');
+      flush(() => {
+        assert.equal(table.sortCriterias.length, 2);
+
+        assert.equal(table.shadowRoot.querySelectorAll("table > thead > tr >th >span[name='sortable-span']")[0].getAttribute('icon'), 'nav-down');
+        assert.equal(table.sortCriterias[1].name, 'name');
+        assert.equal(table.sortCriterias[1].direction, 'desc');
+
+        assert.equal(table.shadowRoot.querySelectorAll("table > thead > tr >th >span[name='sortable-span']")[1].getAttribute('icon'), 'nav-up');
+        assert.equal(table.sortCriterias[0].name, 'description');
+        assert.equal(table.sortCriterias[0].direction, 'asc');
         done();
       })
     })

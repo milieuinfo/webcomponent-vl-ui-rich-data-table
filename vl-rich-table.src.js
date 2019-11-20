@@ -50,12 +50,9 @@ export class VlRichTable extends VlElement(HTMLElement) {
             <tr>
             </tr>
           </thead>
-          <tfoot>
-            <tr>
-            </tr>
-          </tfoot>
           <tbody>
           </tbody>
+          <caption></caption>
         </table>
         `);
     this._data = [];
@@ -63,23 +60,16 @@ export class VlRichTable extends VlElement(HTMLElement) {
     this._searchCriteria = {};
     const slot = this.shadowRoot.querySelector('slot');
     slot.addEventListener('slotchange', () => this._createRows());
-    this.addEventListener('searchValueChange',() => this.updateSearchFields());
+    this.addEventListener('searchValueChange', () => this.updateSearchFields());
   }
 
   _createRows() {
     Array.from(this._tableBody.children).forEach(child => child.remove());
-    if (!Array.isArray(this._data)) {
-      throw new Error("data is geen geldige array van objecten");
-    }
-    this._data.forEach(data => {
+    this.content.forEach(data => {
       const row = document.createElement("tr");
-      Array.from(this.children).filter(child => {
-        return child.tagName.toLowerCase()
-            === 'vl-rich-table-field'
-      }).forEach(field => {
+      Array.from(this.children).forEach(field => {
         const tableData = document.createElement("td");
         tableData.appendChild(field.renderTableData(data[field.fieldName]));
-
         row.appendChild(tableData);
       });
       this._tableBody.appendChild(row);
@@ -130,19 +120,19 @@ export class VlRichTable extends VlElement(HTMLElement) {
     });
   }
 
-  get fields(){
+  get fields() {
     return Array.from(this.children).filter(child => {
       return child.tagName.toLowerCase()
           === 'vl-rich-table-field'
     })
   }
 
-  updateSearchFields(){
+  updateSearchFields() {
     this.fields.forEach(field => {
-      if (field.searchable){
-        if (field.searchValue){
+      if (field.searchable) {
+        if (field.searchValue) {
           this._searchCriteria[field.fieldName] = field.searchValue;
-        }else{
+        } else {
           if (this._searchCriteria[field.fieldName]) {
             delete this._searchCriteria[field.fieldName];
           }
@@ -157,7 +147,7 @@ export class VlRichTable extends VlElement(HTMLElement) {
         }
     );
     this.dispatchEvent(searchEvent);
-    console.log("Searching for:" +JSON.stringify(searchEvent.detail));
+    console.log("Searching for:" + JSON.stringify(searchEvent.detail));
   }
 
   get data() {
@@ -168,6 +158,19 @@ export class VlRichTable extends VlElement(HTMLElement) {
     this._data = data;
     if (this._isReady()) {
       this._createRows();
+    }
+    if (!Array.isArray(this.data)) {
+      this.dispatchEvent(new CustomEvent('data_update_from_object', this.data));
+    }
+  }
+
+  get content() {
+    if (Array.isArray(this.data)) {
+      return this.data;
+    } else if (Array.isArray(this.data.content)) {
+      return this.data.content;
+    } else {
+      throw new Error("data is geen geldige array van objecten");
     }
   }
 
@@ -192,7 +195,7 @@ export class VlRichTable extends VlElement(HTMLElement) {
   }
 
   get _tableFooterRow() {
-    return this._table.querySelector('tfoot > tr');
+    return this._table.querySelector('caption');
   }
 
   addTableHeaderCell(cell) {
@@ -200,10 +203,7 @@ export class VlRichTable extends VlElement(HTMLElement) {
   }
 
   addTableFooterCell(cell) {
-    const td = document.createElement("td");
-    td.setAttribute("colspan", 9999);
-    td.appendChild(cell);
-    this._tableFooterRow.append(td);
+    this._tableFooterRow.append(cell);
   }
 }
 
@@ -425,10 +425,10 @@ export class VlRichTableField extends VlElement(HTMLElement) {
     }
   }
 
-  _dressSearchableHeader(){
+  _dressSearchableHeader() {
     const search = document.createElement('input');
-    search.setAttribute('is','vl-input-field');
-    search.setAttribute("block","");
+    search.setAttribute('is', 'vl-input-field');
+    search.setAttribute("block", "");
     search.setAttribute("style", "display: block;");//TODO
     search.addEventListener("input", (e) => {
       this._search(search.value);
@@ -436,10 +436,11 @@ export class VlRichTableField extends VlElement(HTMLElement) {
     this._headerCell.appendChild(search);
   }
 
-  _search(value){
-    console.log("SearchValue for "+this.fieldName +": "+value);
+  _search(value) {
+    console.log("SearchValue for " + this.fieldName + ": " + value);
     this._searchValue = value;
-    this.dispatchEvent(new CustomEvent('searchValueChange',{detail:{field:this.fieldName, value: value},bubbles: true}));
+    this.dispatchEvent(new CustomEvent('searchValueChange',
+        {detail: {field: this.fieldName, value: value}, bubbles: true}));
   }
 
   get richTable() {
@@ -486,9 +487,24 @@ export class VlRichTablePager extends VlPager {
         this.richTable.dispatchEvent(new CustomEvent('pagechanged',
             {detail: e.detail}));
       });
+
+      this._updatePageable();
+      this.richTable.addEventListener('data_update_from_object', (e) => {
+        console.log(e);
+        this._updatePageable();
+      })
     } else if (!this._appended) {
       console.log(
           'Een VlRichTablePager moet altijd als parent een vl-rich-table hebben.')
+    }
+  }
+
+  _updatePageable() {
+    let data = this.richTable.data;
+    if (data.totalElements && data.size && data.number + 1) {
+      this.setAttribute('total-items', data.totalElements);
+      this.setAttribute('items-per-page', data.size);
+      this.setAttribute('current-page', data.number + 1);
     }
   }
 

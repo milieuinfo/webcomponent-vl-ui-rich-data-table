@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html class="js">
-	<head>
-        <title>vl-rich-table voorbeeld</title>
-        <script type="module" src="demo.js"></script>
-        <script type="module" src="../vl-rich-table.src.js"></script>
-    </head>
+<head>
+  <title>vl-rich-table voorbeeld</title>
+  <script type="module" src="demo.js"></script>
+  <script type="module" src="../vl-rich-table.src.js"></script>
+</head>
 
-	<body>
+<body>
 
-    <h1>vl-ui-rich-table demo</h1>
+<h1>vl-ui-rich-table demo</h1>
 
-    <div>
-      <h2>Rich table met dynamische data en custom renderer</h2>
-      <pre>
+<div>
+  <h2>Rich table met dynamische data en custom renderer</h2>
+  <pre>
         <code class="line-numbers language-markup">
         &#x3C;vl-rich-table id=&#x22;dynamic-data&#x22;&#x3E;
           &#x3C;vl-rich-table-field data-value=&#x22;id&#x22; label=&#x22;ID&#x22;&#x3E;&#x3C;/vl-rich-table-field&#x3E;
@@ -23,20 +23,23 @@
         &#x3C;button type=&#x22;button&#x22; onclick=&#x27;document.getElementById(&#x22;strong-field&#x22;).renderTableData = function(content) {const div = document.createElement(&#x22;div&#x22;); div.innerHTML = &#x22;&#x3C;strong&#x3E;&#x22;+content+&#x22;&#x3C;/strong&#x3E;&#x22;; return div;}&#x27;&#x3E;Verander renderer voor naam&#x3C;/button&#x3E;
         </code>
       </pre>
-      <div class="demo">
-        <vl-rich-table id="dynamic-data">
-          <vl-rich-table-field data-value="id" label="ID"></vl-rich-table-field>
-          <vl-rich-table-field id="strong-field" data-value="name" label="Naam"></vl-rich-table-field>
-        </vl-rich-table>
-        <button type="button" onclick='document.getElementById("dynamic-data").data = [{id: 1, name:"Test"}, {id: 2, name:"Test2"}, {id: 3, name:"Test3"}]'>Voeg testdata toe</button>
-        <button type="button" onclick='document.getElementById("dynamic-data").data = []'>Verwijder data</button>
-        <button type="button" onclick='document.getElementById("strong-field").renderTableData = function(content) {const div = document.createElement("div"); div.innerHTML = "<strong>"+content+"</strong>"; return div;}'>Verander renderer voor naam</button>
-      </div>
-    </div>
+  <div class="demo">
+    <vl-rich-table id="dynamic-data">
+      <vl-rich-table-field data-value="id" label="ID"></vl-rich-table-field>
+      <vl-rich-table-field id="strong-field" data-value="name" label="Naam"></vl-rich-table-field>
+    </vl-rich-table>
+    <button type="button" onclick='document.getElementById("dynamic-data").data = [{id: 1, name:"Test"}, {id: 2, name:"Test2"}, {id: 3, name:"Test3"}]'>Voeg testdata toe</button>
+    <button type="button" onclick='document.getElementById("dynamic-data").data = []'>Verwijder data</button>
+    <button type="button"
+            onclick='document.getElementById("strong-field").renderTableData = function(content) {const div = document.createElement("div"); div.innerHTML = "<strong>"+content+"</strong>"; return div;}'>
+      Verander renderer voor naam
+    </button>
+  </div>
+</div>
 
-    <div>
-      <h2>Rich table met voorgedefinieerde data en zebra stijl</h2>
-      <pre>
+<div>
+  <h2>Rich table met voorgedefinieerde data en zebra stijl</h2>
+  <pre>
         <code class="line-numbers language-markup">
           &#x3C;vl-rich-table data=&#x27;[{&#x22;id&#x22;: 1, &#x22;name&#x22;: &#x22;Lorem ipsum&#x22;, &#x22;description&#x22;: &#x22;Lorem ipsum dolor sit amet, consectetur adipisicing elit.&#x22;}, {&#x22;id&#x22;: 2, &#x22;name&#x22;: &#x22;Amet aut&#x22;, &#x22;description&#x22;: &#x22;Amet aut, blanditiis dignissimos, earum et eveniet explicabo in labore minus odio odit optio, perferendis provident quas quis quod totam vel vero.&#x22;}]&#x27; zebra&#x3E;
             &#x3C;vl-rich-table-field data-value=&#x22;name&#x22; label=&#x22;Naam&#x22;&#x3E;&#x3C;/vl-rich-table-field&#x3E;
@@ -44,70 +47,92 @@
           &#x3C;/vl-rich-table&#x3E;
         </code>
       </pre>
-      <div class="demo">
-        <vl-rich-table data='[{"id": 1, "name": "Lorem ipsum", "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit."}, {"id": 2, "name": "Amet aut", "description": "Amet aut, blanditiis dignissimos, earum et eveniet explicabo in labore minus odio odit optio, perferendis provident quas quis quod totam vel vero."}]' zebra>
-          <vl-rich-table-field data-value="name" label="Naam"></vl-rich-table-field>
-          <vl-rich-table-field data-value="description" label="Omschrijving"></vl-rich-table-field>
-        </vl-rich-table>
-      </div>
-    </div>
+  <div class="demo">
+    <vl-rich-table
+        data='[{"id": 1, "name": "Lorem ipsum", "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit."}, {"id": 2, "name": "Amet aut", "description": "Amet aut, blanditiis dignissimos, earum et eveniet explicabo in labore minus odio odit optio, perferendis provident quas quis quod totam vel vero."}]'
+        zebra>
+      <vl-rich-table-field data-value="name" label="Naam"></vl-rich-table-field>
+      <vl-rich-table-field data-value="description" label="Omschrijving"></vl-rich-table-field>
+    </vl-rich-table>
+  </div>
+</div>
 
-    <div>
-      <h2>Rich table met pager</h2>
-      <pre>
+<div>
+  <h2>Rich table met pager</h2>
+  <pre>
         <code class="line-numbers language-markup">
-          &#x3C;vl-rich-table data=&#x27;[{&#x22;id&#x22;: 1, &#x22;name&#x22;: &#x22;Lorem ipsum&#x22;, &#x22;description&#x22;: &#x22;Lorem ipsum dolor sit amet, consectetur adipisicing elit.&#x22;}, {&#x22;id&#x22;: 2, &#x22;name&#x22;: &#x22;Amet aut&#x22;, &#x22;description&#x22;: &#x22;Amet aut, blanditiis dignissimos, earum et eveniet explicabo in labore minus odio odit optio, perferendis provident quas quis quod totam vel vero.&#x22;}]&#x27;&#x3E;
-            &#x3C;vl-rich-table-field data-value=&#x22;name&#x22; label=&#x22;Naam&#x22;&#x3E;&#x3C;/vl-rich-table-field&#x3E;
-            &#x3C;vl-rich-table-field data-value=&#x22;description&#x22; label=&#x22;Omschrijving&#x22;&#x3E;&#x3C;/vl-rich-table-field&#x3E;
-            &#x3c;vl-pager align-right total-items=&#x22;100&#x22; items-per-page=&#x22;10&#x22; current-page=&#x22;1&#x22;&#x3E;&#x3c;/vl-pager&#x3E;
+          &#x3C;vl-rich-table id=&#x22;pageableTable&#x22; data=&#x27;
+            {
+              &#x22;content&#x22;:
+                [
+                  {&#x22;id&#x22;: 1, &#x22;name&#x22;: &#x22;Lorem ipsum&#x22;, &#x22;description&#x22;: &#x22;Lorem ipsum dolor sit amet, consectetur adipisicing elit.&#x22;},
+                  {&#x22;id&#x22;: 2, &#x22;name&#x22;: &#x22;Amet aut&#x22;, &#x22;description&#x22;: &#x22;Amet aut, blanditiis dignissimos, earum et eveniet explicabo in labore minus odio odit optio, perferendis provident quas quis quod totam vel vero.&#x22;}
+                ],
+              &#x22;totalElements&#x22;: 20,
+              &#x22;size&#x22;: 2,
+              &#x22;number&#x22;: 0
+            }&#x27;&#x3E;
+            &#x3C;vl-rich-table-field data-value="name" label="Naam"&#x3E;&#x3C;/vl-rich-table-field&#x3E;
+            &#x3C;vl-rich-table-field data-value="description" label="Omschrijving"&#x3E;&#x3C;/vl-rich-table-field&#x3E;
+            &#x3C;vl-rich-table-pager align-right&#x3E;&#x3C;/vl-rich-table-pager&#x3E;
           &#x3C;/vl-rich-table&#x3E;
         </code>
       </pre>
       <div class="demo">
-        <vl-rich-table id="pageableTable" data='[{"id": 1, "name": "Lorem ipsum", "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit."}, {"id": 2, "name": "Amet aut", "description": "Amet aut, blanditiis dignissimos, earum et eveniet explicabo in labore minus odio odit optio, perferendis provident quas quis quod totam vel vero."}]'>
-          <vl-rich-table-field data-value="name" label="Naam"></vl-rich-table-field>
-          <vl-rich-table-field data-value="description" label="Omschrijving"></vl-rich-table-field>
-          <vl-rich-table-pager align-right total-items="100" items-per-page="10" current-page="1"></vl-rich-table-pager>
-        </vl-rich-table>
-      </div>
-      Page criterias:<p id="pageCriterias"></p>
-      <script>
-        document.querySelector('#pageableTable').addEventListener('pagechanged',(e) => {
-          let criterias = e.detail;
-          document.querySelector('#pageCriterias').innerHTML = JSON.stringify(criterias);
-        })
-      </script>
-    </div>
+      <vl-rich-table id="pageableTable" data='
+      {
+        "content":[
+                  {"id": 1, "name": "Lorem ipsum", "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit."},
+                  {"id": 2, "name": "Amet aut", "description": "Amet aut, blanditiis dignissimos, earum et eveniet explicabo in labore minus odio odit optio, perferendis provident quas quis quod totam vel vero."}
+                  ],
+        "totalElements": 20,
+        "size": 2,
+        "number":0
+      }'>
+      <vl-rich-table-field data-value="name" label="Naam"></vl-rich-table-field>
+      <vl-rich-table-field data-value="description" label="Omschrijving"></vl-rich-table-field>
+      <vl-rich-table-pager align-right></vl-rich-table-pager>
+    </vl-rich-table>
+  </div>
+  Page criterias:<p id="pageCriterias"></p>
+  <script>
+    document.querySelector('#pageableTable').addEventListener('pagechanged', (e) => {
+      let criterias = e.detail;
+      document.querySelector('#pageCriterias').innerHTML = JSON.stringify(criterias);
+    })
+  </script>
+</div>
 
-    <div>
-      <h2>Sortable</h2>
-      <pre>
+<div>
+  <h2>Sortable</h2>
+  <pre>
         <code class="line-numbers language-markup">
-          &#x3C;vl-rich-table data=&#x27;[{&#x22;id&#x22;: 1, &#x22;name&#x22;: &#x22;Lorem ipsum&#x22;, &#x22;description&#x22;: &#x22;Lorem ipsum dolor sit amet, consectetur adipisicing elit.&#x22;}, {&#x22;id&#x22;: 2, &#x22;name&#x22;: &#x22;Amet aut&#x22;, &#x22;description&#x22;: &#x22;Amet aut, blanditiis dignissimos, earum et eveniet explicabo in labore minus odio odit optio, perferendis provident quas quis quod totam vel vero.&#x22;}]&#x27;&#x3E;
+          &#x3C;vl-rich-table data=&#x27;{&#x22;content&#x22;:[{&#x22;id&#x22;: 1, &#x22;name&#x22;: &#x22;Lorem ipsum&#x22;, &#x22;description&#x22;: &#x22;Lorem ipsum dolor sit amet, consectetur adipisicing elit.&#x22;}, {&#x22;id&#x22;: 2, &#x22;name&#x22;: &#x22;Amet aut&#x22;, &#x22;description&#x22;: &#x22;Amet aut, blanditiis dignissimos, earum et eveniet explicabo in labore minus odio odit optio, perferendis provident quas quis quod totam vel vero.&#x22;}]}&#x27;&#x3E;
             &#x3C;vl-rich-table-field sortable direction=&#x22;desc&#x22; priority=&#x22;1&#x22; data-value=&#x22;name&#x22; label=&#x22;Naam&#x22;&#x3E;&#x3C;/vl-rich-table-field&#x3E;
             &#x3C;vl-rich-table-field sortable direction=&#x22;asc&#x22; priority=&#x22;0&#x22; data-value=&#x22;description&#x22; label=&#x22;Omschrijving&#x22;&#x3E;&#x3C;/vl-rich-table-field&#x3E;
           &#x3C;/vl-rich-table&#x3E;
         </code>
       </pre>
-      <div class="demo">
-        <vl-rich-table id="sortableTable" data='[{"id": 1, "name": "Lorem ipsum", "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit."}, {"id": 2, "name": "Amet aut", "description": "Amet aut, blanditiis dignissimos, earum et eveniet explicabo in labore minus odio odit optio, perferendis provident quas quis quod totam vel vero."}]'>
-          <vl-rich-table-field sortable direction="desc" priority="1" data-value="name" label="Naam"></vl-rich-table-field>
-          <vl-rich-table-field sortable direction="asc" priority="0" data-value="description" label="Omschrijving"></vl-rich-table-field>
-        </vl-rich-table>
-        Sort criterias:<p id="sortCriterias"></p>
-        <script>
-          document.querySelector('#sortableTable').addEventListener('sort',(e) => {
-            let criterias = e.detail.sortCriterias;
-            document.querySelector('#sortCriterias').innerHTML = JSON.stringify(criterias);
-          });
-        </script>
-      </div>
-    </div>
+  <div class="demo">
+    <vl-rich-table id="sortableTable"
+                   data='{"content":[{"id": 1, "name": "Lorem ipsum", "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit."}, {"id": 2, "name": "Amet aut", "description": "Amet aut, blanditiis dignissimos, earum et eveniet explicabo in labore minus odio odit optio, perferendis provident quas quis quod totam vel vero."}]}'>
+      <vl-rich-table-field sortable direction="desc" priority="1" data-value="name" label="Naam"></vl-rich-table-field>
+      <vl-rich-table-field sortable direction="asc" priority="0" data-value="description" label="Omschrijving"></vl-rich-table-field>
+    </vl-rich-table>
+    Sort criterias:<p id="sortCriterias"></p>
+    <script>
+      document.querySelector('#sortableTable').addEventListener('sort', (e) => {
+        let criterias = e.detail.sortCriterias;
+        document.querySelector('#sortCriterias').innerHTML = JSON.stringify(criterias);
+      });
+    </script>
+  </div>
+</div>
 
 
-    <div>
-      <h2>Search</h2>
-      <pre>
+<div>
+  <h2>Search</h2>
+  <pre>
         <code class="line-numbers language-markup">
           &lt;vl-rich-table id=&quot;searchableTable&quot; data=&#39;[
             {
@@ -140,8 +165,8 @@
           &lt;/vl-rich-table&gt;
         </code>
       </pre>
-      <div class="demo">
-        <vl-rich-table id="searchableTable" data='[
+  <div class="demo">
+    <vl-rich-table id="searchableTable" data='[
           {
             "id": 1,
             "name": "Lorem ipsum",
@@ -164,27 +189,27 @@
             "datum": "2020-01-31"
           }
         ]'>
-          <vl-rich-table-field searchable data-value="name" label="Naam"></vl-rich-table-field>
-          <vl-rich-table-field searchable data-value="description" label="Omschrijving"></vl-rich-table-field>
-          <vl-rich-table-field searchable data-value="tijdstip" data-type="datetime" label="Tijdstip"></vl-rich-table-field>
-          <vl-rich-table-field searchable data-value="datum" data-type="date" label="Datum"></vl-rich-table-field>
-          <vl-rich-table-pager align-right total-items="100" items-per-page="10" current-page="1"></vl-rich-table-pager>
-        </vl-rich-table>
-        Search value:<p id="searchValueChanged"></p>
-        Search criteria:<p id="searchCriteria"></p>
-        <script>
-          document.querySelector('#searchableTable').addEventListener('search',(e) => {
-            let criteria = e.detail.searchCriteria;
-            document.querySelector('#searchCriteria').innerHTML = JSON.stringify(criteria);
-          });
+      <vl-rich-table-field searchable data-value="name" label="Naam"></vl-rich-table-field>
+      <vl-rich-table-field searchable data-value="description" label="Omschrijving"></vl-rich-table-field>
+      <vl-rich-table-field searchable data-value="tijdstip" data-type="datetime" label="Tijdstip"></vl-rich-table-field>
+      <vl-rich-table-field searchable data-value="datum" data-type="date" label="Datum"></vl-rich-table-field>
+      <vl-rich-table-pager align-right total-items="100" items-per-page="10" current-page="1"></vl-rich-table-pager>
+    </vl-rich-table>
+    Search value:<p id="searchValueChanged"></p>
+    Search criteria:<p id="searchCriteria"></p>
+    <script>
+      document.querySelector('#searchableTable').addEventListener('search', (e) => {
+        let criteria = e.detail.searchCriteria;
+        document.querySelector('#searchCriteria').innerHTML = JSON.stringify(criteria);
+      });
 
-          document.querySelector('#searchableTable').addEventListener('searchValueChange',(e) => {
-            let detail = e.detail;
-            document.querySelector('#searchValueChanged').innerHTML = JSON.stringify(detail);
-          });
-        </script>
-      </div>
-    </div>
+      document.querySelector('#searchableTable').addEventListener('searchValueChange', (e) => {
+        let detail = e.detail;
+        document.querySelector('#searchValueChanged').innerHTML = JSON.stringify(detail);
+      });
+    </script>
+  </div>
+</div>
 
-  </body>
+</body>
 </html>
