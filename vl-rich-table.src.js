@@ -63,7 +63,7 @@ export class VlRichTable extends VlElement(HTMLElement) {
     this._searchCriteria = {};
     const slot = this.shadowRoot.querySelector('slot');
     slot.addEventListener('slotchange', () => this._createRows());
-    this.addEventListener('searchValueChange',() => this.updateSearchFields(), true);
+    this.addEventListener('searchValueChange',() => this.updateSearchFields());
   }
 
   _createRows() {
@@ -418,7 +418,7 @@ export class VlRichTableField extends VlElement(HTMLElement) {
   _search(value){
     console.log("SearchValue for "+this.fieldName +": "+value);
     this._searchValue = value;
-    this.dispatchEvent(new CustomEvent('searchValueChange'));
+    this.dispatchEvent(new CustomEvent('searchValueChange',{detail:{field:this.fieldName, value: value},bubbles: true}));
   }
 
   get richTable() {

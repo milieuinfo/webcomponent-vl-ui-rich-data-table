@@ -126,6 +126,19 @@
           <vl-rich-table-field searchable data-value="description" label="Omschrijving"></vl-rich-table-field>
           <vl-rich-table-pager align-right total-items="100" items-per-page="10" current-page="1"></vl-rich-table-pager>
         </vl-rich-table>
+        Search value:<p id="searchValueChanged"></p>
+        Search criteria:<p id="searchCriteria"></p>
+        <script>
+          document.querySelector('#searchableTable').addEventListener('search',(e) => {
+            let criteria = e.detail.searchCriteria;
+            document.querySelector('#searchCriteria').innerHTML = JSON.stringify(criteria);
+          });
+
+          document.querySelector('#searchableTable').addEventListener('searchValueChange',(e) => {
+            let detail = e.detail;
+            document.querySelector('#searchValueChanged').innerHTML = JSON.stringify(detail);
+          });
+        </script>
       </div>
     </div>
 
