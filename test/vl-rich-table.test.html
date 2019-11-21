@@ -220,28 +220,28 @@
 
       awaitUntil(() => i === 1).then(() => {
         assert.equal(table.shadowRoot.querySelectorAll("table > thead > tr >th >span[name='sortable-span']")[0].getAttribute('icon'), 'nav-down');
-        assert.equal(table.sortCriterias[0].name, 'name');
-        assert.equal(table.sortCriterias[0].direction, 'desc');
+        assert.equal(table.sortCriteria[0].name, 'name');
+        assert.equal(table.sortCriteria[0].direction, 'desc');
         column1.click();
       });
 
       awaitUntil(() => i === 2).then(() => {
         assert.equal(table.shadowRoot.querySelectorAll("table > thead > tr >th >span[name='sortable-span']")[0].getAttribute('icon'), 'nav-up');
-        assert.equal(table.sortCriterias[0].name, 'name');
-        assert.equal(table.sortCriterias[0].direction, 'asc');
+        assert.equal(table.sortCriteria[0].name, 'name');
+        assert.equal(table.sortCriteria[0].direction, 'asc');
         column1.click();
       });
 
       awaitUntil(() => i === 3).then(() => {
         assert.equal(table.shadowRoot.querySelectorAll("table > thead > tr >th >span[name='sortable-span']")[0].getAttribute('icon'), 'sort');
-        assert.equal(table.sortCriterias.length, 0);
+        assert.equal(table.sortCriteria.length, 0);
         column1.click();
       });
 
       awaitUntil(() => i === 4).then(() => {
         assert.equal(table.shadowRoot.querySelectorAll("table > thead > tr >th >span[name='sortable-span']")[0].getAttribute('icon'), 'nav-down');
-        assert.equal(table.sortCriterias[0].name, 'name');
-        assert.equal(table.sortCriterias[0].direction, 'desc');
+        assert.equal(table.sortCriteria[0].name, 'name');
+        assert.equal(table.sortCriteria[0].direction, 'desc');
         done();
       });
     });
@@ -258,68 +258,68 @@
       column1.click();
 
       awaitUntil(() => i === 1).then(() => {
-        assert.equal(table.sortCriterias.length, 1);
+        assert.equal(table.sortCriteria.length, 1);
 
         assert.equal(table.shadowRoot.querySelectorAll("table > thead > tr >th >span[name='sortable-span']")[0].getAttribute('icon'), 'nav-down');
-        assert.equal(table.sortCriterias[0].name, 'name');
-        assert.equal(table.sortCriterias[0].direction, 'desc');
+        assert.equal(table.sortCriteria[0].name, 'name');
+        assert.equal(table.sortCriteria[0].direction, 'desc');
 
         assert.equal(table.shadowRoot.querySelectorAll("table > thead > tr >th >span[name='sortable-span']")[1].getAttribute('icon'), 'sort');
         column2.click();
       });
 
       awaitUntil(() => i === 2).then(() => {
-        assert.equal(table.sortCriterias.length, 2);
+        assert.equal(table.sortCriteria.length, 2);
 
         assert.equal(table.shadowRoot.querySelectorAll("table > thead > tr >th >span[name='sortable-span']")[0].getAttribute('icon'), 'nav-down');
-        assert.equal(table.sortCriterias[0].name, 'name');
-        assert.equal(table.sortCriterias[0].direction, 'desc');
+        assert.equal(table.sortCriteria[0].name, 'name');
+        assert.equal(table.sortCriteria[0].direction, 'desc');
 
         assert.equal(table.shadowRoot.querySelectorAll("table > thead > tr >th >span[name='sortable-span']")[1].getAttribute('icon'), 'nav-down');
-        assert.equal(table.sortCriterias[1].name, 'description');
-        assert.equal(table.sortCriterias[1].direction, 'desc');
+        assert.equal(table.sortCriteria[1].name, 'description');
+        assert.equal(table.sortCriteria[1].direction, 'desc');
         column1.click();
       });
 
       awaitUntil(() => i === 3).then(() => {
-        assert.equal(table.sortCriterias.length, 2);
+        assert.equal(table.sortCriteria.length, 2);
 
         assert.equal(table.shadowRoot.querySelectorAll("table > thead > tr >th >span[name='sortable-span']")[0].getAttribute('icon'), 'nav-up');
-        assert.equal(table.sortCriterias[1].name, 'name');
-        assert.equal(table.sortCriterias[1].direction, 'asc');
+        assert.equal(table.sortCriteria[1].name, 'name');
+        assert.equal(table.sortCriteria[1].direction, 'asc');
 
         assert.equal(table.shadowRoot.querySelectorAll("table > thead > tr >th >span[name='sortable-span']")[1].getAttribute('icon'), 'nav-down');
-        assert.equal(table.sortCriterias[0].name, 'description');
-        assert.equal(table.sortCriterias[0].direction, 'desc');
+        assert.equal(table.sortCriteria[0].name, 'description');
+        assert.equal(table.sortCriteria[0].direction, 'desc');
         column2.click();
       });
 
       awaitUntil(() => i === 4).then(() => {
-        assert.equal(table.sortCriterias.length, 2);
+        assert.equal(table.sortCriteria.length, 2);
 
         assert.equal(table.shadowRoot.querySelectorAll("table > thead > tr >th >span[name='sortable-span']")[0].getAttribute('icon'), 'nav-up');
-        assert.equal(table.sortCriterias[0].name, 'name');
-        assert.equal(table.sortCriterias[0].direction, 'asc');
+        assert.equal(table.sortCriteria[0].name, 'name');
+        assert.equal(table.sortCriteria[0].direction, 'asc');
 
         assert.equal(table.shadowRoot.querySelectorAll("table > thead > tr >th >span[name='sortable-span']")[1].getAttribute('icon'), 'nav-up');
-        assert.equal(table.sortCriterias[1].name, 'description');
-        assert.equal(table.sortCriterias[1].direction, 'asc');
+        assert.equal(table.sortCriteria[1].name, 'description');
+        assert.equal(table.sortCriteria[1].direction, 'asc');
         column1.click();
       });
 
       awaitUntil(() => i === 5).then(() => {
-        assert.equal(table.sortCriterias.length, 1);
+        assert.equal(table.sortCriteria.length, 1);
 
         assert.equal(table.shadowRoot.querySelectorAll("table > thead > tr >th >span[name='sortable-span']")[0].getAttribute('icon'), 'sort');
 
         assert.equal(table.shadowRoot.querySelectorAll("table > thead > tr >th >span[name='sortable-span']")[1].getAttribute('icon'), 'nav-up');
-        assert.equal(table.sortCriterias[0].name, 'description');
-        assert.equal(table.sortCriterias[0].direction, 'asc');
+        assert.equal(table.sortCriteria[0].name, 'description');
+        assert.equal(table.sortCriteria[0].direction, 'asc');
         column2.click();
       });
 
       awaitUntil(() => i === 6).then(() => {
-        assert.equal(table.sortCriterias.length, 0);
+        assert.equal(table.sortCriteria.length, 0);
 
         assert.equal(table.shadowRoot.querySelectorAll("table > thead > tr >th >span[name='sortable-span']")[0].getAttribute('icon'), 'sort');
 
@@ -341,15 +341,15 @@
       descriptionColumn.setAttribute("priority", "1");
 
       flush(() => {
-        assert.equal(table.sortCriterias.length, 2);
+        assert.equal(table.sortCriteria.length, 2);
 
         assert.equal(table.shadowRoot.querySelectorAll("table > thead > tr >th >span[name='sortable-span']")[0].getAttribute('icon'), 'nav-up');
-        assert.equal(table.sortCriterias[0].name, 'name');
-        assert.equal(table.sortCriterias[0].direction, 'asc');
+        assert.equal(table.sortCriteria[0].name, 'name');
+        assert.equal(table.sortCriteria[0].direction, 'asc');
 
         assert.equal(table.shadowRoot.querySelectorAll("table > thead > tr >th >span[name='sortable-span']")[1].getAttribute('icon'), 'nav-down');
-        assert.equal(table.sortCriterias[1].name, 'description');
-        assert.equal(table.sortCriterias[1].direction, 'desc');
+        assert.equal(table.sortCriteria[1].name, 'description');
+        assert.equal(table.sortCriteria[1].direction, 'desc');
 
         done();
       })
@@ -367,11 +367,11 @@
       descriptionColumn.setAttribute("direction", "desc");
 
       flush(() => {
-        assert.equal(table.sortCriterias.length, 1);
+        assert.equal(table.sortCriteria.length, 1);
 
         assert.equal(table.shadowRoot.querySelectorAll("table > thead > tr >th >span[name='sortable-span']")[0].getAttribute('icon'), 'nav-up');
-        assert.equal(table.sortCriterias[0].name, 'name');
-        assert.equal(table.sortCriterias[0].direction, 'asc');
+        assert.equal(table.sortCriteria[0].name, 'name');
+        assert.equal(table.sortCriteria[0].direction, 'asc');
 
         assert.equal(table.shadowRoot.querySelectorAll("table > thead > tr >th >span[name='sortable-span']")[1].getAttribute('icon'), 'sort');
         done();
@@ -381,15 +381,15 @@
     test('kunnen de sort criteria bepalen door de default waarde te aanduiden', (done) => {
       const table = fixture('vl-rich-table-sortable-met-default-waard-fixture');
       flush(() => {
-        assert.equal(table.sortCriterias.length, 2);
+        assert.equal(table.sortCriteria.length, 2);
 
         assert.equal(table.shadowRoot.querySelectorAll("table > thead > tr >th >span[name='sortable-span']")[0].getAttribute('icon'), 'nav-down');
-        assert.equal(table.sortCriterias[1].name, 'name');
-        assert.equal(table.sortCriterias[1].direction, 'desc');
+        assert.equal(table.sortCriteria[1].name, 'name');
+        assert.equal(table.sortCriteria[1].direction, 'desc');
 
         assert.equal(table.shadowRoot.querySelectorAll("table > thead > tr >th >span[name='sortable-span']")[1].getAttribute('icon'), 'nav-up');
-        assert.equal(table.sortCriterias[0].name, 'description');
-        assert.equal(table.sortCriterias[0].direction, 'asc');
+        assert.equal(table.sortCriteria[0].name, 'description');
+        assert.equal(table.sortCriteria[0].direction, 'asc');
         done();
       })
     })

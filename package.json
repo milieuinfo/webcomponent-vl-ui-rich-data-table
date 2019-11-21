@@ -5,7 +5,7 @@
   "scripts": {
     "prepare": "npm update --dev vl-ui-util && npm run prepare:util",
     "prepare:util": "npm explore vl-ui-util -- npm run util",
-    "test": "wct -l chrome,firefox --npm -p",
+    "test": "wct -l chrome,firefox --npm",
     "release": "np",
     "release:prepare": "npm run release:prepare:build && npm run release:prepare:imports && npm run release:prepare:css && npm run release:prepare:commit",
     "release:prepare:build": "uglifyjs --compress --mangle --output vl-rich-table.js -- *.src.js",

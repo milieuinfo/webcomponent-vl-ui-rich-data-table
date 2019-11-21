@@ -17,20 +17,20 @@ import {VlInputField} from '/node_modules/vl-ui-input-field/vl-input-field.js';
  * @property {boolean} zebra - Variant waarin de rijen afwisslend een andere achtergrondkleur krijgen. Dit maakt de tabel makkelijker leesbaar. Zie ook {@link https://webcomponenten.omgeving.vlaanderen.be/demo/vl-data-table.html|vl-data-table}
  * @property {string} pageable - ...
  *
- * @event pagechanged - De geselecteerd pagina is verandert.
- * @event sort - De sorteercriteria is verandert.
+ * @event pagechanged - De geselecteerde pagina zijn veranderd.
+ * @event sort - De sorteercriteria zijn veranderd.
  *
  * @see {@link https://www.github.com/milieuinfo/webcomponent-vl-ui-rich-table/releases/latest|Release notes}
  * @see {@link https://www.github.com/milieuinfo/webcomponent-vl-ui-rich-table/issues|Issues}
  * @see {@link https://webcomponenten.omgeving.vlaanderen.be/demo/vl-rich-table.html|Demo}
  */
 export class VlRichTable extends VlElement(HTMLElement) {
-  get sortCriterias() {
-    return this._sortCriterias;
+  get sortCriteria() {
+    return this._sortCriteria;
   }
 
-  set sortCriterias(criterias) {
-    this._sortCriterias = criterias;
+  set sortCriteria(criteria) {
+    this._sortCriteria = criteria;
   }
 
   static get _observedAttributes() {
@@ -56,7 +56,7 @@ export class VlRichTable extends VlElement(HTMLElement) {
         </table>
         `);
     this._data = [];
-    this._sortCriterias = [];
+    this._sortCriteria = [];
     this._searchCriteria = {};
     const slot = this.shadowRoot.querySelector('slot');
     slot.addEventListener('slotchange', () => this._createRows());
@@ -93,31 +93,31 @@ export class VlRichTable extends VlElement(HTMLElement) {
   }
 
   updateSortCriteria(criteria) {
-    customElements.whenDefined('vl-rich-table-field').then(() => {
+    setTimeout(() => {
       if (criteria.direction && (criteria.direction === asc
           || criteria.direction === desc)) {
         if (criteria.priority) {
-          this.sortCriterias[criteria.priority] = {
+          this.sortCriteria[criteria.priority] = {
             name: criteria.name,
             direction: criteria.direction
           };
         } else {
-          this.sortCriterias = this.sortCriterias.filter(
+          this.sortCriteria = this.sortCriteria.filter(
               sc => sc.name !== criteria.name);
-          this.sortCriterias.push(criteria);
+          this.sortCriteria.push(criteria);
         }
       } else {
-        this.sortCriterias = this.sortCriterias.filter(
+        this.sortCriteria = this.sortCriteria.filter(
             sc => sc.name !== criteria.name);
       }
 
       this.dispatchEvent(new CustomEvent('sort', {
             detail: {
-              sortCriterias: this.sortCriterias
+              sortCriteria: this.sortCriteria
             }
           }
       ));
-    });
+    },0);
   }
 
   get fields() {
@@ -246,7 +246,7 @@ export const RenderFunctions = {
  *
  * @extends VlElement
  *
- * @property {boolean} sortable - ...
+ * @property {boolean} sortable - 
  * @property {boolean} searchable - ...
  * @property {string} data-value - Attribuut om aan te duiden op welke sleutel van de data deze waarde moet gekoppeld worden. Verplicht en unique.
  * @property {string} data-type - Attribuut om te bepalen welk type data in de kolom moet komen en hoe de formattering moet gebeuren.
@@ -367,11 +367,11 @@ export class VlRichTableField extends VlElement(HTMLElement) {
   }
 
   _updateSortableHeader() {
-    this._priority = this.richTable.sortCriterias.findIndex(
+    this._priority = this.richTable.sortCriteria.findIndex(
         criteria => criteria && criteria.name === this.fieldName);
     this._priority = this._priority > -1 ? this._priority : null;
     const criteria = this._priority !== null
-        ? this.richTable.sortCriterias[this._priority]
+        ? this.richTable.sortCriteria[this._priority]
         : null,
         sortableSpan = this._headerCell.querySelector(
             '[name="sortable-span"]'),
@@ -490,7 +490,6 @@ export class VlRichTablePager extends VlPager {
 
       this._updatePageable();
       this.richTable.addEventListener('data_update_from_object', (e) => {
-        console.log(e);
         this._updatePageable();
       })
     } else if (!this._appended) {
