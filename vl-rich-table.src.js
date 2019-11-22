@@ -46,13 +46,13 @@ export class VlRichTable extends VlElement(HTMLElement) {
 
         <slot></slot>
         <table is="vl-data-table">
+          <caption></caption>
           <thead>
             <tr>
             </tr>
           </thead>
           <tbody>
           </tbody>
-          <caption></caption>
         </table>
         `);
     this._data = [];
@@ -94,10 +94,10 @@ export class VlRichTable extends VlElement(HTMLElement) {
 
   updateSortCriteria(criteria) {
     setTimeout(() => {
-      if (criteria.direction && (criteria.direction === asc
-          || criteria.direction === desc)) {
+      if (criteria.direction === asc || criteria.direction === desc) {
         if (criteria.priority) {
-          this.sortCriteria[criteria.priority] = {
+          const index = criteria.priority - 1;
+          this.sortCriteria[index] = {
             name: criteria.name,
             direction: criteria.direction
           };
@@ -117,7 +117,7 @@ export class VlRichTable extends VlElement(HTMLElement) {
             }
           }
       ));
-    },0);
+    }, 0);
   }
 
   get fields() {
@@ -246,7 +246,7 @@ export const RenderFunctions = {
  *
  * @extends VlElement
  *
- * @property {boolean} sortable - 
+ * @property {boolean} sortable - Attribuut om aan te duiden de soorten op dit veld toestaan is.
  * @property {boolean} searchable - ...
  * @property {string} data-value - Attribuut om aan te duiden op welke sleutel van de data deze waarde moet gekoppeld worden. Verplicht en unique.
  * @property {string} data-type - Attribuut om te bepalen welk type data in de kolom moet komen en hoe de formattering moet gebeuren.
@@ -367,28 +367,30 @@ export class VlRichTableField extends VlElement(HTMLElement) {
   }
 
   _updateSortableHeader() {
-    this._priority = this.richTable.sortCriteria.findIndex(
-        criteria => criteria && criteria.name === this.fieldName);
-    this._priority = this._priority > -1 ? this._priority : null;
-    const criteria = this._priority !== null
-        ? this.richTable.sortCriteria[this._priority]
-        : null,
-        sortableSpan = this._headerCell.querySelector(
-            '[name="sortable-span"]'),
+    const sortableSpan = this._headerCell.querySelector(
+        '[name="sortable-span"]'),
         sortableText = this._headerCell.querySelector('[name="sortable-text"]');
+
+    const index = this.richTable.sortCriteria.findIndex(
+        criteria => criteria && criteria.name === this.fieldName);
+    this._priority = index > -1 ? (index + 1) : null;
+
+    const criteria = index !== null
+        ? this.richTable.sortCriteria[index] : null;
+
     if (criteria) {
       this._direction = criteria.direction;
       switch (criteria.direction) {
         case asc:
           this.setAttribute('direction', asc);
           this.setAttribute('priority', this._priority);
-          sortableText.innerHTML = this._priority + 1;
+          sortableText.innerHTML = this._priority;
           sortableSpan.setAttribute("icon", "nav-up");
           break;
         case desc:
           this.setAttribute('direction', desc);
           this.setAttribute('priority', this._priority);
-          sortableText.innerHTML = this._priority + 1;
+          sortableText.innerHTML = this.priority;
           sortableSpan.setAttribute("icon", "nav-down");
           break;
         default:
@@ -500,7 +502,8 @@ export class VlRichTablePager extends VlPager {
 
   _updatePageable() {
     let data = this.richTable.data;
-    if (data.totalElements && data.size && data.number + 1) {
+    if (Number.isInteger(data.totalElements) && Number.isInteger(data.size)
+        && Number.isInteger(data.number)) {
       this.setAttribute('total-items', data.totalElements);
       this.setAttribute('items-per-page', data.size);
       this.setAttribute('current-page', data.number + 1);

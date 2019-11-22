@@ -227,9 +227,9 @@
       </vl-rich-table>
     </div>
 
-  <div>
-    <h2>Rich table met pager</h2>
-    <pre>
+    <div>
+      <h2>Rich table met pager</h2>
+      <pre>
         <code class="line-numbers language-markup">
           &#x3C;vl-rich-table id=&#x22;pageableTable&#x22;&#x3E;
             &#x3C;vl-rich-table-field data-value="name" label="Naam"&#x3E;&#x3C;/vl-rich-table-field&#x3E;
@@ -238,69 +238,68 @@
           &#x3C;/vl-rich-table&#x3E;
         </code>
       </pre>
-    <div class="demo">
-      <vl-rich-table id="pageableTable">
-        <vl-rich-table-field data-value="name" label="Naam"></vl-rich-table-field>
-        <vl-rich-table-field data-value="description" label="Omschrijving"></vl-rich-table-field>
-        <vl-rich-table-pager align-right></vl-rich-table-pager>
-      </vl-rich-table>
-    </div>
-    Page criteria:<p id="pagecriteria"></p>
-    <script>
-      const pageableTable = document.querySelector('#pageableTable');
-      let page = 0;
-
-      customElements.whenDefined('vl-rich-table').then(() => {
-        pageableTable.data = queryData(0, null, null);
-      });
-
-      pageableTable.addEventListener('pagechanged', (e) => {
-        let criteria = e.detail;
-        document.querySelector('#pagecriteria').innerHTML = JSON.stringify(criteria);
-        if (page !== criteria.newPage) {
-          page = criteria.newPage;
-          pageableTable.data = queryData(criteria.newPage - 1, null, null);
-          console.log("page changed", e, pageableTable, e.target, pageableTable === e.target, queryData(criteria.newPage - 1, null, null), pageableTable.data, e.target.data);
-        }
-      });
-    </script>
-  </div>
-
-  <div>
-    <h2>Sortable</h2>
-    <pre>
-        <code class="line-numbers language-markup">
-          &#x3C;vl-rich-table;&#x3E;
-            &#x3C;vl-rich-table-field sortable direction=&#x22;desc&#x22; priority=&#x22;1&#x22; data-value=&#x22;name&#x22; label=&#x22;Naam&#x22;&#x3E;&#x3C;/vl-rich-table-field&#x3E;
-            &#x3C;vl-rich-table-field sortable direction=&#x22;asc&#x22; priority=&#x22;0&#x22; data-value=&#x22;description&#x22; label=&#x22;Omschrijving&#x22;&#x3E;&#x3C;/vl-rich-table-field&#x3E;
-          &#x3C;/vl-rich-table&#x3E;
-        </code>
-      </pre>
-    <div class="demo">
-      <vl-rich-table id="sortableTable">
-        <vl-rich-table-field sortable direction="desc" priority="0" data-value="name" label="Naam"></vl-rich-table-field>
-        <vl-rich-table-field sortable direction="asc" priority="1" data-value="description" label="Omschrijving"></vl-rich-table-field>
-      </vl-rich-table>
-      Sort criteria:<p id="sortcriteria"></p>
+      <div class="demo">
+        <vl-rich-table id="pageableTable">
+          <vl-rich-table-field data-value="name" label="Naam"></vl-rich-table-field>
+          <vl-rich-table-field data-value="description" label="Omschrijving"></vl-rich-table-field>
+          <vl-rich-table-pager align-right></vl-rich-table-pager>
+        </vl-rich-table>
+      </div>
+      Page criteria:<p id="pagecriteria"></p>
       <script>
-        const sortableTable = document.querySelector('#sortableTable');
+        const pageableTable = document.querySelector('#pageableTable');
+        let page = 0;
 
         customElements.whenDefined('vl-rich-table').then(() => {
-          sortableTable.data = queryData(0, null, null);
+          pageableTable.data = queryData(0, null, null);
         });
 
-        document.querySelector('#sortableTable').addEventListener('sort', (e) => {
-          let criteria = e.detail.sortCriteria;
-          document.querySelector('#sortcriteria').innerHTML = JSON.stringify(criteria);
-          document.querySelector('#sortableTable').data = queryData(null, null, criteria);
+        pageableTable.addEventListener('pagechanged', (e) => {
+          let criteria = e.detail;
+          if (page !== criteria.newPage) {
+            page = criteria.newPage;
+            document.querySelector('#pagecriteria').innerHTML = JSON.stringify(criteria);
+            pageableTable.data = queryData(criteria.newPage - 1, null, null);
+          }
         });
       </script>
     </div>
-  </div>
 
-  <div>
-    <h2>Search</h2>
-    <pre>
+    <div>
+      <h2>Sortable</h2>
+      <pre>
+        <code class="line-numbers language-markup">
+          &#x3C;vl-rich-table;&#x3E;
+            &#x3C;vl-rich-table-field sortable direction=&#x22;desc&#x22; priority=&#x22;2&#x22; data-value=&#x22;name&#x22; label=&#x22;Naam&#x22;&#x3E;&#x3C;/vl-rich-table-field&#x3E;
+            &#x3C;vl-rich-table-field sortable direction=&#x22;asc&#x22; priority=&#x22;1&#x22; data-value=&#x22;description&#x22; label=&#x22;Omschrijving&#x22;&#x3E;&#x3C;/vl-rich-table-field&#x3E;
+          &#x3C;/vl-rich-table&#x3E;
+        </code>
+      </pre>
+      <div class="demo">
+        <vl-rich-table id="sortableTable">
+          <vl-rich-table-field sortable direction="desc" priority="2" data-value="name" label="Naam"></vl-rich-table-field>
+          <vl-rich-table-field sortable direction="asc" priority="1" data-value="description" label="Omschrijving"></vl-rich-table-field>
+        </vl-rich-table>
+        Sort criteria:<p id="sortcriteria"></p>
+        <script>
+          const sortableTable = document.querySelector('#sortableTable');
+
+          customElements.whenDefined('vl-rich-table').then(() => {
+            sortableTable.data = queryData(0, null, null);
+          });
+
+          document.querySelector('#sortableTable').addEventListener('sort', (e) => {
+            let criteria = e.detail.sortCriteria;
+            document.querySelector('#sortcriteria').innerHTML = JSON.stringify(criteria);
+            document.querySelector('#sortableTable').data = queryData(null, null, criteria);
+          });
+        </script>
+      </div>
+    </div>
+
+    <div>
+      <h2>Search</h2>
+      <pre>
         <code class="line-numbers language-markup">
           &lt;vl-rich-table id=&quot;searchableTable&quot;&#39&gt;
             &lt;vl-rich-table-field searchable data-value=&quot;name&quot; label=&quot;Naam&quot;&gt;&lt;/vl-rich-table-field&gt;
@@ -311,37 +310,37 @@
           &lt;/vl-rich-table&gt;
         </code>
       </pre>
-    <div class="demo">
-      <vl-rich-table id="searchableTable">
-        <vl-rich-table-field searchable data-value="name" label="Naam"></vl-rich-table-field>
-        <vl-rich-table-field searchable data-value="description" label="Omschrijving"></vl-rich-table-field>
-        <vl-rich-table-field searchable data-value="tijdstip" data-type="datetime" label="Tijdstip"></vl-rich-table-field>
-        <vl-rich-table-field searchable data-value="datum" data-type="date" label="Datum"></vl-rich-table-field>
-        <vl-rich-table-pager align-right total-items="100" items-per-page="10" current-page="1"></vl-rich-table-pager>
-      </vl-rich-table>
-      Search value:<p id="searchValueChanged"></p>
-      Search criteria:<p id="searchCriteria"></p>
-      <script>
-        const searchableTable = document.querySelector('#searchableTable');
+      <div class="demo">
+        <vl-rich-table id="searchableTable">
+          <vl-rich-table-field searchable data-value="name" label="Naam"></vl-rich-table-field>
+          <vl-rich-table-field searchable data-value="description" label="Omschrijving"></vl-rich-table-field>
+          <vl-rich-table-field searchable data-value="tijdstip" data-type="datetime" label="Tijdstip"></vl-rich-table-field>
+          <vl-rich-table-field searchable data-value="datum" data-type="date" label="Datum"></vl-rich-table-field>
+          <vl-rich-table-pager align-right total-items="100" items-per-page="10" current-page="1"></vl-rich-table-pager>
+        </vl-rich-table>
+        Search value:<p id="searchValueChanged"></p>
+        Search criteria:<p id="searchCriteria"></p>
+        <script>
+          const searchableTable = document.querySelector('#searchableTable');
 
-        customElements.whenDefined('vl-rich-table').then(() => {
-          searchableTable.data = queryData(0, null, null);
-        });
+          customElements.whenDefined('vl-rich-table').then(() => {
+            searchableTable.data = queryData(0, null, null);
+          });
 
-        document.querySelector('#searchableTable').addEventListener('search', (e) => {
-          let criteria = e.detail.searchCriteria;
-          document.querySelector('#searchCriteria').innerHTML = JSON.stringify(criteria);
-          document.querySelector('#searchableTable').data = queryData(null, criteria, null);
-        });
+          document.querySelector('#searchableTable').addEventListener('search', (e) => {
+            let criteria = e.detail.searchCriteria;
+            document.querySelector('#searchCriteria').innerHTML = JSON.stringify(criteria);
+            document.querySelector('#searchableTable').data = queryData(null, criteria, null);
+          });
 
-        document.querySelector('#searchableTable').addEventListener('searchValueChange', (e) => {
-          let detail = e.detail;
-          console.log(detail);
-          document.querySelector('#searchValueChanged').innerHTML = JSON.stringify(detail);
-        });
-      </script>
+          document.querySelector('#searchableTable').addEventListener('searchValueChange', (e) => {
+            let detail = e.detail;
+            console.log(detail);
+            document.querySelector('#searchValueChanged').innerHTML = JSON.stringify(detail);
+          });
+        </script>
+      </div>
     </div>
   </div>
-</div>
 </body>
 </html>

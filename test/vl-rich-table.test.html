@@ -69,14 +69,38 @@
 <test-fixture id="vl-rich-table-sortable-met-default-waard-fixture">
   <template>
     <vl-rich-table>
-      <vl-rich-table-field sortable direction="desc" priority="1" data-value="name" label="Naam"></vl-rich-table-field>
-      <vl-rich-table-field sortable direction="asc" priority="0" data-value="description" label="Omschrijving"></vl-rich-table-field>
+      <vl-rich-table-field sortable direction="desc" priority="2" data-value="name" label="Naam"></vl-rich-table-field>
+      <vl-rich-table-field sortable direction="asc" priority="1" data-value="description" label="Omschrijving"></vl-rich-table-field>
     </vl-rich-table>
   </template>
 </test-fixture>
 
 <script type="module">
   import {awaitUntil} from "vl-ui-core/vl-core.src";
+
+  const getNameColumn = (table) => {
+    return table.querySelector("vl-rich-table-field[data-value='name']");
+  };
+
+  const getDescriptionColumn = (table) => {
+    return table.querySelector("vl-rich-table-field[data-value='description']");
+  };
+
+  const getNameColumnSortButton = (table) => {
+    return  table.shadowRoot.querySelectorAll('table > thead > tr >th >span[name="sortable-span"]')[0];
+  };
+
+  const getDescriptionColumnSortButton = (table) => {
+    return  table.shadowRoot.querySelectorAll('table > thead > tr >th >span[name="sortable-span"]')[1];
+  };
+
+  const getIconOfNameFieldHeader = (table) => {
+    return table.shadowRoot.querySelectorAll("table > thead > tr >th >span[name='sortable-span']")[0].getAttribute('icon');
+  };
+
+  const getIconOfDescriptionFieldHeader = (table) => {
+    return table.shadowRoot.querySelectorAll("table > thead > tr >th >span[name='sortable-span']")[1].getAttribute('icon');
+  };
 
   suite('vl-rich-table', () => {
     const should = chai.should();
@@ -130,7 +154,8 @@
     test('bij het toevoegen van data wordt deze getoond volgens het gedefinieerde data type', async () => {
       const table = fixture('vl-rich-table-data-type-fixture');
 
-      await flush();
+      await flush(() => {
+      });
       const tds = [...table.shadowRoot.querySelectorAll("table > tbody > tr > td")];
       assert.equal(tds[0].textContent, 'Dit is testdata.');
       assert.equal(tds[1].textContent, '03.04.2012');
@@ -139,8 +164,9 @@
 
     test('bij het toevoegen van data met verkeerd datum en tijd datatype verschijnt Invalid Date', async () => {
       const table = fixture('vl-rich-table-data-type-fixture');
-      table.data =[{"tekst": "0", "datum": "abc", "tijdstip": "def" }];
-      await flush();
+      table.data = [{"tekst": "0", "datum": "abc", "tijdstip": "def"}];
+      await flush(() => {
+      });
       const tds = [...table.shadowRoot.querySelectorAll("table > tbody > tr > td")];
       assert.equal(tds[0].textContent, '0');
       assert.equal(tds[1].textContent, 'Invalid Date');
@@ -189,12 +215,21 @@
       const table = fixture('vl-rich-table-pager-met-data-in-object-formaat-fixture');
       const pager = table.shadowRoot.querySelector("vl-rich-table-pager");
       flush(() => {
-        console.log("pager",pager.getAttributeNames());
-        assert.equal(pager.getAttribute('total-items'),"20");
-        assert.equal(pager.getAttribute('items-per-page'),"2");
-        assert.equal(pager.getAttribute('current-page'),"4");
+        assert.equal(pager.getAttribute('total-items'), "20");
+        assert.equal(pager.getAttribute('items-per-page'), "2");
+        assert.equal(pager.getAttribute('current-page'), "4");
         done();
       });
+    });
+
+    test('pager triggert en "pagechanged" event', (done) => {
+      const table = fixture('vl-rich-table-pager-fixture');
+      const pager = table.shadowRoot.querySelector("vl-rich-table-pager");
+      table.addEventListener('pagechanged', (e) => {
+        assert.equal(e.detail.newPage, 2);
+        done();
+      });
+      pager.setAttribute('current-page', 2)
     });
 
     test('de sortable kolom header heeft de juiste style', (done) => {
@@ -210,36 +245,35 @@
 
     test('klik op de  sorteren icon triggert "pagechanged" event en de icon verandert volgens volgende volgorde:"down","up" en "none"', (done) => {
       const table = fixture('vl-rich-table-sortable-fixture');
-      const column1 = table.shadowRoot.querySelectorAll('table > thead > tr >th >span[name="sortable-span"]')[0];
+      const column1 = getNameColumnSortButton(table);
       let i = 0;
-
       table.addEventListener('sort', (e) => {
         i++;
       });
       column1.click();
 
       awaitUntil(() => i === 1).then(() => {
-        assert.equal(table.shadowRoot.querySelectorAll("table > thead > tr >th >span[name='sortable-span']")[0].getAttribute('icon'), 'nav-down');
+        assert.equal(getIconOfNameFieldHeader(table), 'nav-down');
         assert.equal(table.sortCriteria[0].name, 'name');
         assert.equal(table.sortCriteria[0].direction, 'desc');
         column1.click();
       });
 
       awaitUntil(() => i === 2).then(() => {
-        assert.equal(table.shadowRoot.querySelectorAll("table > thead > tr >th >span[name='sortable-span']")[0].getAttribute('icon'), 'nav-up');
+        assert.equal(getIconOfNameFieldHeader(table), 'nav-up');
         assert.equal(table.sortCriteria[0].name, 'name');
         assert.equal(table.sortCriteria[0].direction, 'asc');
         column1.click();
       });
 
       awaitUntil(() => i === 3).then(() => {
-        assert.equal(table.shadowRoot.querySelectorAll("table > thead > tr >th >span[name='sortable-span']")[0].getAttribute('icon'), 'sort');
+        assert.equal(getIconOfNameFieldHeader(table), 'sort');
         assert.equal(table.sortCriteria.length, 0);
         column1.click();
       });
 
       awaitUntil(() => i === 4).then(() => {
-        assert.equal(table.shadowRoot.querySelectorAll("table > thead > tr >th >span[name='sortable-span']")[0].getAttribute('icon'), 'nav-down');
+        assert.equal(getIconOfNameFieldHeader(table), 'nav-down');
         assert.equal(table.sortCriteria[0].name, 'name');
         assert.equal(table.sortCriteria[0].direction, 'desc');
         done();
@@ -248,8 +282,8 @@
 
     test('de laaste geklikt kolom krijgt de laagste prioriteit', (done) => {
       const table = fixture('vl-rich-table-sortable-fixture');
-      const column1 = table.shadowRoot.querySelectorAll('table > thead > tr >th >span[name="sortable-span"]')[0];
-      const column2 = table.shadowRoot.querySelectorAll('table > thead > tr >th >span[name="sortable-span"]')[1];
+      const column1 = getNameColumnSortButton(table);
+      const column2 = getDescriptionColumnSortButton(table);
       let i = 0;
 
       table.addEventListener('sort', (e) => {
@@ -331,23 +365,23 @@
     test('de sort criterias veranderen door de veld attributes', (done) => {
       const table = fixture('vl-rich-table-sortable-fixture');
 
-      let nameColumn = table.querySelector("vl-rich-table-field[data-value='name']");
-      let descriptionColumn = table.querySelector("vl-rich-table-field[data-value='description']");
+      let nameColumn = getNameColumn(table);
+      let descriptionColumn = getDescriptionColumn(table);
 
       nameColumn.setAttribute("direction", "asc");
-      nameColumn.setAttribute("priority", "0");
+      nameColumn.setAttribute("priority", "1");
 
       descriptionColumn.setAttribute("direction", "desc");
-      descriptionColumn.setAttribute("priority", "1");
+      descriptionColumn.setAttribute("priority", "2");
 
       flush(() => {
         assert.equal(table.sortCriteria.length, 2);
 
-        assert.equal(table.shadowRoot.querySelectorAll("table > thead > tr >th >span[name='sortable-span']")[0].getAttribute('icon'), 'nav-up');
+        assert.equal(getIconOfNameFieldHeader(table), 'nav-up');
         assert.equal(table.sortCriteria[0].name, 'name');
         assert.equal(table.sortCriteria[0].direction, 'asc');
 
-        assert.equal(table.shadowRoot.querySelectorAll("table > thead > tr >th >span[name='sortable-span']")[1].getAttribute('icon'), 'nav-down');
+        assert.equal(getIconOfDescriptionFieldHeader(table), 'nav-down');
         assert.equal(table.sortCriteria[1].name, 'description');
         assert.equal(table.sortCriteria[1].direction, 'desc');
 
@@ -355,25 +389,25 @@
       })
     });
 
-    test('om een sort criteria te bepalen,attributes "direction" en "priority" zijn beide verplichten', (done) => {
+    test('om een sort criteria te bepalen,attributes "direction" en "priority" zijn beide verplicht', (done) => {
       const table = fixture('vl-rich-table-sortable-fixture');
 
-      let nameColumn = table.querySelector("vl-rich-table-field[data-value='name']");
-      let descriptionColumn = table.querySelector("vl-rich-table-field[data-value='description']");
+      let nameColumn = getNameColumn(table);
+      let descriptionColumn = getDescriptionColumn(table);
 
       nameColumn.setAttribute("direction", "asc");
-      nameColumn.setAttribute("priority", "0");
+      nameColumn.setAttribute("priority", "1");
 
       descriptionColumn.setAttribute("direction", "desc");
 
       flush(() => {
         assert.equal(table.sortCriteria.length, 1);
 
-        assert.equal(table.shadowRoot.querySelectorAll("table > thead > tr >th >span[name='sortable-span']")[0].getAttribute('icon'), 'nav-up');
+        assert.equal(getIconOfNameFieldHeader(table), 'nav-up');
         assert.equal(table.sortCriteria[0].name, 'name');
         assert.equal(table.sortCriteria[0].direction, 'asc');
 
-        assert.equal(table.shadowRoot.querySelectorAll("table > thead > tr >th >span[name='sortable-span']")[1].getAttribute('icon'), 'sort');
+        assert.equal(getIconOfDescriptionFieldHeader(table), 'sort');
         done();
       })
     });
@@ -383,11 +417,11 @@
       flush(() => {
         assert.equal(table.sortCriteria.length, 2);
 
-        assert.equal(table.shadowRoot.querySelectorAll("table > thead > tr >th >span[name='sortable-span']")[0].getAttribute('icon'), 'nav-down');
+        assert.equal(getIconOfNameFieldHeader(table), 'nav-down');
         assert.equal(table.sortCriteria[1].name, 'name');
         assert.equal(table.sortCriteria[1].direction, 'desc');
 
-        assert.equal(table.shadowRoot.querySelectorAll("table > thead > tr >th >span[name='sortable-span']")[1].getAttribute('icon'), 'nav-up');
+        assert.equal(getIconOfDescriptionFieldHeader(table), 'nav-up');
         assert.equal(table.sortCriteria[0].name, 'description');
         assert.equal(table.sortCriteria[0].direction, 'asc');
         done();

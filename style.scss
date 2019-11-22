@@ -16,8 +16,12 @@
 // ==========================================================================
 // Components
 // ==========================================================================
-[name = 'sortable-span']{
+[name="sortable-span"]{
   cursor: pointer;
+}
+
+[name="sortable-text"] {
+  font-size: smaller;
 }
 
 th.vl-sortable > [is='vl-icon'] {
