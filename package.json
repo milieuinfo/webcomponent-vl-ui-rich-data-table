@@ -39,6 +39,7 @@
   "devDependencies": {
     "@govflanders/vl-ui-util": "^3.9.1",
     "np": "3.0.4",
+    "http-server": "^0.11.1",
     "uglify-js-es6": "2.8.9",
     "sass": "1.23.6",
     "vl-ui-util": "^2.0.13",
