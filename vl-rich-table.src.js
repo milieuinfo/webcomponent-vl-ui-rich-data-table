@@ -512,7 +512,7 @@ export class VlRichTablePager extends VlPager {
   }
 
   _updatePageable() {
-    let data = this.richTable.data;
+    const data = this.richTable.data;
     if (data.totalElements != null && data.size && data.number + 1) {
       this.setAttribute('total-items', data.totalElements);
       this.setAttribute('items-per-page', data.size);
