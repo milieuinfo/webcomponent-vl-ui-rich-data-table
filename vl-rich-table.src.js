@@ -1,8 +1,12 @@
-import {VlElement, define} from '/node_modules/vl-ui-core/vl-core.js';
+import {VlElement, define, awaitUntil} from '/node_modules/vl-ui-core/vl-core.js';
 import {VlDataTable} from '/node_modules/vl-ui-data-table/vl-data-table.js';
 import {VlPager} from '/node_modules/vl-ui-pager/vl-pager.js';
 import {VlIcon} from '/node_modules/vl-ui-icon/vl-icon.js';
 import {VlInputField} from '/node_modules/vl-ui-input-field/vl-input-field.js';
+import {VlSelect} from '/node_modules/vl-ui-select/vl-select.js';
+import {VlLink} from '/node_modules/vl-ui-link/vl-link.js';
+import {VlGrid} from '/node_modules/vl-ui-grid/vl-grid.js';
+import {VlSearchFilter} from '/node_modules/vl-ui-search-filter/vl-search-filter.src.js';
 
 /**
  * VlRichTable
@@ -15,9 +19,10 @@ import {VlInputField} from '/node_modules/vl-ui-input-field/vl-input-field.js';
  * @property {boolean} hover - Attribuut wordt gebruikt om een rij te highlighten waneer de gebruiker erover hovert met muiscursor. Zie ook {@link https://webcomponenten.omgeving.vlaanderen.be/demo/vl-data-table.html|vl-data-table}
  * @property {boolean} lined - Variant met een lijn tussen elke rij en kolom. Zie ook {@link https://webcomponenten.omgeving.vlaanderen.be/demo/vl-data-table.html|vl-data-table}
  * @property {boolean} zebra - Variant waarin de rijen afwisslend een andere achtergrondkleur krijgen. Dit maakt de tabel makkelijker leesbaar. Zie ook {@link https://webcomponenten.omgeving.vlaanderen.be/demo/vl-data-table.html|vl-data-table}
- * @property {string} pageable - ...
+ * @property {boolean} searchable - Attribuut die aangeeft dat deze table doorzoekbaar is. Er zal een vl-search-filter toevoegd worden en gekeken worden welke fields searchable zijn en toegevoegd worden aan de filter.
  *
  * @event pagechanged - De geselecteerde pagina zijn veranderd.
+ * @event search - De zoekcriteria zijn veranderd. Triggert bij elke input/select in het filter slot. Enkel als de rich table searchable is.
  * @event sort - De sorteercriteria zijn veranderd.
  *
  * @see {@link https://www.github.com/milieuinfo/webcomponent-vl-ui-rich-table/releases/latest|Release notes}
@@ -34,40 +39,96 @@ export class VlRichTable extends VlElement(HTMLElement) {
   }
 
   static get _observedAttributes() {
-    return ['data', 'hover', 'lined', 'zebra'];
+    return ['data'];
   }
 
   constructor() {
-    super(`
-        <style>
-          @import "/node_modules/vl-ui-data-table/style.css";
-          @import "../style.css";
-        </style>
-
-        <slot></slot>
-        <table is="vl-data-table">
-          <caption></caption>
-          <thead>
-            <tr>
-            </tr>
-          </thead>
-          <tbody>
-          </tbody>
-        </table>
-        `);
+    super();
     this._data = [];
     this._sortCriteria = [];
     this._searchCriteria = {};
+  }
+
+  connectedCallback() {
+    this._shadow = this.attachShadow({ mode: 'open' });
+    this._shadow.innerHTML = `
+        <style>
+          @import "../style.css";
+        </style>
+        <slot></slot>
+        ${this._renderSearchable(`
+            <style>
+              @import "/node_modules/vl-ui-data-table/style.css";
+            </style>
+            <table is="vl-data-table" ${this._dataTableAttributes}>
+              <thead>
+                <tr>
+                </tr>
+              </thead>
+              <tbody>
+              </tbody>
+              <caption></caption>
+            </table>`)}`;
     const slot = this.shadowRoot.querySelector('slot');
     slot.addEventListener('slotchange', () => this._createRows());
-    this.addEventListener('searchValueChange', () => this.updateSearchFields());
+    const filter = this.shadowRoot.querySelector('slot[name=filter]');
+    if (filter) {
+      filter.addEventListener('slotchange', () => {
+        filter.assignedElements().forEach(slottedFilter => {
+          let filterRoot;
+          if (slottedFilter.shadowRoot) {
+            filterRoot = slottedFilter.shadowRoot;
+          } else {
+            filterRoot = slottedFilter;
+          }
+          filterRoot.querySelectorAll('input, select').forEach(element => {
+            element.addEventListener(element.tagName.toLowerCase() === 'input' ? 'input' : 'change', (e) => {
+              const searchCriteria = {};
+              filterRoot.querySelectorAll('input, select').forEach(filter => {
+                if (filter.value) {
+                  searchCriteria[filter.name] = filter.value;
+                }
+              });
+              this.dispatchEvent(new CustomEvent('search', {
+                detail: {
+                  searchCriteria: searchCriteria
+                },
+                bubbles: true
+              }));
+            });
+          });
+        });
+      });
+    }
+  }
+
+  _renderSearchable(dataTable) {
+    return `${this.getAttribute('searchable') != null ? `
+        <style>
+          @import "/node_modules/vl-ui-grid/style.css";
+        </style>
+        <div is="vl-grid">
+          <div is="vl-column" size="4" small-size="12">
+          <slot name="filter"></slot>
+          </div>
+          <div is="vl-column" size="8" small-size="12">` : `` }
+            ${dataTable}
+            ${this.getAttribute('searchable') != null ? `` : `
+          </div>
+        </div>`}`;
+  }
+
+  get _dataTableAttributes() {
+    return (this.getAttribute('zebra') != null ? ` zebra` : ``)
+        + (this.getAttribute('lined') != null ? ` lined` : ``)
+        + (this.getAttribute('hover') != null ? ` hover` : ``);
   }
 
   _createRows() {
     Array.from(this._tableBody.children).forEach(child => child.remove());
     this.content.forEach(data => {
       const row = document.createElement("tr");
-      Array.from(this.children).forEach(field => {
+      Array.from(this.fields).forEach(field => {
         const tableData = document.createElement("td");
         tableData.appendChild(field.renderTableData(data[field.fieldName]));
         row.appendChild(tableData);
@@ -78,18 +139,6 @@ export class VlRichTable extends VlElement(HTMLElement) {
 
   _dataChangedCallback(oldValue, newValue) {
     this.data = JSON.parse(newValue);
-  }
-
-  _hoverChangedCallback(oldValue, newValue) {
-    this._table.setAttribute('hover', newValue);
-  }
-
-  _zebraChangedCallback(oldValue, newValue) {
-    this._table.setAttribute('zebra', newValue);
-  }
-
-  _linedChangedCallback(oldValue, newValue) {
-    this._table.setAttribute('lined', newValue);
   }
 
   updateSortCriteria(criteria) {
@@ -127,29 +176,6 @@ export class VlRichTable extends VlElement(HTMLElement) {
     })
   }
 
-  updateSearchFields() {
-    this.fields.forEach(field => {
-      if (field.searchable) {
-        if (field.searchValue) {
-          this._searchCriteria[field.fieldName] = field.searchValue;
-        } else {
-          if (this._searchCriteria[field.fieldName]) {
-            delete this._searchCriteria[field.fieldName];
-          }
-        }
-
-      }
-    });
-    const searchEvent = new CustomEvent('search', {
-          detail: {
-            searchCriteria: this._searchCriteria
-          }
-        }
-    );
-    this.dispatchEvent(searchEvent);
-    console.log("Searching for:" + JSON.stringify(searchEvent.detail));
-  }
-
   get data() {
     return this._data;
   }
@@ -179,7 +205,7 @@ export class VlRichTable extends VlElement(HTMLElement) {
   }
 
   _isReady() {
-    return Array.from(this.children).every(child => child.richTable === this);
+    return Array.from(this.fields).every(child => child.richTable === this);
   }
 
   get _table() {
@@ -247,7 +273,8 @@ export const RenderFunctions = {
  * @extends VlElement
  *
  * @property {boolean} sortable - Attribuut om aan te duiden de soorten op dit veld toestaan is.
- * @property {boolean} searchable - ...
+ * @property {HTMLOptionElement[]} search-options - Attribuut om de search options te definiëren.
+ * @property {boolean} searchable - Attribuut om aan te geven dat dit veld searchable moet zijn bij het toevoegen
  * @property {string} data-value - Attribuut om aan te duiden op welke sleutel van de data deze waarde moet gekoppeld worden. Verplicht en unique.
  * @property {string} data-type - Attribuut om te bepalen welk type data in de kolom moet komen en hoe de formattering moet gebeuren.
  *                                Mogelijke waarden:
@@ -268,7 +295,12 @@ export class VlRichTableField extends VlElement(HTMLElement) {
   }
 
   constructor() {
-    super();
+    super(`
+        <style>
+          @import "/node_modules/vl-ui-data-table/style.css";
+          @import "../style.css";
+        </style>
+    `);
     this._searchValue;
   }
 
@@ -288,9 +320,6 @@ export class VlRichTableField extends VlElement(HTMLElement) {
           document.createTextNode(this.getAttribute('label')));
       if (this.hasAttribute('sortable')) {
         this._dressSortableHeader();
-      }
-      if (this.searchable) {
-        this._dressSearchableHeader();
       }
       this.richTable.addTableHeaderCell(headerCell);
     } else {
@@ -427,24 +456,6 @@ export class VlRichTableField extends VlElement(HTMLElement) {
     }
   }
 
-  _dressSearchableHeader() {
-    const search = document.createElement('input');
-    search.setAttribute('is', 'vl-input-field');
-    search.setAttribute("block", "");
-    search.setAttribute("style", "display: block;");//TODO
-    search.addEventListener("input", (e) => {
-      this._search(search.value);
-    });
-    this._headerCell.appendChild(search);
-  }
-
-  _search(value) {
-    console.log("SearchValue for " + this.fieldName + ": " + value);
-    this._searchValue = value;
-    this.dispatchEvent(new CustomEvent('searchValueChange',
-        {detail: {field: this.fieldName, value: value}, bubbles: true}));
-  }
-
   get richTable() {
     if (this.parentNode && this.parentNode.tagName.toLowerCase()
         === 'vl-rich-table') {
@@ -502,8 +513,7 @@ export class VlRichTablePager extends VlPager {
 
   _updatePageable() {
     let data = this.richTable.data;
-    if (Number.isInteger(data.totalElements) && Number.isInteger(data.size)
-        && Number.isInteger(data.number)) {
+    if (data.totalElements != null && data.size && data.number + 1) {
       this.setAttribute('total-items', data.totalElements);
       this.setAttribute('items-per-page', data.size);
       this.setAttribute('current-page', data.number + 1);
@@ -527,3 +537,89 @@ export class VlRichTablePager extends VlPager {
 }
 
 define('vl-rich-table-pager', VlRichTablePager);
+
+/**
+ * VlRichTableSearchFilter
+ * @class
+ * @classdesc
+ *
+ * @extends VlElement
+ *
+ * @see {@link https://www.github.com/milieuinfo/webcomponent-vl-ui-rich-table/releases/latest|Release notes}
+ * @see {@link https://www.github.com/milieuinfo/webcomponent-vl-ui-rich-table/issues|Issues}
+ * @see {@link https://webcomponenten.omgeving.vlaanderen.be/demo/vl-rich-table.html|Demo}
+ **/
+export class VlRichTableSearchFilter extends VlElement(HTMLElement) {
+
+  constructor() {
+    super();
+  }
+
+  connectedCallback() {
+    this._shadow = this.attachShadow({ mode: 'open' });
+    this._shadow.innerHTML = `
+        <style>
+          @import "/node_modules/vl-ui-search-filter/style.css";
+        </style>
+        <div is="vl-search-filter" title="Verfijn uw zoekopdracht" alt>
+          <form>
+            <section>
+              ${this._renderSearchFields()}
+            </section>
+          </form>
+        </div>
+    `;
+  }
+
+
+  get richTable() {
+    if (this.parentElement && this.parentElement
+        && this.parentElement.tagName.toLowerCase()
+        === 'vl-rich-table') {
+      return this.parentElement;
+    }
+  }
+
+  _renderSearchFields() {
+    return this.richTable.fields.map(field => `
+      <div>
+        <label is="form-label" for="${field.getAttribute('data-value')}">
+          ${field.getAttribute('label')}
+        </label>
+        ${this._renderSearchField(field)}
+      </div>
+  `);
+  }
+
+  _renderSearchField(field) {
+    if (field.getAttribute('search-options') != null) {
+      return this._renderSelectSearchField(field);
+    }
+    if (field.getAttribute('data-type') === 'date') {
+      //todo date
+    }
+    return this._renderInputSearchField(field);
+  }
+
+  _renderSelectSearchField(field) {
+    return `
+    <style>
+      @import "/node_modules/vl-ui-select/style.css";
+    </style>
+    <select is="vl-select" data-vl-select name="${field.getAttribute('data-value')}" data-vl-select-deletable>
+      <option placeholder value="">Kies een ${field.getAttribute('label').toLowerCase()}</option>
+      ${JSON.parse(field.getAttribute('search-options')).map(option => `
+      <option value="${option.value}">${option.text}</option>`)}
+    </select>`;
+  }
+
+  _renderInputSearchField(field) {
+    return `
+    <style>
+      @import "/node_modules/vl-ui-input-field/style.css";
+    </style>
+    <input is="vl-input-field" type="text" name="${field.getAttribute(
+        'data-value')}" value="" block/>`;
+  }
+}
+define('vl-rich-table-search-filter', VlRichTableSearchFilter);

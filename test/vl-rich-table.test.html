@@ -19,6 +19,14 @@
   </template>
 </test-fixture>
 
+<test-fixture id="vl-rich-table-fixture-zebra-lined-hover">
+  <template>
+    <vl-rich-table zebra lined hover>
+      <vl-rich-table-field data-value="test" label="Test"></vl-rich-table-field>
+    </vl-rich-table>
+  </template>
+</test-fixture>
+
 <test-fixture id="vl-rich-table-data-fixture">
   <template>
     <vl-rich-table data='[{"test": "Dit is testdata."}]'>
@@ -40,6 +48,7 @@
 <test-fixture id="vl-rich-table-pager-fixture">
   <template>
     <vl-rich-table>
+      <vl-rich-table-field sortable data-value="name" label="Naam"></vl-rich-table-field>
       <vl-rich-table-pager align-right total-items="100" items-per-page="10" current-page="1"></vl-rich-table-pager>
     </vl-rich-table>
   </template>
@@ -52,6 +61,7 @@
         {"id": 2, "name": "Amet aut", "description": "Amet aut, blanditiis dignissimos, earum et eveniet explicabo in labore minus odio odit optio, perferendis provident quas quis quod totam vel vero."},
         {"id": 3, "name": "Lorem ipsum", "description": "Amet aut, blanditiis dignissimos"}
         ],"totalElements":20,"size":2,"number":3}'>
+      <vl-rich-table-field sortable data-value="name" label="Naam"></vl-rich-table-field>
       <vl-rich-table-pager align-right></vl-rich-table-pager>
     </vl-rich-table>
   </template>
@@ -112,11 +122,8 @@
       assert.equal(table.shadowRoot.querySelector("table > thead > tr > th").textContent, 'Test');
     });
 
-    test('als zebra lined of hover op de vl-rich-table wordt gezet, wordt die ook op vl-data-table gezet', () => {
-      const richTable = fixture('vl-rich-table-fixture');
-      richTable.setAttribute('zebra', '');
-      richTable.setAttribute('lined', '');
-      richTable.setAttribute('hover', '');
+    test('als zebra lined of hover op de vl-rich-table staat, staat die ook op vl-data-table', () => {
+      const richTable = fixture('vl-rich-table-fixture-zebra-lined-hover');
 
       assert.equal(richTable._table.getAttribute('zebra'), '');
       assert.equal(richTable._table.getAttribute('lined'), '');

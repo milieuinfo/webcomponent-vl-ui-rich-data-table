@@ -4,93 +4,136 @@
   <title>vl-rich-table voorbeeld</title>
   <script type="module" src="demo.js"></script>
   <script type="module" src="../vl-rich-table.src.js"></script>
+  <script type="module" src="/node_modules/vl-ui-button/vl-button.js"></script>
   <script>
     const data = [
       {
-        id: 1, name: "Lorem ipsum1", description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.", "tijdstip": "2020-01-31T17:22:33.123456",
+        id: 1, name: "Lorem ipsum1", description: "Lorem", "tijdstip": "2020-01-31T17:22:33.123456",
         "datum": "2020-01-31"
       },
       {
-        id: 2, name: "Lorem ipsum2", description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.", "tijdstip": "2020-01-31T17:22:33.123456",
+        id: 2, name: "Lorem ipsum2", description: "ipsum", "tijdstip": "2020-01-31T17:22:33.123456",
         "datum": "2020-01-31"
       },
       {
-        id: 3, name: "Lorem ipsum3", description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.", "tijdstip": "2020-01-31T17:22:33.123456",
+        id: 3, name: "Lorem ipsum3", description: "dolor", "tijdstip": "2020-01-31T17:22:33.123456",
         "datum": "2020-01-31"
       },
       {
-        id: 4, name: "Lorem ipsum4", description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.", "tijdstip": "2020-01-31T17:22:33.123456",
+        id: 4, name: "Lorem ipsum4", description: "sit", "tijdstip": "2020-01-31T17:22:33.123456",
         "datum": "2020-01-31"
       },
       {
-        id: 5, name: "Lorem ipsum5", description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.", "tijdstip": "2020-01-31T17:22:33.123456",
+        id: 5, name: "Lorem ipsum5", description: "amet", "tijdstip": "2020-01-31T17:22:33.123456",
         "datum": "2020-01-31"
       },
       {
-        id: 6, name: "Lorem ipsum6", description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.", "tijdstip": "2020-01-31T17:22:33.123456",
+        id: 6,
+        name: "Lorem ipsum6",
+        description: "consectetur",
+        "tijdstip": "2020-01-31T17:22:33.123456",
         "datum": "2020-01-31"
       },
       {
-        id: 7, name: "Lorem ipsum7", description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.", "tijdstip": "2020-01-31T17:22:33.123456",
+        id: 7,
+        name: "Lorem ipsum7",
+        description: "adipisicing",
+        "tijdstip": "2020-01-31T17:22:33.123456",
         "datum": "2020-01-31"
       },
       {
-        id: 8, name: "Lorem ipsum8", description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.", "tijdstip": "2020-01-31T17:22:33.123456",
+        id: 8, name: "Lorem ipsum8", description: "elit", "tijdstip": "2020-01-31T17:22:33.123456",
         "datum": "2020-01-31"
       },
       {
-        id: 9, name: "Lorem ipsum9", description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.", "tijdstip": "2020-01-31T17:22:33.123456",
+        id: 9,
+        name: "Lorem ipsum9",
+        description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
+        "tijdstip": "2020-01-31T17:22:33.123456",
         "datum": "2020-01-31"
       },
       {
-        id: 10, name: "Lorem ipsum10", description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.", "tijdstip": "2020-01-31T17:22:33.123456",
+        id: 10,
+        name: "Lorem ipsum10",
+        description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
+        "tijdstip": "2020-01-31T17:22:33.123456",
         "datum": "2020-01-31"
       },
       {
-        id: 11, name: "Lorem ipsum11", description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.", "tijdstip": "2020-01-31T17:22:33.123456",
+        id: 11,
+        name: "Lorem ipsum11",
+        description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
+        "tijdstip": "2020-01-31T17:22:33.123456",
         "datum": "2020-01-31"
       },
       {
-        id: 12, name: "Lorem ipsum12", description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.", "tijdstip": "2020-01-31T17:22:33.123456",
+        id: 12,
+        name: "Lorem ipsum12",
+        description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
+        "tijdstip": "2020-01-31T17:22:33.123456",
         "datum": "2020-01-31"
       },
       {
-        id: 13, name: "Lorem ipsum13", description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.", "tijdstip": "2020-01-31T17:22:33.123456",
+        id: 13,
+        name: "Lorem ipsum13",
+        description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
+        "tijdstip": "2020-01-31T17:22:33.123456",
         "datum": "2020-01-31"
       },
       {
-        id: 14, name: "Lorem ipsum14", description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.", "tijdstip": "2020-01-31T17:22:33.123456",
+        id: 14,
+        name: "Lorem ipsum14",
+        description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
+        "tijdstip": "2020-01-31T17:22:33.123456",
         "datum": "2020-01-31"
       },
       {
-        id: 15, name: "Lorem ipsum15", description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.", "tijdstip": "2020-01-31T17:22:33.123456",
+        id: 15,
+        name: "Lorem ipsum15",
+        description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
+        "tijdstip": "2020-01-31T17:22:33.123456",
         "datum": "2020-01-31"
       },
       {
-        id: 16, name: "Lorem ipsum16", description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.", "tijdstip": "2020-01-31T17:22:33.123456",
+        id: 16,
+        name: "Lorem ipsum16",
+        description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
+        "tijdstip": "2020-01-31T17:22:33.123456",
         "datum": "2020-01-31"
       },
       {
-        id: 17, name: "Lorem ipsum17", description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.", "tijdstip": "2020-01-31T17:22:33.123456",
+        id: 17,
+        name: "Lorem ipsum17",
+        description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
+        "tijdstip": "2020-01-31T17:22:33.123456",
         "datum": "2020-01-31"
       },
       {
-        id: 18, name: "Lorem ipsum18", description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.", "tijdstip": "2020-01-31T17:22:33.123456",
+        id: 18,
+        name: "Lorem ipsum18",
+        description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
+        "tijdstip": "2020-01-31T17:22:33.123456",
         "datum": "2020-01-31"
       },
       {
-        id: 19, name: "Lorem ipsum19", description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.", "tijdstip": "2020-01-31T17:22:33.123456",
+        id: 19,
+        name: "Lorem ipsum19",
+        description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
+        "tijdstip": "2020-01-31T17:22:33.123456",
         "datum": "2020-01-31"
       },
       {
-        id: 20, name: "Lorem ipsum20", description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.", "tijdstip": "2020-01-31T17:22:33.123456",
+        id: 20,
+        name: "Lorem ipsum20",
+        description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
+        "tijdstip": "2020-01-31T17:22:33.123456",
         "datum": "2020-01-31"
       },
     ];
 
-    let size = 3;
+    let size = 9;
     const queryData = (page = 0, search, sort) => {
-      const content = data
+      const filteredData = data
       .filter(record => {
         if (search && search.name) {
           return record.name.includes(search.name);
@@ -99,12 +142,11 @@
       })
       .filter(record => {
         if (search && search.description) {
-          console.log("description", search.description);
           return record.description.includes(search.description);
         }
         return true
-      })
-      .sort((record1, record2) => {
+      });
+      const content = filteredData.sort((record1, record2) => {
         const criteria = sort ? sort[0] : null;
         if (criteria) {
           if (criteria.direction === 'desc') {
@@ -130,9 +172,9 @@
       return {
         content: content,
         size: size,
-        totalElements: data.length,
+        totalElements: filteredData.length,
         number: page
-      }
+      };
     }
 
   </script>
@@ -226,10 +268,11 @@
         <vl-rich-table-field data-value="description" label="Omschrijving"></vl-rich-table-field>
       </vl-rich-table>
     </div>
+  </div>
 
-    <div>
-      <h2>Rich table met pager</h2>
-      <pre>
+  <div>
+    <h2>Rich table met pager</h2>
+    <pre>
         <code class="line-numbers language-markup">
           &#x3C;vl-rich-table id=&#x22;pageableTable&#x22;&#x3E;
             &#x3C;vl-rich-table-field data-value="name" label="Naam"&#x3E;&#x3C;/vl-rich-table-field&#x3E;
@@ -238,36 +281,36 @@
           &#x3C;/vl-rich-table&#x3E;
         </code>
       </pre>
-      <div class="demo">
-        <vl-rich-table id="pageableTable">
-          <vl-rich-table-field data-value="name" label="Naam"></vl-rich-table-field>
-          <vl-rich-table-field data-value="description" label="Omschrijving"></vl-rich-table-field>
-          <vl-rich-table-pager align-right></vl-rich-table-pager>
-        </vl-rich-table>
-      </div>
-      Page criteria:<p id="pagecriteria"></p>
-      <script>
-        const pageableTable = document.querySelector('#pageableTable');
-        let page = 0;
-
-        customElements.whenDefined('vl-rich-table').then(() => {
-          pageableTable.data = queryData(0, null, null);
-        });
-
-        pageableTable.addEventListener('pagechanged', (e) => {
-          let criteria = e.detail;
-          if (page !== criteria.newPage) {
-            page = criteria.newPage;
-            document.querySelector('#pagecriteria').innerHTML = JSON.stringify(criteria);
-            pageableTable.data = queryData(criteria.newPage - 1, null, null);
-          }
-        });
-      </script>
+    <div class="demo">
+      <vl-rich-table id="pageableTable">
+        <vl-rich-table-field data-value="name" label="Naam"></vl-rich-table-field>
+        <vl-rich-table-field data-value="description" label="Omschrijving"></vl-rich-table-field>
+        <vl-rich-table-pager align-right></vl-rich-table-pager>
+      </vl-rich-table>
     </div>
+    Page criteria:<p id="pagecriteria"></p>
+    <script>
+      const pageableTable = document.querySelector('#pageableTable');
+      let page = 0;
 
-    <div>
-      <h2>Sortable</h2>
-      <pre>
+      customElements.whenDefined('vl-rich-table').then(() => {
+        pageableTable.data = queryData(0, null, null);
+      });
+
+      pageableTable.addEventListener('pagechanged', (e) => {
+        let criteria = e.detail;
+        if (page !== criteria.newPage) {
+          page = criteria.newPage;
+          document.querySelector('#pagecriteria').innerHTML = JSON.stringify(criteria);
+          pageableTable.data = queryData(criteria.newPage - 1, null, null);
+        }
+      });
+    </script>
+  </div>
+
+  <div>
+    <h2>Sortable</h2>
+    <pre>
         <code class="line-numbers language-markup">
           &#x3C;vl-rich-table;&#x3E;
             &#x3C;vl-rich-table-field sortable direction=&#x22;desc&#x22; priority=&#x22;2&#x22; data-value=&#x22;name&#x22; label=&#x22;Naam&#x22;&#x3E;&#x3C;/vl-rich-table-field&#x3E;
@@ -275,72 +318,133 @@
           &#x3C;/vl-rich-table&#x3E;
         </code>
       </pre>
-      <div class="demo">
-        <vl-rich-table id="sortableTable">
-          <vl-rich-table-field sortable direction="desc" priority="2" data-value="name" label="Naam"></vl-rich-table-field>
-          <vl-rich-table-field sortable direction="asc" priority="1" data-value="description" label="Omschrijving"></vl-rich-table-field>
-        </vl-rich-table>
-        Sort criteria:<p id="sortcriteria"></p>
-        <script>
-          const sortableTable = document.querySelector('#sortableTable');
+    <div class="demo">
+      <vl-rich-table id="sortableTable">
+        <vl-rich-table-field sortable direction="desc" priority="2" data-value="name"
+                             label="Naam"></vl-rich-table-field>
+        <vl-rich-table-field sortable direction="asc" priority="1" data-value="description"
+                             label="Omschrijving"></vl-rich-table-field>
+      </vl-rich-table>
+      Sort criteria:<p id="sortcriteria"></p>
+      <script>
+        const sortableTable = document.querySelector('#sortableTable');
 
-          customElements.whenDefined('vl-rich-table').then(() => {
-            sortableTable.data = queryData(0, null, null);
-          });
+        customElements.whenDefined('vl-rich-table').then(() => {
+          sortableTable.data = queryData(0, null, null);
+        });
 
-          document.querySelector('#sortableTable').addEventListener('sort', (e) => {
-            let criteria = e.detail.sortCriteria;
-            document.querySelector('#sortcriteria').innerHTML = JSON.stringify(criteria);
-            document.querySelector('#sortableTable').data = queryData(null, null, criteria);
-          });
-        </script>
-      </div>
-    </div>
-
-    <div>
-      <h2>Search</h2>
-      <pre>
-        <code class="line-numbers language-markup">
-          &lt;vl-rich-table id=&quot;searchableTable&quot;&#39&gt;
-            &lt;vl-rich-table-field searchable data-value=&quot;name&quot; label=&quot;Naam&quot;&gt;&lt;/vl-rich-table-field&gt;
-            &lt;vl-rich-table-field searchable data-value=&quot;description&quot; label=&quot;Omschrijving&quot;&gt;&lt;/vl-rich-table-field&gt;
-            &lt;vl-rich-table-field searchable data-value=&quot;tijdstip&quot; data-type=&quot;datetime&quot; label=&quot;Tijdstip&quot;&gt;&lt;/vl-rich-table-field&gt;
-            &lt;vl-rich-table-field searchable data-value=&quot;datum&quot; data-type=&quot;date&quot; label=&quot;Datum&quot;&gt;&lt;/vl-rich-table-field&gt;
-            &lt;vl-rich-table-pager align-right total-items=&quot;100&quot; items-per-page=&quot;10&quot; current-page=&quot;1&quot;&gt;&lt;/vl-rich-table-pager&gt;
-          &lt;/vl-rich-table&gt;
-        </code>
-      </pre>
-      <div class="demo">
-        <vl-rich-table id="searchableTable">
-          <vl-rich-table-field searchable data-value="name" label="Naam"></vl-rich-table-field>
-          <vl-rich-table-field searchable data-value="description" label="Omschrijving"></vl-rich-table-field>
-          <vl-rich-table-field searchable data-value="tijdstip" data-type="datetime" label="Tijdstip"></vl-rich-table-field>
-          <vl-rich-table-field searchable data-value="datum" data-type="date" label="Datum"></vl-rich-table-field>
-          <vl-rich-table-pager align-right total-items="100" items-per-page="10" current-page="1"></vl-rich-table-pager>
-        </vl-rich-table>
-        Search value:<p id="searchValueChanged"></p>
-        Search criteria:<p id="searchCriteria"></p>
-        <script>
-          const searchableTable = document.querySelector('#searchableTable');
-
-          customElements.whenDefined('vl-rich-table').then(() => {
-            searchableTable.data = queryData(0, null, null);
-          });
-
-          document.querySelector('#searchableTable').addEventListener('search', (e) => {
-            let criteria = e.detail.searchCriteria;
-            document.querySelector('#searchCriteria').innerHTML = JSON.stringify(criteria);
-            document.querySelector('#searchableTable').data = queryData(null, criteria, null);
-          });
-
-          document.querySelector('#searchableTable').addEventListener('searchValueChange', (e) => {
-            let detail = e.detail;
-            console.log(detail);
-            document.querySelector('#searchValueChanged').innerHTML = JSON.stringify(detail);
-          });
-        </script>
-      </div>
+        document.querySelector('#sortableTable').addEventListener('sort', (e) => {
+          let criteria = e.detail.sortCriteria;
+          document.querySelector('#sortcriteria').innerHTML = JSON.stringify(criteria);
+          document.querySelector('#sortableTable').data = queryData(null, null, criteria);
+        });
+      </script>
     </div>
   </div>
+
+  <div>
+    <h2>Search</h2>
+    <pre>
+        <code class="line-numbers language-markup">
+          &#x3C;vl-rich-table id=&#x22;searchableTable&#x22; searchable&#x3E;
+            &#x3C;vl-rich-table-field data-value=&#x22;name&#x22; label=&#x22;Naam&#x22;&#x3E;&#x3C;/vl-rich-table-field&#x3E;
+            &#x3C;vl-rich-table-field data-value=&#x22;description&#x22; label=&#x22;Omschrijving&#x22;&#x3E;&#x3C;/vl-rich-table-field&#x3E;
+            &#x3C;div slot=&#x22;filter&#x22;&#x3E;
+              &#x3C;input name=&#x22;name&#x22; placeholder=&#x22;Zoeken...&#x22;&#x3E;
+            &#x3C;/div&#x3E;
+          &#x3C;/vl-rich-table&#x3E;
+        </code>
+      </pre>
+    <div class="demo">
+      <vl-rich-table id="searchableTable" searchable>
+        <vl-rich-table-field data-value="name" label="Naam"></vl-rich-table-field>
+        <vl-rich-table-field data-value="description" label="Omschrijving"></vl-rich-table-field>
+        <div slot="filter">
+          <input name="name" placeholder="Zoeken...">
+        </div>
+      </vl-rich-table>
+      Search criteria:<p id="searchCriteria"></p>
+      <script>
+        const searchableTable = document.querySelector('#searchableTable');
+        customElements.whenDefined('vl-rich-table').then(() => {
+          searchableTable.data = queryData(0, null, null);
+        });
+        searchableTable.addEventListener('search', (e) => {
+          document.querySelector('#searchCriteria').innerHTML = JSON.stringify(
+              e.detail.searchCriteria);
+          searchableTable.data = queryData(null, e.detail.searchCriteria, null);
+        });
+      </script>
+    </div>
+  </div>
+
+  <div>
+    <h2>Search, sort en paginatie gecombineerd met generieke search filter</h2>
+    <pre>
+        <code class="line-numbers language-markup">
+          &#x3C;vl-rich-table id=&#x22;gecombineerd&#x22; searchable&#x3E;
+            &#x3C;vl-rich-table-field sortable direction=&#x22;desc&#x22; priority=&#x22;2&#x22; searchable
+                                 search-options=&#x27;[{&#x22;text&#x22;: &#x22;Lorem ipsum&#x22;, &#x22;value&#x22;: &#x22;Lorem ipsum&#x22;}, {&#x22;text&#x22;: &#x22;Lorem ipsum7&#x22;, &#x22;value&#x22;: &#x22;Lorem ipsum7&#x22;}, {&#x22;text&#x22;: &#x22;Amet aut&#x22;, &#x22;value&#x22;: &#x22;Amet aut&#x22;}]&#x27;
+                                 data-value=&#x22;name&#x22; label=&#x22;Naam&#x22;&#x3E;&#x3C;/vl-rich-table-field&#x3E;
+            &#x3C;vl-rich-table-field sortable direction=&#x22;asc&#x22; priority=&#x22;1&#x22; searchable
+                                 data-value=&#x22;description&#x22; label=&#x22;Omschrijving&#x22;&#x3E;&#x3C;/vl-rich-table-field&#x3E;
+            &#x3C;vl-rich-table-field searchable data-value=&#x22;tijdstip&#x22; data-type=&#x22;datetime&#x22;
+                                 label=&#x22;Tijdstip&#x22;&#x3E;&#x3C;/vl-rich-table-field&#x3E;
+            &#x3C;vl-rich-table-field searchable data-value=&#x22;datum&#x22; data-type=&#x22;date&#x22;
+                                 label=&#x22;Datum&#x22;&#x3E;&#x3C;/vl-rich-table-field&#x3E;
+            &#x3C;vl-rich-table-pager align-right total-items=&#x22;100&#x22; items-per-page=&#x22;10&#x22;
+                                 current-page=&#x22;1&#x22;&#x3E;&#x3C;/vl-rich-table-pager&#x3E;
+            &#x3C;vl-rich-table-search-filter slot=&#x22;filter&#x22;&#x3E;&#x3C;/vl-rich-table-search-filter&#x3E;
+          &#x3C;/vl-rich-table&#x3E;
+        </code>
+      </pre>
+    <div class="demo">
+      <vl-rich-table id="gecombineerd" searchable>
+        <vl-rich-table-field sortable direction="desc" priority="2" searchable
+                             search-options='[{"text": "Lorem ipsum", "value": "Lorem ipsum"}, {"text": "Lorem ipsum7", "value": "Lorem ipsum7"}, {"text": "Amet aut", "value": "Amet aut"}]'
+                             data-value="name" label="Naam"></vl-rich-table-field>
+        <vl-rich-table-field sortable direction="asc" priority="1" searchable
+                             data-value="description" label="Omschrijving"></vl-rich-table-field>
+        <vl-rich-table-field searchable data-value="tijdstip" data-type="datetime"
+                             label="Tijdstip"></vl-rich-table-field>
+        <vl-rich-table-field searchable data-value="datum" data-type="date"
+                             label="Datum"></vl-rich-table-field>
+        <vl-rich-table-pager align-right total-items="100" items-per-page="10"
+                             current-page="1"></vl-rich-table-pager>
+        <vl-rich-table-search-filter slot="filter"></vl-rich-table-search-filter>
+      </vl-rich-table>
+      <script>
+        const gecombineerd = document.querySelector('#gecombineerd');
+        let searchCriteria;
+        let currentPage = 0;
+        let sortCriteria;
+
+        customElements.whenDefined('vl-rich-table').then(() => {
+          gecombineerd.data = queryData(0, null, null);
+        });
+
+        const query = () => {
+          gecombineerd.data = queryData(currentPage - 1, searchCriteria, sortCriteria);
+        };
+
+        gecombineerd.addEventListener('search', (e) => {
+          searchCriteria = e.detail.searchCriteria;
+          query();
+        });
+
+        gecombineerd.addEventListener('pagechanged', (e) => {
+          if (currentPage !== e.detail.newPage) {
+            currentPage = e.detail.newPage;
+            query();
+          }
+        });
+        gecombineerd.addEventListener('sort', (e) => {
+          sortCriteria = e.detail.sortCriteria;
+          query();
+        });
+      </script>
+    </div>
+  </div>
+</div>
 </body>
 </html>
