@@ -4,7 +4,7 @@
   "description": "Een configureerbare data-table met paginering, sortering en zoeken op basis van een dynamische lijst van data.",
   "scripts": {
     "prepare": "npm update --dev vl-ui-util && npm run prepare:util",
-    "prepare:util": "npm explore vl-ui-util -- npm run util",
+    "prepare:util": "npm explore vl-ui-util -- npm run install:copy && npm explore vl-ui-util -- npm run install:bamboo",
     "test": "wct -l chrome,firefox --npm",
     "release": "np",
     "release:prepare": "npm run release:prepare:build && npm run release:prepare:css && npm run release:prepare:commit",
@@ -30,6 +30,7 @@
   },
   "homepage": "https://github.com/milieuinfo/webcomponent-vl-rich-table#readme",
   "dependencies": {
+    "replace": "^1.1.1",
     "vl-ui-button": "^1.3.1",
     "vl-ui-core": "^2.0.0",
     "vl-ui-data-table": "1.0.7",
@@ -37,7 +38,6 @@
     "vl-ui-grid": "1.0.12",
     "vl-ui-icon": "2.1.0",
     "vl-ui-input-field": "1.1.2",
-    "vl-ui-link": "1.1.10",
     "vl-ui-pager": "git://github.com/milieuinfo/webcomponent-vl-ui-pager.git",
     "vl-ui-select": "2.0.1"
   },
@@ -47,7 +47,6 @@
     "concurrently": "5.0.0",
     "http-server": "^0.11.1",
     "uglify-js-es6": "2.8.9",
-    "replace": "^1.1.1",
     "rollup": "1.25.1",
     "rollup-plugin-postcss": "2.0.3",
     "rollup-plugin-terser": "5.1.2",
