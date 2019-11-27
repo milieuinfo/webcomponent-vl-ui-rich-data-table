@@ -1,7 +1,7 @@
 import {VlElement} from "/node_modules/vl-ui-core/vl-core.js";
 import {VlInputField} from '/node_modules/vl-ui-input-field/vl-input-field.js';
 import {VlSelect} from '/node_modules/vl-ui-select/vl-select.js';
-import {VlSearchFilter} from '/node_modules/vl-ui-search-filter/vl-search-filter.src.js';
+import {VlSearchFilter} from '/node_modules/vl-ui-search-filter/vl-search-filter.js';
 
 /**
  * VlRichTableSearchFilter

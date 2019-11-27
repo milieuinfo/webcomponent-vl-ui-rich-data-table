@@ -2,7 +2,7 @@ import {VlElement} from "/node_modules/vl-ui-core/vl-core.js";
 import {VlDataTable} from '/node_modules/vl-ui-data-table/vl-data-table.js';
 import {VlGrid} from '/node_modules/vl-ui-grid/vl-grid.js';
 import {asc,desc} from "./domain/sortable";
-import style from  './style.scss';
+import style from "./vl-rich-table-style.scss"
 
 /**
  * VlRichTable
