@@ -4,7 +4,7 @@
   "description": "Een configureerbare data-table met paginering, sortering en zoeken op basis van een dynamische lijst van data.",
   "scripts": {
     "prepare": "npm update --dev vl-ui-util && npm run prepare:util",
-    "prepare:util": "npm explore vl-ui-util -- npm run install:copy && npm explore vl-ui-util -- npm run install:bamboo",
+    "prepare:util": "npm explore vl-ui-util -- npm run util",
     "test": "wct -l chrome,firefox --npm",
     "release": "np",
     "release:prepare": "npm run release:prepare:build && npm run release:prepare:css && npm run release:prepare:commit",
@@ -37,7 +37,9 @@
     "vl-ui-grid": "1.0.12",
     "vl-ui-icon": "2.1.0",
     "vl-ui-input-field": "1.1.2",
-    "vl-ui-select": "2.0.0"
+    "vl-ui-link": "1.1.10",
+    "vl-ui-pager": "git://github.com/milieuinfo/webcomponent-vl-ui-pager.git",
+    "vl-ui-select": "2.0.1"
   },
   "devDependencies": {
     "@govflanders/vl-ui-util": "^3.9.1",
@@ -50,6 +52,7 @@
     "rollup-plugin-postcss": "2.0.3",
     "rollup-plugin-terser": "5.1.2",
     "sass": "1.23.6",
+    "vl-ui-datepicker": "github:milieuinfo/webcomponent-vl-ui-datepicker#change_event_propageren",
     "vl-ui-util": "^2.0.13",
     "vl-ui-pager": "git://github.com/milieuinfo/webcomponent-vl-ui-pager.git",
     "vl-ui-search-filter": "git://github.com/milieuinfo/webcomponent-vl-ui-search-filter.git",
