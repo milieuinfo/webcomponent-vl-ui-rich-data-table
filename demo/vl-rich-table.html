@@ -188,26 +188,41 @@
   <h2>Rich table met dynamische data en custom renderer</h2>
   <pre>
         <code class="line-numbers language-markup">
-        &#x3C;vl-rich-table id=&#x22;dynamic-data&#x22;&#x3E;
-          &#x3C;vl-rich-table-field data-value=&#x22;id&#x22; label=&#x22;ID&#x22;&#x3E;&#x3C;/vl-rich-table-field&#x3E;
-          &#x3C;vl-rich-table-field id=&#x22;strong-field&#x22; data-value=&#x22;name&#x22; label=&#x22;Naam&#x22;&#x3E;&#x3C;/vl-rich-table-field&#x3E;
-        &#x3C;/vl-rich-table&#x3E;
-        &#x3C;button type=&#x22;button&#x22; onclick=&#x27;document.getElementById(&#x22;dynamic-data&#x22;).data = [{id: 1, name:&#x22;Test&#x22;}, {id: 2, name:&#x22;Test2&#x22;}, {id: 3, name:&#x22;Test3&#x22;}]&#x27;&#x3E;Voeg testdata toe&#x3C;/button&#x3E;
-        &#x3C;button type=&#x22;button&#x22; onclick=&#x27;document.getElementById(&#x22;dynamic-data&#x22;).data = []&#x27;&#x3E;Verwijder data&#x3C;/button&#x3E;
-        &#x3C;button type=&#x22;button&#x22; onclick=&#x27;document.getElementById(&#x22;strong-field&#x22;).renderTableData = function(content) {const div = document.createElement(&#x22;div&#x22;); div.innerHTML = &#x22;&#x3C;strong&#x3E;&#x22;+content+&#x22;&#x3C;/strong&#x3E;&#x22;; return div;}&#x27;&#x3E;Verander renderer voor naam&#x3C;/button&#x3E;
+          &lt;vl-rich-table id=&quot;dynamic-data&quot;&gt;
+            &lt;vl-rich-table-field data-value=&quot;id&quot; label=&quot;ID&quot;&gt;&lt;/vl-rich-table-field&gt;
+            &lt;vl-rich-table-field id=&quot;strong-field&quot; data-value=&quot;name&quot; label=&quot;Naam&quot;&gt;&lt;/vl-rich-table-field&gt;
+            &lt;vl-rich-table-field id=&quot;date-field&quot; data-value=&quot;date&quot; data-type=&quot;date&quot; label=&quot;Datum (volgens BIN-norm)&quot;&gt;&lt;/vl-rich-table-field&gt;
+            &lt;vl-rich-table-field id=&quot;date-field-with-slash&quot; data-value=&quot;date&quot; data-type=&quot;date&quot; label=&quot;Datum (dd/mm/jjjj)&quot;&gt;&lt;/vl-rich-table-field&gt;
+          &lt;/vl-rich-table&gt;
+          &lt;button type=&quot;button&quot; onclick=&#39;document.getElementById(&quot;dynamic-data&quot;).data = [{id: 1, name:&quot;Test&quot;, &quot;date&quot;: &quot;2020-01-31&quot;}, {id: 2, name:&quot;Test2&quot;, &quot;date&quot;: &quot;2020-10-01&quot;}, {id: 3, name:&quot;Test3&quot;, &quot;date&quot;: &quot;2020-12-12&quot;}]&#39;&gt;Voeg testdata toe&lt;/button&gt;
+          &lt;button type=&quot;button&quot; onclick=&#39;document.getElementById(&quot;dynamic-data&quot;).data = []&#39;&gt;Verwijder data&lt;/button&gt;
+          &lt;button type=&quot;button&quot;
+                  onclick=&#39;document.getElementById(&quot;strong-field&quot;).renderTableData = function(content) {const div = document.createElement(&quot;div&quot;); div.innerHTML = &quot;&lt;strong&gt;&quot;+content+&quot;&lt;/strong&gt;&quot;; return div;}&#39;&gt;
+            Verander renderer voor naam
+          &lt;/button&gt;
+          &lt;script&gt;
+            const fnDateFormat = (string) =&gt; new Date(string).toLocaleDateString(&#39;nl-BE&#39;, {year: &#39;numeric&#39;, month: &#39;2-digit&#39;, day: &#39;2-digit&#39;});
+            document.querySelector(&quot;#date-field-with-slash&quot;).renderTableData = (content) =&gt;  document.createTextNode(fnDateFormat(content));
+          &lt;/script&gt;
         </code>
       </pre>
   <div class="demo">
     <vl-rich-table id="dynamic-data">
       <vl-rich-table-field data-value="id" label="ID"></vl-rich-table-field>
       <vl-rich-table-field id="strong-field" data-value="name" label="Naam"></vl-rich-table-field>
+      <vl-rich-table-field id="date-field" data-value="date" data-type="date" label="Datum (volgens BIN-norm)"></vl-rich-table-field>
+      <vl-rich-table-field id="date-field-with-slash" data-value="date" data-type="date" label="Datum (dd/mm/jjjj)"></vl-rich-table-field>
     </vl-rich-table>
-    <button type="button" onclick='document.getElementById("dynamic-data").data = [{id: 1, name:"Test"}, {id: 2, name:"Test2"}, {id: 3, name:"Test3"}]'>Voeg testdata toe</button>
+    <button type="button" onclick='document.getElementById("dynamic-data").data = [{id: 1, name:"Test", "date": "2020-01-31"}, {id: 2, name:"Test2", "date": "2020-10-01"}, {id: 3, name:"Test3", "date": "2020-12-12"}]'>Voeg testdata toe</button>
     <button type="button" onclick='document.getElementById("dynamic-data").data = []'>Verwijder data</button>
     <button type="button"
             onclick='document.getElementById("strong-field").renderTableData = function(content) {const div = document.createElement("div"); div.innerHTML = "<strong>"+content+"</strong>"; return div;}'>
       Verander renderer voor naam
     </button>
+    <script>
+      const fnDateFormat = (string) => new Date(string).toLocaleDateString('nl-BE', {year: 'numeric', month: '2-digit', day: '2-digit'});
+      document.querySelector("#date-field-with-slash").renderTableData = (content) =>  document.createTextNode(fnDateFormat(content));
+    </script>
   </div>
 </div>
 
