@@ -96,14 +96,16 @@ export class VlRichTableField extends sortableMixin(VlElement(HTMLElement)) {
   }
 
   connectedCallback() {
+    this._initHeaderCell();
+    super.connectedCallback();
+  }
+
+  _initHeaderCell() {
     if (this.richTable) {
       const headerCell = document.createElement("th");
       this._headerCell = headerCell;
       headerCell.appendChild(
           document.createTextNode(this.getAttribute('label')));
-      if (this.hasAttribute('sortable')) {
-        this._dressSortableHeader();
-      }
       this.richTable.addTableHeaderCell(headerCell);
     } else {
       console.log(

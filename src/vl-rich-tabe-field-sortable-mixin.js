@@ -2,6 +2,12 @@ import {asc, desc} from "./domain/sortable";
 
 export const sortableMixin = baseClass => class extends baseClass {
 
+  connectedCallback() {
+    if (this.richTable && this.hasAttribute('sortable')) {
+      this._dressSortableHeader();
+    }
+  };
+
   _dressSortableHeader() {
     const headerCell = this._headerCell;
     headerCell.classList.add('vl-sortable');
