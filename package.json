@@ -35,7 +35,7 @@
     "vl-ui-data-table": "1.0.7",
     "vl-ui-grid": "1.0.12",
     "vl-ui-icon": "2.1.0",
-    "vl-ui-pager": "git://github.com/milieuinfo/webcomponent-vl-ui-pager.git"
+    "vl-ui-pager": "0.0.3"
   },
   "devDependencies": {
     "@govflanders/vl-ui-util": "^3.9.1",
@@ -50,7 +50,6 @@
     "vl-ui-datepicker": "github:milieuinfo/webcomponent-vl-ui-datepicker#change_event_propageren",
     "vl-ui-input-field": "1.1.2",
     "vl-ui-util": "^2.0.13",
-    "vl-ui-pager": "0.0.2",
     "vl-ui-search-filter": "0.0.1",
     "vl-ui-select": "2.0.1",
     "wct-browser-legacy": "1.0.2",
