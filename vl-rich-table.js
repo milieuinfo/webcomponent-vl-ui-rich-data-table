@@ -1,8 +1,8 @@
-import { VlElement, define } from '../../../../node_modules/vl-ui-core/vl-core.js';
-import '../../../../node_modules/vl-ui-data-table/vl-data-table.js';
-import '../../../../node_modules/vl-ui-grid/vl-grid.js';
-import '../../../../node_modules/vl-ui-icon/vl-icon.js';
-import { VlPager } from '../../../../node_modules/vl-ui-pager/vl-pager.js';
+import { VlElement, define } from '../../../../../../node_modules/vl-ui-core/vl-core.js';
+import '../../../../../../node_modules/vl-ui-data-table/vl-data-table.js';
+import '../../../../../../node_modules/vl-ui-grid/vl-grid.js';
+import '../../../../../../node_modules/vl-ui-icon/vl-icon.js';
+import { VlPager } from '../../../../../../node_modules/vl-ui-pager/vl-pager.js';
 
 const SortDirections = {
   DESCENDING: 'desc', ASCENDING: 'asc'
