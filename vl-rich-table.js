@@ -1,11 +1,8 @@
-import { VlElement, define } from '../../../../../../node_modules/vl-ui-core/vl-core.js';
-import '../../../../../../node_modules/vl-ui-data-table/vl-data-table.js';
-import '../../../../../../node_modules/vl-ui-grid/vl-grid.js';
-import '../../../../../../node_modules/vl-ui-icon/vl-icon.js';
-import { VlPager } from '../../../../../../node_modules/vl-ui-pager/vl-pager.js';
-import '../../../../../../node_modules/vl-ui-input-field/vl-input-field.js';
-import '../../../../../../node_modules/vl-ui-select/vl-select.js';
-import '../../../../../../node_modules/vl-ui-search-filter/vl-search-filter.js';
+import { VlElement, define } from '../../../../node_modules/vl-ui-core/vl-core.js';
+import '../../../../node_modules/vl-ui-data-table/vl-data-table.js';
+import '../../../../node_modules/vl-ui-grid/vl-grid.js';
+import '../../../../node_modules/vl-ui-icon/vl-icon.js';
+import { VlPager } from '../../../../node_modules/vl-ui-pager/vl-pager.js';
 
 const SortDirections = {
   DESCENDING: 'desc', ASCENDING: 'asc'
@@ -55,7 +52,7 @@ styleInject(css);
  * @property {boolean} hover - Attribuut wordt gebruikt om een rij te highlighten waneer de gebruiker erover hovert met muiscursor. Zie ook {@link https://webcomponenten.omgeving.vlaanderen.be/demo/vl-data-table.html|vl-data-table}
  * @property {boolean} lined - Variant met een lijn tussen elke rij en kolom. Zie ook {@link https://webcomponenten.omgeving.vlaanderen.be/demo/vl-data-table.html|vl-data-table}
  * @property {boolean} zebra - Variant waarin de rijen afwisslend een andere achtergrondkleur krijgen. Dit maakt de tabel makkelijker leesbaar. Zie ook {@link https://webcomponenten.omgeving.vlaanderen.be/demo/vl-data-table.html|vl-data-table}
- * @property {boolean} searchable - Attribuut die aangeeft dat deze table doorzoekbaar is. Er zal een vl-search-filter toevoegd worden en gekeken worden welke fields searchable zijn en toegevoegd worden aan de filter.
+ * @property {boolean} searchable - Attribuut die aangeeft dat deze table doorzoekbaar is. Er zal een grid toevoegd worden en het slot filter wordt getoond.
  *
  * @event pagechanged - De geselecteerde pagina zijn veranderd.
  * @event search - De zoekcriteria zijn veranderd. Triggert bij elke input/select in het filter slot. Enkel als de rich table searchable is.
@@ -572,92 +569,8 @@ class VlRichTablePager extends VlPager {
   }
 }
 
-/**
- * VlRichTableSearchFilter
- * @class
- * @classdesc
- *
- * @extends VlElement
- *
- * @see {@link https://www.github.com/milieuinfo/webcomponent-vl-ui-rich-table/releases/latest|Release notes}
- * @see {@link https://www.github.com/milieuinfo/webcomponent-vl-ui-rich-table/issues|Issues}
- * @see {@link https://webcomponenten.omgeving.vlaanderen.be/demo/vl-rich-table.html|Demo}
- **/
-class VlRichTableSearchFilter extends VlElement(HTMLElement) {
-
-  constructor() {
-    super();
-  }
-
-  connectedCallback() {
-    this._shadow = this.attachShadow({ mode: 'open' });
-    this._shadow.innerHTML = `
-        <style>
-          @import "/node_modules/vl-ui-search-filter/style.css";
-        </style>
-        <div is="vl-search-filter" title="Verfijn uw zoekopdracht" alt>
-          <form>
-            <section>
-              ${this._renderSearchFields()}
-            </section>
-          </form>
-        </div>
-    `;
-  }
-
-
-  get richTable() {
-    if (this.parentElement && this.parentElement
-        && this.parentElement.tagName.toLowerCase()
-        === 'vl-rich-table') {
-      return this.parentElement;
-    }
-  }
-
-  _renderSearchFields() {
-    return this.richTable.fields.map(field => `
-      <div>
-        <label is="form-label" for="${field.getAttribute('data-value')}">
-          ${field.getAttribute('label')}
-        </label>
-        ${this._renderSearchField(field)}
-      </div>
-  `);
-  }
-
-  _renderSearchField(field) {
-    if (field.getAttribute('search-options') != null) {
-      return this._renderSelectSearchField(field);
-    }
-    if (field.getAttribute('data-type') === 'date') ;
-    return this._renderInputSearchField(field);
-  }
-
-  _renderSelectSearchField(field) {
-    return `
-    <style>
-      @import "/node_modules/vl-ui-select/style.css";
-    </style>
-    <select is="vl-select" data-vl-select name="${field.getAttribute('data-value')}" data-vl-select-deletable>
-      <option placeholder value="">Kies een ${field.getAttribute('label').toLowerCase()}</option>
-      ${JSON.parse(field.getAttribute('search-options')).map(option => `
-      <option value="${option.value}">${option.text}</option>`)}
-    </select>`;
-  }
-
-  _renderInputSearchField(field) {
-    return `
-    <style>
-      @import "/node_modules/vl-ui-input-field/style.css";
-    </style>
-    <input is="vl-input-field" type="text" name="${field.getAttribute(
-        'data-value')}" value="" block/>`;
-  }
-}
-
 define('vl-rich-table', VlRichTable);
 define('vl-rich-table-field', VlRichTableField);
 define('vl-rich-table-pager', VlRichTablePager);
-define('vl-rich-table-search-filter', VlRichTableSearchFilter);
 
-export { RenderFunctions, SortDirections, VlRichTable, VlRichTableField, VlRichTablePager, VlRichTableSearchFilter, asc, desc };
+export { RenderFunctions, SortDirections, VlRichTable, VlRichTableField, VlRichTablePager, asc, desc };
