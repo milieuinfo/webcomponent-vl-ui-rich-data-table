@@ -52,7 +52,7 @@ styleInject(css);
  * @property {boolean} hover - Attribuut wordt gebruikt om een rij te highlighten waneer de gebruiker erover hovert met muiscursor. Zie ook {@link https://webcomponenten.omgeving.vlaanderen.be/demo/vl-data-table.html|vl-data-table}
  * @property {boolean} lined - Variant met een lijn tussen elke rij en kolom. Zie ook {@link https://webcomponenten.omgeving.vlaanderen.be/demo/vl-data-table.html|vl-data-table}
  * @property {boolean} zebra - Variant waarin de rijen afwisslend een andere achtergrondkleur krijgen. Dit maakt de tabel makkelijker leesbaar. Zie ook {@link https://webcomponenten.omgeving.vlaanderen.be/demo/vl-data-table.html|vl-data-table}
- * @property {boolean} searchable - Attribuut die aangeeft dat deze table doorzoekbaar is. Er zal een grid toegevoegd worden en het filter slot wordt getoond.
+ * @property {boolean} searchable - Attribuut die aangeeft dat deze table doorzoekbaar is. Er zal een grid toevoegd worden en het slot filter wordt getoond.
  *
  * @event pagechanged - De geselecteerde pagina zijn veranderd.
  * @event search - De zoekcriteria zijn veranderd. Triggert bij elke input/select in het filter slot. Enkel als de rich table searchable is.
