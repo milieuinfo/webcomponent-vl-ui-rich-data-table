@@ -31,15 +31,11 @@
   "homepage": "https://github.com/milieuinfo/webcomponent-vl-rich-table#readme",
   "dependencies": {
     "replace": "^1.1.1",
-    "vl-ui-button": "^1.3.1",
     "vl-ui-core": "^2.0.0",
     "vl-ui-data-table": "1.0.7",
-    "vl-ui-link": "1.1.10",
     "vl-ui-grid": "1.0.12",
     "vl-ui-icon": "2.1.0",
-    "vl-ui-input-field": "1.1.2",
-    "vl-ui-pager": "git://github.com/milieuinfo/webcomponent-vl-ui-pager.git",
-    "vl-ui-select": "2.0.1"
+    "vl-ui-pager": "git://github.com/milieuinfo/webcomponent-vl-ui-pager.git"
   },
   "devDependencies": {
     "@govflanders/vl-ui-util": "^3.9.1",
@@ -52,9 +48,11 @@
     "rollup-plugin-terser": "5.1.2",
     "sass": "1.23.6",
     "vl-ui-datepicker": "github:milieuinfo/webcomponent-vl-ui-datepicker#change_event_propageren",
+    "vl-ui-input-field": "1.1.2",
     "vl-ui-util": "^2.0.13",
     "vl-ui-pager": "git://github.com/milieuinfo/webcomponent-vl-ui-pager.git",
-    "vl-ui-search-filter": "git://github.com/milieuinfo/webcomponent-vl-ui-search-filter.git",
+    "vl-ui-search-filter": "0.0.1",
+    "vl-ui-select": "2.0.1",
     "wct-browser-legacy": "1.0.2",
     "web-component-tester": "6.9.2"
   },
