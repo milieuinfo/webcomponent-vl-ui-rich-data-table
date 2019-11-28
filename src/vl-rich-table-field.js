@@ -1,5 +1,4 @@
 import {VlElement} from "/node_modules/vl-ui-core/vl-core.js";
-import {VlIcon} from '/node_modules/vl-ui-icon/vl-icon.js';
 import {sortableMixin} from "./vl-rich-tabe-field-sortable-mixin.js";
 
 const formatDate = (datestring) => {

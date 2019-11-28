@@ -1,4 +1,5 @@
 import {asc, desc} from "./domain/sortable";
+import {VlIcon} from '/node_modules/vl-ui-icon/vl-icon.js';
 
 export const sortableMixin = baseClass => class extends baseClass {
 
