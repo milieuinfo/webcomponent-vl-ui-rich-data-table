@@ -38,7 +38,9 @@ export const RenderFunctions = {
  *                                Mogelijke waarden:
  *                                - string : de waarde wordt als tekst getoond
  *                                - date : de datum wordt getoond volgens de BIN norm dd.mm.jjjj
+ *                                  Parsen gebeurt via de Date constructor en formatteren via toLocaleString met locale 'nl-BE'.
  *                                - datetime : de datum + tijd wordt getoond volgens BIN norm dd.mm.jjjj hh:mi:ss
+ *                                  Parsen gebeurt via de Date constructor en formatteren via toLocaleString met locale 'nl-BE'.
  *                                Default waarde: string
  * @property {asc | desc} direction - Te combineren met een 'priority' attribute om een sorteercriteria te bepalen.
  * @property {number} priority -Te combineren met een 'direction' attribute om een sorteercriteria te bepalen.

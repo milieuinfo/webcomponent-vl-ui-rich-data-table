@@ -8,129 +8,150 @@
   <script type="module" src="/node_modules/vl-ui-search-filter/vl-search-filter.js"></script>
   <script type="module" src="/node_modules/vl-ui-select/vl-select.js"></script>
   <script type="module" src="/node_modules/vl-ui-input-field/vl-input-field.js"></script>
+  <script type="module" src="/node_modules/vl-ui-datepicker/vl-datepicker.js"></script>
+  <script type="module" src="/node_modules/vl-ui-form-message/vl-form-message.js"></script>
   <script>
+
     const data = [
       {
-        id: 1, name: "Lorem ipsum1", description: "Lorem", "tijdstip": "2020-01-31T17:22:33.123456",
-        "datum": "2020-01-31"
+        id: 1,
+        name: "Lorem ipsum1",
+        description: "Lorem",
+        "tijdstip": "2000-01-12T17:22:33.123456",
+        "datum": "2000-01-12T00:00:00"
       },
       {
-        id: 2, name: "Lorem ipsum2", description: "ipsum", "tijdstip": "2020-01-31T17:22:33.123456",
-        "datum": "2020-01-31"
+        id: 2,
+        name: "Lorem ipsum2",
+        description: "ipsum",
+        "tijdstip": "2001-02-11T17:22:33.123456",
+        "datum": "2001-02-11T00:00:00"
       },
       {
-        id: 3, name: "Lorem ipsum3", description: "dolor", "tijdstip": "2020-01-31T17:22:33.123456",
-        "datum": "2020-01-31"
+        id: 3,
+        name: "Lorem ipsum3",
+        description: "dolor",
+        "tijdstip": "2002-03-10T17:22:33.123456",
+        "datum": "2002-03-10T00:00:00"
       },
       {
-        id: 4, name: "Lorem ipsum4", description: "sit", "tijdstip": "2020-01-31T17:22:33.123456",
-        "datum": "2020-01-31"
+        id: 4,
+        name: "Lorem ipsum4",
+        description: "sit",
+        "tijdstip": "2003-04-09T17:22:33.123456",
+        "datum": "2003-04-09T00:00:00"
       },
       {
-        id: 5, name: "Lorem ipsum5", description: "amet", "tijdstip": "2020-01-31T17:22:33.123456",
-        "datum": "2020-01-31"
+        id: 5,
+        name: "Lorem ipsum5",
+        description: "amet",
+        "tijdstip": "2004-05-08T17:22:33.123456",
+        "datum": "2004-05-08T00:00:00"
       },
       {
         id: 6,
         name: "Lorem ipsum6",
         description: "consectetur",
-        "tijdstip": "2020-01-31T17:22:33.123456",
-        "datum": "2020-01-31"
+        "tijdstip": "2005-06-07T17:22:33.123456",
+        "datum": "2005-06-07T00:00:00"
       },
       {
         id: 7,
         name: "Lorem ipsum7",
         description: "adipisicing",
-        "tijdstip": "2020-01-31T17:22:33.123456",
-        "datum": "2020-01-31"
+        "tijdstip": "2006-07-06T17:22:33.123456",
+        "datum": "2006-07-06T00:00:00"
       },
       {
-        id: 8, name: "Lorem ipsum8", description: "elit", "tijdstip": "2020-01-31T17:22:33.123456",
-        "datum": "2020-01-31"
+        id: 8,
+        name: "Lorem ipsum8",
+        description: "elit",
+        "tijdstip": "2007-08-05T17:22:33.123456",
+        "datum": "2007-08-05T00:00:00"
       },
       {
         id: 9,
         name: "Lorem ipsum9",
         description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
-        "tijdstip": "2020-01-31T17:22:33.123456",
-        "datum": "2020-01-31"
+        "tijdstip": "2019-01-01T01:22:33.123456",
+        "datum": "2019-01-01T00:00:00"
       },
       {
         id: 10,
         name: "Lorem ipsum10",
         description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
-        "tijdstip": "2020-01-31T17:22:33.123456",
-        "datum": "2020-01-31"
+        "tijdstip": "2019-02-02T03:22:33.123456",
+        "datum": "2019-02-02T00:00:00"
       },
       {
         id: 11,
         name: "Lorem ipsum11",
         description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
-        "tijdstip": "2020-01-31T17:22:33.123456",
-        "datum": "2020-01-31"
+        "tijdstip": "2019-03-03T05:22:33.123456",
+        "datum": "2019-03-03T00:00:00"
       },
       {
         id: 12,
         name: "Lorem ipsum12",
         description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
-        "tijdstip": "2020-01-31T17:22:33.123456",
-        "datum": "2020-01-31"
+        "tijdstip": "2019-04-04T07:22:33.123456",
+        "datum": "2019-04-04T00:00:00"
       },
       {
         id: 13,
         name: "Lorem ipsum13",
         description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
-        "tijdstip": "2020-01-31T17:22:33.123456",
-        "datum": "2020-01-31"
+        "tijdstip": "2019-05-05T09:22:33.123456",
+        "datum": "2019-05-05T00:00:00"
       },
       {
         id: 14,
         name: "Lorem ipsum14",
         description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
-        "tijdstip": "2020-01-31T17:22:33.123456",
-        "datum": "2020-01-31"
+        "tijdstip": "2019-06-06T11:22:33.123456",
+        "datum": "2019-06-06T00:00:00"
       },
       {
         id: 15,
         name: "Lorem ipsum15",
         description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
-        "tijdstip": "2020-01-31T17:22:33.123456",
-        "datum": "2020-01-31"
+        "tijdstip": "2019-07-07T13:22:33.123456",
+        "datum": "2019-07-07T00:00:00"
       },
       {
         id: 16,
         name: "Lorem ipsum16",
         description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
-        "tijdstip": "2020-01-31T17:22:33.123456",
-        "datum": "2020-01-31"
+        "tijdstip": "2019-08-08T15:22:33.123456",
+        "datum": "2019-08-08T00:00:00"
       },
       {
         id: 17,
         name: "Lorem ipsum17",
         description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
-        "tijdstip": "2020-01-31T17:22:33.123456",
-        "datum": "2020-01-31"
+        "tijdstip": "2019-09-09T17:22:33.123456",
+        "datum": "2019-09-09T00:00:00"
       },
       {
         id: 18,
         name: "Lorem ipsum18",
         description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
-        "tijdstip": "2020-01-31T17:22:33.123456",
-        "datum": "2020-01-31"
+        "tijdstip": "2019-10-10T19:22:33.123456",
+        "datum": "2019-10-10T00:00:00"
       },
       {
         id: 19,
         name: "Lorem ipsum19",
         description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
-        "tijdstip": "2020-01-31T17:22:33.123456",
-        "datum": "2020-01-31"
+        "tijdstip": "2019-11-11T21:22:33.123456",
+        "datum": "2019-11-11T00:00:00"
       },
       {
         id: 20,
         name: "Lorem ipsum20",
         description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
-        "tijdstip": "2020-01-31T17:22:33.123456",
-        "datum": "2020-01-31"
+        "tijdstip": "2019-12-12T23:22:33.123456",
+        "datum": "2019-12-12T00:00:00"
       },
     ];
 
@@ -139,16 +160,35 @@
       const filteredData = data
       .filter(record => {
         if (search && search.name) {
-          return record.name.includes(search.name);
+          return record.name
+              && record.name.toLocaleLowerCase().includes(search.name.toLocaleLowerCase());
         }
         return true
       })
       .filter(record => {
+        if (search && search.datum) {
+
+          if (search.datum.date) {
+            return new Date(record.datum).getTime() === search.datum.date.getTime();
+          }
+
+          if (search.datum.dateFrom && search.datum.dateTo) {
+            const time = new Date(record.datum).getTime();
+            return time >= search.datum.dateFrom.getTime() && time <= search.datum.dateTo.getTime();
+          }
+
+          return false
+        }
+        return true;
+      })
+      .filter(record => {
         if (search && search.description) {
-          return record.description.includes(search.description);
+          return record.description
+              && record.description.toLocaleLowerCase().includes(search.description.toLocaleLowerCase());
         }
         return true
       });
+
       const content = filteredData.sort((record1, record2) => {
         const criteria = sort ? sort[0] : null;
         if (criteria) {
@@ -200,7 +240,7 @@
           &lt;button type=&quot;button&quot; onclick=&#39;document.getElementById(&quot;dynamic-data&quot;).data = [{id: 1, name:&quot;Test&quot;, &quot;date&quot;: &quot;2020-01-31&quot;}, {id: 2, name:&quot;Test2&quot;, &quot;date&quot;: &quot;2020-10-01&quot;}, {id: 3, name:&quot;Test3&quot;, &quot;date&quot;: &quot;2020-12-12&quot;}]&#39;&gt;Voeg testdata toe&lt;/button&gt;
           &lt;button type=&quot;button&quot; onclick=&#39;document.getElementById(&quot;dynamic-data&quot;).data = []&#39;&gt;Verwijder data&lt;/button&gt;
           &lt;button type=&quot;button&quot;
-                  onclick=&#39;document.getElementById(&quot;strong-field&quot;).renderTableData = function(content) {const div = document.createElement(&quot;div&quot;); div.innerHTML = &quot;&lt;strong&gt;&quot;+content+&quot;&lt;/strong&gt;&quot;; return div;}&#39;&gt;
+                  onclick=&#39;document.getElementById(&quot;strong-field&quot;).renderTableData = (content) =&gt; {const div = document.createElement(&quot;div&quot;); div.innerHTML = &quot;&lt;strong&gt;&quot;+content+&quot;&lt;/strong&gt;&quot;; return div;}&#39;&gt;
             Verander renderer voor naam
           &lt;/button&gt;
           &lt;script&gt;
@@ -219,7 +259,7 @@
     <button type="button" onclick='document.getElementById("dynamic-data").data = [{id: 1, name:"Test", "date": "2020-01-31"}, {id: 2, name:"Test2", "date": "2020-10-01"}, {id: 3, name:"Test3", "date": "2020-12-12"}]'>Voeg testdata toe</button>
     <button type="button" onclick='document.getElementById("dynamic-data").data = []'>Verwijder data</button>
     <button type="button"
-            onclick='document.getElementById("strong-field").renderTableData = function(content) {const div = document.createElement("div"); div.innerHTML = "<strong>"+content+"</strong>"; return div;}'>
+            onclick='document.getElementById("strong-field").renderTableData = (content) => {const div = document.createElement("div"); div.innerHTML = "<strong>"+content+"</strong>"; return div;}'>
       Verander renderer voor naam
     </button>
     <script>
@@ -233,15 +273,23 @@
   <h2>Rich table met voorgedefinieerde data en zebra stijl</h2>
   <pre>
         <code class="line-numbers language-markup">
-          &#x3C;vl-rich-table data=&#x27;[{&#x22;id&#x22;: 1, &#x22;name&#x22;: &#x22;Lorem ipsum&#x22;, &#x22;description&#x22;: &#x22;Lorem ipsum dolor sit amet, consectetur adipisicing elit.&#x22;}, {&#x22;id&#x22;: 2, &#x22;name&#x22;: &#x22;Amet aut&#x22;, &#x22;description&#x22;: &#x22;Amet aut, blanditiis dignissimos, earum et eveniet explicabo in labore minus odio odit optio, perferendis provident quas quis quod totam vel vero.&#x22;}]&#x27; zebra&#x3E;
-            &#x3C;vl-rich-table-field data-value=&#x22;name&#x22; label=&#x22;Naam&#x22;&#x3E;&#x3C;/vl-rich-table-field&#x3E;
-            &#x3C;vl-rich-table-field data-value=&#x22;description&#x22; label=&#x22;Omschrijving&#x22;&#x3E;&#x3C;/vl-rich-table-field&#x3E;
-          &#x3C;/vl-rich-table&#x3E;
+          &lt;vl-rich-table
+              data=&#39;[
+                {&quot;id&quot;: 1, &quot;name&quot;: &quot;Lorem ipsum&quot;, &quot;description&quot;: &quot;Lorem ipsum dolor sit amet, consectetur adipisicing elit.&quot;},
+                {&quot;id&quot;: 2, &quot;name&quot;: &quot;Amet aut&quot;, &quot;description&quot;: &quot;Amet aut, blanditiis dignissimos, earum et eveniet explicabo in labore minus odio odit optio, perferendis provident quas quis quod totam vel vero.&quot;}
+              ]&#39;
+              zebra&gt;
+            &lt;vl-rich-table-field data-value=&quot;name&quot; label=&quot;Naam&quot;&gt;&lt;/vl-rich-table-field&gt;
+            &lt;vl-rich-table-field data-value=&quot;description&quot; label=&quot;Omschrijving&quot;&gt;&lt;/vl-rich-table-field&gt;
+          &lt;/vl-rich-table&gt;
         </code>
       </pre>
   <div class="demo">
     <vl-rich-table
-        data='[{"id": 1, "name": "Lorem ipsum", "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit."}, {"id": 2, "name": "Amet aut", "description": "Amet aut, blanditiis dignissimos, earum et eveniet explicabo in labore minus odio odit optio, perferendis provident quas quis quod totam vel vero."}]'
+        data='[
+          {"id": 1, "name": "Lorem ipsum", "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit."},
+          {"id": 2, "name": "Amet aut", "description": "Amet aut, blanditiis dignissimos, earum et eveniet explicabo in labore minus odio odit optio, perferendis provident quas quis quod totam vel vero."}
+        ]'
         zebra>
       <vl-rich-table-field data-value="name" label="Naam"></vl-rich-table-field>
       <vl-rich-table-field data-value="description" label="Omschrijving"></vl-rich-table-field>
@@ -252,22 +300,20 @@
     <h2>Rich table met voorgedefinieerde data (Spring JPA Rest response)</h2>
     <pre>
         <code class="line-numbers language-markup">
-          &#x3C;vl-rich-table
-              data=&#x27;{
-                 &#x22;content&#x22;:[
-                            {&#x22;id&#x22;: 1, &#x22;name&#x22;: &#x22;Lorem ipsum&#x22;, &#x22;description&#x22;: &#x22;Lorem ipsum dolor sit amet, consectetur adipisicing elit.&#x22;},
-                            {&#x22;id&#x22;: 2, &#x22;name&#x22;: &#x22;Amet aut&#x22;, &#x22;description&#x22;: &#x22;Amet aut, blanditiis dignissimos, earum et eveniet explicabo in labore minus odio odit optio, perferendis provident quas quis quod totam vel vero.&#x22;}
-                           ],
-                 &#x22;size&#x22;: 2,
-                 &#x22;totalElements&#x22;:20,
-                 &#x22;number&#x22;: 0
-                }&#x27;
-              zebra&#x3E;
-          &#x3C;vl-rich-table
-            data=&#x27;{&#x22;content&#x22;[{&#x22;id&#x22;: 1, &#x22;name&#x22;: &#x22;Lorem ipsum&#x22;, &#x22;description&#x22;: &#x22;Lorem ipsum dolor sit amet, consectetur adipisicing elit.&#x22;}, {&#x22;id&#x22;: 2, &#x22;name&#x22;: &#x22;Amet aut&#x22;, &#x22;description&#x22;: &#x22;Amet aut, blanditiis dignissimos, earum et eveniet explicabo in labore minus odio odit optio, perferendis provident quas quis quod totam vel vero.&#x22;}]}&#x27; zebra&#x3E;
-            &#x3C;vl-rich-table-field data-value=&#x22;name&#x22; label=&#x22;Naam&#x22;&#x3E;&#x3C;/vl-rich-table-field&#x3E;
-            &#x3C;vl-rich-table-field data-value=&#x22;description&#x22; label=&#x22;Omschrijving&#x22;&#x3E;&#x3C;/vl-rich-table-field&#x3E;
-          &#x3C;/vl-rich-table&#x3E;
+          &lt;vl-rich-table
+              data=&#39;{
+                     &quot;content&quot;:[
+                                {&quot;id&quot;: 1, &quot;name&quot;: &quot;Lorem ipsum&quot;, &quot;description&quot;: &quot;Lorem ipsum dolor sit amet, consectetur adipisicing elit.&quot;},
+                                {&quot;id&quot;: 2, &quot;name&quot;: &quot;Amet aut&quot;, &quot;description&quot;: &quot;Amet aut, blanditiis dignissimos, earum et eveniet explicabo in labore minus odio odit optio, perferendis provident quas quis quod totam vel vero.&quot;}
+                               ],
+                     &quot;size&quot;: 2,
+                     &quot;totalElements&quot;:20,
+                     &quot;number&quot;: 0
+                    }&#39;
+              zebra&gt;
+            &lt;vl-rich-table-field data-value=&quot;name&quot; label=&quot;Naam&quot;&gt;&lt;/vl-rich-table-field&gt;
+            &lt;vl-rich-table-field data-value=&quot;description&quot; label=&quot;Omschrijving&quot;&gt;&lt;/vl-rich-table-field&gt;
+          &lt;/vl-rich-table&gt;
         </code>
       </pre>
     <div class="demo">
@@ -292,11 +338,11 @@
     <h2>Rich table met pager</h2>
     <pre>
         <code class="line-numbers language-markup">
-          &#x3C;vl-rich-table id=&#x22;pageableTable&#x22;&#x3E;
-            &#x3C;vl-rich-table-field data-value="name" label="Naam"&#x3E;&#x3C;/vl-rich-table-field&#x3E;
-            &#x3C;vl-rich-table-field data-value="description" label="Omschrijving"&#x3E;&#x3C;/vl-rich-table-field&#x3E;
-            &#x3C;vl-rich-table-pager align-right&#x3E;&#x3C;/vl-rich-table-pager&#x3E;
-          &#x3C;/vl-rich-table&#x3E;
+          &lt;vl-rich-table id=&quot;pageableTable&quot;&gt;
+            &lt;vl-rich-table-field data-value=&quot;name&quot; label=&quot;Naam&quot;&gt;&lt;/vl-rich-table-field&gt;
+            &lt;vl-rich-table-field data-value=&quot;description&quot; label=&quot;Omschrijving&quot;&gt;&lt;/vl-rich-table-field&gt;
+            &lt;vl-rich-table-pager align-right&gt;&lt;/vl-rich-table-pager&gt;
+          &lt;/vl-rich-table&gt;
         </code>
       </pre>
     <div class="demo">
@@ -330,10 +376,12 @@
     <h2>Sortable</h2>
     <pre>
         <code class="line-numbers language-markup">
-          &#x3C;vl-rich-table;&#x3E;
-            &#x3C;vl-rich-table-field sortable direction=&#x22;desc&#x22; priority=&#x22;2&#x22; data-value=&#x22;name&#x22; label=&#x22;Naam&#x22;&#x3E;&#x3C;/vl-rich-table-field&#x3E;
-            &#x3C;vl-rich-table-field sortable direction=&#x22;asc&#x22; priority=&#x22;1&#x22; data-value=&#x22;description&#x22; label=&#x22;Omschrijving&#x22;&#x3E;&#x3C;/vl-rich-table-field&#x3E;
-          &#x3C;/vl-rich-table&#x3E;
+          &lt;vl-rich-table id=&quot;sortableTable&quot;&gt;
+            &lt;vl-rich-table-field sortable direction=&quot;desc&quot; priority=&quot;2&quot; data-value=&quot;name&quot;
+                                 label=&quot;Naam&quot;&gt;&lt;/vl-rich-table-field&gt;
+            &lt;vl-rich-table-field sortable direction=&quot;asc&quot; priority=&quot;1&quot; data-value=&quot;description&quot;
+                                 label=&quot;Omschrijving&quot;&gt;&lt;/vl-rich-table-field&gt;
+          &lt;/vl-rich-table&gt;
         </code>
       </pre>
     <div class="demo">
@@ -364,21 +412,31 @@
     <h2>Search</h2>
     <pre>
         <code class="line-numbers language-markup">
-          &#x3C;vl-rich-table id=&#x22;searchableTable&#x22; searchable&#x3E;
-            &#x3C;vl-rich-table-field data-value=&#x22;name&#x22; label=&#x22;Naam&#x22;&#x3E;&#x3C;/vl-rich-table-field&#x3E;
-            &#x3C;vl-rich-table-field data-value=&#x22;description&#x22; label=&#x22;Omschrijving&#x22;&#x3E;&#x3C;/vl-rich-table-field&#x3E;
-            &#x3C;div slot=&#x22;filter&#x22;&#x3E;
-              &#x3C;input name=&#x22;name&#x22; placeholder=&#x22;Zoeken op naam...&#x22;&#x3E;
-            &#x3C;/div&#x3E;
-          &#x3C;/vl-rich-table&#x3E;
+          &lt;vl-rich-table id=&quot;searchableTable&quot;&gt;
+            &lt;vl-rich-table-field data-value=&quot;name&quot; label=&quot;Naam&quot;&gt;&lt;/vl-rich-table-field&gt;
+            &lt;vl-rich-table-field data-value=&quot;description&quot; label=&quot;Omschrijving&quot;&gt;&lt;/vl-rich-table-field&gt;
+            &lt;vl-rich-table-field data-value=&quot;datum&quot; data-type=&quot;date&quot; label=&quot;Datum&quot;&gt;&lt;/vl-rich-table-field&gt;
+            &lt;div slot=&quot;filter&quot;&gt;
+              &lt;input is=&quot;vl-input-field&quot; data-vl-search-criterium=&quot;name&quot; placeholder=&quot;Zoeken op naam...&quot;&gt;
+              &lt;div&gt;
+                &lt;label is=&quot;vl-form-label&quot; for=&quot;search-filter-date&quot;&gt;Datum&lt;/label&gt;
+                &lt;vl-datepicker id=&quot;search-filter-date&quot; data-vl-search-criterium=&quot;datum&quot;&gt;&lt;/vl-datepicker&gt;
+              &lt;/div&gt;
+            &lt;/div&gt;
+          &lt;/vl-rich-table&gt;
         </code>
       </pre>
     <div class="demo">
-      <vl-rich-table id="searchableTable" searchable>
+      <vl-rich-table id="searchableTable">
         <vl-rich-table-field data-value="name" label="Naam"></vl-rich-table-field>
         <vl-rich-table-field data-value="description" label="Omschrijving"></vl-rich-table-field>
+        <vl-rich-table-field data-value="datum" data-type="date" label="Datum"></vl-rich-table-field>
         <div slot="filter">
-          <input name="name" placeholder="Zoeken op naam..." data-vl-search-criterium="name">
+          <input is="vl-input-field" data-vl-search-criterium="name" placeholder="Zoeken op naam...">
+          <div>
+            <label is="vl-form-label" for="search-filter-date">Datum</label>
+            <vl-datepicker id="search-filter-date" data-vl-search-criterium="datum"></vl-datepicker>
+          </div>
         </div>
       </vl-rich-table>
       Search criteria:<p id="searchCriteria"></p>
@@ -400,49 +458,54 @@
     <h2>Search, sort en paginatie gecombineerd met search filter</h2>
     <pre>
         <code class="line-numbers language-markup">
-          &#x3C;vl-rich-table id=&#x22;gecombineerd&#x22; searchable&#x3E;
-            &#x3C;vl-rich-table-field sortable direction=&#x22;desc&#x22; priority=&#x22;2&#x22; searchable
-                                 search-options=&#x27;[{&#x22;text&#x22;: &#x22;Lorem ipsum&#x22;, &#x22;value&#x22;: &#x22;Lorem ipsum&#x22;}, {&#x22;text&#x22;: &#x22;Lorem ipsum7&#x22;, &#x22;value&#x22;: &#x22;Lorem ipsum7&#x22;}, {&#x22;text&#x22;: &#x22;Amet aut&#x22;, &#x22;value&#x22;: &#x22;Amet aut&#x22;}]&#x27;
-                                 data-value=&#x22;name&#x22; label=&#x22;Naam&#x22;&#x3E;&#x3C;/vl-rich-table-field&#x3E;
-            &#x3C;vl-rich-table-field sortable direction=&#x22;asc&#x22; priority=&#x22;1&#x22; searchable
-                                 data-value=&#x22;description&#x22; label=&#x22;Omschrijving&#x22;&#x3E;&#x3C;/vl-rich-table-field&#x3E;
-            &#x3C;vl-rich-table-field searchable data-value=&#x22;tijdstip&#x22; data-type=&#x22;datetime&#x22;
-                                 label=&#x22;Tijdstip&#x22;&#x3E;&#x3C;/vl-rich-table-field&#x3E;
-            &#x3C;vl-rich-table-field searchable data-value=&#x22;datum&#x22; data-type=&#x22;date&#x22;
-                                 label=&#x22;Datum&#x22;&#x3E;&#x3C;/vl-rich-table-field&#x3E;
-            &#x3C;vl-rich-table-pager align-right total-items=&#x22;100&#x22; items-per-page=&#x22;10&#x22;
-                                 current-page=&#x22;1&#x22;&#x3E;&#x3C;/vl-rich-table-pager&#x3E;
-            &#x3C;div slot=&#x22;filter&#x22; is=&#x22;vl-search-filter&#x22; data-vl-title=&#x22;Verfijn uw zoekopdracht&#x22; alt&#x3E;
-              &#x3C;style&#x3E;
-                @import &#x22;/node_modules/vl-ui-search-filter/style.css&#x22;;
-              &#x3C;/style&#x3E;
-              &#x3C;form novalidate&#x3E;
-                &#x3C;section&#x3E;
-                  &#x3C;div&#x3E;
-                    &#x3C;label is=&#x22;form-label&#x22; for=&#x22;search-filter-name&#x22;&#x3E;Naam&#x3C;/label&#x3E;
-                    &#x3C;select is=&#x22;vl-select&#x22; data-vl-select id=&#x22;search-filter-name&#x22; name=&#x22;name&#x22; data-vl-select-deletable&#x3E;
-                      &#x3C;option placeholder value=&#x22;&#x22;&#x3E;Kies een naam&#x3C;/option&#x3E;
-                      &#x3C;option value=&#x22;Lorem ipsum&#x22;&#x3E;Lorem ipsum&#x3C;/option&#x3E;
-                      &#x3C;option value=&#x22;Lorem ipsum7&#x22;&#x3E;Lorem ipsum7&#x3C;/option&#x3E;
-                      &#x3C;option value=&#x22;Amet aut&#x22;&#x3E;Amet aut&#x3C;/option&#x3E;
-                    &#x3C;/select&#x3E;
-                  &#x3C;/div&#x3E;
-                  &#x3C;div&#x3E;
-                    &#x3C;label is=&#x22;form-label&#x22; for=&#x22;search-filter-description&#x22;&#x3E;Omschrijving&#x3C;/label&#x3E;
-                    &#x3C;input is=&#x22;vl-input-field&#x22; type=&#x22;text&#x22; id=&#x22;search-filter-description&#x22; name=&#x22;description&#x22; value=&#x22;&#x22; block/&#x3E;
-                  &#x3C;/div&#x3E;
-                &#x3C;/section&#x3E;
-              &#x3C;/form&#x3E;
-            &#x3C;/div&#x3E;
-          &#x3C;/vl-rich-table&#x3E;
+          &lt;vl-rich-table id=&quot;gecombineerd&quot;&gt;
+            &lt;vl-rich-table-field sortable direction=&quot;desc&quot; priority=&quot;2&quot; data-value=&quot;name&quot; label=&quot;Naam&quot;&gt;&lt;/vl-rich-table-field&gt;
+            &lt;vl-rich-table-field sortable direction=&quot;asc&quot; priority=&quot;1&quot;
+                                 data-value=&quot;description&quot; label=&quot;Omschrijving&quot;&gt;&lt;/vl-rich-table-field&gt;
+            &lt;vl-rich-table-field data-value=&quot;tijdstip&quot; data-type=&quot;datetime&quot;
+                                 label=&quot;Tijdstip&quot;&gt;&lt;/vl-rich-table-field&gt;
+            &lt;vl-rich-table-field data-value=&quot;datum&quot; data-type=&quot;date&quot;
+                                 label=&quot;Datum&quot;&gt;&lt;/vl-rich-table-field&gt;
+            &lt;vl-rich-table-pager align-right total-items=&quot;100&quot; items-per-page=&quot;10&quot;
+                                 current-page=&quot;1&quot;&gt;&lt;/vl-rich-table-pager&gt;
+            &lt;div slot=&quot;filter&quot; is=&quot;vl-search-filter&quot; data-vl-title=&quot;Verfijn uw zoekopdracht&quot; alt&gt;
+              &lt;style&gt;
+                @import &quot;/node_modules/vl-ui-search-filter/style.css&quot;;
+              &lt;/style&gt;
+              &lt;form novalidate&gt;
+                &lt;section&gt;
+                  &lt;div&gt;
+                    &lt;label is=&quot;vl-form-label&quot; for=&quot;search-filter-name&quot;&gt;Naam&lt;/label&gt;
+                    &lt;select is=&quot;vl-select&quot; data-vl-select id=&quot;search-filter-name&quot; data-vl-search-criterium=&quot;name&quot; data-vl-select-deletable&gt;
+                      &lt;option placeholder value=&quot;&quot;&gt;Kies een naam&lt;/option&gt;
+                      &lt;option value=&quot;Lorem ipsum&quot;&gt;Lorem ipsum&lt;/option&gt;
+                      &lt;option value=&quot;Lorem ipsum7&quot;&gt;Lorem ipsum7&lt;/option&gt;
+                      &lt;option value=&quot;Amet aut&quot;&gt;Amet aut&lt;/option&gt;
+                    &lt;/select&gt;
+                  &lt;/div&gt;
+                  &lt;div&gt;
+                    &lt;label is=&quot;vl-form-label&quot; for=&quot;search-filter-date-range&quot;&gt;Datum&lt;/label&gt;
+                    &lt;vl-datepicker id=&quot;search-filter-date-range&quot; type=&quot;range&quot; data-vl-search-criterium=&quot;datum&quot;&gt;&lt;/vl-datepicker&gt;
+                  &lt;/div&gt;
+                  &lt;div&gt;
+                    &lt;label is=&quot;vl-form-label&quot; for=&quot;search-filter-description&quot;&gt;Omschrijving&lt;/label&gt;
+                    &lt;input is=&quot;vl-input-field&quot; type=&quot;text&quot; id=&quot;search-filter-description&quot; data-vl-search-criterium=&quot;description&quot; value=&quot;&quot; block/&gt;
+                  &lt;/div&gt;
+                &lt;/section&gt;
+              &lt;/form&gt;
+            &lt;/div&gt;
+          &lt;/vl-rich-table&gt;
         </code>
       </pre>
     <div class="demo">
-      <vl-rich-table id="gecombineerd" searchable>
+      <vl-rich-table id="gecombineerd">
         <vl-rich-table-field sortable direction="desc" priority="2" data-value="name" label="Naam"></vl-rich-table-field>
-        <vl-rich-table-field sortable direction="asc" priority="1" data-value="description" label="Omschrijving"></vl-rich-table-field>
-        <vl-rich-table-field data-value="tijdstip" data-type="datetime" label="Tijdstip"></vl-rich-table-field>
-        <vl-rich-table-field data-value="datum" data-type="date" label="Datum"></vl-rich-table-field>
+        <vl-rich-table-field sortable direction="asc" priority="1"
+                             data-value="description" label="Omschrijving"></vl-rich-table-field>
+        <vl-rich-table-field data-value="tijdstip" data-type="datetime"
+                             label="Tijdstip"></vl-rich-table-field>
+        <vl-rich-table-field data-value="datum" data-type="date"
+                             label="Datum"></vl-rich-table-field>
         <vl-rich-table-pager align-right total-items="100" items-per-page="10"
                              current-page="1"></vl-rich-table-pager>
         <div slot="filter" is="vl-search-filter" data-vl-title="Verfijn uw zoekopdracht" alt>
@@ -452,7 +515,7 @@
           <form novalidate>
             <section>
               <div>
-                <label is="form-label" for="search-filter-name">Naam</label>
+                <label is="vl-form-label" for="search-filter-name">Naam</label>
                 <select is="vl-select" data-vl-select id="search-filter-name" data-vl-search-criterium="name" data-vl-select-deletable>
                   <option placeholder value="">Kies een naam</option>
                   <option value="Lorem ipsum">Lorem ipsum</option>
@@ -461,7 +524,11 @@
                 </select>
               </div>
               <div>
-                <label is="form-label" for="search-filter-description">Omschrijving</label>
+                <label is="vl-form-label" for="search-filter-date-range">Datum</label>
+                <vl-datepicker id="search-filter-date-range" type="range" data-vl-search-criterium="datum"></vl-datepicker>
+              </div>
+              <div>
+                <label is="vl-form-label" for="search-filter-description">Omschrijving</label>
                 <input is="vl-input-field" type="text" id="search-filter-description" data-vl-search-criterium="description" value="" block/>
               </div>
             </section>
@@ -484,6 +551,7 @@
 
         gecombineerd.addEventListener('search', (e) => {
           searchCriteria = e.detail.searchCriteria;
+          currentPage = 1;
           query();
         });
 
