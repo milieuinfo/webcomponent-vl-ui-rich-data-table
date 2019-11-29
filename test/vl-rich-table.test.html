@@ -85,6 +85,23 @@
   </template>
 </test-fixture>
 
+<test-fixture id="vl-rich-table-met-filter">
+  <template>
+    <vl-rich-table>
+      <vl-rich-table-field sortable direction="desc" priority="2" data-value="name" label="Naam"></vl-rich-table-field>
+      <vl-rich-table-field sortable direction="asc" priority="1" data-value="description" label="Omschrijving"></vl-rich-table-field>
+      <div slot="filter">
+        <input name="name" placeholder="Zoeken op naam..." data-vl-search-criterium="name"/>
+        <select data-vl-search-criterium="description">
+          <option value="" placeholder></option>
+          <option value="t1">Test1</option>
+          <option value="t2">Test2</option>
+        </select>
+      </div>
+    </vl-rich-table>
+  </template>
+</test-fixture>
+
 <script type="module">
   import {awaitUntil} from "vl-ui-core/vl-core.src";
 
@@ -433,7 +450,50 @@
         assert.equal(table.sortCriteria[0].direction, 'asc');
         done();
       })
-    })
+    });
+
+    test('als de input verandert, zal er een search event uitgezonden worden met searchCriteria', (done) => {
+      const table = fixture('vl-rich-table-met-filter');
+      table.addEventListener('search', (e) => {
+        assert.equal(Object.keys(e.detail.searchCriteria).length, 1);
+        assert.equal(e.detail.searchCriteria['name'], 'search');
+        done();
+      });
+
+      flush(() => {
+        table.querySelector('input').value = 'search';
+        table.querySelector('input').dispatchEvent(new CustomEvent('input'));
+      });
+    });
+
+    test('als de select verandert, zal er een search event uitgezonden worden met searchCriteria', (done) => {
+      const table = fixture('vl-rich-table-met-filter');
+      table.addEventListener('search', (e) => {
+        assert.equal(Object.keys(e.detail.searchCriteria).length, 1);
+        assert.equal(e.detail.searchCriteria['description'], 't2');
+        done();
+      });
+      flush(() => {
+        table.querySelector('select').value = 't2';
+        table.querySelector('select').dispatchEvent(new Event('change'));
+      });
+    });
+
+    test('als de input en select allebei veranderen, zal er een search event uitgezonden worden met searchCriteria', (done) => {
+      const table = fixture('vl-rich-table-met-filter');
+      table.addEventListener('search', (e) => {
+        assert.equal(Object.keys(e.detail.searchCriteria).length, 2);
+        assert.equal(e.detail.searchCriteria['name'], 'n2');
+        assert.equal(e.detail.searchCriteria['description'], 't2');
+        done();
+      });
+
+      flush(() => {
+        table.querySelector('input').value = 'n2';
+        table.querySelector('select').value = 't2';
+        table.querySelector('select').dispatchEvent(new Event('change'));
+      });
+    });
   });
 </script>
 </body>

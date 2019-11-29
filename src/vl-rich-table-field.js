@@ -61,7 +61,6 @@ export class VlRichTableField extends sortableMixin(VlElement(HTMLElement)) {
     this._searchValue;
   }
 
-
   /**
    * Manier om de data in de tabel te renderen. Kan overschreven worden om eigen renderer mee te geven vooraleer de data te tonen in de tabel.
    *
@@ -116,10 +115,6 @@ export class VlRichTableField extends sortableMixin(VlElement(HTMLElement)) {
         === 'vl-rich-table') {
       return this.parentNode;
     }
-  }
-
-  get searchable() {
-    return this.hasAttribute('searchable');
   }
 
   get searchValue() {
