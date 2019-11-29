@@ -1,9 +1,9 @@
 import {VlElement} from "/node_modules/vl-ui-core/vl-core.js";
 import {VlDataTable} from '/node_modules/vl-ui-data-table/vl-data-table.js';
-import {VlGrid} from '/node_modules/vl-ui-grid/vl-grid.js';
 
 import {asc,desc} from "./domain/sortable";
 import style from "./vl-rich-table-style.scss"
+import {renderFilter, whenFilterActivated} from "./domain/filter";
 
 /**
  * VlRichTable
@@ -16,11 +16,12 @@ import style from "./vl-rich-table-style.scss"
  * @property {boolean} hover - Attribuut wordt gebruikt om een rij te highlighten waneer de gebruiker erover hovert met muiscursor. Zie ook {@link https://webcomponenten.omgeving.vlaanderen.be/demo/vl-data-table.html|vl-data-table}
  * @property {boolean} lined - Variant met een lijn tussen elke rij en kolom. Zie ook {@link https://webcomponenten.omgeving.vlaanderen.be/demo/vl-data-table.html|vl-data-table}
  * @property {boolean} zebra - Variant waarin de rijen afwisslend een andere achtergrondkleur krijgen. Dit maakt de tabel makkelijker leesbaar. Zie ook {@link https://webcomponenten.omgeving.vlaanderen.be/demo/vl-data-table.html|vl-data-table}
- * @property {boolean} searchable - Attribuut die aangeeft dat deze table doorzoekbaar is. Er zal een grid toevoegd worden en het slot filter wordt getoond.
  *
  * @event pagechanged - De geselecteerde pagina zijn veranderd.
- * @event search - De zoekcriteria zijn veranderd. Triggert bij elke input/select in het filter slot. Enkel als de rich table searchable is.
+ * @event search - De zoekcriteria zijn veranderd. Triggert bij elke input|select|... element met data-vl-search-criterium in het filter slot indien beschikbaar. In detail van het event object zit een searchCriteria object met hierin als keys de data-vl-search-criterium van de elementen met de value property van het element
  * @event sort - De sorteercriteria zijn veranderd.
+ *
+ * @slot filter - Filter met input|select|... velden die data-vl-search-criterium als attribuut hebben (moet unieke namen hebben binnen de filter slot), worden op geluisterd en indien er een verandering is, zal een search event op de rich-table worden uitgezonden met de searchCriteria.
  *
  * @see {@link https://www.github.com/milieuinfo/webcomponent-vl-ui-rich-table/releases/latest|Release notes}
  * @see {@link https://www.github.com/milieuinfo/webcomponent-vl-ui-rich-table/issues|Issues}
@@ -67,52 +68,27 @@ export class VlRichTable extends VlElement(HTMLElement) {
               <caption></caption>
             </table>`)}`;
     const slot = this.shadowRoot.querySelector('slot');
-    slot.addEventListener('slotchange', () => this._createRows());
+    slot.addEventListener('slotchange', () => this._createRows(), {once: true});
     const filter = this.shadowRoot.querySelector('slot[name=filter]');
     if (filter) {
       filter.addEventListener('slotchange', () => {
-        filter.assignedElements().forEach(slottedFilter => {
-          let filterRoot;
-          if (slottedFilter.shadowRoot) {
-            filterRoot = slottedFilter.shadowRoot;
-          } else {
-            filterRoot = slottedFilter;
-          }
-          filterRoot.querySelectorAll('input, select').forEach(element => {
-            element.addEventListener(element.tagName.toLowerCase() === 'input' ? 'input' : 'change', (e) => {
-              const searchCriteria = {};
-              filterRoot.querySelectorAll('input, select').forEach(filter => {
-                if (filter.value) {
-                  searchCriteria[filter.name] = filter.value;
-                }
-              });
-              this.dispatchEvent(new CustomEvent('search', {
-                detail: {
-                  searchCriteria: searchCriteria
-                },
-                bubbles: true
-              }));
-            });
-          });
-        });
-      });
+        filter.assignedElements().forEach(whenFilterActivated((searchCriteria) => {
+            this.dispatchEvent(new CustomEvent('search', {
+              detail: {
+                searchCriteria: searchCriteria
+              },
+              bubbles: true
+            }));
+        }));
+      }, {once: true});
     }
   }
 
   _renderSearchable(dataTable) {
-    return `${this.getAttribute('searchable') != null ? `
-        <style>
-          @import "/node_modules/vl-ui-grid/style.css";
-        </style>
-        <div is="vl-grid">
-          <div is="vl-column" size="4" small-size="12">
-          <slot name="filter"></slot>
-          </div>
-          <div is="vl-column" size="8" small-size="12">` : `` }
-            ${dataTable}
-            ${this.getAttribute('searchable') != null ? `` : `
-          </div>
-        </div>`}`;
+    if (this.querySelector('[slot=filter]') != null) {
+      return renderFilter(dataTable);
+    }
+    return dataTable;
   }
 
   get _dataTableAttributes() {

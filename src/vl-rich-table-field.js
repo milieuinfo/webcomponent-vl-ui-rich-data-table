@@ -33,7 +33,6 @@ export const RenderFunctions = {
  *
  * @property {boolean} sortable - Attribuut om aan te duiden de soorten op dit veld toestaan is.
  * @property {HTMLOptionElement[]} search-options - Attribuut om de search options te definiëren.
- * @property {boolean} searchable - Attribuut om aan te geven dat dit veld searchable moet zijn bij het toevoegen
  * @property {string} data-value - Attribuut om aan te duiden op welke sleutel van de data deze waarde moet gekoppeld worden. Verplicht en unique.
  * @property {string} data-type - Attribuut om te bepalen welk type data in de kolom moet komen en hoe de formattering moet gebeuren.
  *                                Mogelijke waarden:

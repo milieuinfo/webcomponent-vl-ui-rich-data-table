@@ -378,7 +378,7 @@
         <vl-rich-table-field data-value="name" label="Naam"></vl-rich-table-field>
         <vl-rich-table-field data-value="description" label="Omschrijving"></vl-rich-table-field>
         <div slot="filter">
-          <input name="name" placeholder="Zoeken op naam...">
+          <input name="name" placeholder="Zoeken op naam..." data-vl-search-criterium="name">
         </div>
       </vl-rich-table>
       Search criteria:<p id="searchCriteria"></p>
@@ -440,12 +440,9 @@
     <div class="demo">
       <vl-rich-table id="gecombineerd" searchable>
         <vl-rich-table-field sortable direction="desc" priority="2" data-value="name" label="Naam"></vl-rich-table-field>
-        <vl-rich-table-field sortable direction="asc" priority="1" searchable
-                             data-value="description" label="Omschrijving"></vl-rich-table-field>
-        <vl-rich-table-field searchable data-value="tijdstip" data-type="datetime"
-                             label="Tijdstip"></vl-rich-table-field>
-        <vl-rich-table-field searchable data-value="datum" data-type="date"
-                             label="Datum"></vl-rich-table-field>
+        <vl-rich-table-field sortable direction="asc" priority="1" data-value="description" label="Omschrijving"></vl-rich-table-field>
+        <vl-rich-table-field data-value="tijdstip" data-type="datetime" label="Tijdstip"></vl-rich-table-field>
+        <vl-rich-table-field data-value="datum" data-type="date" label="Datum"></vl-rich-table-field>
         <vl-rich-table-pager align-right total-items="100" items-per-page="10"
                              current-page="1"></vl-rich-table-pager>
         <div slot="filter" is="vl-search-filter" data-vl-title="Verfijn uw zoekopdracht" alt>
@@ -456,7 +453,7 @@
             <section>
               <div>
                 <label is="form-label" for="search-filter-name">Naam</label>
-                <select is="vl-select" data-vl-select id="search-filter-name" name="name" data-vl-select-deletable>
+                <select is="vl-select" data-vl-select id="search-filter-name" data-vl-search-criterium="name" data-vl-select-deletable>
                   <option placeholder value="">Kies een naam</option>
                   <option value="Lorem ipsum">Lorem ipsum</option>
                   <option value="Lorem ipsum7">Lorem ipsum7</option>
@@ -465,7 +462,7 @@
               </div>
               <div>
                 <label is="form-label" for="search-filter-description">Omschrijving</label>
-                <input is="vl-input-field" type="text" id="search-filter-description" name="description" value="" block/>
+                <input is="vl-input-field" type="text" id="search-filter-description" data-vl-search-criterium="description" value="" block/>
               </div>
             </section>
           </form>
