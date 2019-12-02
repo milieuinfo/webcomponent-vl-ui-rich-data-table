@@ -10,4 +10,5 @@ define('vl-rich-table-pager', VlRichTablePager);
 export * from "./src/vl-rich-table";
 export * from "./src/vl-rich-table-field";
 export * from "./src/vl-rich-table-pager";
+export * from "./src/domain/filter";
 export * from "./src/domain/sortable";

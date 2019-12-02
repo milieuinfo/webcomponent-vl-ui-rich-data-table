@@ -33,13 +33,14 @@ export const RenderFunctions = {
  *
  * @property {boolean} sortable - Attribuut om aan te duiden de soorten op dit veld toestaan is.
  * @property {HTMLOptionElement[]} search-options - Attribuut om de search options te definiëren.
- * @property {boolean} searchable - Attribuut om aan te geven dat dit veld searchable moet zijn bij het toevoegen
  * @property {string} data-value - Attribuut om aan te duiden op welke sleutel van de data deze waarde moet gekoppeld worden. Verplicht en unique.
  * @property {string} data-type - Attribuut om te bepalen welk type data in de kolom moet komen en hoe de formattering moet gebeuren.
  *                                Mogelijke waarden:
  *                                - string : de waarde wordt als tekst getoond
  *                                - date : de datum wordt getoond volgens de BIN norm dd.mm.jjjj
+ *                                  Parsen gebeurt via de Date constructor en formatteren via toLocaleString met locale 'nl-BE'.
  *                                - datetime : de datum + tijd wordt getoond volgens BIN norm dd.mm.jjjj hh:mi:ss
+ *                                  Parsen gebeurt via de Date constructor en formatteren via toLocaleString met locale 'nl-BE'.
  *                                Default waarde: string
  * @property {asc | desc} direction - Te combineren met een 'priority' attribute om een sorteercriteria te bepalen.
  * @property {number} priority -Te combineren met een 'direction' attribute om een sorteercriteria te bepalen.
@@ -61,7 +62,6 @@ export class VlRichTableField extends sortableMixin(VlElement(HTMLElement)) {
     `);
     this._searchValue;
   }
-
 
   /**
    * Manier om de data in de tabel te renderen. Kan overschreven worden om eigen renderer mee te geven vooraleer de data te tonen in de tabel.
@@ -117,10 +117,6 @@ export class VlRichTableField extends sortableMixin(VlElement(HTMLElement)) {
         === 'vl-rich-table') {
       return this.parentNode;
     }
-  }
-
-  get searchable() {
-    return this.hasAttribute('searchable');
   }
 
   get searchValue() {
