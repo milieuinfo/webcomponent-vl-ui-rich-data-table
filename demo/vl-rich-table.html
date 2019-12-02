@@ -161,15 +161,26 @@
         return 0;
       })
       .sort((record1, record2) => {
-        const criteria = sort ? sort[1] : null;
-        if (criteria) {
-          if (criteria.direction === 'desc') {
-            return record2[criteria.name].localeCompare(record1[criteria.name]);
-          } else {
-            return record1[criteria.name].localeCompare(record2[criteria.name]);
+        let result = 0;
+        if (sort) {
+          const criteria1 = sort[0],
+                criteria2 = sort[1];
+          if (criteria1) {
+            if (criteria1.direction === 'desc') {
+              result = record2[criteria1.name].localeCompare(record1[criteria1.name]);
+            } else {
+              result = record1[criteria1.name].localeCompare(record2[criteria1.name]);
+            }
+          }
+          if (result === 0 && criteria2) {
+            if (criteria2.direction === 'desc') {
+              result = record2[criteria2.name].localeCompare(record1[criteria2.name]);
+            } else {
+              result = record1[criteria2.name].localeCompare(record2[criteria2.name]);
+            }
           }
         }
-        return 0;
+        return result;
       })
       .slice(page * size, page * size + size);
       return {
@@ -216,7 +227,10 @@
       <vl-rich-table-field id="date-field" data-value="date" data-type="date" label="Datum (volgens BIN-norm)"></vl-rich-table-field>
       <vl-rich-table-field id="date-field-with-slash" data-value="date" data-type="date" label="Datum (dd/mm/jjjj)"></vl-rich-table-field>
     </vl-rich-table>
-    <button type="button" onclick='document.getElementById("dynamic-data").data = [{id: 1, name:"Test", "date": "2020-01-31"}, {id: 2, name:"Test2", "date": "2020-10-01"}, {id: 3, name:"Test3", "date": "2020-12-12"}]'>Voeg testdata toe</button>
+    <button type="button"
+            onclick='document.getElementById("dynamic-data").data = [{id: 1, name:"Test", "date": "2020-01-31"}, {id: 2, name:"Test2", "date": "2020-10-01"}, {id: 3, name:"Test3", "date": "2020-12-12"}]'>
+      Voeg testdata toe
+    </button>
     <button type="button" onclick='document.getElementById("dynamic-data").data = []'>Verwijder data</button>
     <button type="button"
             onclick='document.getElementById("strong-field").renderTableData = function(content) {const div = document.createElement("div"); div.innerHTML = "<strong>"+content+"</strong>"; return div;}'>
@@ -224,7 +238,7 @@
     </button>
     <script>
       const fnDateFormat = (string) => new Date(string).toLocaleDateString('nl-BE', {year: 'numeric', month: '2-digit', day: '2-digit'});
-      document.querySelector("#date-field-with-slash").renderTableData = (content) =>  document.createTextNode(fnDateFormat(content));
+      document.querySelector("#date-field-with-slash").renderTableData = (content) => document.createTextNode(fnDateFormat(content));
     </script>
   </div>
 </div>
@@ -486,6 +500,7 @@
         };
 
         gecombineerd.addEventListener('search', (e) => {
+          currentPage = 1;
           searchCriteria = e.detail.searchCriteria;
           query();
         });
@@ -497,6 +512,7 @@
           }
         });
         gecombineerd.addEventListener('sort', (e) => {
+          currentPage = 1;
           sortCriteria = e.detail.sortCriteria;
           query();
         });
