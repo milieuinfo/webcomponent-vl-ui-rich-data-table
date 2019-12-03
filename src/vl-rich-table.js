@@ -1,9 +1,9 @@
 import {VlElement} from "/node_modules/vl-ui-core/vl-core.js";
 import {VlDataTable} from '/node_modules/vl-ui-data-table/vl-data-table.js';
 
-import {asc,desc} from "./domain/sortable";
+import {asc, desc} from "./domain/sortable";
 import style from "./vl-rich-table-style.scss"
-import {renderFilter, whenFilterActivated} from "./domain/filter";
+import {FilterFunctions} from "./domain/filter";
 
 /**
  * VlRichTable
@@ -48,7 +48,7 @@ export class VlRichTable extends VlElement(HTMLElement) {
   }
 
   connectedCallback() {
-    this._shadow = this.attachShadow({ mode: 'open' });
+    this._shadow = this.attachShadow({mode: 'open'});
     this._shadow.innerHTML = `
         <style>
           ${style}
@@ -72,21 +72,22 @@ export class VlRichTable extends VlElement(HTMLElement) {
     const filter = this.shadowRoot.querySelector('slot[name=filter]');
     if (filter) {
       filter.addEventListener('slotchange', () => {
-        filter.assignedElements().forEach(whenFilterActivated((searchCriteria) => {
-            this.dispatchEvent(new CustomEvent('search', {
-              detail: {
-                searchCriteria: searchCriteria
-              },
-              bubbles: true
+        filter.assignedElements().forEach(
+            FilterFunctions.whenFilterActivated((searchCriteria) => {
+              this.dispatchEvent(new CustomEvent('search', {
+                detail: {
+                  searchCriteria: searchCriteria
+                },
+                bubbles: true
+              }));
             }));
-        }));
       }, {once: true});
     }
   }
 
   _renderSearchable(dataTable) {
     if (this.querySelector('[slot=filter]') != null) {
-      return renderFilter(dataTable);
+      return FilterFunctions.renderFilter(dataTable);
     }
     return dataTable;
   }

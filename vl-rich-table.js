@@ -1,1 +1,607 @@
-import{VlElement as e,define as t}from"/node_modules/vl-ui-core/vl-core.js";import"/node_modules/vl-ui-data-table/vl-data-table.js";import"/node_modules/vl-ui-grid/vl-grid.js";import"/node_modules/vl-ui-icon/vl-icon.js";import{VlPager as i}from"/node_modules/vl-ui-pager/vl-pager.js";const r={DESCENDING:"desc",ASCENDING:"asc"},a=r.ASCENDING,s=r.DESCENDING;var n="[name=sortable-span] {\n  cursor: pointer;\n}\n\n[name=sortable-text] {\n  font-size: x-small;\n  vertical-align: super;\n}\n\nth.vl-sortable > [is=vl-icon] {\n  vertical-align: middle;\n}\n\ncaption {\n  caption-side: bottom;\n}";function o(e){return`\n        <style>\n          @import "/node_modules/vl-ui-grid/style.css";\n        </style>\n        <div is="vl-grid">\n          <div is="vl-column" size="4" small-size="12">\n            <slot name="filter"></slot>\n          </div>\n          <div is="vl-column" size="8" small-size="12">\n            ${e}\n          </div>\n        </div>`}function l(e){return t=>{let i;const r=(i=t.shadowRoot?t.shadowRoot:t).querySelectorAll("*[data-vl-search-criterium]");r.forEach(t=>{t.addEventListener("input"===t.tagName.toLowerCase()?"input":"change",()=>{const t={};r.forEach(e=>{e.value&&(t[e.getAttribute("data-vl-search-criterium")]=e.value)}),e(t)})})}}!function(e,t){void 0===t&&(t={});var i=t.insertAt;if(e&&"undefined"!=typeof document){var r=document.head||document.getElementsByTagName("head")[0],a=document.createElement("style");a.type="text/css","top"===i&&r.firstChild?r.insertBefore(a,r.firstChild):r.appendChild(a),a.styleSheet?a.styleSheet.cssText=e:a.appendChild(document.createTextNode(e))}}(n);class d extends(e(HTMLElement)){get sortCriteria(){return this._sortCriteria}set sortCriteria(e){this._sortCriteria=e}static get _observedAttributes(){return["data"]}constructor(){super(),this._data=[],this._sortCriteria=[],this._searchCriteria={}}connectedCallback(){this._shadow=this.attachShadow({mode:"open"}),this._shadow.innerHTML=`\n        <style>\n          ${n}\n        </style>\n        <slot></slot>\n        ${this._renderSearchable(`\n            <style>\n              @import "/node_modules/vl-ui-data-table/style.css";\n            </style>\n            <table is="vl-data-table" ${this._dataTableAttributes}>\n              <thead>\n                <tr>\n                </tr>\n              </thead>\n              <tbody>\n              </tbody>\n              <caption></caption>\n            </table>`)}`,this.shadowRoot.querySelector("slot").addEventListener("slotchange",()=>this._createRows(),{once:!0});const e=this.shadowRoot.querySelector("slot[name=filter]");e&&e.addEventListener("slotchange",()=>{e.assignedElements().forEach(l(e=>{this.dispatchEvent(new CustomEvent("search",{detail:{searchCriteria:e},bubbles:!0}))}))},{once:!0})}_renderSearchable(e){return null!=this.querySelector("[slot=filter]")?o(e):e}get _dataTableAttributes(){return(null!=this.getAttribute("zebra")?" zebra":"")+(null!=this.getAttribute("lined")?" lined":"")+(null!=this.getAttribute("hover")?" hover":"")}_createRows(){Array.from(this._tableBody.children).forEach(e=>e.remove()),this.content.forEach(e=>{const t=document.createElement("tr");Array.from(this.fields).forEach(i=>{const r=document.createElement("td");r.appendChild(i.renderTableData(e[i.fieldName])),t.appendChild(r)}),this._tableBody.appendChild(t)})}_dataChangedCallback(e,t){this.data=JSON.parse(t)}updateSortCriteria(e){setTimeout(()=>{if(e.direction===a||e.direction===s)if(e.priority){const t=e.priority-1;this.sortCriteria[t]={name:e.name,direction:e.direction}}else this.sortCriteria=this.sortCriteria.filter(t=>t.name!==e.name),this.sortCriteria.push(e);else this.sortCriteria=this.sortCriteria.filter(t=>t.name!==e.name);this.dispatchEvent(new CustomEvent("sort",{detail:{sortCriteria:this.sortCriteria}}))},0)}get fields(){return Array.from(this.children).filter(e=>"vl-rich-table-field"===e.tagName.toLowerCase())}get data(){return this._data}set data(e){this._data=e,this._isReady()&&this._createRows(),Array.isArray(this.data)||this.dispatchEvent(new CustomEvent("data_update_from_object",this.data))}get content(){if(Array.isArray(this.data))return this.data;if(Array.isArray(this.data.content))return this.data.content;throw new Error("data is geen geldige array van objecten")}get headers(){return this.shadowRoot.querySelectorAll("th")}_isReady(){return Array.from(this.fields).every(e=>e.richTable===this)}get _table(){return this.shadowRoot.querySelector("table")}get _tableHeaderRow(){return this._table.querySelector("thead > tr")}get _tableBody(){return this._table.querySelector("tbody")}get _tableFooterRow(){return this._table.querySelector("caption")}addTableHeaderCell(e){this._tableHeaderRow.appendChild(e)}addTableFooterCell(e){this._tableFooterRow.append(e)}}const h=e=>(class extends e{connectedCallback(){this.richTable&&this.hasAttribute("sortable")&&this._dressSortableHeader()}_dressSortableHeader(){const e=this._headerCell;e.classList.add("vl-sortable");const t=document.createElement("span","vl-icon");t.setAttribute("before",""),t.setAttribute("icon","sort"),t.setAttribute("name","sortable-span");const i=document.createElement("label");i.setAttribute("name","sortable-text"),e.appendChild(t),e.appendChild(i),t.addEventListener("click",()=>{this._sortButtonClicked()}),this.richTable.addEventListener("sort",()=>{this._updateSortableHeader()})}get direction(){return this.getAttribute("direction")}get priority(){return this.getAttribute("priority")}_sortButtonClicked(e){let t;switch(this.direction){case a:t=null;break;case s:t=a;break;default:t=s}this.richTable.updateSortCriteria({name:this.fieldName,direction:t})}_updateSortableHeader(){const e=this._headerCell.querySelector('[name="sortable-span"]'),t=this._headerCell.querySelector('[name="sortable-text"]'),i=this.richTable.sortCriteria.findIndex(e=>e&&e.name===this.fieldName);this._priority=i>-1?i+1:null;const r=null!==i?this.richTable.sortCriteria[i]:null;if(r)switch(this._direction=r.direction,r.direction){case a:this.setAttribute("direction",a),this.setAttribute("priority",this._priority),t.innerHTML=this._priority,e.setAttribute("icon","nav-up");break;case s:this.setAttribute("direction",s),this.setAttribute("priority",this._priority),t.innerHTML=this.priority,e.setAttribute("icon","nav-down");break;default:console.error(`${r.direction} is niet een geldige sort direction`)}else this._direction=null,this.removeAttribute("direction"),this.removeAttribute("priority"),t.innerHTML="",e.setAttribute("icon","sort")}_directionChangedCallback(e,t){this.priority&&t!==this._direction&&this.richTable.updateSortCriteria({name:this.fieldName,direction:t,priority:this.priority})}_priorityChangedCallback(e,t){this.direction&&parseInt(t)!==this._priority&&this.richTable.updateSortCriteria({name:this.fieldName,direction:this.direction,priority:t})}}),c={string:e=>document.createTextNode(e),datetime:e=>document.createTextNode((e=>new Date(e).toLocaleString("nl-BE",{year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit",second:"2-digit"}).replace(/\//g,"."))(e)),date:e=>document.createTextNode((e=>new Date(e).toLocaleDateString("nl-BE",{year:"numeric",month:"2-digit",day:"2-digit"}).replace(/\//g,"."))(e)),default:e=>document.createTextNode(e)};class u extends(h(e(HTMLElement))){static get _observedAttributes(){return["direction","priority"]}constructor(){super('\n        <style>\n          @import "/node_modules/vl-ui-data-table/style.css";\n        </style>\n    '),this._searchValue}renderTableData(e){return c[this._validDataType()](e)}get fieldName(){return this.getAttribute("data-value")}_validDataType(){const e=this.getAttribute("data-type");return null!=e&&c.hasOwnProperty(e)?e:"default"}get _headerCell(){return this.__headerCell}set _headerCell(e){this.__headerCell=e}connectedCallback(){this._initHeaderCell(),super.connectedCallback()}_initHeaderCell(){if(this.richTable){const e=document.createElement("th");this._headerCell=e,e.appendChild(document.createTextNode(this.getAttribute("label"))),this.richTable.addTableHeaderCell(e)}else console.log("Een VlRichTableField moet altijd als parent een vl-rich-table hebben.")}get richTable(){if(this.parentNode&&"vl-rich-table"===this.parentNode.tagName.toLowerCase())return this.parentNode}get searchValue(){return this._searchValue}}class b extends i{connectedCallback(){super.connectedCallback(),this._tableToInsert?(this._appended=!0,this._tableToInsert.addTableFooterCell(this),this.addEventListener("pagechanged",e=>{this.richTable.dispatchEvent(new CustomEvent("pagechanged",{detail:e.detail}))}),this._updatePageable(),this.richTable.addEventListener("data_update_from_object",e=>{this._updatePageable()})):this._appended||console.log("Een VlRichTablePager moet altijd als parent een vl-rich-table hebben.")}_updatePageable(){const e=this.richTable.data;null!=e.totalElements&&e.size&&e.number+1&&(this.setAttribute("total-items",e.totalElements),this.setAttribute("items-per-page",e.size),this.setAttribute("current-page",e.number+1))}get _tableToInsert(){if(this.parentNode&&"vl-rich-table"===this.parentNode.tagName.toLowerCase())return this.parentNode}get richTable(){if(this.getRootNode()&&this.getRootNode().host&&"vl-rich-table"===this.getRootNode().host.tagName.toLowerCase())return this.getRootNode().host}}t("vl-rich-table",d),t("vl-rich-table-field",u),t("vl-rich-table-pager",b);export{c as RenderFunctions,r as SortDirections,d as VlRichTable,u as VlRichTableField,b as VlRichTablePager,a as asc,s as desc,o as renderFilter,l as whenFilterActivated};
+import { VlElement, define } from '../../../../node_modules/vl-ui-core/vl-core.js';
+import '../../../../node_modules/vl-ui-data-table/vl-data-table.js';
+import '../../../../node_modules/vl-ui-grid/vl-grid.js';
+import '../../../../node_modules/vl-ui-icon/vl-icon.js';
+import { VlPager } from '../../../../node_modules/vl-ui-pager/vl-pager.js';
+
+const SortDirections = {
+  DESCENDING: 'desc', ASCENDING: 'asc'
+};
+
+const asc = SortDirections.ASCENDING;
+const desc = SortDirections.DESCENDING;
+
+function styleInject(css, ref) {
+  if ( ref === void 0 ) ref = {};
+  var insertAt = ref.insertAt;
+
+  if (!css || typeof document === 'undefined') { return; }
+
+  var head = document.head || document.getElementsByTagName('head')[0];
+  var style = document.createElement('style');
+  style.type = 'text/css';
+
+  if (insertAt === 'top') {
+    if (head.firstChild) {
+      head.insertBefore(style, head.firstChild);
+    } else {
+      head.appendChild(style);
+    }
+  } else {
+    head.appendChild(style);
+  }
+
+  if (style.styleSheet) {
+    style.styleSheet.cssText = css;
+  } else {
+    style.appendChild(document.createTextNode(css));
+  }
+}
+
+var css = "[name=sortable-span] {\n  cursor: pointer;\n}\n\n[name=sortable-text] {\n  font-size: x-small;\n  vertical-align: super;\n}\n\nth.vl-sortable > [is=vl-icon] {\n  vertical-align: middle;\n}\n\ncaption {\n  caption-side: bottom;\n}";
+styleInject(css);
+
+class FilterFunctions {
+
+  static renderFilter(dataTable) {
+    return `
+        <style>
+          @import "/node_modules/vl-ui-grid/style.css";
+        </style>
+        <div is="vl-grid">
+          <div is="vl-column" size="4" small-size="12">
+            <slot name="filter"></slot>
+          </div>
+          <div is="vl-column" size="8" small-size="12">
+            ${dataTable}
+          </div>
+        </div>`;
+  }
+
+  static whenFilterActivated(doWithSearchCriteria) {
+    return filter => {
+      let filterRoot;
+      if (filter.shadowRoot) {
+        filterRoot = filter.shadowRoot;
+      } else {
+        filterRoot = filter;
+      }
+      const filterElements = filterRoot.querySelectorAll(
+          '*[data-vl-search-criterium]');
+      filterElements.forEach(element => {
+        element.addEventListener(
+            element.tagName.toLowerCase() === 'input' ? 'input' : 'change',
+            () => {
+              const searchCriteria = {};
+              filterElements.forEach(filter => {
+                if (this._isNotEmpty(filter.value)) {
+                  searchCriteria[filter.getAttribute(
+                      'data-vl-search-criterium')] = filter.value;
+                }
+              });
+              doWithSearchCriteria(searchCriteria);
+            });
+      });
+    }
+  }
+
+  static _isNotEmpty(value) {
+    if (value == null) {
+      return false;
+    }
+    if (Array.isArray(value) && value.length) {
+      return false;
+    }
+    if (value === 0) {
+      return false;
+    }
+    return !!value;
+  }
+}
+
+/**
+ * VlRichTable
+ * @class
+ * @classdesc
+ *
+ * @extends VlElement
+ *
+ * @property {object[]} data - Attribuut die de data bevat.
+ * @property {boolean} hover - Attribuut wordt gebruikt om een rij te highlighten waneer de gebruiker erover hovert met muiscursor. Zie ook {@link https://webcomponenten.omgeving.vlaanderen.be/demo/vl-data-table.html|vl-data-table}
+ * @property {boolean} lined - Variant met een lijn tussen elke rij en kolom. Zie ook {@link https://webcomponenten.omgeving.vlaanderen.be/demo/vl-data-table.html|vl-data-table}
+ * @property {boolean} zebra - Variant waarin de rijen afwisslend een andere achtergrondkleur krijgen. Dit maakt de tabel makkelijker leesbaar. Zie ook {@link https://webcomponenten.omgeving.vlaanderen.be/demo/vl-data-table.html|vl-data-table}
+ *
+ * @event pagechanged - De geselecteerde pagina zijn veranderd.
+ * @event search - De zoekcriteria zijn veranderd. Triggert bij elke input|select|... element met data-vl-search-criterium in het filter slot indien beschikbaar. In detail van het event object zit een searchCriteria object met hierin als keys de data-vl-search-criterium van de elementen met de value property van het element
+ * @event sort - De sorteercriteria zijn veranderd.
+ *
+ * @slot filter - Filter met input|select|... velden die data-vl-search-criterium als attribuut hebben (moet unieke namen hebben binnen de filter slot), worden op geluisterd en indien er een verandering is, zal een search event op de rich-table worden uitgezonden met de searchCriteria.
+ *
+ * @see {@link https://www.github.com/milieuinfo/webcomponent-vl-ui-rich-table/releases/latest|Release notes}
+ * @see {@link https://www.github.com/milieuinfo/webcomponent-vl-ui-rich-table/issues|Issues}
+ * @see {@link https://webcomponenten.omgeving.vlaanderen.be/demo/vl-rich-table.html|Demo}
+ */
+class VlRichTable extends VlElement(HTMLElement) {
+  get sortCriteria() {
+    return this._sortCriteria;
+  }
+
+  set sortCriteria(criteria) {
+    this._sortCriteria = criteria;
+  }
+
+  static get _observedAttributes() {
+    return ['data'];
+  }
+
+  constructor() {
+    super();
+    this._data = [];
+    this._sortCriteria = [];
+    this._searchCriteria = {};
+  }
+
+  connectedCallback() {
+    this._shadow = this.attachShadow({mode: 'open'});
+    this._shadow.innerHTML = `
+        <style>
+          ${css}
+        </style>
+        <slot></slot>
+        ${this._renderSearchable(`
+            <style>
+              @import "/node_modules/vl-ui-data-table/style.css";
+            </style>
+            <table is="vl-data-table" ${this._dataTableAttributes}>
+              <thead>
+                <tr>
+                </tr>
+              </thead>
+              <tbody>
+              </tbody>
+              <caption></caption>
+            </table>`)}`;
+    const slot = this.shadowRoot.querySelector('slot');
+    slot.addEventListener('slotchange', () => this._createRows(), {once: true});
+    const filter = this.shadowRoot.querySelector('slot[name=filter]');
+    if (filter) {
+      filter.addEventListener('slotchange', () => {
+        filter.assignedElements().forEach(
+            FilterFunctions.whenFilterActivated((searchCriteria) => {
+              this.dispatchEvent(new CustomEvent('search', {
+                detail: {
+                  searchCriteria: searchCriteria
+                },
+                bubbles: true
+              }));
+            }));
+      }, {once: true});
+    }
+  }
+
+  _renderSearchable(dataTable) {
+    if (this.querySelector('[slot=filter]') != null) {
+      return FilterFunctions.renderFilter(dataTable);
+    }
+    return dataTable;
+  }
+
+  get _dataTableAttributes() {
+    return (this.getAttribute('zebra') != null ? ` zebra` : ``)
+        + (this.getAttribute('lined') != null ? ` lined` : ``)
+        + (this.getAttribute('hover') != null ? ` hover` : ``);
+  }
+
+  _createRows() {
+    Array.from(this._tableBody.children).forEach(child => child.remove());
+    this.content.forEach(data => {
+      const row = document.createElement("tr");
+      Array.from(this.fields).forEach(field => {
+        const tableData = document.createElement("td");
+        tableData.appendChild(field.renderTableData(data[field.fieldName]));
+        row.appendChild(tableData);
+      });
+      this._tableBody.appendChild(row);
+    });
+  }
+
+  _dataChangedCallback(oldValue, newValue) {
+    this.data = JSON.parse(newValue);
+  }
+
+  updateSortCriteria(criteria) {
+    setTimeout(() => {
+      if (criteria.direction === asc || criteria.direction === desc) {
+        if (criteria.priority) {
+          const index = criteria.priority - 1;
+          this.sortCriteria[index] = {
+            name: criteria.name,
+            direction: criteria.direction
+          };
+        } else {
+          this.sortCriteria = this.sortCriteria.filter(
+              sc => sc.name !== criteria.name);
+          this.sortCriteria.push(criteria);
+        }
+      } else {
+        this.sortCriteria = this.sortCriteria.filter(
+            sc => sc.name !== criteria.name);
+      }
+
+      this.dispatchEvent(new CustomEvent('sort', {
+            detail: {
+              sortCriteria: this.sortCriteria
+            }
+          }
+      ));
+    }, 0);
+  }
+
+  get fields() {
+    return Array.from(this.children).filter(child => {
+      return child.tagName.toLowerCase()
+          === 'vl-rich-table-field'
+    })
+  }
+
+  get data() {
+    return this._data;
+  }
+
+  set data(data) {
+    this._data = data;
+    if (this._isReady()) {
+      this._createRows();
+    }
+    if (!Array.isArray(this.data)) {
+      this.dispatchEvent(new CustomEvent('data_update_from_object', this.data));
+    }
+  }
+
+  get content() {
+    if (Array.isArray(this.data)) {
+      return this.data;
+    } else if (Array.isArray(this.data.content)) {
+      return this.data.content;
+    } else {
+      throw new Error("data is geen geldige array van objecten");
+    }
+  }
+
+  get headers() {
+    return this.shadowRoot.querySelectorAll('th');
+  }
+
+  _isReady() {
+    return Array.from(this.fields).every(child => child.richTable === this);
+  }
+
+  get _table() {
+    return this.shadowRoot.querySelector('table');
+  }
+
+  get _tableHeaderRow() {
+    return this._table.querySelector('thead > tr');
+  }
+
+  get _tableBody() {
+    return this._table.querySelector('tbody');
+  }
+
+  get _tableFooterRow() {
+    return this._table.querySelector('caption');
+  }
+
+  addTableHeaderCell(cell) {
+    this._tableHeaderRow.appendChild(cell);
+  }
+
+  addTableFooterCell(cell) {
+    this._tableFooterRow.append(cell);
+  }
+}
+
+const sortableMixin = baseClass => class extends baseClass {
+
+  connectedCallback() {
+    if (this.richTable && this.hasAttribute('sortable')) {
+      this._dressSortableHeader();
+    }
+  };
+
+  _dressSortableHeader() {
+    const headerCell = this._headerCell;
+    headerCell.classList.add('vl-sortable');
+    const span = document.createElement('span', 'vl-icon');
+    span.setAttribute('before', '');
+    span.setAttribute('icon', 'sort');
+    span.setAttribute('name', 'sortable-span');
+    const text = document.createElement('label');
+    text.setAttribute('name', 'sortable-text');
+    headerCell.appendChild(span);
+    headerCell.appendChild(text);
+    span.addEventListener("click", () => {
+      this._sortButtonClicked();
+    });
+
+    this.richTable.addEventListener('sort', () => {
+      this._updateSortableHeader();
+    });
+  };
+
+  get direction() {
+    return this.getAttribute('direction');
+  };
+
+  get priority() {
+    return this.getAttribute('priority');
+  };
+
+  _sortButtonClicked(e) {
+    let direction;
+    switch (this.direction) {
+      case asc:
+        direction = null;
+        break;
+      case desc:
+        direction = asc;
+        break;
+      default:
+        direction = desc;
+    }
+    this.richTable.updateSortCriteria(
+        {name: this.fieldName, direction: direction});
+  };
+
+  _updateSortableHeader() {
+    const sortableSpan = this._headerCell.querySelector(
+        '[name="sortable-span"]'),
+        sortableText = this._headerCell.querySelector('[name="sortable-text"]');
+
+    const index = this.richTable.sortCriteria.findIndex(
+        criteria => criteria && criteria.name === this.fieldName);
+    this._priority = index > -1 ? (index + 1) : null;
+
+    const criteria = index !== null
+        ? this.richTable.sortCriteria[index] : null;
+
+    if (criteria) {
+      this._direction = criteria.direction;
+      switch (criteria.direction) {
+        case asc:
+          this.setAttribute('direction', asc);
+          this.setAttribute('priority', this._priority);
+          sortableText.innerHTML = this._priority;
+          sortableSpan.setAttribute("icon", "nav-up");
+          break;
+        case desc:
+          this.setAttribute('direction', desc);
+          this.setAttribute('priority', this._priority);
+          sortableText.innerHTML = this.priority;
+          sortableSpan.setAttribute("icon", "nav-down");
+          break;
+        default:
+          console.error(
+              `${criteria.direction} is niet een geldige sort direction`);
+      }
+    } else {
+      this._direction = null;
+      this.removeAttribute('direction');
+      this.removeAttribute('priority');
+      sortableText.innerHTML = '';
+      sortableSpan.setAttribute("icon", "sort");
+    }
+  };
+
+  _directionChangedCallback(oldValue, newValue) {
+    if (this.priority && newValue !== this._direction) {
+      this.richTable.updateSortCriteria(
+          {
+            name: this.fieldName,
+            direction: newValue,
+            priority: this.priority
+          });
+    }
+  };
+
+  _priorityChangedCallback(oldValue, newValue) {
+    if (this.direction && parseInt(newValue) !== this._priority) {
+      this.richTable.updateSortCriteria({
+        name: this.fieldName,
+        direction: this.direction,
+        priority: newValue
+      });
+    }
+  }
+};
+
+const formatDate = (datestring) => {
+  return new Date(datestring).toLocaleDateString('nl-BE',
+      {year: 'numeric', month: '2-digit', day: '2-digit'}).replace(/\//g, '.');
+};
+
+const formatDatetime = (datetimestring) => {
+  return new Date(datetimestring).toLocaleString('nl-BE', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit'
+  }).replace(/\//g, '.');
+};
+
+const RenderFunctions = {
+  'string': content => document.createTextNode(content),
+  'datetime': content => document.createTextNode(formatDatetime(content)),
+  'date': content => document.createTextNode(formatDate(content)),
+  'default': content => document.createTextNode(content)
+};
+
+/**
+ * VlRichTableField
+ * @class
+ * @classdesc
+ *
+ * @extends VlElement
+ *
+ * @property {boolean} sortable - Attribuut om aan te duiden de soorten op dit veld toestaan is.
+ * @property {HTMLOptionElement[]} search-options - Attribuut om de search options te definiëren.
+ * @property {string} data-value - Attribuut om aan te duiden op welke sleutel van de data deze waarde moet gekoppeld worden. Verplicht en unique.
+ * @property {string} data-type - Attribuut om te bepalen welk type data in de kolom moet komen en hoe de formattering moet gebeuren.
+ *                                Mogelijke waarden:
+ *                                - string : de waarde wordt als tekst getoond
+ *                                - date : de datum wordt getoond volgens de BIN norm dd.mm.jjjj
+ *                                  Parsen gebeurt via de Date constructor en formatteren via toLocaleString met locale 'nl-BE'.
+ *                                - datetime : de datum + tijd wordt getoond volgens BIN norm dd.mm.jjjj hh:mi:ss
+ *                                  Parsen gebeurt via de Date constructor en formatteren via toLocaleString met locale 'nl-BE'.
+ *                                Default waarde: string
+ * @property {asc | desc} direction - Te combineren met een 'priority' attribute om een sorteercriteria te bepalen.
+ * @property {number} priority -Te combineren met een 'direction' attribute om een sorteercriteria te bepalen.
+ *
+ * @see {@link https://www.github.com/milieuinfo/webcomponent-vl-ui-rich-table/releases/latest|Release notes}
+ * @see {@link https://www.github.com/milieuinfo/webcomponent-vl-ui-rich-table/issues|Issues}
+ * @see {@link https://webcomponenten.omgeving.vlaanderen.be/demo/vl-rich-table.html|Demo}
+ */
+class VlRichTableField extends sortableMixin(VlElement(HTMLElement)) {
+  static get _observedAttributes() {
+    return ['direction', 'priority'];
+  }
+
+  constructor() {
+    super(`
+        <style>
+          @import "/node_modules/vl-ui-data-table/style.css";
+        </style>
+    `);
+    this._searchValue;
+  }
+
+  /**
+   * Manier om de data in de tabel te renderen. Kan overschreven worden om eigen renderer mee te geven vooraleer de data te tonen in de tabel.
+   *
+   * @param content de content die hoort in de te renderen cell van de tabel
+   * @returns {Node} een node om in de td van de tabel te voegen
+   */
+  renderTableData(content) {
+    return RenderFunctions[this._validDataType()](content);
+  };
+
+  get fieldName() {
+    return this.getAttribute('data-value');
+  }
+
+  _validDataType() {
+    const dataType = this.getAttribute('data-type');
+    if (dataType != null && RenderFunctions.hasOwnProperty(dataType)) {
+      return dataType;
+    } else {
+      return 'default';
+    }
+  }
+
+  get _headerCell() {
+    return this.__headerCell;
+  }
+
+  set _headerCell(headerCell) {
+    this.__headerCell = headerCell;
+  }
+
+  connectedCallback() {
+    this._initHeaderCell();
+    super.connectedCallback();
+  }
+
+  _initHeaderCell() {
+    if (this.richTable) {
+      const headerCell = document.createElement("th");
+      this._headerCell = headerCell;
+      headerCell.appendChild(
+          document.createTextNode(this.getAttribute('label')));
+      this.richTable.addTableHeaderCell(headerCell);
+    } else {
+      console.log(
+          'Een VlRichTableField moet altijd als parent een vl-rich-table hebben.');
+    }
+  }
+
+  get richTable() {
+    if (this.parentNode && this.parentNode.tagName.toLowerCase()
+        === 'vl-rich-table') {
+      return this.parentNode;
+    }
+  }
+
+  get searchValue() {
+    return this._searchValue;
+  }
+}
+
+/**
+ * VlRichTablePager
+ * @class
+ * @classdesc
+ *
+ * @extends VlPager
+ *
+ * @see {@link https://www.github.com/milieuinfo/webcomponent-vl-ui-pager/releases/latest|Release notes}
+ * @see {@link https://www.github.com/milieuinfo/webcomponent-vl-ui-pager/issues|Issues}
+ * @see {@link https://webcomponenten.omgeving.vlaanderen.be/demo/vl-pager.html|Demo}
+ *
+ * @see {@link https://www.github.com/milieuinfo/webcomponent-vl-ui-rich-table/releases/latest|Release notes}
+ * @see {@link https://www.github.com/milieuinfo/webcomponent-vl-ui-rich-table/issues|Issues}
+ * @see {@link https://webcomponenten.omgeving.vlaanderen.be/demo/vl-rich-table.html|Demo}
+ **/
+class VlRichTablePager extends VlPager {
+
+  connectedCallback() {
+    super.connectedCallback();
+    if (this._tableToInsert) {
+      this._appended = true;
+      this._tableToInsert.addTableFooterCell(this);
+      this.addEventListener('pagechanged', (e) => {
+        this.richTable.dispatchEvent(new CustomEvent('pagechanged',
+            {detail: e.detail}));
+      });
+
+      this._updatePageable();
+      this.richTable.addEventListener('data_update_from_object', (e) => {
+        this._updatePageable();
+      });
+    } else if (!this._appended) {
+      console.log(
+          'Een VlRichTablePager moet altijd als parent een vl-rich-table hebben.');
+    }
+  }
+
+  _updatePageable() {
+    const data = this.richTable.data;
+    if (data.totalElements != null && data.size && data.number + 1) {
+      this.setAttribute('total-items', data.totalElements);
+      this.setAttribute('items-per-page', data.size);
+      this.setAttribute('current-page', data.number + 1);
+    }
+  }
+
+  get _tableToInsert() {
+    if (this.parentNode && this.parentNode.tagName.toLowerCase()
+        === 'vl-rich-table') {
+      return this.parentNode;
+    }
+  }
+
+  get richTable() {
+    if (this.getRootNode() && this.getRootNode().host
+        && this.getRootNode().host.tagName.toLowerCase()
+        === 'vl-rich-table') {
+      return this.getRootNode().host;
+    }
+  }
+}
+
+define('vl-rich-table', VlRichTable);
+define('vl-rich-table-field', VlRichTableField);
+define('vl-rich-table-pager', VlRichTablePager);
+
+export { FilterFunctions, RenderFunctions, SortDirections, VlRichTable, VlRichTableField, VlRichTablePager, asc, desc };

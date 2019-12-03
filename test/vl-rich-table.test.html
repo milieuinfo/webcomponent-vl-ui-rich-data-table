@@ -102,6 +102,17 @@
   </template>
 </test-fixture>
 
+<test-fixture id="vl-rich-table-met-number-filter">
+  <template>
+    <vl-rich-table>
+      <vl-rich-table-field data-value="number" label="Nummer"></vl-rich-table-field>
+      <div slot="filter">
+        <input name="name" type="number" placeholder="Zoeken op nummer..." data-vl-search-criterium="number"/>
+      </div>
+    </vl-rich-table>
+  </template>
+</test-fixture>
+
 <script type="module">
   import {awaitUntil} from "vl-ui-core/vl-core.src";
 
@@ -462,6 +473,20 @@
 
       flush(() => {
         table.querySelector('input').value = 'search';
+        table.querySelector('input').dispatchEvent(new CustomEvent('input'));
+      });
+    });
+
+    test('als de input verandert naar 0, zal er een search event uitgezonden worden met searchCriteria', (done) => {
+      const table = fixture('vl-rich-table-met-number-filter');
+      table.addEventListener('search', (e) => {
+        assert.equal(Object.keys(e.detail.searchCriteria).length, 1);
+        assert.equal(e.detail.searchCriteria['number'], 0);
+        done();
+      });
+
+      flush(() => {
+        table.querySelector('input').value = 0;
         table.querySelector('input').dispatchEvent(new CustomEvent('input'));
       });
     });
