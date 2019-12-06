@@ -15,13 +15,15 @@ import {FilterFunctions} from "./domain/filter";
  * @property {object[]} data - Attribuut die de data bevat.
  * @property {boolean} hover - Attribuut wordt gebruikt om een rij te highlighten waneer de gebruiker erover hovert met muiscursor. Zie ook {@link https://webcomponenten.omgeving.vlaanderen.be/demo/vl-data-table.html|vl-data-table}
  * @property {boolean} lined - Variant met een lijn tussen elke rij en kolom. Zie ook {@link https://webcomponenten.omgeving.vlaanderen.be/demo/vl-data-table.html|vl-data-table}
- * @property {boolean} zebra - Variant waarin de rijen afwisslend een andere achtergrondkleur krijgen. Dit maakt de tabel makkelijker leesbaar. Zie ook {@link https://webcomponenten.omgeving.vlaanderen.be/demo/vl-data-table.html|vl-data-table}
+ * @property {boolean} zebra - Variant waarin de rijen afwisselend een andere achtergrondkleur krijgen. Dit maakt de tabel makkelijker leesbaar. Zie ook {@link https://webcomponenten.omgeving.vlaanderen.be/demo/vl-data-table.html|vl-data-table}
  *
  * @event pagechanged - De geselecteerde pagina zijn veranderd.
  * @event search - De zoekcriteria zijn veranderd. Triggert bij elke input|select|... element met data-vl-search-criterium in het filter slot indien beschikbaar. In detail van het event object zit een searchCriteria object met hierin als keys de data-vl-search-criterium van de elementen met de value property van het element
  * @event sort - De sorteercriteria zijn veranderd.
  *
- * @slot filter - Filter met input|select|... velden die data-vl-search-criterium als attribuut hebben (moet unieke namen hebben binnen de filter slot), worden op geluisterd en indien er een verandering is, zal een search event op de rich-table worden uitgezonden met de searchCriteria.
+ * @slot filter - Filter met input|select|... velden die data-vl-search-criterium als attribuut hebben (moet unieke namen hebben binnen de filter slot), worden op geluisterd en indien er een verandering is, zal een search event op de rich-table worden uitgezonden met de searchCriteria. Er wordt aanbevolen om de vl-search-filter te gebruiken.
+ *              - @property {boolean} data-vl-closed-on-start - Attribuut op slotted element waarbij de filter bij het eerste renderen gesloten start. Default niet gezet.
+ *              - @property {boolean} data-vl-closable - Attribuut dat op "false" kan gezet worden zodat de filter niet meer sluitbaar is en de knop "Filter" niet meer getoond wordt. Default is het closable.
  *
  * @see {@link https://www.github.com/milieuinfo/webcomponent-vl-ui-rich-table/releases/latest|Release notes}
  * @see {@link https://www.github.com/milieuinfo/webcomponent-vl-ui-rich-table/issues|Issues}
@@ -82,14 +84,25 @@ export class VlRichTable extends VlElement(HTMLElement) {
               }));
             }));
       }, {once: true});
+      FilterFunctions.addToggleFilterButtonClickListener(this.shadowRoot);
+      if (this.querySelector('[slot=filter]').getAttribute('data-vl-closed-on-start') != null) {
+        FilterFunctions.hideFilter(this.shadowRoot);
+      }
     }
   }
 
   _renderSearchable(dataTable) {
     if (this.querySelector('[slot=filter]') != null) {
-      return FilterFunctions.renderFilter(dataTable);
+      return this._renderToggleFilter() + FilterFunctions.renderFilter(dataTable);
     }
     return dataTable;
+  }
+
+  _renderToggleFilter() {
+    if (this.querySelector('[slot=filter]').getAttribute('data-vl-closable') !== 'false') {
+      return FilterFunctions.renderToggleFilter();
+    }
+    return ``;
   }
 
   get _dataTableAttributes() {

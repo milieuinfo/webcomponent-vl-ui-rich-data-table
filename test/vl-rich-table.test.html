@@ -102,6 +102,30 @@
   </template>
 </test-fixture>
 
+<test-fixture id="vl-rich-table-met-filter-en-niet-closable">
+  <template>
+    <vl-rich-table>
+      <vl-rich-table-field sortable direction="desc" priority="2" data-value="name" label="Naam"></vl-rich-table-field>
+      <vl-rich-table-field sortable direction="asc" priority="1" data-value="description" label="Omschrijving"></vl-rich-table-field>
+      <div slot="filter" data-vl-closable="false">
+        <input name="name" placeholder="Zoeken op naam..." data-vl-search-criterium="name"/>
+      </div>
+    </vl-rich-table>
+  </template>
+</test-fixture>
+
+<test-fixture id="vl-rich-table-met-filter-closed-on-start">
+  <template>
+    <vl-rich-table>
+      <vl-rich-table-field sortable direction="desc" priority="2" data-value="name" label="Naam"></vl-rich-table-field>
+      <vl-rich-table-field sortable direction="asc" priority="1" data-value="description" label="Omschrijving"></vl-rich-table-field>
+      <div slot="filter" data-vl-closed-on-start>
+        <input name="name" placeholder="Zoeken op naam..." data-vl-search-criterium="name"/>
+      </div>
+    </vl-rich-table>
+  </template>
+</test-fixture>
+
 <test-fixture id="vl-rich-table-met-number-filter">
   <template>
     <vl-rich-table>
@@ -518,6 +542,35 @@
         table.querySelector('select').value = 't2';
         table.querySelector('select').dispatchEvent(new Event('change'));
       });
+    });
+
+    test('als er geklikt wordt op de toggle filter knop zal de filter niet meer getoond worden en bij opnieuw klikken komt die weer tevoorschijn', () => {
+      const table = fixture('vl-rich-table-met-filter');
+      const toggleFilterButton = table.shadowRoot.querySelector('#toggleFilter button');
+      const filterColumn = table.shadowRoot.querySelector('#filterColumn');
+      const dataTableColumn = table.shadowRoot.querySelector('#dataTableColumn');
+
+      toggleFilterButton.click();
+      assert.equal(filterColumn.style.display, 'none');
+      assert.equal(dataTableColumn.getAttribute('size'), '12');
+
+      toggleFilterButton.click();
+      assert.equal(filterColumn.style.display, '');
+      assert.equal(dataTableColumn.getAttribute('size'), '8');
+    });
+
+    test('het attribuut data-vl-closable op false zorgt er voor dat de filter toggle knop niet meer zichtbaar is', () => {
+      const table = fixture('vl-rich-table-met-filter-en-niet-closable');
+      const toggleFilterButton = table.shadowRoot.querySelector('#toggleFilter button');
+
+      assert.isNull(toggleFilterButton);
+    });
+
+    test('het attribuut data-vl-close-on-start zorgt er voor dat de filter initieel niet getoond wordt', () => {
+      const table = fixture('vl-rich-table-met-filter-closed-on-start');
+      const filterColumn = table.shadowRoot.querySelector('#filterColumn');
+
+      assert.equal(filterColumn.style.display, 'none');
     });
   });
 </script>

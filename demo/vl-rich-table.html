@@ -430,7 +430,7 @@
             &lt;vl-rich-table-field data-value=&quot;name&quot; label=&quot;Naam&quot;&gt;&lt;/vl-rich-table-field&gt;
             &lt;vl-rich-table-field data-value=&quot;description&quot; label=&quot;Omschrijving&quot;&gt;&lt;/vl-rich-table-field&gt;
             &lt;vl-rich-table-field data-value=&quot;datum&quot; data-type=&quot;date&quot; label=&quot;Datum&quot;&gt;&lt;/vl-rich-table-field&gt;
-            &lt;div slot=&quot;filter&quot;&gt;
+            &lt;div slot=&quot;filter&quot; data-vl-closable=&quot;false&quot;&gt;
               &lt;input is=&quot;vl-input-field&quot; data-vl-search-criterium=&quot;name&quot; placeholder=&quot;Zoeken op naam...&quot;&gt;
               &lt;div&gt;
                 &lt;label is=&quot;vl-form-label&quot; for=&quot;search-filter-date&quot;&gt;Datum&lt;/label&gt;
@@ -445,7 +445,7 @@
         <vl-rich-table-field data-value="name" label="Naam"></vl-rich-table-field>
         <vl-rich-table-field data-value="description" label="Omschrijving"></vl-rich-table-field>
         <vl-rich-table-field data-value="datum" data-type="date" label="Datum"></vl-rich-table-field>
-        <div slot="filter">
+        <div slot="filter" data-vl-closable="false">
           <input is="vl-input-field" data-vl-search-criterium="name" placeholder="Zoeken op naam...">
           <div>
             <label is="vl-form-label" for="search-filter-date">Datum</label>
@@ -482,7 +482,7 @@
                                  label=&quot;Datum&quot;&gt;&lt;/vl-rich-table-field&gt;
             &lt;vl-rich-table-pager align-right total-items=&quot;100&quot; items-per-page=&quot;10&quot;
                                  current-page=&quot;1&quot;&gt;&lt;/vl-rich-table-pager&gt;
-            &lt;div slot=&quot;filter&quot; is=&quot;vl-search-filter&quot; data-vl-title=&quot;Verfijn uw zoekopdracht&quot; alt&gt;
+            &lt;div slot=&quot;filter&quot; is=&quot;vl-search-filter&quot; data-vl-title=&quot;Verfijn uw zoekopdracht&quot; alt data-vl-closed-on-start&gt;
               &lt;style&gt;
                 @import &quot;/node_modules/vl-ui-search-filter/style.css&quot;;
               &lt;/style&gt;
@@ -522,7 +522,7 @@
                              label="Datum"></vl-rich-table-field>
         <vl-rich-table-pager align-right total-items="100" items-per-page="10"
                              current-page="1"></vl-rich-table-pager>
-        <div slot="filter" is="vl-search-filter" data-vl-title="Verfijn uw zoekopdracht" alt>
+        <div slot="filter" is="vl-search-filter" data-vl-title="Verfijn uw zoekopdracht" alt data-vl-closed-on-start>
           <style>
             @import "/node_modules/vl-ui-search-filter/style.css";
           </style>
