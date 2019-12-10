@@ -84,8 +84,10 @@ export class VlRichTable extends VlElement(HTMLElement) {
               }));
             }));
       }, {once: true});
-      FilterFunctions.addToggleFilterButtonClickListener(this.shadowRoot);
-      if (this.querySelector('[slot=filter]').getAttribute('data-vl-closed-on-start') != null) {
+      FilterFunctions.addCloseAndToggleFilterButtonClickListeners(
+          this.shadowRoot);
+      if (this.querySelector('[slot=filter]').getAttribute(
+          'data-vl-closed-on-start') != null) {
         FilterFunctions.hideFilter(this.shadowRoot);
       }
     }
@@ -93,16 +95,11 @@ export class VlRichTable extends VlElement(HTMLElement) {
 
   _renderSearchable(dataTable) {
     if (this.querySelector('[slot=filter]') != null) {
-      return this._renderToggleFilter() + FilterFunctions.renderFilter(dataTable);
+      const closable = this.querySelector('[slot=filter]').getAttribute(
+          'data-vl-closable') !== 'false';
+      return FilterFunctions.renderFilter(dataTable, closable);
     }
     return dataTable;
-  }
-
-  _renderToggleFilter() {
-    if (this.querySelector('[slot=filter]').getAttribute('data-vl-closable') !== 'false') {
-      return FilterFunctions.renderToggleFilter();
-    }
-    return ``;
   }
 
   get _dataTableAttributes() {

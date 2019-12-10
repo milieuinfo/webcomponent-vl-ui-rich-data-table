@@ -559,6 +559,17 @@
       assert.equal(dataTableColumn.getAttribute('size'), '8');
     });
 
+    test('als er geklikt wordt op de close filter knop zal de filter niet meer getoond worden', () => {
+      const table = fixture('vl-rich-table-met-filter');
+      const closeFilterButton = table.shadowRoot.querySelector('#closeFilter button');
+      const filterColumn = table.shadowRoot.querySelector('#filterColumn');
+      const dataTableColumn = table.shadowRoot.querySelector('#dataTableColumn');
+
+      closeFilterButton.click();
+      assert.equal(filterColumn.style.display, 'none');
+      assert.equal(dataTableColumn.getAttribute('size'), '12');
+    });
+
     test('het attribuut data-vl-closable op false zorgt er voor dat de filter toggle knop niet meer zichtbaar is', () => {
       const table = fixture('vl-rich-table-met-filter-en-niet-closable');
       const toggleFilterButton = table.shadowRoot.querySelector('#toggleFilter button');

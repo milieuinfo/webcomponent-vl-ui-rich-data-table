@@ -46,35 +46,51 @@ const dataTableColumnSize = "8";
 
 class FilterFunctions {
 
-  static renderFilter(dataTable) {
+  static renderFilter(dataTable, closable) {
     return `
         <style>
           @import "/node_modules/vl-ui-grid/style.css";
         </style>
         <div is="vl-grid">
           <div id="filterColumn" is="vl-column" size="4" small-size="12">
+            ${closable ? FilterFunctions._renderCloseFilterButton() : ``}
             <slot name="filter"></slot>
           </div>
           <div id="dataTableColumn" is="vl-column" size="${dataTableColumnSize}" small-size="12">
+            ${closable ? FilterFunctions._renderToggleFilterButton() : ``}
             ${dataTable}
           </div>
         </div>`;
   }
 
-  static renderToggleFilter() {
+  static _renderCloseFilterButton() {
     return `
-        <style>
-          #toggleFilter {
-            text-align: right;
-          }
-        </style>
-        <div id="toggleFilter">
-          <style>
-            @import "/node_modules/vl-ui-icon/style.css";
-            @import "/node_modules/vl-ui-button/style.css";
-          </style>
-          <button is="vl-button-link" type="button" aria-label="Toon of verberg de filter"><span is="vl-icon" icon="content-filter" before></span>Filter</button>
-        </div>`;
+      <style>
+        @import "/node_modules/vl-ui-icon/style.css";
+        @import "/node_modules/vl-ui-button/style.css";
+        #closeFilter {
+          text-align: right;
+        }
+      </style>
+      <div id="closeFilter">
+        <button is="vl-button-link" type="button" aria-label="Verberg de filter"><span is="vl-icon" icon="close" before></span></button>
+      </div>
+        `;
+  }
+
+  static _renderToggleFilterButton() {
+    return `
+      <style>
+        @import "/node_modules/vl-ui-icon/style.css";
+        @import "/node_modules/vl-ui-button/style.css";
+        #toggleFilter {
+          text-align: right;
+        }
+      </style>
+      <div id="toggleFilter">
+        <button is="vl-button-link" type="button" aria-label="Toon of verberg de filter"><span is="vl-icon" icon="content-filter" before></span>Filter</button>
+      </div>
+    `;
   }
 
   static whenFilterActivated(doWithSearchCriteria) {
@@ -117,19 +133,26 @@ class FilterFunctions {
     return !!value;
   }
 
-  static addToggleFilterButtonClickListener(richTable) {
+  static addCloseAndToggleFilterButtonClickListeners(richTable) {
     const toggleFilterButton = richTable.querySelector('#toggleFilter button');
     if (toggleFilterButton != null) {
-      toggleFilterButton.addEventListener('click', () => {
-        const filterColumn = richTable.querySelector('#filterColumn');
-        const dataTableColumn = richTable.querySelector('#dataTableColumn');
-        if (filterColumn.style.display === '') {
-          FilterFunctions.hideFilter(richTable);
-        } else {
-          filterColumn.style.display = '';
-          dataTableColumn.setAttribute('size', dataTableColumnSize);
-        }
+      toggleFilterButton.addEventListener('click', () =>
+          FilterFunctions._toggleFilter(richTable));
+    }
+    const closeFilterButton = richTable.querySelector('#closeFilter button');
+    if (closeFilterButton != null) {
+      closeFilterButton.addEventListener('click', () => {
+        FilterFunctions.hideFilter(richTable);
       });
+    }
+  }
+
+  static _toggleFilter(richTable) {
+    const filterColumn = richTable.querySelector('#filterColumn');
+    if (filterColumn.style.display === '') {
+      FilterFunctions.hideFilter(richTable);
+    } else {
+      FilterFunctions._showFilter(richTable);
     }
   }
 
@@ -138,6 +161,13 @@ class FilterFunctions {
     const dataTableColumn = richTable.querySelector('#dataTableColumn');
     filterColumn.style.display = 'none';
     dataTableColumn.setAttribute('size', '12');
+  }
+
+  static _showFilter(richTable) {
+    const filterColumn = richTable.querySelector('#filterColumn');
+    const dataTableColumn = richTable.querySelector('#dataTableColumn');
+    filterColumn.style.display = '';
+    dataTableColumn.setAttribute('size', dataTableColumnSize);
   }
 }
 
@@ -220,8 +250,10 @@ class VlRichTable extends VlElement(HTMLElement) {
               }));
             }));
       }, {once: true});
-      FilterFunctions.addToggleFilterButtonClickListener(this.shadowRoot);
-      if (this.querySelector('[slot=filter]').getAttribute('data-vl-closed-on-start') != null) {
+      FilterFunctions.addCloseAndToggleFilterButtonClickListeners(
+          this.shadowRoot);
+      if (this.querySelector('[slot=filter]').getAttribute(
+          'data-vl-closed-on-start') != null) {
         FilterFunctions.hideFilter(this.shadowRoot);
       }
     }
@@ -229,16 +261,11 @@ class VlRichTable extends VlElement(HTMLElement) {
 
   _renderSearchable(dataTable) {
     if (this.querySelector('[slot=filter]') != null) {
-      return this._renderToggleFilter() + FilterFunctions.renderFilter(dataTable);
+      const closable = this.querySelector('[slot=filter]').getAttribute(
+          'data-vl-closable') !== 'false';
+      return FilterFunctions.renderFilter(dataTable, closable);
     }
     return dataTable;
-  }
-
-  _renderToggleFilter() {
-    if (this.querySelector('[slot=filter]').getAttribute('data-vl-closable') !== 'false') {
-      return FilterFunctions.renderToggleFilter();
-    }
-    return ``;
   }
 
   get _dataTableAttributes() {
