@@ -10,8 +10,15 @@ export class FilterFunctions {
     return `
         <style>
           @import "/node_modules/vl-ui-grid/style.css";
+          #dataTableGrid {
+            margin-left: 0;
+          }
+          #dataTableColumn {
+            overflow-y: auto;
+            padding-left: 0;
+          }
         </style>
-        <div is="vl-grid">
+        <div id="dataTableGrid" is="vl-grid">
           <div id="filterColumn" is="vl-column" size="4" small-size="12">
             ${closable ? FilterFunctions._renderCloseFilterButton() : ``}
             <slot name="filter"></slot>

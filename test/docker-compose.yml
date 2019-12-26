@@ -4,22 +4,32 @@ services:
     image: ${DOCKER_REGISTRY}selenium/hub:3.141.59
     container_name: selenium-hub
   selenium-chrome:
-    image: ${DOCKER_REGISTRY}selenium/node-chrome:3.141.59
+    image: ${DOCKER_REGISTRY}selenium/node-chrome-debug:3.141.59
     depends_on:
       - selenium-hub
     environment:
       - HUB_HOST=selenium-hub
       - HUB_PORT=4444
+      - http_proxy=${http_proxy}
+      - https_proxy=${https_proxy}
+      - no_proxy=${no_proxy},selenium-hub,tests
+    ports:
+      - 5900:5900
   selenium-firefox:
-    image: ${DOCKER_REGISTRY}selenium/node-firefox:3.141.59
+    image: ${DOCKER_REGISTRY}selenium/node-firefox-debug:3.141.59
     depends_on:
       - selenium-hub
     environment:
       - HUB_PORT_4444_TCP_ADDR=selenium-hub
       - HUB_PORT_4444_TCP_PORT=4444
+      - http_proxy=${http_proxy}
+      - https_proxy=${https_proxy}
+      - no_proxy=${no_proxy},selenium-hub,tests
+    ports:
+      - 5901:5900
   tests:
     image: ${DOCKER_REGISTRY}node:12
-    command: bash -c "cp -R /data/. /workdir && npm install && npm run test"
+    command: bash -c "cp -R /data/. /workdir && npm install && npm run test:grid"
     depends_on:
       - selenium-hub
       - selenium-chrome
@@ -27,7 +37,10 @@ services:
     environment: 
       - http_proxy=${http_proxy}
       - https_proxy=${https_proxy}
-      - no_proxy=${no_proxy},selenium-hub,host
+      - no_proxy=${no_proxy},selenium-hub,tests
+      - HTTP_PROXY=${http_proxy}
+      - HTTPS_PROXY=${https_proxy}
+      - NO_PROXY=${no_proxy},selenium-hub,tests
     extra_hosts:
       - "repository.milieuinfo.be:${REPOSITORY_FIXED_IP}"
     working_dir: /workdir
@@ -36,7 +49,3 @@ services:
       - ${HOME:-.}/.gitconfig:/root/.gitconfig:ro
       - ${HOME:-.}/.git-credentials:/root/.git-credentials:ro
       - ..:/data:ro
-      - ./wct.docker.conf.json:/workdir/wct.conf.json:ro
-networks:
-  build-network:
-    driver: bridge

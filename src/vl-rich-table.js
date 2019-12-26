@@ -98,8 +98,17 @@ export class VlRichTable extends VlElement(HTMLElement) {
       const closable = this.querySelector('[slot=filter]').getAttribute(
           'data-vl-closable') !== 'false';
       return FilterFunctions.renderFilter(dataTable, closable);
+    } else {
+      return `
+        <style>
+          #dataTableDiv {
+            overflow-y: auto;
+          }
+        </style>
+          <div id="dataTableDiv">
+            ${dataTable}
+          </div>`;
     }
-    return dataTable;
   }
 
   get _dataTableAttributes() {
