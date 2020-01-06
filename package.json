@@ -40,7 +40,7 @@
   "devDependencies": {
     "@govflanders/vl-ui-util": "^3.9.1",
     "concurrently": "5.0.0",
-    "http-server": "^0.11.1",
+    "http-server": "^0.12.0",
     "np": "3.0.4",
     "replace": "^1.1.1",
     "rollup": "1.25.1",
