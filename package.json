@@ -53,7 +53,7 @@
     "vl-ui-input-field": "1.1.2",
     "vl-ui-search-filter": "0.0.1",
     "vl-ui-select": "2.0.1",
-    "vl-ui-util": "github:milieuinfo/webcomponent-vl-ui-util#cd47b2f01b4afd960922f62f3d42b999bddb4367",
+    "vl-ui-util": "github:milieuinfo/webcomponent-vl-ui-util#6a002c2eed76998ad3862b24ff6ea6f39ce11436",
     "wct-browser-legacy": "1.0.2",
     "web-component-tester": "6.9.2"
   },
