@@ -1,0 +1,23 @@
+{
+    "activeBrowsers": [
+      {
+        "browserName": "chrome",
+        "url": "http://selenium-hub:4444/wd/hub"
+      },
+      {
+        "browserName": "firefox",
+        "url": "http://selenium-hub:4444/wd/hub"
+      }
+    ],
+    "expanded": true,
+    "npm": true,
+    "plugins": {
+      "local": false,
+      "sauce": false
+    },
+    "suites": ["test/unit/*.test.html"],
+    "webserver": {
+      "hostname": "tests"
+    }
+  }
+  

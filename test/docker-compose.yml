@@ -3,6 +3,9 @@ services:
   selenium-hub:
     image: ${DOCKER_REGISTRY}selenium/hub:3.141.59
     container_name: selenium-hub
+    environment: 
+      - NODE_MAX_SESSION=3
+      - NODE_MAX_INSTANCES=3
   selenium-chrome:
     image: ${DOCKER_REGISTRY}selenium/node-chrome-debug:3.141.59
     depends_on:
