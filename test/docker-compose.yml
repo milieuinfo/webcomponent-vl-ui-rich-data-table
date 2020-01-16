@@ -16,8 +16,6 @@ services:
       - http_proxy=${http_proxy}
       - https_proxy=${https_proxy}
       - no_proxy=${no_proxy},selenium-hub,tests
-    ports:
-      - 5900:5900
   selenium-firefox:
     image: ${DOCKER_REGISTRY}selenium/node-firefox-debug:3.141.59
     depends_on:
@@ -28,8 +26,6 @@ services:
       - http_proxy=${http_proxy}
       - https_proxy=${https_proxy}
       - no_proxy=${no_proxy},selenium-hub,tests
-    ports:
-      - 5901:5900
   tests:
     image: ${DOCKER_REGISTRY}node:12
     command: bash -c "cp -R /data/. /workdir && npm install && npm run test:grid"
