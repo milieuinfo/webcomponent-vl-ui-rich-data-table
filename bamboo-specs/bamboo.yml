@@ -41,7 +41,7 @@ Release:
         #!/usr/env/bin bash
         set -e
         /opt/scripts/git/git-repository-information-restore.sh
-        docker run -e http_proxy=${bamboo.http_proxy} -e https_proxy=${bamboo.http_proxy} -e HTTP_PROXY=${bamboo.http_proxy} -e HTTPS_PROXY=${bamboo.http_proxy} -e GIT_REPO=${bamboo_repository_git_repositoryUrl} -e RELEASE_VERSION=${bamboo.release_version} acd-docker.repository.milieuinfo.be/milieuinfo/wc-release:1.0.0
+        COMPOSE_OPTIONS="-e git_repo=${bamboo_repository_git_repositoryUrl} -e release_version=${bamboo.release_version}" docker-compose -f docker-compose-release.yml run release
   final-tasks:
     - script: /opt/scripts/docker/stop-docker-containers.sh
   requirements:
