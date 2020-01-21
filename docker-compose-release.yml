@@ -1,0 +1,15 @@
+version: "3"
+services:
+  release:
+    image: ${DOCKER_REGISTRY}milieuinfo/wc-release:1.0.1
+    environment:
+      - http_proxy=${http_proxy}
+      - https_proxy=${https_proxy}
+      - no_proxy=${no_proxy}
+      - HTTP_PROXY=${http_proxy}
+      - HTTPS_PROXY=${https_proxy}
+      - NO_PROXY=${no_proxy}
+      - GIT_REPO=${git_repo}
+      - RELEASE_VERSION=${release_version}
+    extra_hosts:
+      - "repository.milieuinfo.be:${REPOSITORY_FIXED_IP}"
