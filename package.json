@@ -46,7 +46,7 @@
     "rollup": "1.25.1",
     "rollup-plugin-postcss": "2.0.3",
     "rollup-plugin-terser": "5.1.2",
-    "sass": "1.23.6",
+    "sass": "1.25.0",
     "uglify-js-es6": "2.8.9",
     "vl-ui-datepicker": "github:milieuinfo/webcomponent-vl-ui-datepicker#change_event_propageren",
     "vl-ui-form-message": "3.0.0",
