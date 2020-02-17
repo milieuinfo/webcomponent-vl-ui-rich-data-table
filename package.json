@@ -49,7 +49,7 @@
     "sass": "1.23.6",
     "uglify-js-es6": "2.8.9",
     "vl-ui-datepicker": "github:milieuinfo/webcomponent-vl-ui-datepicker#change_event_propageren",
-    "vl-ui-form-message": "3.0.0",
+    "vl-ui-form-message": "4.0.1",
     "vl-ui-input-field": "1.1.2",
     "vl-ui-search-filter": "0.0.1",
     "vl-ui-select": "2.0.1",
