@@ -35,7 +35,7 @@
     "vl-ui-data-table": "1.0.7",
     "vl-ui-grid": "1.0.12",
     "vl-ui-icon": "2.1.0",
-    "vl-ui-pager": "0.0.4"
+    "vl-ui-pager": "2.0.1"
   },
   "devDependencies": {
     "@govflanders/vl-ui-util": "^3.9.1",
