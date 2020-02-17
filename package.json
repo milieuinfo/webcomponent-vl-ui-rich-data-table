@@ -30,7 +30,7 @@
   },
   "homepage": "https://github.com/milieuinfo/webcomponent-vl-rich-table#readme",
   "dependencies": {
-    "vl-ui-button": "1.3.2",
+    "vl-ui-button": "1.4.0",
     "vl-ui-core": "^2.0.0",
     "vl-ui-data-table": "1.0.7",
     "vl-ui-grid": "1.0.12",
