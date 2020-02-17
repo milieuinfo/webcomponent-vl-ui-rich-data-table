@@ -34,7 +34,7 @@
     "vl-ui-core": "^2.0.0",
     "vl-ui-data-table": "1.0.7",
     "vl-ui-grid": "1.0.12",
-    "vl-ui-icon": "2.1.0",
+    "vl-ui-icon": "3.0.1",
     "vl-ui-pager": "0.0.4"
   },
   "devDependencies": {
