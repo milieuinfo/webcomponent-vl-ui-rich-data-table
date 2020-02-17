@@ -51,7 +51,7 @@
     "vl-ui-datepicker": "github:milieuinfo/webcomponent-vl-ui-datepicker#change_event_propageren",
     "vl-ui-form-message": "3.0.0",
     "vl-ui-input-field": "1.1.2",
-    "vl-ui-search-filter": "0.0.1",
+    "vl-ui-search-filter": "2.0.1",
     "vl-ui-select": "2.0.1",
     "vl-ui-util": "^3.4.4",
     "wct-browser-legacy": "1.0.2",
