@@ -16,12 +16,6 @@ import '/node_modules/vl-ui-data-table/dist/vl-data-table.js';
  *
  */
 export class VlRichDataTable extends VlElement(HTMLElement) {
-    static get EVENTS() {
-        return {
-            dataChanged: 'data-changed'
-        }
-    }
-
     static get _observedAttributes() {
         return ['data-vl-data'];
     }
@@ -48,15 +42,8 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
 
     set data(data) {
         if(this.__data !== data) {
-            const oldData = this.__data;
             this.__data = data;
             this._renderBody();
-            this.dispatchEvent(new CustomEvent(VlRichDataTable.EVENTS.dataChanged, {
-                detail: {
-                    old: oldData,
-                    new: data
-                }
-            }));
         }
     }
 
