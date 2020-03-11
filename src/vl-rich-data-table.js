@@ -4,11 +4,11 @@ import '/node_modules/vl-ui-data-table/dist/vl-data-table.js';
 /**
  * VlRichDataTable
  * @class
- * @classdesc
+ * @classdesc Een tabel op basis van een dynamische lijst van data die uitgebreid kan worden met functionaliteiten die het consumeren van de data door een gebruiker kunnen verbeteren.
  *
  * @extends VlElement
  *
- * @property
+ * @property {String} data-vl-data - De data die door de tabel getoond moet worden in JSON formaat.
  *
  * @see {@link https://www.github.com/milieuinfo/webcomponent-vl-ui-rich-data-table/releases/latest|Release notes}
  * @see {@link https://www.github.com/milieuinfo/webcomponent-vl-ui-rich-data-table/issues|Issues}
@@ -40,6 +40,10 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
         this._render();
     }
 
+    /**
+     * Stelt in welke data de tabel moet tonen.
+     * @param {Object[]} data - Een Array van objecten die de data voorstellen.
+     */
     set data(data) {
         if (!Array.isArray(data)) {
             throw new Error('vl-rich-data-table verwacht een Array als data');
@@ -51,6 +55,10 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
         }
     }
 
+    /**
+     * Geeft de data terug die de tabel toont.
+     * @returns {Object[]}
+     */
     get data() {
         return this.__data || [];
     }
@@ -148,6 +156,21 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
     }
 }
 
+/**
+ * VlRichDataField
+ * @class
+ * @classdesc De definitie van een rich data veld.
+ *
+ * @extends VlElement
+ *
+ * @property {String} data-vl-label - Een naam die getoond kan worden aan de gebruiker.
+ * @property {String} data-vl-selector - De selector die gebruikt wordt om de juiste waarde uit de data te halen.
+ *
+ * @see {@link https://www.github.com/milieuinfo/webcomponent-vl-ui-rich-data-table/releases/latest|Release notes}
+ * @see {@link https://www.github.com/milieuinfo/webcomponent-vl-ui-rich-data-table/issues|Issues}
+ * @see {@link https://webcomponenten.omgeving.vlaanderen.be/demo/vl-rich-data-table.html|Demo}
+ *
+ */
 export class VlRichDataField extends VlElement(HTMLElement) {
     static get EVENTS() {
         return {
@@ -207,6 +230,12 @@ export class VlRichDataField extends VlElement(HTMLElement) {
         }));
     }
 }
+
+/**
+ * VlRichDataField change event
+ * @event VlRichDataField#change
+ * @property {String[]} properties - De eigenschappen die veranderd zijn.
+ */
 
 define('vl-rich-data-field', VlRichDataField);
 define('vl-rich-data-table', VlRichDataTable);
