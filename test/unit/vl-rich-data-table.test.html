@@ -10,8 +10,9 @@
 </head>
 
 <body>
-  <test-fixture id="">
+  <test-fixture id="vl-rich-data-table-fixture">
     <template>
+      <vl-rich-data-table></vl-rich-data-table>
     </template>
   </test-fixture>
 
@@ -19,11 +20,46 @@
     suite('<vl-rich-data-table>', () => {
       const should = chai.should();
 
-      test('', () => {
- 
+      test('De tabel bevat een vl-data-table met de juiste subelementen', () => {
+        const richTable = fixture('vl-rich-data-table-fixture');
+
+        const table = richTable.shadowRoot.querySelector('[is="vl-data-table"]');
+        should.exist(table);
+        should.exist(table.querySelector('thead'));
+        should.exist(table.querySelector('tbody'));
+      });
+
+      test('De data op een tabel kan gezet worden via het data-vl-data attribuut', () => {
+        const richTable = fixture('vl-rich-data-table-fixture');
+        const value = [{ foo: 'bar' }];
+
+        richTable.data.should.deep.equal([]);
+        richTable.dataset.vlData = JSON.stringify(value);
+        richTable.data.should.deep.equal(value);
+      });
+
+      test('De data op een tabel kan gezet worden via de "data" setter', () => {
+        const richTable = fixture('vl-rich-data-table-fixture');
+        const value = [{ foo: 'bar' }];
+
+        richTable.data.should.deep.equal([]);
+        richTable.data = value;
+        richTable.data.should.deep.equal(value);
+      });
+
+      test('De data op een tabel kan enkel doorgegeven worden als Array', (done) => {
+        const richTable = fixture('vl-rich-data-table-fixture');
+
+        richTable.data.should.deep.equal([]);
+        try {
+          richTable.data = { foo: 'bar' };
+        } catch (error) {
+          error.message.should.equal('vl-rich-data-table verwacht een Array als data');
+          richTable.data.should.deep.equal([]);
+          done();
+        }
       });
     });
-
   </script>
 </body>
 

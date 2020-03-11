@@ -41,14 +41,18 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
     }
 
     set data(data) {
-        if(this.__data !== data) {
+        if (!Array.isArray(data)) {
+            throw new Error('vl-rich-data-table verwacht een Array als data');
+        }
+
+        if (this.__data !== data) {
             this.__data = data;
             this._renderBody();
         }
     }
 
     get data() {
-        return this.__data;
+        return this.__data || [];
     }
 
     _render() {
@@ -70,9 +74,9 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
         this.data.forEach(rowData => {
             const rowTemplate = this._template(`<tr>
                 ${Array.from(this.__fields)
-                       .map(field => field.valueTemplate ? field.valueTemplate(rowData) : '')
-                       .map(value => `<td>${value}</td>`)
-                       .join('')}
+                .map(field => field.valueTemplate ? field.valueTemplate(rowData) : '')
+                .map(value => `<td>${value}</td>`)
+                .join('')}
             </tr>`);
             this.__tableBody.appendChild(rowTemplate);
         });
@@ -140,7 +144,7 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
                 this._render();
             }
         });
-        observer.observe(this, { childList: true });
+        observer.observe(this, {childList: true});
     }
 }
 
@@ -152,7 +156,7 @@ export class VlRichDataField extends VlElement(HTMLElement) {
     }
 
     static get _observedAttributes() {
-        return ['data-vl-selector','data-vl-label'];
+        return ['data-vl-selector', 'data-vl-label'];
     }
 
     static get is() {
@@ -185,13 +189,13 @@ export class VlRichDataField extends VlElement(HTMLElement) {
 
     _data_vl_selectorChangedCallback(oldValue, newValue) {
         if (oldValue !== newValue) {
-            this._changed([ 'selector' ]);
+            this._changed(['selector']);
         }
     }
 
     _data_vl_labelChangedCallback(oldValue, newValue) {
         if (oldValue !== newValue) {
-            this._changed([ 'label' ]);
+            this._changed(['label']);
         }
     }
 
