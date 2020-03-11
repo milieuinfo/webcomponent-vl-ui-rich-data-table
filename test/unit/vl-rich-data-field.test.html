@@ -39,7 +39,7 @@
         const field = fixture('vl-rich-data-field-fixture');
 
         field.addEventListener('change', event => {
-          event.detail.properties.should.include('selector');
+          event.detail.properties.should.deep.equal(['selector']);
           field.selector.should.equal('bar');
           done();
         });
@@ -51,7 +51,7 @@
         const field = fixture('vl-rich-data-field-fixture');
 
         field.addEventListener('change', event => {
-          event.detail.properties.should.include('label');
+          event.detail.properties.should.deep.equal(['label']);
           field.label.should.equal('Bar');
           done();
         });
