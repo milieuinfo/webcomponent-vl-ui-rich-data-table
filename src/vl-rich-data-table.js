@@ -1,227 +1,221 @@
-import {VlElement} from "/node_modules/vl-ui-core/vl-core.js";
-import {VlDataTable} from '/node_modules/vl-ui-data-table/vl-data-table.js';
-
-import {asc, desc} from "./domain/sortable";
-import style from "./vl-rich-data-table-style.scss"
-import {FilterFunctions} from "./domain/filter";
+import {VlElement, define} from '/node_modules/vl-ui-core/dist/vl-core.js';
+import '/node_modules/vl-ui-data-table/dist/vl-data-table.js';
 
 /**
- * VlRichTable
+ * VlRichDataTable
  * @class
  * @classdesc
  *
  * @extends VlElement
  *
- * @property {object[]} data - Attribuut die de data bevat.
- * @property {boolean} hover - Attribuut wordt gebruikt om een rij te highlighten waneer de gebruiker erover hovert met muiscursor. Zie ook {@link https://webcomponenten.omgeving.vlaanderen.be/demo/vl-data-table.html|vl-data-table}
- * @property {boolean} lined - Variant met een lijn tussen elke rij en kolom. Zie ook {@link https://webcomponenten.omgeving.vlaanderen.be/demo/vl-data-table.html|vl-data-table}
- * @property {boolean} zebra - Variant waarin de rijen afwisselend een andere achtergrondkleur krijgen. Dit maakt de tabel makkelijker leesbaar. Zie ook {@link https://webcomponenten.omgeving.vlaanderen.be/demo/vl-data-table.html|vl-data-table}
- *
- * @event pagechanged - De geselecteerde pagina zijn veranderd.
- * @event search - De zoekcriteria zijn veranderd. Triggert bij elke input|select|... element met data-vl-search-criterium in het filter slot indien beschikbaar. In detail van het event object zit een searchCriteria object met hierin als keys de data-vl-search-criterium van de elementen met de value property van het element
- * @event sort - De sorteercriteria zijn veranderd.
- *
- * @slot filter - Filter met input|select|... velden die data-vl-search-criterium als attribuut hebben (moet unieke namen hebben binnen de filter slot), worden op geluisterd en indien er een verandering is, zal een search event op de rich-data-table worden uitgezonden met de searchCriteria. Er wordt aanbevolen om de vl-search-filter te gebruiken.
- *              - @property {boolean} data-vl-closed-on-start - Attribuut op slotted element waarbij de filter bij het eerste renderen gesloten start. Default niet gezet.
- *              - @property {boolean} data-vl-closable - Attribuut dat op "false" kan gezet worden zodat de filter niet meer sluitbaar is en de knop "Filter" niet meer getoond wordt. Default is het closable.
+ * @property
  *
  * @see {@link https://www.github.com/milieuinfo/webcomponent-vl-ui-rich-data-table/releases/latest|Release notes}
  * @see {@link https://www.github.com/milieuinfo/webcomponent-vl-ui-rich-data-table/issues|Issues}
  * @see {@link https://webcomponenten.omgeving.vlaanderen.be/demo/vl-rich-data-table.html|Demo}
+ *
  */
-export class VlRichTable extends VlElement(HTMLElement) {
-  get sortCriteria() {
-    return this._sortCriteria;
-  }
-
-  set sortCriteria(criteria) {
-    this._sortCriteria = criteria;
-  }
-
-  static get _observedAttributes() {
-    return ['data'];
-  }
-
-  constructor() {
-    super();
-    this._data = [];
-    this._sortCriteria = [];
-    this._searchCriteria = {};
-  }
-
-  connectedCallback() {
-    this._shadow = this.attachShadow({mode: 'open'});
-    this._shadow.innerHTML = `
-        <style>
-          ${style}
-        </style>
-        <slot></slot>
-        ${this._renderSearchable(`
-            <style>
-              @import "/node_modules/vl-ui-data-table/style.css";
-            </style>
-            <table is="vl-data-table" ${this._dataTableAttributes}>
-              <thead>
-                <tr>
-                </tr>
-              </thead>
-              <tbody>
-              </tbody>
-              <caption></caption>
-            </table>`)}`;
-    const slot = this.shadowRoot.querySelector('slot');
-    slot.addEventListener('slotchange', () => this._createRows(), {once: true});
-    const filter = this.shadowRoot.querySelector('slot[name=filter]');
-    if (filter) {
-      filter.addEventListener('slotchange', () => {
-        filter.assignedElements().forEach(
-            FilterFunctions.whenFilterActivated((searchCriteria) => {
-              this.dispatchEvent(new CustomEvent('search', {
-                detail: {
-                  searchCriteria: searchCriteria
-                },
-                bubbles: true
-              }));
-            }));
-      }, {once: true});
-      FilterFunctions.addCloseAndToggleFilterButtonClickListeners(
-          this.shadowRoot);
-      if (this.querySelector('[slot=filter]').getAttribute(
-          'data-vl-closed-on-start') != null) {
-        FilterFunctions.hideFilter(this.shadowRoot);
-      }
-    }
-  }
-
-  _renderSearchable(dataTable) {
-    if (this.querySelector('[slot=filter]') != null) {
-      const closable = this.querySelector('[slot=filter]').getAttribute(
-          'data-vl-closable') !== 'false';
-      return FilterFunctions.renderFilter(dataTable, closable);
-    } else {
-      return `
-        <style>
-          #dataTableDiv {
-            overflow-y: auto;
-          }
-        </style>
-          <div id="dataTableDiv">
-            ${dataTable}
-          </div>`;
-    }
-  }
-
-  get _dataTableAttributes() {
-    return (this.getAttribute('zebra') != null ? ` zebra` : ``)
-        + (this.getAttribute('lined') != null ? ` lined` : ``)
-        + (this.getAttribute('hover') != null ? ` hover` : ``);
-  }
-
-  _createRows() {
-    Array.from(this._tableBody.children).forEach(child => child.remove());
-    this.content.forEach(data => {
-      const row = document.createElement("tr");
-      Array.from(this.fields).forEach(field => {
-        const tableData = document.createElement("td");
-        tableData.appendChild(field.renderTableData(data[field.fieldName]));
-        row.appendChild(tableData);
-      });
-      this._tableBody.appendChild(row);
-    });
-  }
-
-  _dataChangedCallback(oldValue, newValue) {
-    this.data = JSON.parse(newValue);
-  }
-
-  updateSortCriteria(criteria) {
-    setTimeout(() => {
-      if (criteria.direction === asc || criteria.direction === desc) {
-        if (criteria.priority) {
-          const index = criteria.priority - 1;
-          this.sortCriteria[index] = {
-            name: criteria.name,
-            direction: criteria.direction
-          };
-        } else {
-          this.sortCriteria = this.sortCriteria.filter(
-              sc => sc.name !== criteria.name);
-          this.sortCriteria.push(criteria);
+export class VlRichDataTable extends VlElement(HTMLElement) {
+    static get EVENTS() {
+        return {
+            dataChanged: 'data-changed'
         }
-      } else {
-        this.sortCriteria = this.sortCriteria.filter(
-            sc => sc.name !== criteria.name);
-      }
+    }
 
-      this.dispatchEvent(new CustomEvent('sort', {
-            detail: {
-              sortCriteria: this.sortCriteria
+    static get _observedAttributes() {
+        return ['data-vl-data'];
+    }
+
+    constructor() {
+        super(`
+            <style>
+                @import "/src/style.css";
+                @import "/node_modules/vl-ui-data-table/dist/style.css";
+            </style>
+            <table is="vl-data-table">
+                <thead>
+                    <tr></tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        `);
+        this.__observeFields();
+    }
+
+    connectedCallback() {
+        this._render();
+    }
+
+    set data(data) {
+        if(this.__data !== data) {
+            const oldData = this.__data;
+            this.__data = data;
+            this._renderBody();
+            this.dispatchEvent(new CustomEvent(VlRichDataTable.EVENTS.dataChanged, {
+                detail: {
+                    old: oldData,
+                    new: data
+                }
+            }));
+        }
+    }
+
+    get data() {
+        return this.__data;
+    }
+
+    _render() {
+        this._renderHeaders();
+        this._renderBody();
+    }
+
+    _renderHeaders() {
+        this.__tableHeaderRow.innerHTML = '';
+        this.__fields.forEach(field => {
+            const label = field.labelTemplate ? field.labelTemplate() : '';
+            const headerTemplate = this._template(`<th>${label}</th>`);
+            this.__tableHeaderRow.appendChild(headerTemplate);
+        })
+    }
+
+    _renderBody() {
+        this.__tableBody.innerHTML = '';
+        this.data.forEach(rowData => {
+            const rowTemplate = this._template(`<tr>
+                ${Array.from(this.__fields)
+                       .map(field => field.valueTemplate ? field.valueTemplate(rowData) : '')
+                       .map(value => `<td>${value}</td>`)
+                       .join('')}
+            </tr>`);
+            this.__tableBody.appendChild(rowTemplate);
+        });
+    }
+
+    _data_vl_dataChangedCallback(oldValue, newValue) {
+        this.data = JSON.parse(newValue);
+    }
+
+    get __table() {
+        return this.shadowRoot.querySelector('table');
+    }
+
+    get __tableHeaderRow() {
+        return this.__table.querySelector('thead > tr');
+    }
+
+    get __tableBody() {
+        return this.__table.querySelector('tbody');
+    }
+
+    get __fields() {
+        return this.querySelectorAll(VlRichDataField.is);
+    }
+
+    __listenToFieldChanges(field) {
+        field.addEventListener(VlRichDataField.EVENTS.change, this.__fieldChanged.bind(this));
+    }
+
+    __stopListeningToFieldChanges(field) {
+        field.removeEventListener(VlRichDataField.EVENTS.change, this.__fieldChanged.bind(this));
+    }
+
+    __fieldChanged(event) {
+        const propertiesChanged = event.detail.properties;
+        if (propertiesChanged) {
+            if (propertiesChanged.includes('label')) {
+                this._renderHeaders();
             }
-          }
-      ));
-    }, 0);
-  }
 
-  get fields() {
-    return Array.from(this.children).filter(child => {
-      return child.tagName.toLowerCase()
-          === 'vl-rich-data-table-field'
-    })
-  }
-
-  get data() {
-    return this._data;
-  }
-
-  set data(data) {
-    this._data = data;
-    if (this._isReady()) {
-      this._createRows();
+            if (propertiesChanged.includes('selector')) {
+                this._renderBody();
+            }
+        }
     }
-    if (!Array.isArray(this.data)) {
-      this.dispatchEvent(new CustomEvent('data_update_from_object', this.data));
+
+    __observeFields() {
+        this.__fields.forEach(this.__listenToFieldChanges.bind(this));
+        const observer = new MutationObserver(mutationsList => {
+            let shouldRender = false;
+            mutationsList.forEach(mutation => {
+                if (mutation.addedNodes || mutation.removedNodes) {
+                    shouldRender = true;
+
+                    if (mutation.addedNodes) {
+                        mutation.addedNodes.forEach(this.__listenToFieldChanges.bind(this));
+                    }
+
+                    if (mutation.removedNodes) {
+                        mutation.removedNodes.forEach(this.__stopListeningToFieldChanges.bind(this));
+                    }
+                }
+            });
+            if (shouldRender) {
+                this._render();
+            }
+        });
+        observer.observe(this, { childList: true });
     }
-  }
-
-  get content() {
-    if (Array.isArray(this.data)) {
-      return this.data;
-    } else if (Array.isArray(this.data.content)) {
-      return this.data.content;
-    } else {
-      throw new Error("data is geen geldige array van objecten");
-    }
-  }
-
-  get headers() {
-    return this.shadowRoot.querySelectorAll('th');
-  }
-
-  _isReady() {
-    return Array.from(this.fields).every(child => child.richTable === this);
-  }
-
-  get _table() {
-    return this.shadowRoot.querySelector('table');
-  }
-
-  get _tableHeaderRow() {
-    return this._table.querySelector('thead > tr');
-  }
-
-  get _tableBody() {
-    return this._table.querySelector('tbody');
-  }
-
-  get _tableFooterRow() {
-    return this._table.querySelector('caption');
-  }
-
-  addTableHeaderCell(cell) {
-    this._tableHeaderRow.appendChild(cell);
-  }
-
-  addTableFooterCell(cell) {
-    this._tableFooterRow.append(cell);
-  }
 }
+
+export class VlRichDataField extends VlElement(HTMLElement) {
+    static get EVENTS() {
+        return {
+            change: 'change'
+        }
+    }
+
+    static get _observedAttributes() {
+        return ['data-vl-selector','data-vl-label'];
+    }
+
+    static get is() {
+        return 'vl-rich-data-field';
+    }
+
+    constructor() {
+        super(`
+            <style>
+              @import "/node_modules/vl-ui-data-table/dist/style.css";
+            </style>
+        `);
+    }
+
+    labelTemplate() {
+        return this.label;
+    }
+
+    valueTemplate(rowData) {
+        return rowData[this.selector];
+    }
+
+    get selector() {
+        return this.dataset.vlSelector;
+    }
+
+    get label() {
+        return this.dataset.vlLabel;
+    }
+
+    _data_vl_selectorChangedCallback(oldValue, newValue) {
+        if (oldValue !== newValue) {
+            this._changed([ 'selector' ]);
+        }
+    }
+
+    _data_vl_labelChangedCallback(oldValue, newValue) {
+        if (oldValue !== newValue) {
+            this._changed([ 'label' ]);
+        }
+    }
+
+    _changed(properties) {
+        this.dispatchEvent(new CustomEvent(VlRichDataField.EVENTS.change, {
+            detail: {
+                properties: properties
+            }
+        }));
+    }
+}
+
+define('vl-rich-data-field', VlRichDataField);
+define('vl-rich-data-table', VlRichDataTable);
