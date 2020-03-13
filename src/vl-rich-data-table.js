@@ -1,5 +1,6 @@
 import {VlElement, define} from '/node_modules/vl-ui-core/dist/vl-core.js';
 import '/node_modules/vl-ui-data-table/dist/vl-data-table.js';
+import '/node_modules/vl-ui-search-filter/dist/vl-search-filter.js';
 
 /**
  * VlRichDataTable
@@ -92,10 +93,9 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
     }
 
     _renderSearchFilter() {
-        console.log(this);
         const filterSlot = this.querySelector("[slot='filter']");
     	if (filterSlot && ! this.__searchFilter) {
-            this.shadowRoot.append(this._template(`<div is="search-filter">foo</div>`));
+            this.shadowRoot.append(this._template(`<div is="search-filter"><slot name="filter"></slot></div>`));
     	}
     }
 
@@ -121,6 +121,10 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
 
     get __searchFilter() {
         return this.shadowRoot.querySelector('[is="search-filter"]');
+    }
+
+    get __searchFilterContent() {
+        return this.__searchFilter.querySelector('slot[name="filter"]').assignedNodes()[0];
     }
 
     __listenToFieldChanges(field) {

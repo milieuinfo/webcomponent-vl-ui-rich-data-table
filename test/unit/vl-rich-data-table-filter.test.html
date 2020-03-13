@@ -25,8 +25,7 @@
         <vl-rich-data-field id="id-field"></vl-rich-data-field>
         <vl-rich-data-field id="name-field"></vl-rich-data-field>
         <div slot="filter">
-          <label>label</label>
-          <input type="text" />
+          <label>Hier kunnen filtervelden komen</label>
         </div>
     </vl-rich-data-table>
     </template>
@@ -36,14 +35,20 @@
     suite('vl-rich-data-table met filter', () => {
       const should = chai.should();
 
-      test('Wanneer geen filter slot bestaat, zal er geen search filter aanwezig zijn', () => {
+      test('Wanneer geen filterslot bestaat, zal er geen search filter aanwezig zijn', () => {
         const table = fixture('vl-rich-data-table-zonder-filter-fixture');
         should.not.exist(table.__searchFilter);
       });
 
-      test('Wanneer wel een filter slot is bestaat, zal er een search filter aanwezig zijn', () => {
+      test('Wanneer wel een filterslot is bestaat, zal er een search filter aanwezig zijn', () => {
         const table = fixture('vl-rich-data-table-met-filter-fixture');
         should.exist(table.__searchFilter);
+      });
+
+      test('De searchfilter wordt gerenderd via een slot', () => {
+        const table = fixture('vl-rich-data-table-met-filter-fixture');
+        const searchFilterContent = table.__searchFilterContent;
+        expect(searchFilterContent.querySelector('label').textContent).to.equal('Hier kunnen filtervelden komen');
       });
     });
 </script>
