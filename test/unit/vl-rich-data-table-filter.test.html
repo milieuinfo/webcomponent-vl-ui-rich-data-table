@@ -21,7 +21,7 @@
 
   <test-fixture id="vl-rich-data-table-met-filter-fixture">
     <template>
-      <vl-rich-data-table data-vl-data='[]'>
+      <vl-rich-data-table data-vl-data='[]' data-vl-filter-title='title'>
         <vl-rich-data-field id="id-field"></vl-rich-data-field>
         <vl-rich-data-field id="name-field"></vl-rich-data-field>
         <div slot="filter">
@@ -50,6 +50,19 @@
         const searchFilterContent = table.__searchFilterContent;
         expect(searchFilterContent.querySelector('label').textContent).to.equal('Hier kunnen filtervelden komen');
       });
+
+      test('De titel wordt correct getoond om een searchfilter', (done) => {
+        const table = fixture('vl-rich-data-table-met-filter-fixture');
+        setTimeout(() => {
+
+          const searchFilter = table.__searchFilter;
+          const searchFilterTitle = searchFilter.getAttribute('data-vl-title');
+          searchFilterTitle.should.be.equal('title');
+          done();
+        });
+
+      });
+
     });
 </script>
 </body>
