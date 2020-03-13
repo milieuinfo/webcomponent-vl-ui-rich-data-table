@@ -66,6 +66,7 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
     _render() {
         this._renderHeaders();
         this._renderBody();
+        this._renderSearchFilter();
     }
 
     _renderHeaders() {
@@ -90,6 +91,14 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
         });
     }
 
+    _renderSearchFilter() {
+        console.log(this);
+        const filterSlot = this.querySelector("[slot='filter']");
+    	if (filterSlot && ! this.__searchFilter) {
+            this.shadowRoot.append(this._template(`<div is="search-filter">foo</div>`));
+    	}
+    }
+
     _data_vl_dataChangedCallback(oldValue, newValue) {
         this.data = JSON.parse(newValue);
     }
@@ -108,6 +117,10 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
 
     get __fields() {
         return this.querySelectorAll(VlRichDataField.is);
+    }
+
+    get __searchFilter() {
+        return this.shadowRoot.querySelector('[is="search-filter"]');
     }
 
     __listenToFieldChanges(field) {
