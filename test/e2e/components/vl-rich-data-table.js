@@ -12,7 +12,7 @@ class VlRichDataTable extends VlElement {
 	}
 
 	async getDataTable() {
-		const dataTable = await this.shadowRoot;
+		const dataTable = await this.shadowRoot.findElement(By.css("[is='vl-data-table']"));
 		return new VlDataTable(this.driver, dataTable);
 	}
 	

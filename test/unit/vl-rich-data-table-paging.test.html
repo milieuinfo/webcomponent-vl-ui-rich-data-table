@@ -26,10 +26,15 @@
     suite('<vl-rich-data-table> met paging', () => {
       const should = chai.should();
 
-      test('De pager wordt in de caption van de tabel getoond', () => {
+      test('De pager wordt in een kolom van volledige breedete in een grid getoond', () => {
         const richTable = fixture('vl-rich-data-table-paging-fixture');
 
-        const pagerSlot = richTable.shadowRoot.querySelector('caption slot[name="pager"]');
+        const grid = richTable.shadowRoot.querySelector("div[is='vl-grid']");
+        should.exist(grid);
+        const pagerColumn = grid.querySelector("div#pager[is='vl-column']");
+        should.exist(pagerColumn);
+        assert.equal(pagerColumn.getAttribute("size"), 12);
+        const pagerSlot = pagerColumn.querySelector('slot[name="pager"]');
         should.exist(pagerSlot);
         const pager = pagerSlot.assignedElements()[0];
         should.exist(pager);
@@ -57,7 +62,7 @@
     		firstRowSecondPage.querySelectorAll("td")[1].textContent.should.equal("P6");
     		done();
     	});
-		const pager = richDataTablePaging.shadowRoot.querySelector('caption slot[name="pager"]').assignedElements()[0];
+		const pager = richDataTablePaging.shadowRoot.querySelector('slot[name="pager"]').assignedElements()[0];
 		pager.shadowRoot.querySelector("#page-forward-link").click()
 		
       });
