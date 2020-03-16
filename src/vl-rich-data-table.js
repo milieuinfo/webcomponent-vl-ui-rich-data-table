@@ -269,7 +269,9 @@ export class VlRichDataField extends VlElement(HTMLElement) {
     }
 
     valueTemplate(rowData) {
-        return rowData[this.selector];
+        return this.selector.split('.').reduce(function(prev, curr) {
+            return prev ? prev[curr] : null
+        }, rowData);
     }
 
     get selector() {
