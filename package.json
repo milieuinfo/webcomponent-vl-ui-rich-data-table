@@ -46,11 +46,13 @@
 	"dependencies": {
 		"vl-ui-core": "^5.0.3",
 		"vl-ui-data-table": "^3.0.0",
+		"vl-ui-search-filter": "^3.0.0",
 		"vl-ui-pager": "^3.0.1"
 	},
 	"peerDependencies": {
 		"vl-ui-core": "^5.0.3",
 		"vl-ui-data-table": "^3.0.0",
+		"vl-ui-search-filter": "^3.0.0",
 		"vl-ui-pager": "^3.0.1"
 	},
 	"devDependencies": {

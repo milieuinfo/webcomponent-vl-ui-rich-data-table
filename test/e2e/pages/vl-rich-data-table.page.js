@@ -7,7 +7,7 @@ class VLRichDataTablePage extends Page {
     }
 
     async load() {
-        await super.load(config.baseUrl);
+        await super.load(Config.baseUrl + '/demo/vl-rich-data-table.html');
     }
 }
 

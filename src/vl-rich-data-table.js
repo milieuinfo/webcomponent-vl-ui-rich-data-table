@@ -1,5 +1,6 @@
 import {VlElement, define} from '/node_modules/vl-ui-core/dist/vl-core.js';
 import '/node_modules/vl-ui-data-table/dist/vl-data-table.js';
+import '/node_modules/vl-ui-search-filter/dist/vl-search-filter.js';
 
 /**
  * VlRichDataTable
@@ -9,6 +10,7 @@ import '/node_modules/vl-ui-data-table/dist/vl-data-table.js';
  * @extends VlElement
  *
  * @property {String} data-vl-data - De data die door de tabel getoond moet worden in JSON formaat.
+ * @property {String} data-vl-filter-title - De titel die op de search filter getoond wordt.
  *
  * @see {@link https://www.github.com/milieuinfo/webcomponent-vl-ui-rich-data-table/releases/latest|Release notes}
  * @see {@link https://www.github.com/milieuinfo/webcomponent-vl-ui-rich-data-table/issues|Issues}
@@ -17,7 +19,7 @@ import '/node_modules/vl-ui-data-table/dist/vl-data-table.js';
  */
 export class VlRichDataTable extends VlElement(HTMLElement) {
     static get _observedAttributes() {
-        return ['data-vl-data'];
+        return ['data-vl-data', 'data-vl-filter-title'];
     }
 
     constructor() {
@@ -37,6 +39,7 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
             </table>
         `);
         this.__observeFields();
+        this._renderSearchFilter();
         if (this.__pager) {
         	this.__pager.addEventListener('change', e => {
         		this.__onStateChange(e);
@@ -128,8 +131,23 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
         });
     }
 
+    _renderSearchFilter() {
+        const filterSlot = this.querySelector("[slot='filter']");
+    	if (filterSlot && ! this.__searchFilter) {
+            this.shadowRoot.append(this._template(`<div is="vl-search-filter"><slot name="filter"></slot></div>`));
+    	}
+    }
+
     _data_vl_dataChangedCallback(oldValue, newValue) {
         this.data = JSON.parse(newValue);
+    }
+
+
+    _data_vl_filter_titleChangedCallback(oldValue, newValue) {
+        const searchFilter = this.__searchFilter;
+        if (searchFilter) {
+            searchFilter.setAttribute('data-vl-title', newValue);
+        }
     }
 
     get __table() {
@@ -146,6 +164,14 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
 
     get __fields() {
         return this.querySelectorAll(VlRichDataField.is);
+    }
+
+    get __searchFilter() {
+        return this.shadowRoot.querySelector('[is="vl-search-filter"]');
+    }
+
+    get __searchFilterContent() {
+        return this.__searchFilter.querySelector('slot[name="filter"]').assignedNodes()[0];
     }
 
     __listenToFieldChanges(field) {

@@ -28,6 +28,25 @@
             </div>
         </div>
 
+        <h1>vl-ui-rich-data-table met search filterdemo</h1>
+        <div>
+            <h2>Basis rich data table</h2>
+            <pre>
+                <code class="line-numbers language-markup">
+
+                </code>
+            </pre>
+            <div class="demo">
+                <vl-rich-data-table data-vl-data='[{"id": 0, "name": "Project #1"}, {"id": 1, "name": "Project #2"}]' data-vl-filter-title="Verfijn uw zoekopdracht">
+                    <vl-rich-data-field data-vl-label="ID" data-vl-selector="id"></vl-rich-data-field>
+                    <vl-rich-data-field data-vl-label="Naam" data-vl-selector="name"></vl-rich-data-field>
+                    <div slot="filter">
+                        <label>a:</label>
+                        <input type="text" />
+                    </div>
+                </vl-rich-data-table>
+            </div>
+        </div>
 
         <h1>vl-ui-rich-data-table pagina</h1>
         <div>

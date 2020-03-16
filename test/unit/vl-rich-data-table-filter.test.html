@@ -1,0 +1,69 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <script src="../../../@webcomponents/webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../../web-component-tester/browser.js"></script>
+
+  <script type="module" src="../../src/vl-rich-data-table.js"></script>
+</head>
+
+<body>
+  <test-fixture id="vl-rich-data-table-zonder-filter-fixture">
+    <template>
+      <vl-rich-data-table data-vl-data='[]'>
+        <vl-rich-data-field id="id-field"></vl-rich-data-field>
+        <vl-rich-data-field id="name-field"></vl-rich-data-field>
+    </vl-rich-data-table>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="vl-rich-data-table-met-filter-fixture">
+    <template>
+      <vl-rich-data-table data-vl-data='[]' data-vl-filter-title='title'>
+        <vl-rich-data-field id="id-field"></vl-rich-data-field>
+        <vl-rich-data-field id="name-field"></vl-rich-data-field>
+        <div slot="filter">
+          <label>Hier kunnen filtervelden komen</label>
+        </div>
+    </vl-rich-data-table>
+    </template>
+  </test-fixture>
+
+  <script>
+    suite('vl-rich-data-table met filter', () => {
+      const should = chai.should();
+
+      test('Wanneer geen filterslot bestaat, zal er geen search filter aanwezig zijn', () => {
+        const table = fixture('vl-rich-data-table-zonder-filter-fixture');
+        should.not.exist(table.__searchFilter);
+      });
+
+      test('Wanneer wel een filterslot is bestaat, zal er een search filter aanwezig zijn', () => {
+        const table = fixture('vl-rich-data-table-met-filter-fixture');
+        should.exist(table.__searchFilter);
+      });
+
+      test('De searchfilter wordt gerenderd via een slot', () => {
+        const table = fixture('vl-rich-data-table-met-filter-fixture');
+        const searchFilterContent = table.__searchFilterContent;
+        expect(searchFilterContent.querySelector('label').textContent).to.equal('Hier kunnen filtervelden komen');
+      });
+
+      test('De titel wordt correct getoond om een searchfilter', (done) => {
+        const table = fixture('vl-rich-data-table-met-filter-fixture');
+        setTimeout(() => {
+
+          const searchFilter = table.__searchFilter;
+          const searchFilterTitle = searchFilter.getAttribute('data-vl-title');
+          searchFilterTitle.should.be.equal('title');
+          done();
+        });
+
+      });
+
+    });
+</script>
+</body>
+</html>
