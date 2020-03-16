@@ -46,11 +46,15 @@
         should.exist(table.__searchFilter);
       });
 
-      test('De searchfilter wordt gerenderd via een slot', () => {
+      test('De inhoud van het filter-slot wordt gekopieerd in de searchfilter', (done) => {
         const table = fixture('vl-rich-data-table-met-filter-fixture');
-        const searchFilterContent = table.__searchFilterContent;
-        expect(searchFilterContent.querySelector('label').textContent).to.equal('Hier kunnen filtervelden komen');
-        expect(searchFilterContent.querySelector('input').getAttribute('name')).to.equal('filter1');
+        setTimeout(() => {
+          const searchFilter = table.__searchFilter;
+
+          expect(searchFilter.querySelector('label').textContent).to.equal('Hier kunnen filtervelden komen');
+          expect(searchFilter.querySelector('input').getAttribute('name')).to.equal('filter1');
+          done();
+        });
       });
 
       test('De titel wordt correct getoond om een searchfilter', (done) => {
@@ -68,16 +72,14 @@
         const table = fixture('vl-rich-data-table-met-filter-fixture');
         
         setTimeout(() => {
-        
           table.addEventListener('change', (e) => {
-            // expect(e.detail.formData.get('filter1')).to.equal('een beetje input');
+            expect(e.detail.formData.get('filter1')).to.equal('een beetje input');
             done();;
           });
 
-          const searchFilterContent = table.__searchFilterContent;
-          setInputValue(searchFilterContent.querySelector('input'), 'een beetje input');
+          const searchFilter = table.__searchFilter;
+          setInputValue(searchFilter.querySelector('input'), 'een beetje input');
         });
-
       });
 
       function setInputValue(input, value) {
