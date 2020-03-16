@@ -60,7 +60,6 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
         		this.__onStateChange(e);
         	});
         }
-        
     }
     
     get __pager() {
@@ -83,12 +82,19 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
     			totalItems: this.__pager.totalItems	
     		};
     	}
-    	
+    }
+
+    get __sortingState() {
+        return this.__sortCriteria.map(criteria => { return {
+            name: criteria.for,
+            direction: criteria.direction
+        } });
     }
     
     get __state() {
     	const state = {};
-    	state.paging = this.__pagingState;
+        state.paging = this.__pagingState;
+        state.sorting = this.__sortingState;
     	return state;
     }
 
@@ -157,7 +163,6 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
         this.data = JSON.parse(newValue);
     }
 
-
     _data_vl_filter_titleChangedCallback(oldValue, newValue) {
         const searchFilter = this.__searchFilter;
         if (searchFilter) {
@@ -198,17 +203,17 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
     }
 
     __listenToSortChanges(sorter) {
-        sorter.addEventListener(VlRichDataSorter.EVENTS.change, this.__sorterChanged.bind(this));
+        sorter.addEventListener(VlRichDataSorter.EVENTS.change, this.__sortingChanged.bind(this));
     }
 
     __stopListeningToSortChanges(sorter) {
-        sorter.removeEventListener(VlRichDataSorter.EVENTS.change, this.__sorterChanged.bind(this));
+        sorter.removeEventListener(VlRichDataSorter.EVENTS.change, this.__sortingChanged.bind(this));
     }
 
     __fieldChanged(event) {
         const propertiesChanged = event.detail.properties;
         if (propertiesChanged) {
-            if (propertiesChanged.some(property => ['label', 'sortable', 'sorting-direction', 'sorting-priority'].includes(property))) {
+            if (propertiesChanged.some(property => ['name', 'label', 'sortable', 'sorting-direction', 'sorting-priority'].includes(property))) {
                 this._renderHeaders();
             }
 
@@ -218,30 +223,40 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
         }
     }
 
-    __sorterChanged(event) {
+    __removeFromSortCriteria(index) {
+        const sorter = this.__sortCriteria[index];
+        this.__sortCriteria.splice(index, 1);
+        this.__sortCriteria.slice(index).forEach(criteria => criteria.priority = criteria.priority - 1);
+        sorter.priority = undefined;
+
+        if (this.__sortCriteria.length === 1) {
+            this.__sortCriteria[0].priority = undefined;
+        }
+    }
+
+    __addSortCriteria(sorter) {
+        this.__sortCriteria.push(sorter);
+        if (this.__sortCriteria.length > 1) {
+            sorter.priority = this.__sortCriteria.length;
+            this.__sortCriteria[0].priority = 1;
+        }
+    }
+
+    __sortingChanged(event) {
         const direction = event.detail.direction;
-        const priority = event.detail.priority;
+        const criteriaIndex = this.__sortCriteria.indexOf(event.target);
+        const fieldWasAlreadySorted = criteriaIndex !== -1;
 
-        const criteriaIndex = this.__sortCriteria.findIndex(criteria => criteria.target === event.target);
-
-        if (criteriaIndex !== -1) {
-            const criteria = this.__sortCriteria[criteriaIndex];
-
-            if (direction === undefined) {
-                this.__sortCriteria.splice(criteriaIndex, 1);
-                this.__sortCriteria.slice(criteriaIndex).forEach(criteria => criteria.target.priority = criteria.target.priority - 1);
-                criteria.target.priority = undefined;
+        if (fieldWasAlreadySorted) {
+            const fieldIsNoLongerSorted = direction === undefined;
+            if (fieldIsNoLongerSorted) {
+                this.__removeFromSortCriteria(criteriaIndex);
             }
         } else {
-            this.__sortCriteria.push({
-                target: event.target
-            });
-
-            if (this.__sortCriteria.length > 1) {
-                event.target.priority = this.__sortCriteria.length;
-                this.__sortCriteria[0].target.priority = 1;
-            }
+            this.__addSortCriteria(event.target);
         }
+
+        this.__onStateChange(event);
     }
 
     __observeFields() {
@@ -303,6 +318,7 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
  *
  * @extends VlElement
  *
+ * @property {string} data-vl-name - Een naam die gebruikt kan worden om het veld te identificeren.
  * @property {string} data-vl-label - Een naam die getoond kan worden aan de gebruiker.
  * @property {string} data-vl-selector - De selector die gebruikt wordt om de juiste waarde uit de data te halen.
  * @property {boolean} data-vl-sortable - Of er gesorteerd moet kunnen worden.
@@ -322,7 +338,7 @@ export class VlRichDataField extends VlElement(HTMLElement) {
     }
 
     static get _observedAttributes() {
-        return ['data-vl-selector', 'data-vl-label', 'data-vl-sortable', 'data-vl-sorting-direction', 'data-vl-sorting-priority'];
+        return ['data-vl-name', 'data-vl-selector', 'data-vl-label', 'data-vl-sortable', 'data-vl-sorting-direction', 'data-vl-sorting-priority'];
     }
 
     static get is() {
@@ -332,13 +348,17 @@ export class VlRichDataField extends VlElement(HTMLElement) {
     labelTemplate() {
         let template = this.label;
         if (this.sortable) {
-            template += `<vl-rich-data-sorter ${this.sortingDirection ? 'data-vl-direction="' + this.sortingDirection + '"' : ''} ${this.sortingPriority ? 'data-vl-priority="' + this.sortingPriority + '"' : ''}></vl-rich-data-sorter>`;
+            template += `<vl-rich-data-sorter data-vl-for="${this.name}" ${this.sortingDirection ? 'data-vl-direction="' + this.sortingDirection + '"' : ''} ${this.sortingPriority ? 'data-vl-priority="' + this.sortingPriority + '"' : ''}></vl-rich-data-sorter>`;
         }
         return template;
     }
 
     valueTemplate(rowData) {
         return rowData[this.selector];
+    }
+
+    get name() {
+        return this.dataset.vlName;
     }
 
     get selector() {
@@ -359,6 +379,12 @@ export class VlRichDataField extends VlElement(HTMLElement) {
 
     get sortingPriority() {
         return this.dataset.vlSortingPriority;
+    }
+
+    _data_vl_nameChangedCallback(oldValue, newValue) {
+        if (oldValue !== newValue) {
+            this._changed(['name']);
+        }
     }
 
     _data_vl_selectorChangedCallback(oldValue, newValue) {
@@ -456,7 +482,10 @@ class VlRichDataSorter extends VlElement(HTMLElement) {
 
     connectedCallback() {
         this.__directionElement.addEventListener('click', this._nextDirection.bind(this));
-        this.__priorityElement.addEventListener('click', this._nextDirection.bind(this));
+    }
+
+    get for() {
+        return this.dataset.vlFor;
     }
 
     get direction() {
