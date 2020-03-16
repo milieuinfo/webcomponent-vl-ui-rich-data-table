@@ -39,6 +39,7 @@
         const pager = pagerSlot.assignedElements()[0];
         should.exist(pager);
         pager.tagName.should.equal("VL-PAGER");
+        should.exist(pager.getAttribute("align-right"));
       });
 
       test('Wanneer de pager verandert, wordt een change event gegooid zodat de afnemer andere data kan opzoeken en zetten', (done) => {
