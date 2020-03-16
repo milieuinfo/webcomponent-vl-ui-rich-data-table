@@ -122,9 +122,9 @@
             <pre>
                 <code class="line-numbers language-markup">
                     &lt;vl-rich-data-table id=&quot;rich-data-table-sorting&quot;&gt;
-                        &lt;vl-rich-data-field data-vl-name=&quot;id&quot; data-vl-label=&quot;ID&quot; data-vl-selector=&quot;id&quot; data-vl-sortable&gt;&lt;/vl-rich-data-field&gt;
-                        &lt;vl-rich-data-field data-vl-name=&quot;name&quot; data-vl-label=&quot;Naam&quot; data-vl-selector=&quot;name&quot; data-vl-sortable&gt;&lt;/vl-rich-data-field&gt;
-                        &lt;vl-rich-data-field data-vl-name=&quot;owner&quot; data-vl-label=&quot;Eigenaar&quot; data-vl-selector=&quot;owner&quot; data-vl-sortable&gt;&lt;/vl-rich-data-field&gt;
+                        &lt;vl-rich-data-field data-vl-name=&quot;id&quot; data-vl-label=&quot;ID&quot; data-vl-selector=&quot;id&quot; data-vl-sortable data-vl-sorting-direction=&quot;asc&quot; data-vl-sorting-priority=&quot;3&quot;&gt;&lt;/vl-rich-data-field&gt;
+                        &lt;vl-rich-data-field data-vl-name=&quot;name&quot; data-vl-label=&quot;Naam&quot; data-vl-selector=&quot;name&quot; data-vl-sortable data-vl-sorting-direction=&quot;asc&quot; data-vl-sorting-priority=&quot;2&quot;&gt;&lt;/vl-rich-data-field&gt;
+                        &lt;vl-rich-data-field data-vl-name=&quot;owner&quot; data-vl-label=&quot;Eigenaar&quot; data-vl-selector=&quot;owner&quot; data-vl-sortable data-vl-sorting-direction=&quot;desc&quot; data-vl-sorting-priority=&quot;1&quot;&gt;&lt;/vl-rich-data-field&gt;
                     &lt;/vl-rich-data-table&gt;
 
                     &lt;script&gt;
@@ -163,9 +163,9 @@
             </pre>
             <div class="demo">
                 <vl-rich-data-table id="rich-data-table-sorting">
-                    <vl-rich-data-field data-vl-name="id" data-vl-label="ID" data-vl-selector="id" data-vl-sortable></vl-rich-data-field>
-                    <vl-rich-data-field data-vl-name="name" data-vl-label="Naam" data-vl-selector="name" data-vl-sortable></vl-rich-data-field>
-                    <vl-rich-data-field data-vl-name="owner" data-vl-label="Eigenaar" data-vl-selector="owner" data-vl-sortable></vl-rich-data-field>
+                    <vl-rich-data-field data-vl-name="id" data-vl-label="ID" data-vl-selector="id" data-vl-sortable data-vl-sorting-direction="asc" data-vl-sorting-priority="3"></vl-rich-data-field>
+                    <vl-rich-data-field data-vl-name="name" data-vl-label="Naam" data-vl-selector="name" data-vl-sortable data-vl-sorting-direction="asc" data-vl-sorting-priority="2"></vl-rich-data-field>
+                    <vl-rich-data-field data-vl-name="owner" data-vl-label="Eigenaar" data-vl-selector="owner" data-vl-sortable data-vl-sorting-direction="desc" data-vl-sorting-priority="1"></vl-rich-data-field>
                 </vl-rich-data-table>
             </div>
             <script>

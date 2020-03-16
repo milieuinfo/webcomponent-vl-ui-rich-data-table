@@ -49,8 +49,6 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
             </div>
         `);
 
-        this.__sortCriteria = [];
-
         this.__observeFields();
         this.__observeSorters();
         this._renderSearchFilter();
@@ -85,7 +83,7 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
     }
 
     get __sortingState() {
-        return this.__sortCriteria.map(criteria => { return {
+        return this.__activeSorters.map(criteria => { return {
             name: criteria.for,
             direction: criteria.direction
         } });
@@ -186,6 +184,16 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
         return this.querySelectorAll(VlRichDataField.is);
     }
 
+    get __sorters() {
+        return this.__tableHeaderRow.querySelectorAll(VlRichDataSorter.is);
+    }
+
+    get __activeSorters() {
+        return Array.from(this.__sorters)
+            .filter(sorter => sorter.direction !== undefined)
+            .sort(VlRichDataSorter.PRIORITY_COMPARATOR);
+    }
+
     get __searchFilter() {
         return this.shadowRoot.querySelector('[is="vl-search-filter"]');
     }
@@ -223,39 +231,8 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
         }
     }
 
-    __removeFromSortCriteria(index) {
-        const sorter = this.__sortCriteria[index];
-        this.__sortCriteria.splice(index, 1);
-        this.__sortCriteria.slice(index).forEach(criteria => criteria.priority = criteria.priority - 1);
-        sorter.priority = undefined;
-
-        if (this.__sortCriteria.length === 1) {
-            this.__sortCriteria[0].priority = undefined;
-        }
-    }
-
-    __addSortCriteria(sorter) {
-        this.__sortCriteria.push(sorter);
-        if (this.__sortCriteria.length > 1) {
-            sorter.priority = this.__sortCriteria.length;
-            this.__sortCriteria[0].priority = 1;
-        }
-    }
-
     __sortingChanged(event) {
-        const direction = event.detail.direction;
-        const criteriaIndex = this.__sortCriteria.indexOf(event.target);
-        const fieldWasAlreadySorted = criteriaIndex !== -1;
-
-        if (fieldWasAlreadySorted) {
-            const fieldIsNoLongerSorted = direction === undefined;
-            if (fieldIsNoLongerSorted) {
-                this.__removeFromSortCriteria(criteriaIndex);
-            }
-        } else {
-            this.__addSortCriteria(event.target);
-        }
-
+        this.__activeSorters.forEach((sorter, index) => sorter.priority = index + 1);
         this.__onStateChange(event);
     }
 
@@ -407,13 +384,13 @@ export class VlRichDataField extends VlElement(HTMLElement) {
         }
     }
 
-    _data_vl_sortingDirectionChangedCallback(oldValue, newValue) {
+    _data_vl_sorting_directionChangedCallback(oldValue, newValue) {
         if (oldValue !== newValue) {
             this._changed(['sorting-direction']);
         }
     }
 
-    _data_vl_sortingPriorityChangedCallback(oldValue, newValue) {
+    _data_vl_sorting_priorityChangedCallback(oldValue, newValue) {
         if (oldValue !== newValue) {
             this._changed(['sorting-priority']);
         }
@@ -498,6 +475,11 @@ class VlRichDataSorter extends VlElement(HTMLElement) {
         if (this.__direction !== direction) {
             this.__direction = direction;
             this.__directionElement.setAttribute('icon', this._directionIcon);
+
+            if (direction === undefined) {
+                this.priority = undefined;
+            }
+
             this._changed();
         }
     }
@@ -560,6 +542,20 @@ class VlRichDataSorter extends VlElement(HTMLElement) {
                 priority: this.priority
             }
         }))
+    }
+
+    static get PRIORITY_COMPARATOR() {
+        return (firstSorter, secondSorter) => {
+            const firstPriority = firstSorter.priority;
+            const secondPriority = secondSorter.priority;
+            if (secondPriority === undefined || firstPriority < secondPriority) {
+                return -1;
+            } else if (firstPriority === undefined || firstPriority > secondPriority) {
+                return 1;
+            } else {
+                return 0;
+            }
+        };
     }
 }
 
