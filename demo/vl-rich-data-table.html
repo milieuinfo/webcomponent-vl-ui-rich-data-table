@@ -16,16 +16,22 @@
             <h2>Basis rich data table</h2>
             <pre>
                 <code class="line-numbers language-markup">
-                    &lt;vl-rich-data-table data-vl-data=&apos;[{&quot;id&quot;: 0, &quot;name&quot;: &quot;Project #1&quot;}, {&quot;id&quot;: 1, &quot;name&quot;: &quot;Project #2&quot;}]&apos;&gt;
-                        &lt;vl-rich-data-field data-vl-label=&quot;ID&quot; data-vl-selector=&quot;id&quot;&gt;&lt;/vl-rich-data-field&gt;
-                        &lt;vl-rich-data-field data-vl-label=&quot;Naam&quot; data-vl-selector=&quot;name&quot;&gt;&lt;/vl-rich-data-field&gt;
-                    &lt;/vl-rich-data-table&gt;
+	                &lt;vl-rich-data-table data-vl-data='[{&quot;id&quot;: 0, &quot;name&quot;: &quot;Project #1&quot;, &quot;manager&quot;: {&quot;firstName&quot;: &quot;Pascal&quot;, &quot;lastName&quot;: &quot;Riquier&quot;}, &quot;medewerkers&quot;: [{&quot;firstName&quot;: &quot;Sander&quot;, &quot;lastName&quot;: &quot;Kleykens&quot;}]}, 
+	                	{&quot;id&quot;: 1, &quot;name&quot;: &quot;Project #2&quot;, &quot;manager&quot;: {&quot;firstName&quot;: &quot;Tom&quot;, &quot;lastName&quot;: &quot;Coemans&quot;}, &quot;medewerkers&quot;: [{&quot;firstName&quot;: &quot;Guy&quot;, &quot;lastName&quot;: &quot;Wauters&quot;}]}]'&gt;
+	                    &lt;vl-rich-data-field data-vl-label=&quot;ID&quot; data-vl-selector=&quot;id&quot;&gt;&lt;/vl-rich-data-field&gt;
+	                    &lt;vl-rich-data-field data-vl-label=&quot;Naam&quot; data-vl-selector=&quot;name&quot;&gt;&lt;/vl-rich-data-field&gt;
+	                    &lt;vl-rich-data-field data-vl-label=&quot;Naam manager&quot; data-vl-selector=&quot;manager.lastName&quot;&gt;&lt;/vl-rich-data-field&gt;
+	                    &lt;vl-rich-data-field data-vl-label=&quot;Eerste medewerker&quot; data-vl-selector=&quot;medewerkers.0.lastName&quot;&gt;&lt;/vl-rich-data-field&gt;
+	                &lt;/vl-rich-data-table&gt;
                 </code>
             </pre>
             <div class="demo">
-                <vl-rich-data-table data-vl-data='[{"id": 0, "name": "Project #1"}, {"id": 1, "name": "Project #2"}]'>
+                <vl-rich-data-table id="rich-data-table" data-vl-data='[{"id": 0, "name": "Project #1", "manager": {"firstName": "Pascal", "lastName": "Riquier"}, "medewerkers": [{"firstName": "Sander", "lastName": "Kleykens"}]}, 
+                	{"id": 1, "name": "Project #2", "manager": {"firstName": "Tom", "lastName": "Coemans"}, "medewerkers": [{"firstName": "Guy", "lastName": "Wauters"}]}]'>
                     <vl-rich-data-field data-vl-label="ID" data-vl-selector="id"></vl-rich-data-field>
                     <vl-rich-data-field data-vl-label="Naam" data-vl-selector="name"></vl-rich-data-field>
+                    <vl-rich-data-field data-vl-label="Naam manager" data-vl-selector="manager.lastName"></vl-rich-data-field>
+                    <vl-rich-data-field data-vl-label="Eerste medewerker" data-vl-selector="medewerkers.0.lastName"></vl-rich-data-field>
                 </vl-rich-data-table>
             </div>
         </div>
@@ -62,6 +68,33 @@
             <h2>Rich data table met paginering</h2>
             <pre>
                 <code class="line-numbers language-markup">
+	                &lt;vl-rich-data-table id=&quot;rich-data-table-paging&quot;&gt;
+	                    &lt;vl-rich-data-field data-vl-label=&quot;ID&quot; data-vl-selector=&quot;id&quot;&gt;&lt;/vl-rich-data-field&gt;
+	                    &lt;vl-rich-data-field data-vl-label=&quot;Naam&quot; data-vl-selector=&quot;name&quot;&gt;&lt;/vl-rich-data-field&gt;
+						&lt;vl-pager id=&quot;rich-data-table-paging-pager&quot; slot=&quot;pager&quot; total-items=&quot;20&quot; items-per-page=&quot;5&quot; current-page=&quot;1&quot; align-center&gt;&lt;/vl-pager&gt;
+	                &lt;/vl-rich-data-table&gt;
+		            &lt;script&gt;
+	    	        	customElements.whenDefined('vl-rich-data-table').then(() =&gt; {
+		    	        	const richDataTablePagingData = [];
+		        	    	for (let i = 1; i &lt;= 20; i++) {
+		            			richDataTablePagingData.push({&quot;id&quot;: i, &quot;name&quot;: `Project #${i}`})
+		            		}
+	            	
+							function page(page, itemsPerPage, data) {
+								const start = (page - 1) * itemsPerPage;
+								const end = start + itemsPerPage;
+								return data.slice(start, end);
+							}	
+						
+							const richDataTablePaging = document.querySelector(&quot;#rich-data-table-paging&quot;);
+							richDataTablePaging.data = page(1, 5, richDataTablePagingData);
+							richDataTablePaging.addEventListener('change', (e) =&gt; {
+	    	    	    		const newPage = page(e.detail.paging.currentPage, e.detail.paging.itemsPerPage, richDataTablePagingData);
+	        	    			console.log(newPage[0]);
+	            				richDataTablePaging.data = newPage;
+		            		});
+	    	        	});
+		            &lt;/script&gt;
                 </code>
             </pre>
             <div class="demo">
@@ -70,29 +103,29 @@
                     <vl-rich-data-field data-vl-label="Naam" data-vl-selector="name"></vl-rich-data-field>
 					<vl-pager id="rich-data-table-paging-pager" slot="pager" total-items="20" items-per-page="5" current-page="1" align-center></vl-pager>
                 </vl-rich-data-table>
-            </div>
-            <script>
-            	customElements.whenDefined('vl-rich-data-table').then(() => {
-	            	const richDataTablePagingData = [];
-	            	for (let i = 1; i <= 20; i++) {
-	            		richDataTablePagingData.push({"id": i, "name": `Project #${i}`})
-	            	}
+	            <script>
+    	        	customElements.whenDefined('vl-rich-data-table').then(() => {
+	    	        	const richDataTablePagingData = [];
+	        	    	for (let i = 1; i <= 20; i++) {
+	            			richDataTablePagingData.push({"id": i, "name": `Project #${i}`})
+	            		}
             	
-					function page(page, itemsPerPage, data) {
-						const start = (page - 1) * itemsPerPage;
-						const end = start + itemsPerPage;
-						return data.slice(start, end);
-					}
-
-					const richDataTablePaging = document.querySelector("#rich-data-table-paging");
-					richDataTablePaging.data = page(1, 5, richDataTablePagingData);
-					richDataTablePaging.addEventListener('change', (e) => {
-    	        		const newPage = page(e.detail.paging.currentPage, e.detail.paging.itemsPerPage, richDataTablePagingData);
-        	    		console.log(newPage[0]);
-            			richDataTablePaging.data = newPage;
-            		});
-            	});
-            </script>
+						function page(page, itemsPerPage, data) {
+							const start = (page - 1) * itemsPerPage;
+							const end = start + itemsPerPage;
+							return data.slice(start, end);
+						}	
+					
+						const richDataTablePaging = document.querySelector("#rich-data-table-paging");
+						richDataTablePaging.data = page(1, 5, richDataTablePagingData);
+						richDataTablePaging.addEventListener('change', (e) => {
+    	    	    		const newPage = page(e.detail.paging.currentPage, e.detail.paging.itemsPerPage, richDataTablePagingData);
+        	    			console.log(newPage[0]);
+            				richDataTablePaging.data = newPage;
+	            		});
+    	        	});
+	            </script>
+            </div>
         </div>
 
         <div>
@@ -100,9 +133,9 @@
             <pre>
                 <code class="line-numbers language-markup">
                     &lt;vl-rich-data-table id=&quot;rich-data-table-sorting&quot;&gt;
-                        &lt;vl-rich-data-field data-vl-name=&quot;id&quot; data-vl-label=&quot;ID&quot; data-vl-selector=&quot;id&quot; data-vl-sortable&gt;&lt;/vl-rich-data-field&gt;
-                        &lt;vl-rich-data-field data-vl-name=&quot;name&quot; data-vl-label=&quot;Naam&quot; data-vl-selector=&quot;name&quot; data-vl-sortable&gt;&lt;/vl-rich-data-field&gt;
-                        &lt;vl-rich-data-field data-vl-name=&quot;owner&quot; data-vl-label=&quot;Eigenaar&quot; data-vl-selector=&quot;owner&quot; data-vl-sortable&gt;&lt;/vl-rich-data-field&gt;
+                        &lt;vl-rich-data-field data-vl-name=&quot;id&quot; data-vl-label=&quot;ID&quot; data-vl-selector=&quot;id&quot; data-vl-sortable data-vl-sorting-direction=&quot;asc&quot; data-vl-sorting-priority=&quot;3&quot;&gt;&lt;/vl-rich-data-field&gt;
+                        &lt;vl-rich-data-field data-vl-name=&quot;name&quot; data-vl-label=&quot;Naam&quot; data-vl-selector=&quot;name&quot; data-vl-sortable data-vl-sorting-direction=&quot;asc&quot; data-vl-sorting-priority=&quot;2&quot;&gt;&lt;/vl-rich-data-field&gt;
+                        &lt;vl-rich-data-field data-vl-name=&quot;owner&quot; data-vl-label=&quot;Eigenaar&quot; data-vl-selector=&quot;owner&quot; data-vl-sortable data-vl-sorting-direction=&quot;desc&quot; data-vl-sorting-priority=&quot;1&quot;&gt;&lt;/vl-rich-data-field&gt;
                     &lt;/vl-rich-data-table&gt;
 
                     &lt;script&gt;
@@ -141,9 +174,9 @@
             </pre>
             <div class="demo">
                 <vl-rich-data-table id="rich-data-table-sorting">
-                    <vl-rich-data-field data-vl-name="id" data-vl-label="ID" data-vl-selector="id" data-vl-sortable></vl-rich-data-field>
-                    <vl-rich-data-field data-vl-name="name" data-vl-label="Naam" data-vl-selector="name" data-vl-sortable></vl-rich-data-field>
-                    <vl-rich-data-field data-vl-name="owner" data-vl-label="Eigenaar" data-vl-selector="owner" data-vl-sortable></vl-rich-data-field>
+                    <vl-rich-data-field data-vl-name="id" data-vl-label="ID" data-vl-selector="id" data-vl-sortable data-vl-sorting-direction="asc" data-vl-sorting-priority="3"></vl-rich-data-field>
+                    <vl-rich-data-field data-vl-name="name" data-vl-label="Naam" data-vl-selector="name" data-vl-sortable data-vl-sorting-direction="asc" data-vl-sorting-priority="2"></vl-rich-data-field>
+                    <vl-rich-data-field data-vl-name="owner" data-vl-label="Eigenaar" data-vl-selector="owner" data-vl-sortable data-vl-sorting-direction="desc" data-vl-sorting-priority="1"></vl-rich-data-field>
                 </vl-rich-data-table>
             </div>
             <script>

@@ -10,6 +10,10 @@ class VlRichDataTablePage extends Page {
     	return this._getRichDataTable("#rich-data-table-paging");
     }
 
+    async getRichDataTable() {
+    	return this._getRichDataTable("#rich-data-table");
+    }
+
     async load() {
         await super.load(Config.baseUrl + '/demo/vl-rich-data-table.html');
     }
