@@ -13,7 +13,7 @@ import '/node_modules/vl-ui-grid/dist/vl-grid.js';
  *
  * @property {string} data-vl-data - De data die door de tabel getoond moet worden in JSON formaat.
  * @property {string} data-vl-filter-title - De titel die op de search filter getoond wordt.
- *
+ * 
  * @see {@link https://www.github.com/milieuinfo/webcomponent-vl-ui-rich-data-table/releases/latest|Release notes}
  * @see {@link https://www.github.com/milieuinfo/webcomponent-vl-ui-rich-data-table/issues|Issues}
  * @see {@link https://webcomponenten.omgeving.vlaanderen.be/demo/vl-rich-data-table.html|Demo}
@@ -33,6 +33,7 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
             <style>
                 @import "/src/style.css";
                 @import "/node_modules/vl-ui-data-table/dist/style.css";
+                @import "/node_modules/vl-ui-search-filter/dist/style.css";
             </style>
             <div is="vl-grid" is-stacked>
                 <div id="content" is="vl-column" size="12">
@@ -98,6 +99,7 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
 
     connectedCallback() {
         this._render();
+        
     }
 
     /**
@@ -153,8 +155,27 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
     _renderSearchFilter() {
         const filterSlot = this.querySelector("[slot='filter']");
     	if (filterSlot && ! this.__searchFilter) {
-            this.shadowRoot.append(this._template(`<div is="vl-search-filter"><slot name="filter"></slot></div>`));
+            this.shadowRoot.append(this._template(`<div is="vl-search-filter"><form>${this._searchFilterSlotContent}</form></div>`));
+            this.__searchFilter.addEventListener('input', e => {
+                this.__onFilterFieldChanged(e);
+            });
     	}
+    }
+
+    __onFilterFieldChanged(originalEvent) {
+    	originalEvent.stopPropagation();
+    	originalEvent.preventDefault();
+        const event = {
+            detail: this.__filterFormData, 
+            bubbles: true
+        };
+    	this.dispatchEvent(new CustomEvent('change', event));
+    }
+
+    get __filterFormData() {
+        return {
+            formData: this.__searchFilter.formData
+        };
     }
 
     _data_vl_dataChangedCallback(oldValue, newValue) {
@@ -198,8 +219,8 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
         return this.shadowRoot.querySelector('[is="vl-search-filter"]');
     }
 
-    get __searchFilterContent() {
-        return this.__searchFilter.querySelector('slot[name="filter"]').assignedNodes()[0];
+    get _searchFilterSlotContent() {
+        return this.querySelector('[slot="filter"]').innerHTML;
     }
 
     __listenToFieldChanges(field) {

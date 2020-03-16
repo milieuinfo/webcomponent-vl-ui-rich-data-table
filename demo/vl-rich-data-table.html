@@ -5,6 +5,8 @@
         <script type="module" src="demo.js"></script>
         <script type="module" src="/src/vl-rich-data-table.js"></script>
         <script type="module" src="/node_modules/vl-ui-pager/dist/vl-pager.js"></script>
+        <script type="module" src="/node_modules/vl-ui-input-field/dist/vl-input-field.js"></script>
+        <link rel="stylesheet" type="text/css" href="/node_modules/vl-ui-input-field/dist/style.css"/>
         <link rel="stylesheet" type="text/css" href="/node_modules/vl-ui-core/dist/style.css"/>
     </head>
 
@@ -46,8 +48,17 @@
                     <vl-rich-data-field data-vl-label="ID" data-vl-selector="id"></vl-rich-data-field>
                     <vl-rich-data-field data-vl-label="Naam" data-vl-selector="name"></vl-rich-data-field>
                     <div slot="filter">
-                        <label>a:</label>
-                        <input type="text" />
+                        <section>
+                            <h2>Gegevens</h2>
+                            <div>
+                              <label is="form-label" for="filterOpId">Id</label>
+                              <input is="vl-input-field" type="text" id="filterOpId" name="kolomId" value="" block/>
+                            </div>
+                            <div>
+                              <label is="form-label" for="filterOpNaam">Naam</label>
+                              <input is="vl-input-field" type="text" id="filterOpNaam" name="kolomNaam" value="" block/>
+                            </div>
+                          </section>
                     </div>
                 </vl-rich-data-table>
             </div>
