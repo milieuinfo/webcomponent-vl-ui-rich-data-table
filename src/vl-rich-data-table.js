@@ -498,7 +498,7 @@ class VlRichDataSorter extends VlElement(HTMLElement) {
                 }
             </style>
             <div>
-                <span id="direction" is="vl-icon" before icon="sort"></span>
+                <span id="direction" is="vl-icon" icon="sort"></span>
                 <label id="priority"></label>
             </div>
         `);

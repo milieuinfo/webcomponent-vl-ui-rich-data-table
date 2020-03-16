@@ -38,7 +38,6 @@
         function assertDirectionIcon(sorter, expectedDirection) {
             const directionIcon = sorter.__directionElement;
             directionIcon.getAttribute('is').should.equal('vl-icon');
-            directionIcon.hasAttribute('before').should.be.true;
 
             let iconType = 'sort';
             if (expectedDirection === 'asc') {
