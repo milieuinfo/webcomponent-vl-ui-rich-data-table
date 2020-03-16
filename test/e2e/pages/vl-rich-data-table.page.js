@@ -1,9 +1,13 @@
-const VLRichDataTable = require('../components/vl-rich-data-table');
+const VlRichDataTable = require('../components/vl-rich-data-table');
 const { Page, Config } = require('vl-ui-core').Test;
 
-class VLRichDataTablePage extends Page {
+class VlRichDataTablePage extends Page {
     async _getRichDataTable(selector) {
         return new VlRichDataTable(this.driver, selector);
+    }
+    
+    async getRichDataTablePaging() {
+    	return this._getRichDataTable("#rich-data-table-paging");
     }
 
     async load() {
@@ -11,4 +15,4 @@ class VLRichDataTablePage extends Page {
     }
 }
 
-module.exports = VLRichDataTablePage;
+module.exports = VlRichDataTablePage;

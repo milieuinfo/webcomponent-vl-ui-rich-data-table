@@ -59,35 +59,31 @@
                 <vl-rich-data-table id="rich-data-table-paging">
                     <vl-rich-data-field data-vl-label="ID" data-vl-selector="id"></vl-rich-data-field>
                     <vl-rich-data-field data-vl-label="Naam" data-vl-selector="name"></vl-rich-data-field>
-					<vl-pager slot="pager" total-items="10" items-per-page="5" current-page="1"></vl-pager>
+					<vl-pager id="rich-data-table-paging-pager" slot="pager" total-items="20" items-per-page="5" current-page="1"></vl-pager>
                 </vl-rich-data-table>
             </div>
             <script>
-            	const richDataTablePagingData = [
-            		{"id": 1, "name": "Project #1"}, 
-            		{"id": 2, "name": "Project #2"},
-            		{"id": 3, "name": "Project #3"},
-            		{"id": 4, "name": "Project #4"},
-            		{"id": 5, "name": "Project #5"},
-            		{"id": 6, "name": "Project #6"},
-            		{"id": 7, "name": "Project #7"},
-            		{"id": 8, "name": "Project #8"},
-            		{"id": 9, "name": "Project #9"},
-            		{"id": 10, "name": "Project #10"}
-            	];
+            	customElements.whenDefined('vl-rich-data-table').then(() => {
+	            	const richDataTablePagingData = [];
+	            	for (let i = 1; i <= 20; i++) {
+	            		richDataTablePagingData.push({"id": i, "name": `Project #${i}`})
+	            	}
             	
-				function page(page, itemsPerPage, data) {
-					const start = (page - 1) * itemsPerPage;
-					const end = start + itemsPerPage;
-					return data.slice(start, end);
-				}	
-				
-				const richDataTablePaging = document.querySelector("#rich-data-table-paging");
-				richDataTablePaging.data = page(1, 5, richDataTablePagingData);
-				richDataTablePaging.addEventListener('change', (e) => {
-            		const newPage = page(e.detail.paging.currentPage, e.detail.paging.itemsPerPage, richDataTablePagingData);
-            		richDataTablePaging.data = newPage;
+					function page(page, itemsPerPage, data) {
+						const start = (page - 1) * itemsPerPage;
+						const end = start + itemsPerPage;
+						return data.slice(start, end);
+					}	
+					
+					const richDataTablePaging = document.querySelector("#rich-data-table-paging");
+					richDataTablePaging.data = page(1, 5, richDataTablePagingData);
+					richDataTablePaging.addEventListener('change', (e) => {
+    	        		const newPage = page(e.detail.paging.currentPage, e.detail.paging.itemsPerPage, richDataTablePagingData);
+        	    		console.log(newPage[0]);
+            			richDataTablePaging.data = newPage;
+            		});
             	});
+            
             </script>
         </div>
 
