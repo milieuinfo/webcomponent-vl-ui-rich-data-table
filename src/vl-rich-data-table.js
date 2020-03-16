@@ -101,6 +101,7 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
 
     connectedCallback() {
         this._render();
+        
     }
 
     /**
@@ -157,6 +158,9 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
         const filterSlot = this.querySelector("[slot='filter']");
     	if (filterSlot && ! this.__searchFilter) {
             this.shadowRoot.append(this._template(`<div is="vl-search-filter"><form><slot name="filter"></slot></form></div>`));
+            this.__searchFilter.addEventListener('input', e => {
+                this.dispatchEvent(new CustomEvent('change', e));
+            });
     	}
     }
 
