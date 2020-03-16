@@ -1,0 +1,146 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <script src="../../../@webcomponents/webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../../web-component-tester/browser.js"></script>
+
+    <script type="module" src="../../src/vl-rich-data-table.js"></script>
+    <link rel="stylesheet" type="text/css" href="/node_modules/vl-ui-core/dist/style.css"/>
+</head>
+
+<body>
+<test-fixture id="vl-rich-data-table-sorting-fixture">
+    <template>
+        <vl-rich-data-table data-vl-data='[{"id": 0, "name": "Project #1", "owner": "Jan Jansens"}, {"id": 1, "name": "Project #2", "owner": "Jan Jansens"}]'>
+            <vl-rich-data-field data-vl-name="id" data-vl-label="ID" data-vl-selector="id" data-vl-sortable data-vl-sorting-direction="asc" data-vl-sorting-priority="1"></vl-rich-data-field>
+            <vl-rich-data-field data-vl-name="name" data-vl-label="Naam" data-vl-selector="name" data-vl-sortable></vl-rich-data-field>
+            <vl-rich-data-field data-vl-name="owner" data-vl-label="Eigenaar" data-vl-selector="owner"></vl-rich-data-field>
+        </vl-rich-data-table>
+    </template>
+</test-fixture>
+<test-fixture id="vl-rich-data-table-sorting-multiple-sortings-fixture">
+    <template>
+        <vl-rich-data-table data-vl-data='[{"id": 0, "name": "Project #1", "owner": "Jan Jansens"}, {"id": 1, "name": "Project #2", "owner": "Jan Jansens"}]'>
+            <vl-rich-data-field data-vl-name="id" data-vl-label="ID" data-vl-selector="id" data-vl-sortable data-vl-sorting-direction="asc" data-vl-sorting-priority="1"></vl-rich-data-field>
+            <vl-rich-data-field data-vl-name="name" data-vl-label="Naam" data-vl-selector="name" data-vl-sortable data-vl-sorting-direction="desc" data-vl-sorting-priority="2"></vl-rich-data-field>
+            <vl-rich-data-field data-vl-name="owner" data-vl-label="Eigenaar" data-vl-selector="owner" data-vl-sortable data-vl-sorting-direction="asc" data-vl-sorting-priority="3"></vl-rich-data-field>
+        </vl-rich-data-table>
+    </template>
+</test-fixture>
+
+<script>
+    suite('<vl-rich-data-table> met sorting', () => {
+        const should = chai.should();
+
+        function getSorter(table, field) {
+            return Array.from(table.__sorters).find(sorter => sorter.for === field);
+        }
+
+        test('De mogelijkheid voor te sorteren wordt in de headers getoond indien sortering is ingeschakeld', () => {
+            const richTable = fixture('vl-rich-data-table-sorting-fixture');
+            const idSorter = getSorter(richTable, 'id');
+            should.exist(idSorter);
+            const nameSorter = getSorter(richTable, 'name');
+            should.exist(nameSorter);
+            const ownerSorter = getSorter(richTable, 'owner');
+            should.not.exist(ownerSorter);
+        });
+
+        test('Indien op een nieuw veld gesorteerd wordt, wordt een event uitgestuurd vanuit de table met de juiste informatie en zijn de sorteerprioriteiten van de velden correct', (done) => {
+            const richTable = fixture('vl-rich-data-table-sorting-fixture');
+            const nameSorter = getSorter(richTable, 'name');
+
+            richTable.addEventListener('change', event => {
+                const sorting = event.detail.sorting;
+                sorting.should.be.lengthOf(2);
+
+                sorting[0].name.should.equal('id');
+                sorting[0].direction.should.equal('asc');
+
+                sorting[1].name.should.equal('name');
+                sorting[1].direction.should.equal('desc');
+
+                should.equal(getSorter(richTable, 'id').priority, 1);
+                should.equal(getSorter(richTable, 'name').priority, 2);
+
+                done();
+            });
+
+            setTimeout(() => {
+                nameSorter.direction = 'desc';
+            });
+        });
+
+        test('Indien niet langer op een veld gesorteerd wordt, wordt een event uitgestuurd vanuit de table met de juiste informatie en zijn de sorteerprioriteiten van de velden correct', (done) => {
+            const richTable = fixture('vl-rich-data-table-sorting-fixture');
+            const idSorter = getSorter(richTable, 'id');
+
+            richTable.addEventListener('change', event => {
+                const sorting = event.detail.sorting;
+                sorting.should.be.lengthOf(0);
+
+                should.equal(getSorter(richTable, 'id').priority, undefined);
+                should.equal(getSorter(richTable, 'name').priority, undefined);
+
+                done();
+            });
+
+            setTimeout(() => {
+                idSorter.direction = undefined;
+            });
+        });
+
+        test('Indien de sorteerrichting van een veld aangepast wordt, wordt een event uitgestuurd vanuit de table met de juiste informatie en zijn de sorteerprioriteiten van de velden correct', (done) => {
+            const richTable = fixture('vl-rich-data-table-sorting-fixture');
+            const idSorter = getSorter(richTable, 'id');
+
+            richTable.addEventListener('change', event => {
+                const sorting = event.detail.sorting;
+                sorting.should.be.lengthOf(1);
+
+                sorting[0].name.should.equal('id');
+                sorting[0].direction.should.equal('desc');
+
+                should.equal(getSorter(richTable, 'id').priority, 1);
+                should.equal(getSorter(richTable, 'name').priority, undefined);
+
+                done();
+            });
+
+            setTimeout(() => {
+                idSorter.direction = 'desc';
+            });
+        });
+
+        test('Indien er op meerdere velden gesorteerd zijn en een veld met hogere sorteerprioriteit valt weg, worden de prioriteiten correct herschikt', (done) => {
+            const richTable = fixture('vl-rich-data-table-sorting-multiple-sortings-fixture');
+            const nameSorter = getSorter(richTable, 'name');
+
+            richTable.addEventListener('change', event => {
+                const sorting = event.detail.sorting;
+                sorting.should.be.lengthOf(2);
+
+                sorting[0].name.should.equal('id');
+                sorting[0].direction.should.equal('asc');
+
+                sorting[1].name.should.equal('owner');
+                sorting[1].direction.should.equal('asc');
+
+                should.equal(getSorter(richTable, 'id').priority, 1);
+                should.equal(getSorter(richTable, 'name').priority, undefined);
+                should.equal(getSorter(richTable, 'owner').priority, 2);
+
+                done();
+            });
+
+            setTimeout(() => {
+                nameSorter.direction = undefined;
+            });
+        });
+    });
+</script>
+</body>
+
+</html>

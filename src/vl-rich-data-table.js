@@ -336,26 +336,50 @@ export class VlRichDataField extends VlElement(HTMLElement) {
         }, rowData);
     }
 
+    /**
+     * Geeft de naam terug die gebruikt wordt om het veld te identificeren.
+     * @returns {string}
+     */
     get name() {
         return this.dataset.vlName;
     }
 
+    /**
+     * Geeft de selector terug die gebruikt wordt om de juiste waarde uit de data te halen.
+     * @returns {string}
+     */
     get selector() {
         return this.dataset.vlSelector;
     }
 
+    /**
+     * Geeft de naam terug die getoond kan worden aan de gebruiker.
+     * @returns {string}
+     */
     get label() {
         return this.dataset.vlLabel;
     }
 
+    /**
+     * Geeft terug of er op het veld gesorteerd kan worden.
+     * @returns {boolean}
+     */
     get sortable() {
         return this.dataset.vlSortable !== undefined;
     }
 
+    /**
+     * Geeft de sorteerrichting terug.
+     * @returns {asc | desc}
+     */
     get sortingDirection() {
         return this.dataset.vlSortingDirection;
     }
 
+    /**
+     * Geeft de prioriteit van het sorteren terug.
+     * @returns {number}
+     */
     get sortingPriority() {
         return this.dataset.vlSortingPriority;
     }
