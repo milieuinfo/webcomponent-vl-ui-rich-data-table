@@ -38,6 +38,9 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
                     <tr></tr>
                 </thead>
                 <tbody></tbody>
+                <caption>
+                	<slot name="pager"></slot>
+                </caption>
             </table>
         `);
 
@@ -46,6 +49,41 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
         this.__observeFields();
         this.__observeSorters();
         this._renderSearchFilter();
+        if (this.__pager) {
+        	this.__pager.addEventListener('change', e => {
+        		this.__onStateChange(e);
+        	});
+        }
+        
+    }
+    
+    get __pager() {
+    	return this.querySelector("[slot='pager']");
+    }
+    
+    __onStateChange(originalEvent) {
+    	originalEvent.stopPropagation();
+    	originalEvent.preventDefault();
+    	const event = {detail: this.__state, bubbles: true};
+    	this.dispatchEvent(new CustomEvent('change', event));
+    }
+    
+    get __pagingState() {
+    	if (this.__pager) {
+    		return {
+    			currentPage: Number(this.__pager.currentPage), 
+    			totalPages: this.__pager.totalPages, 
+    			itemsPerPage: this.__pager.itemsPerPage, 
+    			totalItems: this.__pager.totalItems	
+    		};
+    	}
+    	
+    }
+    
+    get __state() {
+    	const state = {};
+    	state.paging = this.__pagingState;
+    	return state;
     }
 
     connectedCallback() {
