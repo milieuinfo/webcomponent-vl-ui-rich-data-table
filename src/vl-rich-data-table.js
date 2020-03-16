@@ -508,7 +508,6 @@ class VlRichDataSorter extends VlElement(HTMLElement) {
         if (this.__priority !== priority) {
             this.__priority = priority;
             this.__priorityElement.textContent = this.priority;
-            // this._changed();
         }
     }
 
