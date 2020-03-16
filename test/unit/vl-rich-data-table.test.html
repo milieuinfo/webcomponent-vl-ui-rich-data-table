@@ -20,6 +20,18 @@
     suite('<vl-rich-data-table>', () => {
       const should = chai.should();
 
+      test('De tabel wordt getoond in een grid met een kolom van breedte 12', () => {
+        const richTable = fixture('vl-rich-data-table-fixture');
+        const grid = richTable.shadowRoot.querySelector("div[is='vl-grid']");
+        should.exist(grid);
+        should.exist(grid.getAttribute("is-stacked"));
+        const contentColumn = grid.querySelector("div#content[is='vl-column']");
+        should.exist(contentColumn);
+        assert.equal(contentColumn.getAttribute("size"), 12);
+        const table = contentColumn.querySelector('table[is="vl-data-table"]');
+        should.exist(table);
+      });
+
       test('De tabel bevat een vl-data-table met de juiste subelementen', () => {
         const richTable = fixture('vl-rich-data-table-fixture');
 

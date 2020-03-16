@@ -2,6 +2,7 @@ import {VlElement, define} from '/node_modules/vl-ui-core/dist/vl-core.js';
 import '/node_modules/vl-ui-icon/dist/vl-icon.js';
 import '/node_modules/vl-ui-data-table/dist/vl-data-table.js';
 import '/node_modules/vl-ui-search-filter/dist/vl-search-filter.js';
+import '/node_modules/vl-ui-grid/dist/vl-grid.js';
 
 /**
  * VlRichDataTable
@@ -33,15 +34,19 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
                 @import "/src/style.css";
                 @import "/node_modules/vl-ui-data-table/dist/style.css";
             </style>
-            <table is="vl-data-table">
-                <thead>
-                    <tr></tr>
-                </thead>
-                <tbody></tbody>
-                <caption>
-                	<slot name="pager"></slot>
-                </caption>
-            </table>
+            <div is="vl-grid" is-stacked>
+                <div id="content" is="vl-column" size="12">
+                    <table is="vl-data-table">
+                        <thead>
+                            <tr></tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <div id="pager" is="vl-column" size="12">
+                    <slot name="pager"></slot>
+                </div>
+            </div>
         `);
 
         this.__sortCriteria = [];
@@ -50,6 +55,7 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
         this.__observeSorters();
         this._renderSearchFilter();
         if (this.__pager) {
+        	this.__pager.setAttribute("align-right", true);
         	this.__pager.addEventListener('change', e => {
         		this.__onStateChange(e);
         	});
