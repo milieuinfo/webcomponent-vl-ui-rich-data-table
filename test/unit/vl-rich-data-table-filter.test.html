@@ -70,14 +70,12 @@
         setTimeout(() => {
         
           table.addEventListener('change', (e) => {
-            console.log(123);
+            // expect(e.detail.formData.get('filter1')).to.equal('een beetje input');
             done();;
           });
 
           const searchFilterContent = table.__searchFilterContent;
-
           setInputValue(searchFilterContent.querySelector('input'), 'een beetje input');
-         
         });
 
       });

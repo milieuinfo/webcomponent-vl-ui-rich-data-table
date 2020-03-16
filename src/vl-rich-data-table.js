@@ -159,9 +159,25 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
     	if (filterSlot && ! this.__searchFilter) {
             this.shadowRoot.append(this._template(`<div is="vl-search-filter"><form><slot name="filter"></slot></form></div>`));
             this.__searchFilter.addEventListener('input', e => {
-                this.dispatchEvent(new CustomEvent('change', e));
+                this.__onFilterFieldChanged(e);
             });
     	}
+    }
+
+    __onFilterFieldChanged(originalEvent) {
+    	originalEvent.stopPropagation();
+    	originalEvent.preventDefault();
+        const event = {
+            detail: this.__filterFormData, 
+            bubbles: true
+        };
+    	this.dispatchEvent(new CustomEvent('change', event));
+    }
+
+    get __filterFormData() {
+        return {
+            formData: this.__searchFilter.formData
+        };
     }
 
     _data_vl_dataChangedCallback(oldValue, newValue) {
