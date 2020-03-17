@@ -43,7 +43,8 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
                 @import "/node_modules/vl-ui-search-filter/dist/style.css";
             </style>
             <div is="vl-grid" is-stacked>
-                <div id="content" is="vl-column" size="12">
+                <div id="search" is="vl-column" size="4"></div>
+                <div id="content" is="vl-column" size="8">
                     <table is="vl-data-table">
                         <thead>
                             <tr></tr>
@@ -74,6 +75,10 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
     	if (VlRichDataTable._tableAttributes.includes(attr)) {
     		this.__setTableAttribute(attr, oldValue, newValue);
     	}
+    }
+
+    get _searchElement() {
+        return this.shadowRoot.querySelector('#search');
     }
     
     __copyTableAttributes() {
@@ -205,7 +210,7 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
     }
 
     _createSearchFilter() {
-        this.shadowRoot.append(this._template(`<div is="vl-search-filter"><form>${this._searchFilterSlotContent}</form></div>`));
+        this._searchElement.append(this._template(`<div is="vl-search-filter"><form>${this._searchFilterSlotContent}</form></div>`));
         this._voegTitelToeAanSearchFilter();
         this.__searchFilter.addEventListener('input', e => {
             this.__onFilterFieldChanged(e);
