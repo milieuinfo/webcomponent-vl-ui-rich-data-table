@@ -10,20 +10,20 @@ describe('vl-rich-data-table', async () => {
 
     it('Als gebruiker kan ik allerlei soorten selectoren gebruiken voor velden van een rich table', async () => {
     	const vlRichDataTable = await vlRichDataTablePage.getRichDataTable();
-    	assertAantalRows(vlRichDataTable, 2);
+    	await assertAantalRows(vlRichDataTable, 2);
     	await assertRow(vlRichDataTable, 0, [0, "Project #1", "Riquier", "Kleykens"]);
     });
 
     it('Als gebruiker kan ik pagineren door de verschillende paginas van een rich data table', async () => {
     	const vlRichDataTablePaging = await vlRichDataTablePage.getRichDataTablePaging();
-    	assertAantalRows(vlRichDataTablePaging, 5);
+    	await assertAantalRows(vlRichDataTablePaging, 5);
     	await assertRow(vlRichDataTablePaging, 0, [1, "Project #1"]);
     	const pager = await vlRichDataTablePaging.getPager();
     	await pager.goToNextPage();
-    	assertAantalRows(vlRichDataTablePaging, 5);
+    	await assertAantalRows(vlRichDataTablePaging, 5);
     	await assertRow(vlRichDataTablePaging, 0, [6, "Project #6"]);
     	await pager.goToPreviousPage();
-    	assertAantalRows(vlRichDataTablePaging, 5);
+    	await assertAantalRows(vlRichDataTablePaging, 5);
     	await assertRow(vlRichDataTablePaging, 0, [1, "Project #1"]);
     });
     
@@ -37,7 +37,7 @@ describe('vl-rich-data-table', async () => {
     	const table = await richDataTable.getDataTable();
     	const body = await table.getDataTableBody();
     	const rows = await body.getRows();
-    	const cells = await rows[0].getCells();
+    	const cells = await rows[index].getCells();
     	assert.equal(cells.length, values.length);
     	for (let i = 0; i < cells.length; i++) {
     		const cellValue = await cells[i].getText();
