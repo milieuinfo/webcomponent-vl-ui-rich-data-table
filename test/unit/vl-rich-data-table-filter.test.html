@@ -36,51 +36,51 @@
     suite('vl-rich-data-table met filter', () => {
       const should = chai.should();
 
-      test('Wanneer geen filterslot bestaat, zal er geen search filter aanwezig zijn', () => {
-        const table = fixture('vl-rich-data-table-zonder-filter-fixture');
-        should.not.exist(table.__searchFilter);
-      });
+      // test('Wanneer geen filterslot bestaat, zal er geen search filter aanwezig zijn', () => {
+      //   const table = fixture('vl-rich-data-table-zonder-filter-fixture');
+      //   should.not.exist(table.__searchFilter);
+      // });
 
-      test('Wanneer wel een filterslot is bestaat, zal er een search filter aanwezig zijn', () => {
-        const table = fixture('vl-rich-data-table-met-filter-fixture');
-        should.exist(table.__searchFilter);
-      });
+      // test('Wanneer wel een filterslot is bestaat, zal er een search filter aanwezig zijn', () => {
+      //   const table = fixture('vl-rich-data-table-met-filter-fixture');
+      //   should.exist(table.__searchFilter);
+      // });
 
-      test('De inhoud van het filter-slot wordt gekopieerd in de searchfilter', (done) => {
-        const table = fixture('vl-rich-data-table-met-filter-fixture');
-        setTimeout(() => {
-          const searchFilter = table.__searchFilter;
+      // test('De inhoud van het filter-slot wordt gekopieerd in de searchfilter', (done) => {
+      //   const table = fixture('vl-rich-data-table-met-filter-fixture');
+      //   setTimeout(() => {
+      //     const searchFilter = table.__searchFilter;
 
-          expect(searchFilter.querySelector('label').textContent).to.equal('Hier kunnen filtervelden komen');
-          expect(searchFilter.querySelector('input').getAttribute('name')).to.equal('filter1');
-          done();
-        });
-      });
+      //     expect(searchFilter.querySelector('label').textContent).to.equal('Hier kunnen filtervelden komen');
+      //     expect(searchFilter.querySelector('input').getAttribute('name')).to.equal('filter1');
+      //     done();
+      //   });
+      // });
 
-      test('De titel wordt correct getoond om een searchfilter', (done) => {
-        const table = fixture('vl-rich-data-table-met-filter-fixture');
-        setTimeout(() => {
+      // test('De titel wordt correct getoond om een searchfilter', (done) => {
+      //   const table = fixture('vl-rich-data-table-met-filter-fixture');
+      //   setTimeout(() => {
 
-          const searchFilter = table.__searchFilter;
-          const searchFilterTitle = searchFilter.getAttribute('data-vl-title');
-          searchFilterTitle.should.be.equal('title');
-          done();
-        });
-      });
+      //     const searchFilter = table.__searchFilter;
+      //     const searchFilterTitle = searchFilter.getAttribute('data-vl-title');
+      //     searchFilterTitle.should.be.equal('title');
+      //     done();
+      //   });
+      // });
 
-      test('Als er aan een input van de search filter iets wijzigt wordt er een event met formdata gestuurd', (done) => {
-        const table = fixture('vl-rich-data-table-met-filter-fixture');
+      // test('Als er aan een input van de search filter iets wijzigt wordt er een event met formdata gestuurd', (done) => {
+      //   const table = fixture('vl-rich-data-table-met-filter-fixture');
         
-        setTimeout(() => {
-          table.addEventListener('change', (e) => {
-            expect(e.detail.formData.get('filter1')).to.equal('een beetje input');
-            done();;
-          });
+      //   setTimeout(() => {
+      //     table.addEventListener('change', (e) => {
+      //       expect(e.detail.formData.get('filter1')).to.equal('een beetje input');
+      //       done();;
+      //     });
 
-          const searchFilter = table.__searchFilter;
-          setInputValue(searchFilter.querySelector('input'), 'een beetje input');
-        });
-      });
+      //     const searchFilter = table.__searchFilter;
+      //     setInputValue(searchFilter.querySelector('input'), 'een beetje input');
+      //   });
+      // });
 
       // test('Als het filter-slot wijzigt wordt de nieuwe inhoud gekopieerd naar de searchfilter', (done) => {
       //   const table = fixture('vl-rich-data-table-met-filter-fixture');
