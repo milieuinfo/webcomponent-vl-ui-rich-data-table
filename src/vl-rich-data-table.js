@@ -155,10 +155,7 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
     _renderSearchFilter() {
         const filterSlot = this.querySelector("[slot='filter']");
         if (filterSlot) {
-            debugger
-            
-            filterSlot.addEventListener('slotchange', function(e) {
-                debugger;
+            this.__observeSlotElements(() => {
                 console.log(123);
             });
         }
@@ -169,6 +166,12 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
             });
     	}
     }
+
+    __observeSlotElements(callback) {
+		const observer = new MutationObserver(callback);
+		observer.observe(this, { attributes: true, childList: true, characterData: true, subtree: true });
+		return observer;
+	}
 
     __onFilterFieldChanged(originalEvent) {
     	originalEvent.stopPropagation();
