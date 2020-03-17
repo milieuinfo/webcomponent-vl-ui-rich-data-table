@@ -14,6 +14,10 @@ class VlRichDataTablePage extends Page {
     	return this._getRichDataTable("#rich-data-table");
     }
 
+    async getRichDataTableSorting() {
+        return this._getRichDataTable("#rich-data-table-sorting");
+    }
+
     async load() {
         await super.load(Config.baseUrl + '/demo/vl-rich-data-table.html');
     }
