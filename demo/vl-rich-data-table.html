@@ -240,5 +240,24 @@
                 });
             </script>
         </div>
+
+
+        <div>
+            <h2>Rich data table responsiveness</h2>
+            <pre>
+                <code class="line-numbers language-markup">
+                </code>
+            </pre>
+            <div class="demo">
+                <vl-rich-data-table id="rich-data-table-responsive" data-vl-collapsed-m  data-vl-data='[{"firstName": "Pascal", "lastName": "Riquier", "birthDate": "22/12/1980", "address": "Kerkstraat 7, 153O Zwevezele"},
+                	{"firstName": "Albert", "lastName": "Einstein", "birthDate": "14/03/1879", "address": "Dorpsstraat 145, 9877 Aalbeke"}]'>
+                    <vl-rich-data-field data-vl-label="Voornaam" data-vl-selector="firstName"></vl-rich-data-field>
+                    <vl-rich-data-field data-vl-label="Achternaam" data-vl-selector="lastName"></vl-rich-data-field>
+                    <vl-rich-data-field data-vl-label="Geboortedatum" data-vl-selector="birthDate"></vl-rich-data-field>
+                    <vl-rich-data-field data-vl-label="Adres" data-vl-selector="address"></vl-rich-data-field>
+                </vl-rich-data-table>
+            </div>
+        </div>
+
     </body>
 </html>

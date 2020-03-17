@@ -46,7 +46,7 @@
 	"dependencies": {
 		"vl-ui-core": "^5.0.3",
 		"vl-ui-icon": "^4.0.1",
-		"vl-ui-data-table": "^3.0.1",
+		"vl-ui-data-table": "^3.1.0",
 		"vl-ui-search-filter": "^3.1.0",
 		"vl-ui-pager": "^3.0.1",
 		"vl-ui-grid": "^3.0.1"
@@ -54,7 +54,7 @@
 	"peerDependencies": {
 		"vl-ui-core": "^5.0.3",
 		"vl-ui-icon": "^4.0.1",
-		"vl-ui-data-table": "^3.0.1",
+		"vl-ui-data-table": "^3.1.0",
 		"vl-ui-search-filter": "^3.1.0",
 		"vl-ui-pager": "^3.0.1",
 		"vl-ui-grid": "^3.0.1"
