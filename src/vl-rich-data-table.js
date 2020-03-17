@@ -154,6 +154,14 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
 
     _renderSearchFilter() {
         const filterSlot = this.querySelector("[slot='filter']");
+        if (filterSlot) {
+            debugger
+            
+            filterSlot.addEventListener('slotchange', function(e) {
+                debugger;
+                console.log(123);
+            });
+        }
     	if (filterSlot && ! this.__searchFilter) {
             this.shadowRoot.append(this._template(`<div is="vl-search-filter"><form>${this._searchFilterSlotContent}</form></div>`));
             this.__searchFilter.addEventListener('input', e => {

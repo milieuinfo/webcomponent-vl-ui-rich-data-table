@@ -61,8 +61,20 @@
                           </section>
                     </div>
                 </vl-rich-data-table>
+                <button id='button1'>clickme</button>
             </div>
         </div>
+
+        
+        <script>
+            document.querySelector('#button1').addEventListener('click', (e) => {
+                const filterContent = document.querySelector('[slot="filter"]');
+                debugger;
+                filterContent.innerHTML=' <input is="vl-input-field" type="text" id="filterOpId2" name="kolomId" value="" block/>';
+                debugger;
+            });
+
+        </script>
 
         <div>
             <h2>Rich data table met paginering</h2>

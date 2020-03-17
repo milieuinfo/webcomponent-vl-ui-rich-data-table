@@ -68,7 +68,7 @@
         });
       });
 
-      test('Als er aan een input van de search filter iets wijzigt wordt er een event gestuurd', (done) => {
+      test('Als er aan een input van de search filter iets wijzigt wordt er een event met formdata gestuurd', (done) => {
         const table = fixture('vl-rich-data-table-met-filter-fixture');
         
         setTimeout(() => {
@@ -81,6 +81,27 @@
           setInputValue(searchFilter.querySelector('input'), 'een beetje input');
         });
       });
+
+      // test('Als het filter-slot wijzigt wordt de nieuwe inhoud gekopieerd naar de searchfilter', (done) => {
+      //   const table = fixture('vl-rich-data-table-met-filter-fixture');
+      //   setTimeout(() => {
+      //     modifyFilterSlot(table, '<input type="text" name="filter2" />');
+      //     setTimeout(() => {
+
+      //       const searchFilter = table.__searchFilter;
+      //       expect(searchFilter.querySelector('input').getAttribute('name')).to.equal('filter2');
+      //       done();
+      //     });
+      //   });
+      // });
+
+
+      function modifyFilterSlot(fixture, html) {
+
+        const filterSlot = fixture.querySelector("[slot=filter]");
+        filterSlot.innerHTML = html;
+        debugger;
+      }
 
       function setInputValue(input, value) {
         input.value = value;
