@@ -30,6 +30,10 @@ class VlRichDataTablePage extends Page {
     	return this._getRichDataTable('#rich-data-table-collapsed-extra-small');
     }
 
+    async getRichDataTableFilter() {
+        return this._getRichDataTable('#rich-data-table-filter')
+    }
+
     async load() {
         await super.load(Config.baseUrl + '/demo/vl-rich-data-table.html');
     }

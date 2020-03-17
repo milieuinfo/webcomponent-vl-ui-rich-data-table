@@ -130,6 +130,11 @@ describe('vl-rich-data-table', async () => {
 		await assert.eventually.isFalse(richDatatableWithoutCollapsedExtraSmall.isCollapsedExtraSmall());
 	});
 
+	it('Als gebruiker kan ik de titel van een search filter zien', async () => {
+		const richDataTableWithFilter = await vlRichDataTablePage.getRichDataTableFilter();
+		await assert.eventually.equal(richDataTableWithFilter.getFilterTitle(), 'Verfijn uw zoekopdracht');
+	});
+
     async function assertHeaders(richDataTable, expectedHeaders) {
     	const table = await richDataTable.getDataTable();
     	const headers = await table.getDataTableHeader();

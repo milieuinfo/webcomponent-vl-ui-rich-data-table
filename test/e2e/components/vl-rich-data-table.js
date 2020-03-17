@@ -31,7 +31,11 @@ class VlRichDataTable extends VlElement {
 
     async isCollapsedExtraSmall() {
     	return this.hasAttribute('data-vl-collapsed-xs');
-    }
+	}
+	
+	async getFilterTitle() {
+		return this.getAttribute('data-vl-filter-title');
+	}
 }
 
 class VlRichDataSorter extends VlElement {
