@@ -15,14 +15,46 @@
       <vl-rich-data-field data-vl-selector="foo" data-vl-label="Foo"></vl-rich-data-field>
     </template>
   </test-fixture>
+
   <test-fixture id="vl-rich-data-field-fixture-nested-property">
     <template>
       <vl-rich-data-field data-vl-selector="foo.bar" data-vl-label="Foo"></vl-rich-data-field>
     </template>
   </test-fixture>
+
   <test-fixture id="vl-rich-data-field-fixture-nested-property-array">
     <template>
       <vl-rich-data-field data-vl-selector="foo.0.bar" data-vl-label="Foo"></vl-rich-data-field>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="vl-rich-data-field-content-template-fixture">
+    <template>
+      <vl-rich-data-field data-vl-label="Foo">
+        <template slot="content">
+          <span>foo</span>
+        </template>
+      </vl-rich-data-field>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="vl-rich-data-field-dynamic-content-template-fixture">
+    <template>
+      <vl-rich-data-field data-vl-label="Foo">
+        <template slot="content">
+          <span>${item.foo.bar}</span>
+        </template>
+      </vl-rich-data-field>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="vl-rich-data-field-label-template-fixture">
+    <template>
+      <vl-rich-data-field data-vl-selector="foo">
+        <template slot="label">
+          <span>Foo</span>
+        </template>
+      </vl-rich-data-field>
     </template>
   </test-fixture>
 
@@ -61,10 +93,29 @@
         should.not.exist(field.valueTemplate({}));
       });
 
+      test('Indien er geen selector attribuut aanwezig is, zal de template content slot gebruikt worden om de kolom te visualiseren', () => {
+        const field = fixture('vl-rich-data-field-content-template-fixture');
+        field.valueTemplate().should.equal(field.querySelector('template[slot="content"]').innerHTML);
+      });
+
+      test('In de template content slot kan er gebruik gemaakt worden van de field data om de kolom te visualiseren', () => {
+        const dataRow = {
+          foo: {
+            bar: 'foobar'
+          }
+        };
+        const field = fixture('vl-rich-data-field-dynamic-content-template-fixture');
+        field.valueTemplate(dataRow).trim('').should.equal('<span>foobar</span>');
+      });
+
       test('Men kan de template van de label van een field opvragen voor een bepaalde rij data', () => {
         const field = fixture('vl-rich-data-field-fixture');
-
         field.labelTemplate().should.equal('Foo');
+      });
+
+      test('Indien er geen label attribuut aanwezig is, zal de template label slot gebruikt worden om de header te visualiseren', () => {
+        const field = fixture('vl-rich-data-field-label-template-fixture');
+        field.labelTemplate().should.equal(field.querySelector('template[slot="label"]').innerHTML);
       });
 
       test('Het aanpassen van de selector zorgt voor het afvuren van een event', (done) => {
