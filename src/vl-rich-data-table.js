@@ -206,9 +206,21 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
 
     _createSearchFilter() {
         this.shadowRoot.append(this._template(`<div is="vl-search-filter"><form>${this._searchFilterSlotContent}</form></div>`));
+        this._voegTitelToeAanSearchFilter();
         this.__searchFilter.addEventListener('input', e => {
             this.__onFilterFieldChanged(e);
         });
+    }
+
+    _voegTitelToeAanSearchFilter() {
+        const searchFilterTitle = this.getAttribute('data-vl-filter-title');
+        if (searchFilterTitle !== undefined) {
+            this._zetTitelAttribuutOpSearchFilter(searchFilterTitle);
+        }
+    }
+
+    _zetTitelAttribuutOpSearchFilter(title) {
+        this.__searchFilter.setAttribute('data-vl-title', title);
     }
 
     __observeFilterSlotElement(filterSlot, callback) {
@@ -239,8 +251,10 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
 
     _data_vl_filter_titleChangedCallback(oldValue, newValue) {
         const searchFilter = this.__searchFilter;
+        console.log(1);
         if (searchFilter) {
-            searchFilter.setAttribute('data-vl-title', newValue);
+            console.log(2);
+            this._zetTitelAttribuutOpSearchFilter(newValue);
         }
     }
 

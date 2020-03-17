@@ -57,7 +57,7 @@
         });
       });
 
-      test('De titel wordt correct getoond om een searchfilter', (done) => {
+      test('De titel van de searchfilter wordt correct getoond', (done) => {
         const table = fixture('vl-rich-data-table-met-filter-fixture');
         setTimeout(() => {
 
@@ -94,6 +94,18 @@
         });
       });
 
+      test('De titel van de searchfilter wordt ook correct getoond als de inhoud van het filter-slot wijzig', (done) => {
+        const table = fixture('vl-rich-data-table-met-filter-fixture');
+        setTimeout(() => {
+          modifyFilterSlot(table, '<input type="text" name="filter2" />');
+          setTimeout(() => {
+            const searchFilter = table.__searchFilter;
+            const searchFilterTitle = searchFilter.getAttribute('data-vl-title');
+            searchFilterTitle.should.be.equal('title');
+            done();
+          });
+        });
+      });
 
       function modifyFilterSlot(fixture, html) {
         const filterSlot = fixture.querySelector("[slot=filter]");
