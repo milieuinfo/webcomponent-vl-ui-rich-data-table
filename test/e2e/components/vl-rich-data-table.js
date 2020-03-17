@@ -20,6 +20,18 @@ class VlRichDataTable extends VlElement {
 		const element = await this.shadowRoot.findElement(By.css(`vl-rich-data-sorter[data-vl-for="${field}"]`));
 		return new VlRichDataSorter(this.driver, element);
 	}
+
+    async isCollapsedMedium() {
+    	return this.hasAttribute('data-vl-collapsed-m');
+    }
+
+    async isCollapsedSmall() {
+    	return this.hasAttribute('data-vl-collapsed-s');
+    }
+
+    async isCollapsedExtraSmall() {
+    	return this.hasAttribute('data-vl-collapsed-xs');
+    }
 }
 
 class VlRichDataSorter extends VlElement {

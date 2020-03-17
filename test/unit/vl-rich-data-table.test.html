@@ -16,6 +16,12 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="vl-rich-data-table-fixture-responsive">
+    <template>
+      <vl-rich-data-table data-vl-collapsed-m data-vl-collapsed-s data-vl-collapsed-xs></vl-rich-data-table>
+    </template>
+  </test-fixture>
+
   <script>
     suite('<vl-rich-data-table>', () => {
       const should = chai.should();
@@ -39,6 +45,27 @@
         should.exist(table);
         should.exist(table.querySelector('thead'));
         should.exist(table.querySelector('tbody'));
+      });
+
+      test('De responsive attributen op de rich-data-table worden doorgezet naar zijn interne data-table', () => {
+        const richTable = fixture('vl-rich-data-table-fixture-responsive');
+        const table = richTable.shadowRoot.querySelector('[is="vl-data-table"]');
+        should.exist(table);
+        assert.isTrue(table.hasAttribute("collapsed-m"));
+        assert.isTrue(table.hasAttribute("collapsed-s"));
+        assert.isTrue(table.hasAttribute("collapsed-xs"));
+        richTable.removeAttribute("data-vl-collapsed-m");
+        richTable.removeAttribute("data-vl-collapsed-s");
+        richTable.removeAttribute("data-vl-collapsed-xs");
+        assert.isFalse(table.hasAttribute("collapsed-m"));
+        assert.isFalse(table.hasAttribute("collapsed-s"));
+        assert.isFalse(table.hasAttribute("collapsed-xs"));
+        richTable.setAttribute("data-vl-collapsed-m", "");
+        richTable.setAttribute("data-vl-collapsed-s", "");
+        richTable.setAttribute("data-vl-collapsed-xs", "");
+        assert.isTrue(table.hasAttribute("collapsed-m"));
+        assert.isTrue(table.hasAttribute("collapsed-s"));
+        assert.isTrue(table.hasAttribute("collapsed-xs"));
       });
 
       test('De data op een tabel kan gezet worden via het data-vl-data attribuut', () => {
