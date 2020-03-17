@@ -32,6 +32,14 @@
                     <vl-rich-data-field data-vl-label="Naam" data-vl-selector="name"></vl-rich-data-field>
                     <vl-rich-data-field data-vl-label="Naam manager" data-vl-selector="manager.lastName"></vl-rich-data-field>
                     <vl-rich-data-field data-vl-label="Eerste medewerker" data-vl-selector="medewerkers.0.lastName"></vl-rich-data-field>
+                    <vl-rich-data-field>
+                        <template slot="label">
+                            <span style="font-weight: normal">Project o.l.v.</span> <strong>manager</strong>
+                        </template>
+                        <template slot="content">
+                            <span>${item.name}</span> o.l.v. <strong>${item.manager.firstName} ${item.manager.lastName}</strong>
+                        </template>
+                    </vl-rich-data-field>
                 </vl-rich-data-table>
             </div>
         </div>
