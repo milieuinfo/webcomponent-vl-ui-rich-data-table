@@ -138,12 +138,12 @@
                         return data;
                     }
                     return data.filter(element => {
-                        const valueByPath = findByPath(element, pathToKey);
+                        const valueByPath = findValueByPath(element, pathToKey);
                         return valueByPath.includes(value);
                     });
                 }
 
-                function findByPath(element, pathToKey) {
+                function findValueByPath(element, pathToKey) {
                     var keys = pathToKey.split('.');
                     
                     let current = element;
