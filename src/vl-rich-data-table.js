@@ -13,6 +13,9 @@ import '/node_modules/vl-ui-grid/dist/vl-grid.js';
  *
  * @property {string} data-vl-data - De data die door de tabel getoond moet worden in JSON formaat.
  * @property {string} data-vl-filter-title - De titel die op de search filter getoond wordt.
+ * @property {boolean} data-vl-collaped-m - Vanaf een medium schermgrootte zullen de cellen van elke rij onder elkaar ipv naast elkaar getoond worden.
+ * @property {boolean} data-vl-collaped-s - Vanaf een small schermgrootte zullen de cellen van elke rij onder elkaar ipv naast elkaar getoond worden.
+ * @property {boolean} data-vl-collaped-xs - Vanaf een extra small schermgrootte zullen de cellen van elke rij onder elkaar ipv naast elkaar getoond worden.
  * 
  * @see {@link https://www.github.com/milieuinfo/webcomponent-vl-ui-rich-data-table/releases/latest|Release notes}
  * @see {@link https://www.github.com/milieuinfo/webcomponent-vl-ui-rich-data-table/issues|Issues}
@@ -21,7 +24,11 @@ import '/node_modules/vl-ui-grid/dist/vl-grid.js';
  */
 export class VlRichDataTable extends VlElement(HTMLElement) {
     static get _observedAttributes() {
-        return ['data-vl-data', 'data-vl-filter-title'];
+        return ['data-vl-data', 'data-vl-filter-title', 'data-vl-collapsed-m', 'data-vl-collapsed-s', 'data-vl-collapsed-xs'];
+    }
+    
+    static get _tableAttributes() {
+    	return [ "data-vl-collapsed-m", "data-vl-collapsed-s", "data-vl-collapsed-xs"];
     }
 
     static get is() {
@@ -50,6 +57,7 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
             </div>
         `);
 
+        this.__copyTableAttributes();
         this.__observeFields();
         this.__observeSorters();
         this._renderSearchFilter();
@@ -59,6 +67,30 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
         		this.__onStateChange(e);
         	});
         }
+    }
+    
+    attributeChangedCallback(attr, oldValue, newValue) {
+    	super.attributeChangedCallback(attr, oldValue, newValue);
+    	if (VlRichDataTable._tableAttributes.includes(attr)) {
+    		this.__setTableAttribute(attr, oldValue, newValue);
+    	}
+    }
+    
+    __copyTableAttributes() {
+    	VlRichDataTable._tableAttributes.forEach(attr => {
+    		if (this.hasAttribute(attr)) {
+    			this.__setTableAttribute(attr, null, "");
+    		}
+    	});
+    }
+    
+    __setTableAttribute(attr, oldValue, newValue) {
+    	const withoutDataVlPrefix = attr.substring("data-vl-".length);
+    	if (newValue != undefined && newValue != null) {
+    		this.__table.setAttribute(withoutDataVlPrefix, "");
+    	} else {
+    		this.__table.removeAttribute(withoutDataVlPrefix);
+    	}
     }
     
     get __pager() {
