@@ -144,8 +144,7 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
         this.data.forEach(rowData => {
             const rowTemplate = this._template(`<tr>
                 ${Array.from(this.__fields)
-                .map(field => field.valueTemplate ? field.valueTemplate(rowData) : '')
-                .map(value => `<td>${value}</td>`)
+                .map(field => field.renderCellValue ? field.renderCellValue(rowData) : '<td></td>')
                 .join('')}
             </tr>`);
             this.__tableBody.appendChild(rowTemplate);
@@ -366,7 +365,7 @@ export class VlRichDataField extends VlElement(HTMLElement) {
         }
     }
 
-    valueTemplate(rowData) {
+    __valueTemplate(rowData) {
         if (this.selector) {
             return this.selector.split('.').reduce(function(prev, curr) {
                 return prev ? prev[curr] : null
@@ -374,6 +373,15 @@ export class VlRichDataField extends VlElement(HTMLElement) {
         } else {
             return this.__template(`${this.querySelector('template[slot="content"]').innerHTML}`, rowData);
         }
+    }
+    
+    renderCellValue(rowData) {
+    	const value = this.__valueTemplate(rowData);
+    	if (this.label) {
+    		return `<td data-title="${this.label}">${value}</td>`;
+    	} else {
+    		return `<td>${value}</td>`;
+    	}
     }
 
     __template(literal, data) {
