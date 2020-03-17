@@ -344,11 +344,15 @@ export class VlRichDataField extends VlElement(HTMLElement) {
     }
 
     labelTemplate() {
-        let template = this.label;
-        if (this.sortable) {
-            template += `<vl-rich-data-sorter data-vl-for="${this.name}" ${this.sortingDirection ? 'data-vl-direction="' + this.sortingDirection + '"' : ''} ${this.sortingPriority ? 'data-vl-priority="' + this.sortingPriority + '"' : ''}></vl-rich-data-sorter>`;
+        if (this.label) {
+            let template = this.label;
+            if (this.sortable) {
+                template += `<vl-rich-data-sorter data-vl-for="${this.name}" ${this.sortingDirection ? 'data-vl-direction="' + this.sortingDirection + '"' : ''} ${this.sortingPriority ? 'data-vl-priority="' + this.sortingPriority + '"' : ''}></vl-rich-data-sorter>`;
+            }
+            return template;
+        } else {
+            return this.__template(`${this.querySelector('template[slot="label"]').innerHTML}`);
         }
-        return template;
     }
 
     valueTemplate(rowData) {
@@ -357,7 +361,7 @@ export class VlRichDataField extends VlElement(HTMLElement) {
                 return prev ? prev[curr] : null
             }, rowData);
         } else {
-            return this.__template(`${this.querySelector('template').innerHTML}`, rowData);
+            return this.__template(`${this.querySelector('template[slot="content"]').innerHTML}`, rowData);
         }
     }
 
