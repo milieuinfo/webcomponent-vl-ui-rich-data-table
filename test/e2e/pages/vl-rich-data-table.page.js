@@ -18,6 +18,18 @@ class VlRichDataTablePage extends Page {
         return this._getRichDataTable("#rich-data-table-sorting");
     }
 
+    async getRichDataTableCollapsedMedium() {
+    	return this._getRichDataTable('#rich-data-table-collapsed-medium');
+    }
+    
+    async getRichDataTableCollapsedSmall() {
+    	return this._getRichDataTable('#rich-data-table-collapsed-small');
+    }
+    
+    async getRichDataTableCollapsedExtraSmall() {
+    	return this._getRichDataTable('#rich-data-table-collapsed-extra-small');
+    }
+
     async load() {
         await super.load(Config.baseUrl + '/demo/vl-rich-data-table.html');
     }

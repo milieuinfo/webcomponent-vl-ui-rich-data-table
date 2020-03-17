@@ -243,14 +243,69 @@
 
 
         <div>
-            <h2>Rich data table responsiveness</h2>
+            <h2>Rich data table responsive medium</h2>
             <pre>
                 <code class="line-numbers language-markup">
+                    &lt;vl-rich-data-table id=&quot;rich-data-table-collapsed-medium&quot; data-vl-collapsed-m  data-vl-data='[{&quot;firstName&quot;: &quot;Pascal&quot;, &quot;lastName&quot;: &quot;Riquier&quot;, &quot;birthDate&quot;: &quot;22/12/1980&quot;, &quot;address&quot;: &quot;Kerkstraat 7, 153O Zwevezele&quot;},
+                        {&quot;firstName&quot;: &quot;Albert&quot;, &quot;lastName&quot;: &quot;Einstein&quot;, &quot;birthDate&quot;: &quot;14/03/1879&quot;, &quot;address&quot;: &quot;Dorpsstraat 145, 9877 Aalbeke&quot;}]'&gt;
+                        &lt;vl-rich-data-field data-vl-label=&quot;Voornaam&quot; data-vl-selector=&quot;firstName&quot;&gt;&lt;/vl-rich-data-field&gt;
+                        &lt;vl-rich-data-field data-vl-label=&quot;Achternaam&quot; data-vl-selector=&quot;lastName&quot;&gt;&lt;/vl-rich-data-field&gt;
+                        &lt;vl-rich-data-field data-vl-label=&quot;Geboortedatum&quot; data-vl-selector=&quot;birthDate&quot;&gt;&lt;/vl-rich-data-field&gt;
+                        &lt;vl-rich-data-field data-vl-label=&quot;Adres&quot; data-vl-selector=&quot;address&quot;&gt;&lt;/vl-rich-data-field&gt;
+                    &lt;/vl-rich-data-table&gt;
                 </code>
             </pre>
             <div class="demo">
-                <vl-rich-data-table id="rich-data-table-responsive" data-vl-collapsed-m  data-vl-data='[{"firstName": "Pascal", "lastName": "Riquier", "birthDate": "22/12/1980", "address": "Kerkstraat 7, 153O Zwevezele"},
-                	{"firstName": "Albert", "lastName": "Einstein", "birthDate": "14/03/1879", "address": "Dorpsstraat 145, 9877 Aalbeke"}]'>
+                <vl-rich-data-table id="rich-data-table-collapsed-medium" data-vl-collapsed-m  data-vl-data='[{"firstName": "Pascal", "lastName": "Riquier", "birthDate": "22/12/1980", "address": "Kerkstraat 7, 153O Zwevezele"},
+                    {"firstName": "Albert", "lastName": "Einstein", "birthDate": "14/03/1879", "address": "Dorpsstraat 145, 9877 Aalbeke"}]'>
+                    <vl-rich-data-field data-vl-label="Voornaam" data-vl-selector="firstName"></vl-rich-data-field>
+                    <vl-rich-data-field data-vl-label="Achternaam" data-vl-selector="lastName"></vl-rich-data-field>
+                    <vl-rich-data-field data-vl-label="Geboortedatum" data-vl-selector="birthDate"></vl-rich-data-field>
+                    <vl-rich-data-field data-vl-label="Adres" data-vl-selector="address"></vl-rich-data-field>
+                </vl-rich-data-table>
+            </div>
+        </div>
+
+        <div>
+            <h2>Rich data table responsive small</h2>
+            <pre>
+                <code class="line-numbers language-markup">
+                    &lt;vl-rich-data-table id=&quot;rich-data-table-collapsed-small&quot; data-vl-collapsed-s  data-vl-data='[{&quot;firstName&quot;: &quot;Pascal&quot;, &quot;lastName&quot;: &quot;Riquier&quot;, &quot;birthDate&quot;: &quot;22/12/1980&quot;, &quot;address&quot;: &quot;Kerkstraat 7, 153O Zwevezele&quot;},
+                        {&quot;firstName&quot;: &quot;Albert&quot;, &quot;lastName&quot;: &quot;Einstein&quot;, &quot;birthDate&quot;: &quot;14/03/1879&quot;, &quot;address&quot;: &quot;Dorpsstraat 145, 9877 Aalbeke&quot;}]'&gt;
+                        &lt;vl-rich-data-field data-vl-label=&quot;Voornaam&quot; data-vl-selector=&quot;firstName&quot;&gt;&lt;/vl-rich-data-field&gt;
+                        &lt;vl-rich-data-field data-vl-label=&quot;Achternaam&quot; data-vl-selector=&quot;lastName&quot;&gt;&lt;/vl-rich-data-field&gt;
+                        &lt;vl-rich-data-field data-vl-label=&quot;Geboortedatum&quot; data-vl-selector=&quot;birthDate&quot;&gt;&lt;/vl-rich-data-field&gt;
+                        &lt;vl-rich-data-field data-vl-label=&quot;Adres&quot; data-vl-selector=&quot;address&quot;&gt;&lt;/vl-rich-data-field&gt;
+                    &lt;/vl-rich-data-table&gt;
+                </code>
+            </pre>
+            <div class="demo">
+                <vl-rich-data-table id="rich-data-table-collapsed-small" data-vl-collapsed-s  data-vl-data='[{"firstName": "Pascal", "lastName": "Riquier", "birthDate": "22/12/1980", "address": "Kerkstraat 7, 153O Zwevezele"},
+                    {"firstName": "Albert", "lastName": "Einstein", "birthDate": "14/03/1879", "address": "Dorpsstraat 145, 9877 Aalbeke"}]'>
+                    <vl-rich-data-field data-vl-label="Voornaam" data-vl-selector="firstName"></vl-rich-data-field>
+                    <vl-rich-data-field data-vl-label="Achternaam" data-vl-selector="lastName"></vl-rich-data-field>
+                    <vl-rich-data-field data-vl-label="Geboortedatum" data-vl-selector="birthDate"></vl-rich-data-field>
+                    <vl-rich-data-field data-vl-label="Adres" data-vl-selector="address"></vl-rich-data-field>
+                </vl-rich-data-table>
+            </div>
+        </div>
+
+        <div>
+            <h2>Rich data table responsive extra small</h2>
+            <pre>
+                <code class="line-numbers language-markup">
+                    &lt;vl-rich-data-table id=&quot;rich-data-table-collapsed-extra-small&quot; data-vl-collapsed-xs  data-vl-data='[{&quot;firstName&quot;: &quot;Pascal&quot;, &quot;lastName&quot;: &quot;Riquier&quot;, &quot;birthDate&quot;: &quot;22/12/1980&quot;, &quot;address&quot;: &quot;Kerkstraat 7, 153O Zwevezele&quot;},
+                        {&quot;firstName&quot;: &quot;Albert&quot;, &quot;lastName&quot;: &quot;Einstein&quot;, &quot;birthDate&quot;: &quot;14/03/1879&quot;, &quot;address&quot;: &quot;Dorpsstraat 145, 9877 Aalbeke&quot;}]'&gt;
+                        &lt;vl-rich-data-field data-vl-label=&quot;Voornaam&quot; data-vl-selector=&quot;firstName&quot;&gt;&lt;/vl-rich-data-field&gt;
+                        &lt;vl-rich-data-field data-vl-label=&quot;Achternaam&quot; data-vl-selector=&quot;lastName&quot;&gt;&lt;/vl-rich-data-field&gt;
+                        &lt;vl-rich-data-field data-vl-label=&quot;Geboortedatum&quot; data-vl-selector=&quot;birthDate&quot;&gt;&lt;/vl-rich-data-field&gt;
+                        &lt;vl-rich-data-field data-vl-label=&quot;Adres&quot; data-vl-selector=&quot;address&quot;&gt;&lt;/vl-rich-data-field&gt;
+                    &lt;/vl-rich-data-table&gt;
+                </code>
+            </pre>
+            <div class="demo">
+                <vl-rich-data-table id="rich-data-table-collapsed-extra-small" data-vl-collapsed-xs  data-vl-data='[{"firstName": "Pascal", "lastName": "Riquier", "birthDate": "22/12/1980", "address": "Kerkstraat 7, 153O Zwevezele"},
+                    {"firstName": "Albert", "lastName": "Einstein", "birthDate": "14/03/1879", "address": "Dorpsstraat 145, 9877 Aalbeke"}]'>
                     <vl-rich-data-field data-vl-label="Voornaam" data-vl-selector="firstName"></vl-rich-data-field>
                     <vl-rich-data-field data-vl-label="Achternaam" data-vl-selector="lastName"></vl-rich-data-field>
                     <vl-rich-data-field data-vl-label="Geboortedatum" data-vl-selector="birthDate"></vl-rich-data-field>

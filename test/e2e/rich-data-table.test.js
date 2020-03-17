@@ -103,7 +103,28 @@ describe('vl-rich-data-table', async () => {
 		await assert.eventually.isTrue(nameSorter.isAscending());
 		await assert.eventually.equal(nameSorter.getPriority(), "2");
 	});
-    
+
+	it('Als gebruiker zie ik het onderscheid tussen een collapsed-medium rich-data-table en een zonder', async() => {
+		const richDatatableWithCollapsedMedium = await vlRichDataTablePage.getRichDataTableCollapsedMedium();
+		await assert.eventually.isTrue(richDatatableWithCollapsedMedium.isCollapsedMedium());
+		const richDatatableWithoutCollapsedMedium = await vlRichDataTablePage.getRichDataTablePaging();
+		await assert.eventually.isFalse(richDatatableWithoutCollapsedMedium.isCollapsedMedium());
+	});
+
+	it('Als gebruiker zie ik het onderscheid tussen een collapsed-small rich-data-table en een zonder', async() => {
+		const richDatatableWithCollapsedSmall = await vlRichDataTablePage.getRichDataTableCollapsedSmall();
+		await assert.eventually.isTrue(richDatatableWithCollapsedSmall.isCollapsedSmall());
+		const richDatatableWithoutCollapsedSmall = await vlRichDataTablePage.getRichDataTablePaging();
+		await assert.eventually.isFalse(richDatatableWithoutCollapsedSmall.isCollapsedSmall());
+	});
+	
+	it('Als gebruiker zie ik het onderscheid tussen een collapsed-extra-small rich-data-table en een zonder', async() => {
+		const richDatatableWithCollapsedExtraSmall = await vlRichDataTablePage.getRichDataTableCollapsedExtraSmall();
+		await assert.eventually.isTrue(richDatatableWithCollapsedExtraSmall.isCollapsedExtraSmall());
+		const richDatatableWithoutCollapsedExtraSmall = await vlRichDataTablePage.getRichDataTablePaging();
+		await assert.eventually.isFalse(richDatatableWithoutCollapsedExtraSmall.isCollapsedExtraSmall());
+	});
+
     async function assertAantalRows(richDataTable, aantal) {
     	const table = await richDataTable.getDataTable();
     	const body = await table.getDataTableBody();
