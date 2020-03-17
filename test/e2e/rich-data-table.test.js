@@ -8,7 +8,12 @@ describe('vl-rich-data-table', async () => {
         return vlRichDataTablePage.load();
     });
 
-    it('Als gebruiker kan ik allerlei soorten selectoren gebruiken voor velden van een rich table', async () => {
+	it('Als gebruiker kan ik de hoofdingen van een rich data table zien', async () => {
+		const vlRichDataTable = await vlRichDataTablePage.getRichDataTable();
+		await assertHeaders(vlRichDataTable, [ "ID", "Naam", "Naam manager", "Eerste medewerker", "Project o.l.v. manager" ]);
+	});
+
+    it('Als gebruiker kan ik allerlei soorten selectoren gebruiken voor velden van een rich data table', async () => {
     	const vlRichDataTable = await vlRichDataTablePage.getRichDataTable();
     	await assertAantalRows(vlRichDataTable, 2);
 		await assertRow(vlRichDataTable, 0, [0, "Project #1", "Riquier", "Kleykens", "Project #1 o.l.v. Pascal Riquier"]);
@@ -103,11 +108,19 @@ describe('vl-rich-data-table', async () => {
 		await assert.eventually.isTrue(nameSorter.isAscending());
 		await assert.eventually.equal(nameSorter.getPriority(), "2");
 	});
+
+    async function assertHeaders(richDataTable, expectedHeaders) {
+    	const table = await richDataTable.getDataTable();
+    	const headers = await table.getDataTableHeader();
+		const rows = await headers.getRows();
+		const cells = await rows[0].getCells();
+		await assertCells(cells, expectedHeaders);
+	}
     
     async function assertAantalRows(richDataTable, aantal) {
     	const table = await richDataTable.getDataTable();
     	const body = await table.getDataTableBody();
-    	assert.eventually.lengthOf(body.getRows(), aantal);
+    	await assert.eventually.lengthOf(body.getRows(), aantal);
     }
     
     async function assertRow(richDataTable, index, values) {
@@ -115,11 +128,13 @@ describe('vl-rich-data-table', async () => {
     	const body = await table.getDataTableBody();
     	const rows = await body.getRows();
     	const cells = await rows[index].getCells();
-    	assert.equal(cells.length, values.length);
-    	for (let i = 0; i < cells.length; i++) {
-    		const cellValue = await cells[i].getText();
-    		assert.equal(cellValue, values[i]);
-    	}
+    	await assertCells(cells, values);
     }
 
+    async function assertCells(cells, values) {
+		assert.lengthOf(cells, values.length);
+		for (let i = 0; i < cells.length; i++) {
+			await assert.eventually.equal(cells[i].getText(), values[i])
+		}
+	}
 });
