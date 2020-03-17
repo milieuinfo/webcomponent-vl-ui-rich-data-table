@@ -154,6 +154,11 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
 
     _renderSearchFilter() {
         const filterSlot = this.querySelector("[slot='filter']");
+        if (filterSlot) {
+            this.__observeSlotElements(() => {
+                console.log(123);
+            });
+        }
     	if (filterSlot && ! this.__searchFilter) {
             this.shadowRoot.append(this._template(`<div is="vl-search-filter"><form>${this._searchFilterSlotContent}</form></div>`));
             this.__searchFilter.addEventListener('input', e => {
@@ -161,6 +166,12 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
             });
     	}
     }
+
+    __observeSlotElements(callback) {
+		const observer = new MutationObserver(callback);
+		observer.observe(this, { attributes: true, childList: true, characterData: true, subtree: true });
+		return observer;
+	}
 
     __onFilterFieldChanged(originalEvent) {
     	originalEvent.stopPropagation();
@@ -344,17 +355,29 @@ export class VlRichDataField extends VlElement(HTMLElement) {
     }
 
     labelTemplate() {
-        let template = this.label;
-        if (this.sortable) {
-            template += `<vl-rich-data-sorter data-vl-for="${this.name}" ${this.sortingDirection ? 'data-vl-direction="' + this.sortingDirection + '"' : ''} ${this.sortingPriority ? 'data-vl-priority="' + this.sortingPriority + '"' : ''}></vl-rich-data-sorter>`;
+        if (this.label) {
+            let template = this.label;
+            if (this.sortable) {
+                template += `<vl-rich-data-sorter data-vl-for="${this.name}" ${this.sortingDirection ? 'data-vl-direction="' + this.sortingDirection + '"' : ''} ${this.sortingPriority ? 'data-vl-priority="' + this.sortingPriority + '"' : ''}></vl-rich-data-sorter>`;
+            }
+            return template;
+        } else {
+            return this.__template(`${this.querySelector('template[slot="label"]').innerHTML}`);
         }
-        return template;
     }
 
     valueTemplate(rowData) {
-        return this.selector.split('.').reduce(function(prev, curr) {
-            return prev ? prev[curr] : null
-        }, rowData);
+        if (this.selector) {
+            return this.selector.split('.').reduce(function(prev, curr) {
+                return prev ? prev[curr] : null
+            }, rowData);
+        } else {
+            return this.__template(`${this.querySelector('template[slot="content"]').innerHTML}`, rowData);
+        }
+    }
+
+    __template(literal, data) {
+        return ((literal, item) => new Function('item', 'return `' + literal + '`')(item)).call(this, literal, data);
     }
 
     /**
