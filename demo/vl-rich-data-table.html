@@ -60,36 +60,103 @@
                 </code>
             </pre>
             <div class="demo">
-                <vl-rich-data-table data-vl-data='[{"id": 0, "name": "Project #1"}, {"id": 1, "name": "Project #2"}]' data-vl-filter-title="Verfijn uw zoekopdracht">
+                <vl-rich-data-table id="rich-data-table-filter" data-vl-filter-title="Verfijn uw zoekopdracht">
                     <vl-rich-data-field data-vl-label="ID" data-vl-selector="id"></vl-rich-data-field>
-                    <vl-rich-data-field data-vl-label="Naam" data-vl-selector="name"></vl-rich-data-field>
+                    <vl-rich-data-field data-vl-label="Naam Project" data-vl-selector="name"></vl-rich-data-field>
+                    <vl-rich-data-field data-vl-label="Naam Manager" data-vl-selector="manager.lastName"></vl-rich-data-field>
+                    <vl-rich-data-field data-vl-label="Eerste medewerker" data-vl-selector="medewerkers.0.lastName"></vl-rich-data-field>
+                        <vl-rich-data-field>
+                            <template slot="label">
+                                <span style="font-weight: normal">Project o.l.v.</span> <strong>manager</strong>
+                            </template>
+                            <template slot="content">
+                                <span>${item.name}</span> o.l.v. <strong>${item.manager.firstName} ${item.manager.lastName}</strong>
+                            </template>
+                        </vl-rich-data-field>
                     <div slot="filter">
                         <section>
                             <h2>Gegevens</h2>
                             <div>
                               <label is="form-label" for="filterOpId">Id</label>
-                              <input is="vl-input-field" type="text" id="filterOpId" name="kolomId" value="" block/>
+                              <input is="vl-input-field" id="filterOpId" type="text" name="id" value="" block/>
                             </div>
                             <div>
-                              <label is="form-label" for="filterOpNaam">Naam</label>
-                              <input is="vl-input-field" type="text" id="filterOpNaam" name="kolomNaam" value="" block/>
+                              <label is="form-label" for="filterOpNaamProject">Naam Project</label>
+                              <input is="vl-input-field" id="filterOpNaamProject" type="text" name="name" value="" block/>
                             </div>
+                            <div>
+                                <label is="form-label" for="filterOpNaamManager">Familienaam manager</label>
+                                <input is="vl-input-field" id="filterOpNaamManager" type="text" name="manager.lastName" value="" block/>
+                              </div>
                           </section>
                     </div>
                 </vl-rich-data-table>
-                <button id='button1'>clickme</button>
             </div>
         </div>
 
         
         <script>
-            document.querySelector('#button1').addEventListener('click', (e) => {
-                const filterContent = document.querySelector('[slot="filter"]');
-                debugger;
-                filterContent.innerHTML=' <input is="vl-input-field" type="text" id="filterOpId2" name="kolomId" value="" block/>';
-                debugger;
-            });
+            customElements.whenDefined('vl-rich-data-table').then(() => {
+                
+                const richDataTableFilter = document.querySelector('#rich-data-table-filter');
+                const richDataTableFilterData = [
+                                                    {
+                                                        "id": 0, 
+                                                        "name": "Project #1", 
+                                                        "manager": {"firstName": "Pascal", "lastName": "Riquier"}, 
+                                                        "medewerkers": [{"firstName": "Sander", "lastName": "Kleykens"}]
+                                                    }, 
+                                                    {
+                                                        "id": 1, "name": 
+                                                        "Project #2", 
+                                                        "manager": {"firstName": "Tom", "lastName": "Coemans"}, 
+                                                        "medewerkers": [{"firstName": "Guy", "lastName": "Wauters"}]
+                                                    },
+                                                    {
+                                                        "id": 2, 
+                                                        "name": "Project #3", 
+                                                        "manager": {"firstName": "Pascal", "lastName": "Riquier"}, 
+                                                        "medewerkers": [{"firstName": "Pieter", "lastName": "Beckers"}]
+                                                    }
+                                                ];
+                richDataTableFilter.data = richDataTableFilterData;
 
+                richDataTableFilter.addEventListener('change', (e) => {
+
+                    let filteredData = richDataTableFilterData;
+                    if (e.detail.formData) {
+                        for (let entry of e.detail.formData.entries()) {
+                            filteredData = filter(filteredData, entry[0], entry[1]);
+                        }
+                    }
+                    richDataTableFilter.data = filteredData;
+                });
+
+
+                function filter(data, pathToKey, value) {
+                    if (value === "") {
+                        return data;
+                    }
+                    return data.filter(element => {
+                        const valueByPath = findByPath(element, pathToKey);
+                        return valueByPath.includes(value);
+                    });
+                }
+
+                function findByPath(element, pathToKey) {
+                    var keys = pathToKey.split('.');
+                    
+                    let current = element;
+                    for (let i = 0; i < keys.length; i++) {
+                        if (current[keys[i]] !== undefined) {
+                            current = current[keys[i]];
+                        } else {
+                            return undefined;
+                        }
+                    }
+                    return current.toString();
+                }
+            });
         </script>
 
         <div>
