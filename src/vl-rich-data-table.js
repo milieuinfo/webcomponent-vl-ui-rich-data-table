@@ -352,9 +352,17 @@ export class VlRichDataField extends VlElement(HTMLElement) {
     }
 
     valueTemplate(rowData) {
-        return this.selector.split('.').reduce(function(prev, curr) {
-            return prev ? prev[curr] : null
-        }, rowData);
+        if (this.selector) {
+            return this.selector.split('.').reduce(function(prev, curr) {
+                return prev ? prev[curr] : null
+            }, rowData);
+        } else {
+            return this.__template(`${this.querySelector('template').innerHTML}`, rowData);
+        }
+    }
+
+    __template(literal, data) {
+        return ((literal, item) => new Function('item', 'return `' + literal + '`')(item)).call(this, literal, data);
     }
 
     /**
