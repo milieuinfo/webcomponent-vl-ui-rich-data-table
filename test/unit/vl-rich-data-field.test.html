@@ -40,26 +40,26 @@
       });
 
       test('Men kan de template van de waarde van een field met een geneste object structuur opvragen voor een bepaalde rij data', () => {
-          const dataRow = {
-            foo: {
-            	bar: 'foobar'
-            }
-          };
-          const field = fixture('vl-rich-data-field-fixture-nested-property');
-          field.valueTemplate(dataRow).should.equal('foobar');
-          should.not.exist(field.valueTemplate({}));
-        });
+        const dataRow = {
+          foo: {
+            bar: 'foobar'
+          }
+        };
+        const field = fixture('vl-rich-data-field-fixture-nested-property');
+        field.valueTemplate(dataRow).should.equal('foobar');
+        should.not.exist(field.valueTemplate({}));
+      });
 
       test('Men kan de template van de waarde van een field met een geneste object structuur met een array index opvragen voor een bepaalde rij data', () => {
-          const dataRow = {
-            foo: [{
-            	bar: 'foobar'
-            }]
-          };
-          const field = fixture('vl-rich-data-field-fixture-nested-property-array');
-          field.valueTemplate(dataRow).should.equal('foobar');
-          should.not.exist(field.valueTemplate({}));
-        });
+        const dataRow = {
+          foo: [{
+            bar: 'foobar'
+          }]
+        };
+        const field = fixture('vl-rich-data-field-fixture-nested-property-array');
+        field.valueTemplate(dataRow).should.equal('foobar');
+        should.not.exist(field.valueTemplate({}));
+      });
 
       test('Men kan de template van de label van een field opvragen voor een bepaalde rij data', () => {
         const field = fixture('vl-rich-data-field-fixture');
