@@ -2,6 +2,7 @@ const { VlElement } = require('vl-ui-core').Test;
 const { By } = require('vl-ui-core').Test.Setup;
 const { VlPager } = require('vl-ui-pager').Test;
 const { VlDataTable } = require('vl-ui-data-table').Test;
+const { VlSearchFilter } = require('vl-ui-search-filter').Test;
 const { VlIcon } = require('vl-ui-icon').Test;
 
 class VlRichDataTable extends VlElement {
@@ -35,6 +36,11 @@ class VlRichDataTable extends VlElement {
 	
 	async getFilterTitle() {
 		return this.getAttribute('data-vl-filter-title');
+	}
+
+	async getSearchFilter() {
+		const searchFilter = await this.shadowRoot.findElement(By.css("[is='vl-search-filter']"));
+		return new VlSearchFilter(this.driver, searchFilter);
 	}
 }
 
