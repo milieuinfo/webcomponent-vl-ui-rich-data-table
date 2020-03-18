@@ -67,6 +67,6 @@
 	"devDependencies": {
 		"@govflanders/vl-ui-util": "3.9.1",
 		"vl-ui-util": "^5.0.9",
-		"vl-ui-input-field": "^3.0.0"
+		"vl-ui-input-field": "^3.0.1"
 	}
 }

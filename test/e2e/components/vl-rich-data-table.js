@@ -4,6 +4,7 @@ const { VlPager } = require('vl-ui-pager').Test;
 const { VlDataTable } = require('vl-ui-data-table').Test;
 const { VlSearchFilter } = require('vl-ui-search-filter').Test;
 const { VlIcon } = require('vl-ui-icon').Test;
+const { VlButton } = require('vl-ui-button').Test;
 
 class VlRichDataTable extends VlElement {
 	async getPager() {
@@ -39,9 +40,14 @@ class VlRichDataTable extends VlElement {
 		return new VlSearchFilter(this.driver, searchFilter);
 	}
 
-	async getSearchFilterField(name) {
+	async search() {
+		const button = await this._getSearchButton();
+		return button.click();
+	}
+
+	async _getSearchButton() {
 		const searchFilter = await this.getSearchFilter();
-		return searchFilter.findElement(By.css(`[name="${name}"]`));
+		return new VlButton(this.driver, await searchFilter.findElement(By.css('button')));
 	}
 }
 

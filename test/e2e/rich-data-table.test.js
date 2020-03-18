@@ -1,40 +1,41 @@
-const { assert, driver } = require('vl-ui-core').Test.Setup;
+const { assert, driver, By } = require('vl-ui-core').Test.Setup;
 const VlRichDataTablePage = require('./pages/vl-rich-data-table.page');
 const { Key } = require('selenium-webdriver');
+const { VlInputField } = require('vl-ui-input-field').Test;
 
 describe('vl-rich-data-table', async () => {
-    const vlRichDataTablePage = new VlRichDataTablePage(driver);
+	const vlRichDataTablePage = new VlRichDataTablePage(driver);
 
-    before(() => {
-        return vlRichDataTablePage.load();
-    });
+	before(() => {
+		return vlRichDataTablePage.load();
+	});
 
 	it('Als gebruiker kan ik de hoofdingen van een rich data table zien', async () => {
 		const vlRichDataTable = await vlRichDataTablePage.getRichDataTable();
-		await assertHeaders(vlRichDataTable, [ "ID", "Naam", "Naam manager", "Eerste medewerker", "Project o.l.v. manager" ]);
+		await assertHeaders(vlRichDataTable, ["ID", "Naam", "Naam manager", "Eerste medewerker", "Project o.l.v. manager"]);
 	});
 
-    it('Als gebruiker kan ik allerlei soorten selectoren gebruiken voor velden van een rich data table', async () => {
-    	const vlRichDataTable = await vlRichDataTablePage.getRichDataTable();
-    	await assertAantalRows(vlRichDataTable, 2);
+	it('Als gebruiker kan ik allerlei soorten selectoren gebruiken voor velden van een rich data table', async () => {
+		const vlRichDataTable = await vlRichDataTablePage.getRichDataTable();
+		await assertAantalRows(vlRichDataTable, 2);
 		await assertRow(vlRichDataTable, 0, [0, "Project #1", "Riquier", "Kleykens", "Project #1 o.l.v. Pascal Riquier"]);
 		await assertRow(vlRichDataTable, 1, [1, "Project #2", "Coemans", "Wauters", "Project #2 o.l.v. Tom Coemans"]);
-    });
+	});
 
-    it('Als gebruiker kan ik pagineren door de verschillende paginas van een rich data table', async () => {
-    	const vlRichDataTablePaging = await vlRichDataTablePage.getRichDataTablePaging();
-    	await assertAantalRows(vlRichDataTablePaging, 5);
-    	await assertRow(vlRichDataTablePaging, 0, [1, "Project #1"]);
-    	const pager = await vlRichDataTablePaging.getPager();
-    	await pager.goToNextPage();
-    	await assertAantalRows(vlRichDataTablePaging, 5);
-    	await assertRow(vlRichDataTablePaging, 0, [6, "Project #6"]);
-    	await pager.goToPreviousPage();
-    	await assertAantalRows(vlRichDataTablePaging, 5);
-    	await assertRow(vlRichDataTablePaging, 0, [1, "Project #1"]);
-    });
+	it('Als gebruiker kan ik pagineren door de verschillende paginas van een rich data table', async () => {
+		const vlRichDataTablePaging = await vlRichDataTablePage.getRichDataTablePaging();
+		await assertAantalRows(vlRichDataTablePaging, 5);
+		await assertRow(vlRichDataTablePaging, 0, [1, "Project #1"]);
+		const pager = await vlRichDataTablePaging.getPager();
+		await pager.goToNextPage();
+		await assertAantalRows(vlRichDataTablePaging, 5);
+		await assertRow(vlRichDataTablePaging, 0, [6, "Project #6"]);
+		await pager.goToPreviousPage();
+		await assertAantalRows(vlRichDataTablePaging, 5);
+		await assertRow(vlRichDataTablePaging, 0, [1, "Project #1"]);
+	});
 
-    it('Als gebruiker kan ik sorteren op de kolommen van een rich data table', async () => {
+	it('Als gebruiker kan ik sorteren op de kolommen van een rich data table', async () => {
 		const vlRichDataTableSorting = await vlRichDataTablePage.getRichDataTableSorting();
 		await assertAantalRows(vlRichDataTableSorting, 2);
 		await assertRow(vlRichDataTableSorting, 0, [0, "Project #1", "Jan Jansens"]);
@@ -110,74 +111,78 @@ describe('vl-rich-data-table', async () => {
 		await assert.eventually.equal(nameSorter.getPriority(), "2");
 	});
 
-	it('Als gebruiker zie ik het onderscheid tussen een collapsed-medium rich-data-table en een zonder', async() => {
+	it('Als gebruiker zie ik het onderscheid tussen een collapsed-medium rich-data-table en een zonder', async () => {
 		const richDatatableWithCollapsedMedium = await vlRichDataTablePage.getRichDataTableCollapsedMedium();
 		await assert.eventually.isTrue(richDatatableWithCollapsedMedium.isCollapsedMedium());
 		const richDatatableWithoutCollapsedMedium = await vlRichDataTablePage.getRichDataTablePaging();
 		await assert.eventually.isFalse(richDatatableWithoutCollapsedMedium.isCollapsedMedium());
 	});
 
-	it('Als gebruiker zie ik het onderscheid tussen een collapsed-small rich-data-table en een zonder', async() => {
+	it('Als gebruiker zie ik het onderscheid tussen een collapsed-small rich-data-table en een zonder', async () => {
 		const richDatatableWithCollapsedSmall = await vlRichDataTablePage.getRichDataTableCollapsedSmall();
 		await assert.eventually.isTrue(richDatatableWithCollapsedSmall.isCollapsedSmall());
 		const richDatatableWithoutCollapsedSmall = await vlRichDataTablePage.getRichDataTablePaging();
 		await assert.eventually.isFalse(richDatatableWithoutCollapsedSmall.isCollapsedSmall());
 	});
 
-	it('Als gebruiker zie ik het onderscheid tussen een collapsed-extra-small rich-data-table en een zonder', async() => {
+	it('Als gebruiker zie ik het onderscheid tussen een collapsed-extra-small rich-data-table en een zonder', async () => {
 		const richDatatableWithCollapsedExtraSmall = await vlRichDataTablePage.getRichDataTableCollapsedExtraSmall();
 		await assert.eventually.isTrue(richDatatableWithCollapsedExtraSmall.isCollapsedExtraSmall());
 		const richDatatableWithoutCollapsedExtraSmall = await vlRichDataTablePage.getRichDataTablePaging();
 		await assert.eventually.isFalse(richDatatableWithoutCollapsedExtraSmall.isCollapsedExtraSmall());
 	});
 
-	it('Als gebruiker kan ik op verschillende velden filteren', async() => {
+	it('Als gebruiker kan ik op verschillende velden filteren', async () => {
 		const richDataTableWithFilter = await vlRichDataTablePage.getRichDataTableFilter();
-		const filterManagerLastNameVeld = await richDataTableWithFilter.getSearchFilterField('manager.lastName');
-		await filterManagerLastNameVeld.sendKeys('Riq');
+		const searchFilter = await richDataTableWithFilter.getSearchFilter();
+		const filterManagerLastNameVeld = await new VlInputField(driver, await searchFilter.findElement(By.css('[name="manager.lastName"]')));
+		await filterManagerLastNameVeld.setValue('Riq');
 		await assertAantalRows(richDataTableWithFilter, 2);
 		await assertRow(richDataTableWithFilter, 0, [0, "Project #1", "Riquier", "Kleykens", "Project #1 o.l.v. Pascal Riquier"]);
 		await assertRow(richDataTableWithFilter, 1, [2, "Project #3", "Riquier", "Beckers", "Project #3 o.l.v. Pascal Riquier"]);
-		const filterIdVeld = await richDataTableWithFilter.getSearchFilterField('id');
-		await filterIdVeld.sendKeys('0');
+		const filterIdVeld = await new VlInputField(driver, await searchFilter.findElement(By.css('[name="id"]')));
+		await filterIdVeld.setValue('0');
 		await assertAantalRows(richDataTableWithFilter, 1);
 		await assertRow(richDataTableWithFilter, 0, [0, "Project #1", "Riquier", "Kleykens", "Project #1 o.l.v. Pascal Riquier"]);
 
+		await filterIdVeld.clear();
 		await filterIdVeld.sendKeys(Key.BACK_SPACE);
+		await richDataTableWithFilter.search();
 		await assertAantalRows(richDataTableWithFilter, 2);
 		await assertRow(richDataTableWithFilter, 0, [0, "Project #1", "Riquier", "Kleykens", "Project #1 o.l.v. Pascal Riquier"]);
 		await assertRow(richDataTableWithFilter, 1, [2, "Project #3", "Riquier", "Beckers", "Project #3 o.l.v. Pascal Riquier"]);
 
-		await filterManagerLastNameVeld.sendKeys(Key.BACK_SPACE + Key.BACK_SPACE + Key.BACK_SPACE);
+		await filterManagerLastNameVeld.clear();
+		await richDataTableWithFilter.search();
 		await assertAantalRows(richDataTableWithFilter, 3);
 		await assertRow(richDataTableWithFilter, 0, [0, "Project #1", "Riquier", "Kleykens", "Project #1 o.l.v. Pascal Riquier"]);
 		await assertRow(richDataTableWithFilter, 1, [1, "Project #2", "Coemans", "Wauters", "Project #2 o.l.v. Tom Coemans"]);
 		await assertRow(richDataTableWithFilter, 2, [2, "Project #3", "Riquier", "Beckers", "Project #3 o.l.v. Pascal Riquier"]);
 	});
 
-    async function assertHeaders(richDataTable, expectedHeaders) {
-    	const table = await richDataTable.getDataTable();
-    	const headers = await table.getDataTableHeader();
+	async function assertHeaders(richDataTable, expectedHeaders) {
+		const table = await richDataTable.getDataTable();
+		const headers = await table.getDataTableHeader();
 		const rows = await headers.getRows();
 		const cells = await rows[0].getCells();
 		await assertCells(cells, expectedHeaders);
 	}
 
-    async function assertAantalRows(richDataTable, aantal) {
-    	const table = await richDataTable.getDataTable();
-    	const body = await table.getDataTableBody();
-    	await assert.eventually.lengthOf(body.getRows(), aantal);
-    }
-    
-    async function assertRow(richDataTable, index, values) {
-    	const table = await richDataTable.getDataTable();
-    	const body = await table.getDataTableBody();
-    	const rows = await body.getRows();
-    	const cells = await rows[index].getCells();
-    	await assertCells(cells, values);
+	async function assertAantalRows(richDataTable, aantal) {
+		const table = await richDataTable.getDataTable();
+		const body = await table.getDataTableBody();
+		await assert.eventually.lengthOf(body.getRows(), aantal);
 	}
-	
-    async function assertCells(cells, values) {
+
+	async function assertRow(richDataTable, index, values) {
+		const table = await richDataTable.getDataTable();
+		const body = await table.getDataTableBody();
+		const rows = await body.getRows();
+		const cells = await rows[index].getCells();
+		await assertCells(cells, values);
+	}
+
+	async function assertCells(cells, values) {
 		assert.lengthOf(cells, values.length);
 		for (let i = 0; i < cells.length; i++) {
 			await assert.eventually.equal(cells[i].getText(), values[i])
