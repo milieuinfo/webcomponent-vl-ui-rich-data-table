@@ -56,7 +56,101 @@
             <h2>Rich data table met search filter</h2>
             <pre>
                 <code class="line-numbers language-markup">
+                    &lt;vl-rich-data-table id="rich-data-table-filter" data-vl-filter-title="Verfijn uw zoekopdracht"&gt;
+                        &lt;vl-rich-data-field data-vl-label="ID" data-vl-selector="id"&gt;&lt;/vl-rich-data-field&gt;
+                        &lt;vl-rich-data-field data-vl-label="Naam Project" data-vl-selector="name"&gt;&lt;/vl-rich-data-field&gt;
+                        &lt;vl-rich-data-field data-vl-label="Naam Manager" data-vl-selector="manager.lastName"&gt;&lt;/vl-rich-data-field&gt;
+                        &lt;vl-rich-data-field data-vl-label="Eerste medewerker" data-vl-selector="medewerkers.0.lastName"&gt;&lt;/vl-rich-data-field&gt;
+                        &lt;vl-rich-data-field&gt;
+                            &lt;template slot="label"&gt;
+                                &lt;span style="font-weight: normal"&gt;Project o.l.v.&lt;/span&gt; &lt;strong&gt;manager&lt;/strong&gt;
+                            &lt;/template&gt;
+                            &lt;template slot="content"&gt;
+                                &lt;span&gt;${item.name}&lt;/span&gt; o.l.v. &lt;strong&gt;${item.manager.firstName} ${item.manager.lastName}&lt;/strong&gt;
+                            &lt;/template&gt;
+                        &lt;/vl-rich-data-field&gt;
+                        &lt;div slot="filter"&gt;
+                            &lt;section&gt;
+                                &lt;h2&gt;Gegevens&lt;/h2&gt;
+                                &lt;div&gt;
+                                    &lt;label is="form-label" for="filterOpId"&gt;Id&lt;/label&gt;
+                                    &lt;input is="vl-input-field" id="filterOpId" type="text" name="id" value="" block/&gt;
+                                &lt;/div&gt;
+                                &lt;div&gt;
+                                    &lt;label is="form-label" for="filterOpNaamProject"&gt;Naam Project&lt;/label&gt;
+                                    &lt;input is="vl-input-field" id="filterOpNaamProject" type="text" name="name" value="" block/&gt;
+                                &lt;/div&gt;
+                                &lt;div&gt;
+                                    &lt;label is="form-label" for="filterOpNaamManager"&gt;Familienaam manager&lt;/label&gt;
+                                    &lt;input is="vl-input-field" id="filterOpNaamManager" type="text" name="manager.lastName" value="" block/&gt;
+                                &lt;/div&gt;
+                            &lt;/section&gt;
+                        &lt;/div&gt;
+                    &lt;/vl-rich-data-table&gt;
 
+        
+                    &lt;script&gt;
+                        customElements.whenDefined('vl-rich-data-table').then(() =&gt; {
+                
+                            const richDataTableFilter = document.querySelector('#rich-data-table-filter');
+                            const richDataTableFilterData = [
+                                                    {
+                                                        "id": 0, 
+                                                        "name": "Project #1", 
+                                                        "manager": {"firstName": "Pascal", "lastName": "Riquier"}, 
+                                                        "medewerkers": [{"firstName": "Sander", "lastName": "Kleykens"}]
+                                                    }, 
+                                                    {
+                                                        "id": 1, "name": 
+                                                        "Project #2", 
+                                                        "manager": {"firstName": "Tom", "lastName": "Coemans"}, 
+                                                        "medewerkers": [{"firstName": "Guy", "lastName": "Wauters"}]
+                                                    },
+                                                    {
+                                                        "id": 2, 
+                                                        "name": "Project #3", 
+                                                        "manager": {"firstName": "Pascal", "lastName": "Riquier"}, 
+                                                        "medewerkers": [{"firstName": "Pieter", "lastName": "Beckers"}]
+                                                    }
+                                                ];
+                            richDataTableFilter.data = richDataTableFilterData;
+
+                            richDataTableFilter.addEventListener('change', (e) =&gt; {
+                                let filteredData = richDataTableFilterData;
+                                if (e.detail.formData) {
+                                    for (let entry of e.detail.formData.entries()) {
+                                        filteredData = filter(filteredData, entry[0], entry[1]);
+                                    }
+                                }
+                                richDataTableFilter.data = filteredData;
+                            });
+
+
+                            function filter(data, pathToKey, value) {
+                                if (value === "") {
+                                    return data;
+                                }
+                                return data.filter(element =&gt; {
+                                    const valueByPath = findValueByPath(element, pathToKey);
+                                    return valueByPath.includes(value);
+                                });
+                            }
+
+                            function findValueByPath(element, pathToKey) {
+                                var keys = pathToKey.split('.');
+                    
+                                let current = element;
+                                for (let i = 0; i &lt; keys.length; i++) {
+                                    if (current[keys[i]] !== undefined) {
+                                        current = current[keys[i]];
+                                    } else {
+                                        return undefined;
+                                    }
+                                }
+                                return current.toString();
+                            }
+                        });
+                    &lt;/script&gt;
                 </code>
             </pre>
             <div class="demo">
@@ -91,15 +185,14 @@
                           </section>
                     </div>
                 </vl-rich-data-table>
-            </div>
-        </div>
+           
 
         
-        <script>
-            customElements.whenDefined('vl-rich-data-table').then(() => {
+                <script>
+                    customElements.whenDefined('vl-rich-data-table').then(() => {
                 
-                const richDataTableFilter = document.querySelector('#rich-data-table-filter');
-                const richDataTableFilterData = [
+                        const richDataTableFilter = document.querySelector('#rich-data-table-filter');
+                        const richDataTableFilterData = [
                                                     {
                                                         "id": 0, 
                                                         "name": "Project #1", 
@@ -119,47 +212,48 @@
                                                         "medewerkers": [{"firstName": "Pieter", "lastName": "Beckers"}]
                                                     }
                                                 ];
-                richDataTableFilter.data = richDataTableFilterData;
+                        richDataTableFilter.data = richDataTableFilterData;
 
-                richDataTableFilter.addEventListener('change', (e) => {
+                        richDataTableFilter.addEventListener('change', (e) => {
 
-                    let filteredData = richDataTableFilterData;
-                    if (e.detail.formData) {
-                        for (let entry of e.detail.formData.entries()) {
-                            filteredData = filter(filteredData, entry[0], entry[1]);
+                            let filteredData = richDataTableFilterData;
+                            if (e.detail.formData) {
+                                for (let entry of e.detail.formData.entries()) {
+                                    filteredData = filter(filteredData, entry[0], entry[1]);
+                                }
+                            }
+                            richDataTableFilter.data = filteredData;
+                        });
+
+
+                        function filter(data, pathToKey, value) {
+                            if (value === "") {
+                                return data;
+                            }
+                            return data.filter(element => {
+                                const valueByPath = findValueByPath(element, pathToKey);
+                                return valueByPath.includes(value);
+                            });
                         }
-                    }
-                    richDataTableFilter.data = filteredData;
-                });
 
-
-                function filter(data, pathToKey, value) {
-                    if (value === "") {
-                        return data;
-                    }
-                    return data.filter(element => {
-                        const valueByPath = findValueByPath(element, pathToKey);
-                        return valueByPath.includes(value);
-                    });
-                }
-
-                function findValueByPath(element, pathToKey) {
-                    var keys = pathToKey.split('.');
+                        function findValueByPath(element, pathToKey) {
+                            var keys = pathToKey.split('.');
                     
-                    // let current = keys.reduce((acc, key) => acc[key], element);
-                    let current = element;
-                    for (let i = 0; i < keys.length; i++) {
-                        if (current[keys[i]] !== undefined) {
-                            current = current[keys[i]];
-                        } else {
-                            return undefined;
+                            let current = element;
+                            for (let i = 0; i < keys.length; i++) {
+                                if (current[keys[i]] !== undefined) {
+                                    current = current[keys[i]];
+                                } else {
+                                    return undefined;
+                                }
+                            }
+                            return current.toString();
                         }
-                    }
-                    return current.toString();
-                }
-            });
-        </script>
+                    });
+                </script>
 
+            </div>
+        </div>
         <div>
             <h2>Rich data table met paginering</h2>
             <pre>
