@@ -256,9 +256,7 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
 
     _data_vl_filter_titleChangedCallback(oldValue, newValue) {
         const searchFilter = this.__searchFilter;
-        console.log(1);
         if (searchFilter) {
-            console.log(2);
             this._zetTitelAttribuutOpSearchFilter(newValue);
         }
     }
