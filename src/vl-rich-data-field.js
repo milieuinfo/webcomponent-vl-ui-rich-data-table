@@ -162,4 +162,11 @@ export class VlRichDataField extends VlElement(HTMLElement) {
     }
 }
 
+
+/**
+ * VlRichDataField change event
+ * @event VlRichDataField#change
+ * @property {string[]} properties - De eigenschappen die veranderd zijn.
+ */
+
 define(VlRichDataField.is, VlRichDataField);
