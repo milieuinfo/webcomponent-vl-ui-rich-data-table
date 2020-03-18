@@ -1,5 +1,6 @@
 const { assert, driver } = require('vl-ui-core').Test.Setup;
 const VlRichDataTablePage = require('./pages/vl-rich-data-table.page');
+const { Key } = require('selenium-webdriver');
 
 describe('vl-rich-data-table', async () => {
     const vlRichDataTablePage = new VlRichDataTablePage(driver);
@@ -136,6 +137,30 @@ describe('vl-rich-data-table', async () => {
 		await assert.eventually.equal(searchFilter.getTitleText(), 'VERFIJN UW ZOEKOPDRACHT');
 	});
 
+	it('Als gebruiker kan ik op verschillende velden filteren', async() => {
+		const richDataTableWithFilter = await vlRichDataTablePage.getRichDataTableFilter();
+		const filterManagerLastNameVeld = await richDataTableWithFilter.getSearchFilterField('manager.lastName');
+		await filterManagerLastNameVeld.sendKeys('Riq');
+		await assertAantalRows(richDataTableWithFilter, 2);
+		await assertRow(richDataTableWithFilter, 0, [0, "Project #1", "Riquier", "Kleykens", "Project #1 o.l.v. Pascal Riquier"]);
+		await assertRow(richDataTableWithFilter, 1, [2, "Project #3", "Riquier", "Beckers", "Project #3 o.l.v. Pascal Riquier"]);
+		const filterIdVeld = await richDataTableWithFilter.getSearchFilterField('id');
+		await filterIdVeld.sendKeys('0');
+		await assertAantalRows(richDataTableWithFilter, 1);
+		await assertRow(richDataTableWithFilter, 0, [0, "Project #1", "Riquier", "Kleykens", "Project #1 o.l.v. Pascal Riquier"]);
+
+		await filterIdVeld.sendKeys(Key.BACK_SPACE);
+		await assertAantalRows(richDataTableWithFilter, 2);
+		await assertRow(richDataTableWithFilter, 0, [0, "Project #1", "Riquier", "Kleykens", "Project #1 o.l.v. Pascal Riquier"]);
+		await assertRow(richDataTableWithFilter, 1, [2, "Project #3", "Riquier", "Beckers", "Project #3 o.l.v. Pascal Riquier"]);
+
+		await filterManagerLastNameVeld.sendKeys(Key.BACK_SPACE + Key.BACK_SPACE + Key.BACK_SPACE);
+		await assertAantalRows(richDataTableWithFilter, 3);
+		await assertRow(richDataTableWithFilter, 0, [0, "Project #1", "Riquier", "Kleykens", "Project #1 o.l.v. Pascal Riquier"]);
+		await assertRow(richDataTableWithFilter, 1, [1, "Project #2", "Coemans", "Wauters", "Project #2 o.l.v. Tom Coemans"]);
+		await assertRow(richDataTableWithFilter, 2, [2, "Project #3", "Riquier", "Beckers", "Project #3 o.l.v. Pascal Riquier"]);
+	});
+
     async function assertHeaders(richDataTable, expectedHeaders) {
     	const table = await richDataTable.getDataTable();
     	const headers = await table.getDataTableHeader();
@@ -156,8 +181,8 @@ describe('vl-rich-data-table', async () => {
     	const rows = await body.getRows();
     	const cells = await rows[index].getCells();
     	await assertCells(cells, values);
-    }
-
+	}
+	
     async function assertCells(cells, values) {
 		assert.lengthOf(cells, values.length);
 		for (let i = 0; i < cells.length; i++) {
