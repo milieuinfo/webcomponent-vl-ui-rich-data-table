@@ -5,6 +5,7 @@ import '/node_modules/vl-ui-search-filter/dist/vl-search-filter.js';
 import '/node_modules/vl-ui-grid/dist/vl-grid.js';
 import '/node_modules/vl-ui-input-field/dist/vl-input-field.js';
 import '/node_modules/vl-ui-form-message/dist/vl-form-message.js';
+import '/node_modules/vl-ui-button/dist/vl-button.js';
 
 /**
  * VlRichDataTable
@@ -46,6 +47,7 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
                 @import "/node_modules/vl-ui-search-filter/dist/style.css";
                 @import "/node_modules/vl-ui-input-field/dist/style.css";
                 @import "/node_modules/vl-ui-form-message/dist/style.css";
+                @import "/node_modules/vl-ui-button/dist/style.css";
             </style>
             <div is="vl-grid" is-stacked>
                 <div id="search" is="vl-column" size="0"></div>
@@ -166,6 +168,22 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
         return this.__data || [];
     }
 
+    _getSearchFilterTemplate(content) {
+        return this._template(`
+            <div is="vl-search-filter" alt>
+                <form>
+                    ${content}
+                    <div>
+                        <button is="vl-button" type="submit">Zoeken</button>
+                    </div>
+                </form>
+                <div>
+                    <button is="vl-button-link" type="reset">Zoekopdracht verwijderen</button>
+                </div>
+            </div>
+        `);
+    }
+
     _render() {
         this._renderHeaders();
         this._renderBody();
@@ -217,7 +235,7 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
     _createSearchFilter() {
         const searchFilterContent = this._searchFilterSlotContent;
         if (searchFilterContent != '') {
-            this._searchElement.append(this._template(`<div is="vl-search-filter" alt><form>${searchFilterContent}</form></div>`));
+            this._searchElement.append(this._getSearchFilterTemplate(searchFilterContent));
             this.__searchFilter.addEventListener('input', e => {
                 this.__onFilterFieldChanged(e);
             });
