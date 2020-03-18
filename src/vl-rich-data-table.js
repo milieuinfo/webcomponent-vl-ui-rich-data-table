@@ -3,6 +3,8 @@ import '/node_modules/vl-ui-icon/dist/vl-icon.js';
 import '/node_modules/vl-ui-data-table/dist/vl-data-table.js';
 import '/node_modules/vl-ui-search-filter/dist/vl-search-filter.js';
 import '/node_modules/vl-ui-grid/dist/vl-grid.js';
+import '/node_modules/vl-ui-input-field/dist/vl-input-field.js';
+import '/node_modules/vl-ui-form-message/dist/vl-form-message.js';
 
 /**
  * VlRichDataTable
@@ -12,7 +14,6 @@ import '/node_modules/vl-ui-grid/dist/vl-grid.js';
  * @extends VlElement
  *
  * @property {string} data-vl-data - De data die door de tabel getoond moet worden in JSON formaat.
- * @property {string} data-vl-filter-title - De titel die op de search filter getoond wordt.
  * @property {boolean} data-vl-collaped-m - Vanaf een medium schermgrootte zullen de cellen van elke rij onder elkaar ipv naast elkaar getoond worden.
  * @property {boolean} data-vl-collaped-s - Vanaf een small schermgrootte zullen de cellen van elke rij onder elkaar ipv naast elkaar getoond worden.
  * @property {boolean} data-vl-collaped-xs - Vanaf een extra small schermgrootte zullen de cellen van elke rij onder elkaar ipv naast elkaar getoond worden.
@@ -26,7 +27,7 @@ import '/node_modules/vl-ui-grid/dist/vl-grid.js';
  */
 export class VlRichDataTable extends VlElement(HTMLElement) {
     static get _observedAttributes() {
-        return ['data-vl-data', 'data-vl-filter-title', 'data-vl-collapsed-m', 'data-vl-collapsed-s', 'data-vl-collapsed-xs'];
+        return ['data-vl-data', 'data-vl-collapsed-m', 'data-vl-collapsed-s', 'data-vl-collapsed-xs'];
     }
     
     static get _tableAttributes() {
@@ -43,6 +44,8 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
                 @import "/src/style.css";
                 @import "/node_modules/vl-ui-data-table/dist/style.css";
                 @import "/node_modules/vl-ui-search-filter/dist/style.css";
+                @import "/node_modules/vl-ui-input-field/dist/style.css";
+                @import "/node_modules/vl-ui-form-message/dist/style.css";
             </style>
             <div is="vl-grid" is-stacked>
                 <div id="search" is="vl-column" size="0"></div>
@@ -214,8 +217,7 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
     _createSearchFilter() {
         const searchFilterContent = this._searchFilterSlotContent;
         if (searchFilterContent != '') {
-            this._searchElement.append(this._template(`<div is="vl-search-filter"><form>${searchFilterContent}</form></div>`));
-            this._addTitleToSearchFilter();
+            this._searchElement.append(this._template(`<div is="vl-search-filter" alt><form>${searchFilterContent}</form></div>`));
             this.__searchFilter.addEventListener('input', e => {
                 this.__onFilterFieldChanged(e);
             });
@@ -234,17 +236,6 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
 
     get __contentLocation() {
         return this.shadowRoot.querySelector('#content');
-    }
-
-    _addTitleToSearchFilter() {
-        const searchFilterTitle = this.getAttribute('data-vl-filter-title');
-        if (searchFilterTitle !== undefined) {
-            this._setTitleAttributeOnSearchFilter(searchFilterTitle);
-        }
-    }
-
-    _setTitleAttributeOnSearchFilter(title) {
-        this.__searchFilter.setAttribute('data-vl-title', title);
     }
 
     __observeFilterSlotElement(filterSlot, callback) {
@@ -271,13 +262,6 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
 
     _data_vl_dataChangedCallback(oldValue, newValue) {
         this.data = JSON.parse(newValue);
-    }
-
-    _data_vl_filter_titleChangedCallback(oldValue, newValue) {
-        const searchFilter = this.__searchFilter;
-        if (searchFilter) {
-            this._setTitleAttributeOnSearchFilter(newValue);
-        }
     }
 
     get __table() {

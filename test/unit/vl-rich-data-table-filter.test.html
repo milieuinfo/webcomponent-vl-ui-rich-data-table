@@ -15,7 +15,7 @@
       <vl-rich-data-table data-vl-data='[]'>
         <vl-rich-data-field id="id-field" data-vl-label="ID" data-vl-selector="id"></vl-rich-data-field>
         <vl-rich-data-field id="name-field" data-vl-label="Naam" data-vl-selector="name"></vl-rich-data-field>
-    </vl-rich-data-table>
+      </vl-rich-data-table>
     </template>
   </test-fixture>
 
@@ -28,7 +28,7 @@
           <label>Hier kunnen filtervelden komen</label>
           <input type="text" name="filter1" />
         </div>
-    </vl-rich-data-table>
+      </vl-rich-data-table>
     </template>
   </test-fixture>
 
@@ -57,20 +57,9 @@
         });
       });
 
-      test('De titel van de searchfilter wordt correct getoond', (done) => {
-        const table = fixture('vl-rich-data-table-met-filter-fixture');
-        setTimeout(() => {
-
-          const searchFilter = table.__searchFilter;
-          const searchFilterTitle = searchFilter.getAttribute('data-vl-title');
-          searchFilterTitle.should.be.equal('title');
-          done();
-        });
-      });
-
       test('Als er aan een input van de search filter iets wijzigt wordt er een event met formdata gestuurd', (done) => {
         const table = fixture('vl-rich-data-table-met-filter-fixture');
-        
+
         setTimeout(() => {
           table.addEventListener('change', (e) => {
             expect(e.detail.formData.get('filter1')).to.equal('een beetje input');
@@ -94,19 +83,6 @@
         });
       });
 
-      test('De titel van de searchfilter wordt ook correct getoond als de inhoud van het filter-slot wijzig', (done) => {
-        const table = fixture('vl-rich-data-table-met-filter-fixture');
-        setTimeout(() => {
-          modifyFilterSlot(table, '<input type="text" name="filter2" />');
-          setTimeout(() => {
-            const searchFilter = table.__searchFilter;
-            const searchFilterTitle = searchFilter.getAttribute('data-vl-title');
-            searchFilterTitle.should.be.equal('title');
-            done();
-          });
-        });
-      });
-
       test('Als er geen searchfilter aanwezig is, wordt er geen plaats voor voorzien', () => {
         const table = fixture('vl-rich-data-table-zonder-filter-fixture');
         const content = table.shadowRoot.querySelector('#content');
@@ -118,11 +94,11 @@
       test('Als er een searchfilter aanwezig is, wordt er ook plaats voor voorzien', (done) => {
         const table = fixture('vl-rich-data-table-met-filter-fixture');
         setTimeout(() => {
-            const content = table.shadowRoot.querySelector('#content');
-            const search = table.shadowRoot.querySelector('#search');
-            expect(content.getAttribute('size')).to.be.equal('8');
-            expect(search.getAttribute('size')).to.be.equal('4');
-            done();
+          const content = table.shadowRoot.querySelector('#content');
+          const search = table.shadowRoot.querySelector('#search');
+          expect(content.getAttribute('size')).to.be.equal('8');
+          expect(search.getAttribute('size')).to.be.equal('4');
+          done();
         });
       });
 
@@ -140,8 +116,6 @@
         });
       });
 
-      
-
       function modifyFilterSlot(fixture, html) {
         const filterSlot = fixture.querySelector("[slot=filter]");
         filterSlot.innerHTML = html;
@@ -149,10 +123,10 @@
 
       function setInputValue(input, value) {
         input.value = value;
-        input.dispatchEvent(new CustomEvent('input', {detail: 'dummy-event', bubbles: true}));
+        input.dispatchEvent(new CustomEvent('input', { detail: 'dummy-event', bubbles: true }));
       }
-
     });
-</script>
+  </script>
 </body>
+
 </html>
