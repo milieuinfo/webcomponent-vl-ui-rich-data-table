@@ -3,8 +3,8 @@ const { By } = require('vl-ui-core').Test.Setup;
 const { VlPager } = require('vl-ui-pager').Test;
 const { VlDataTable } = require('vl-ui-data-table').Test;
 const { VlSearchFilter } = require('vl-ui-search-filter').Test;
-const { VlIcon } = require('vl-ui-icon').Test;
 const { VlButton } = require('vl-ui-button').Test;
+const VlRichDataSorter = require('./vl-rich-data-sorter');
 
 class VlRichDataTable extends VlElement {
 	async getPager() {
@@ -48,53 +48,6 @@ class VlRichDataTable extends VlElement {
 	async _getSearchButton() {
 		const searchFilter = await this.getSearchFilter();
 		return new VlButton(this.driver, await searchFilter.findElement(By.css('button')));
-	}
-}
-
-class VlRichDataSorter extends VlElement {
-	async isDescending() {
-		return this._hasDirectionIcon('nav-down');
-	}
-
-	async isAscending() {
-		return this._hasDirectionIcon('nav-up');
-	}
-
-	async isUnsorted() {
-		return this._hasDirectionIcon('sort');
-	}
-
-	async getPriority() {
-		const priorityLabel = await this._getPriorityLabel();
-		return priorityLabel.getText();
-	}
-
-	async toggleSorting() {
-		const icon = await this._getDirectionIcon();
-		await icon.click();
-	}
-
-	async _hasDirectionIcon(expectedIconType) {
-		const iconType = await this._getDirectionIconType();
-		return iconType === expectedIconType;
-	}
-
-	async _getDirection() {
-		return this.getAttribute('direction');
-	}
-
-	async _getDirectionIcon() {
-		const element = await this.shadowRoot.findElement(By.css('#direction'));
-		return new VlIcon(this.driver, element);
-	}
-
-	async _getDirectionIconType() {
-		const icon = await this._getDirectionIcon();
-		return icon.getType();
-	}
-
-	async _getPriorityLabel() {
-		return this.shadowRoot.findElement(By.css('#priority'));
 	}
 }
 
