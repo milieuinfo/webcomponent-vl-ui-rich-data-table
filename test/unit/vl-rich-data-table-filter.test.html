@@ -41,9 +41,11 @@
         should.not.exist(table.__searchFilter);
       });
 
-      test('Wanneer wel een filterslot is bestaat, zal er een search filter aanwezig zijn', () => {
+      test('Wanneer wel een filterslot is bestaat, zal er een alt variant search filter aanwezig zijn', () => {
         const table = fixture('vl-rich-data-table-met-filter-fixture');
-        should.exist(table.__searchFilter);
+        const searchFilter = table.__searchFilter;
+        should.exist(searchFilter);
+        assert.isTrue(searchFilter.hasAttribute('alt'));
       });
 
       test('De inhoud van het filter-slot wordt gekopieerd in de searchfilter', (done) => {
