@@ -1,5 +1,4 @@
 import {VlElement, define} from '/node_modules/vl-ui-core/dist/vl-core.js';
-import '/node_modules/vl-ui-icon/dist/vl-icon.js';
 import '/node_modules/vl-ui-data-table/dist/vl-data-table.js';
 import '/node_modules/vl-ui-search-filter/dist/vl-search-filter.js';
 import '/node_modules/vl-ui-grid/dist/vl-grid.js';

@@ -1,4 +1,5 @@
 import {VlElement, define} from '/node_modules/vl-ui-core/dist/vl-core.js';
+import '/node_modules/vl-ui-icon/dist/vl-icon.js';
 
 
 export class VlRichDataSorter extends VlElement(HTMLElement) {
