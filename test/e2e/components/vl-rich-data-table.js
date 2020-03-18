@@ -33,10 +33,6 @@ class VlRichDataTable extends VlElement {
     async isCollapsedExtraSmall() {
     	return this.hasAttribute('data-vl-collapsed-xs');
 	}
-	
-	async getFilterTitle() {
-		return this.getAttribute('data-vl-filter-title');
-	}
 
 	async getSearchFilter() {
 		const searchFilter = await this.shadowRoot.findElement(By.css("[is='vl-search-filter']"));

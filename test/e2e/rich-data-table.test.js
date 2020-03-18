@@ -132,9 +132,8 @@ describe('vl-rich-data-table', async () => {
 
 	it('Als gebruiker kan ik de titel van een search filter zien', async () => {
 		const richDataTableWithFilter = await vlRichDataTablePage.getRichDataTableFilter();
-		await assert.eventually.equal(richDataTableWithFilter.getFilterTitle(), 'Verfijn uw zoekopdracht');
 		const searchFilter = await richDataTableWithFilter.getSearchFilter();
-		// await assert.eventually.equal(searchFilter.getTitleText(), 'Verfijn uw zoekopdracht');
+		await assert.eventually.equal(searchFilter.getTitleText(), 'VERFIJN UW ZOEKOPDRACHT');
 	});
 
     async function assertHeaders(richDataTable, expectedHeaders) {
