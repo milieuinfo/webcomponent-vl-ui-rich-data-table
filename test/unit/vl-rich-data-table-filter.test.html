@@ -107,6 +107,41 @@
         });
       });
 
+      test('Als er geen searchfilter aanwezig is, wordt er geen plaats voor voorzien', () => {
+        const table = fixture('vl-rich-data-table-zonder-filter-fixture');
+        const content = table.shadowRoot.querySelector('#content');
+        const search = table.shadowRoot.querySelector('#search');
+        expect(content.getAttribute('size')).to.be.equal('12');
+        expect(search.getAttribute('size')).to.be.equal('0');
+      });
+
+      test('Als er een searchfilter aanwezig is, wordt er ook plaats voor voorzien', (done) => {
+        const table = fixture('vl-rich-data-table-met-filter-fixture');
+        setTimeout(() => {
+            const content = table.shadowRoot.querySelector('#content');
+            const search = table.shadowRoot.querySelector('#search');
+            expect(content.getAttribute('size')).to.be.equal('8');
+            expect(search.getAttribute('size')).to.be.equal('4');
+            done();
+        });
+      });
+
+      test('Als de searchfilter leeg gemaakt wordt, neemt de content terug de volledige breedte in', (done) => {
+        const table = fixture('vl-rich-data-table-met-filter-fixture');
+        setTimeout(() => {
+          modifyFilterSlot(table, '');
+          setTimeout(() => {
+            const content = table.shadowRoot.querySelector('#content');
+            const search = table.shadowRoot.querySelector('#search');
+            expect(content.getAttribute('size')).to.be.equal('12');
+            expect(search.getAttribute('size')).to.be.equal('0');
+            done();
+          });
+        });
+      });
+
+      
+
       function modifyFilterSlot(fixture, html) {
         const filterSlot = fixture.querySelector("[slot=filter]");
         filterSlot.innerHTML = html;

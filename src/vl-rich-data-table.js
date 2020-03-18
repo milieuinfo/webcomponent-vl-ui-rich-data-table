@@ -43,8 +43,8 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
                 @import "/node_modules/vl-ui-search-filter/dist/style.css";
             </style>
             <div is="vl-grid" is-stacked>
-                <div id="search" is="vl-column" size="4"></div>
-                <div id="content" is="vl-column" size="8">
+                <div id="search" is="vl-column" size="0"></div>
+                <div id="content" is="vl-column" size="12">
                     <table is="vl-data-table">
                         <thead>
                             <tr></tr>
@@ -210,21 +210,38 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
     }
 
     _createSearchFilter() {
-        this._searchElement.append(this._template(`<div is="vl-search-filter"><form>${this._searchFilterSlotContent}</form></div>`));
-        this._voegTitelToeAanSearchFilter();
-        this.__searchFilter.addEventListener('input', e => {
-            this.__onFilterFieldChanged(e);
-        });
+        const searchFilterContent = this._searchFilterSlotContent;
+        if (searchFilterContent != '') {
+            this._searchElement.append(this._template(`<div is="vl-search-filter"><form>${searchFilterContent}</form></div>`));
+            this._addTitleToSearchFilter();
+            this.__searchFilter.addEventListener('input', e => {
+                this.__onFilterFieldChanged(e);
+            });
+        }
+        this._setWidthForSearchFilter(searchFilterContent != ''? 4 : 0 );
     }
 
-    _voegTitelToeAanSearchFilter() {
+    _setWidthForSearchFilter(width) {
+        this.__searchFilterLocation.setAttribute('size', width);
+        this.__contentLocation.setAttribute('size', 12-width);
+    }
+
+    get __searchFilterLocation() {
+        return this.shadowRoot.querySelector('#search');
+    }
+
+    get __contentLocation() {
+        return this.shadowRoot.querySelector('#content');
+    }
+
+    _addTitleToSearchFilter() {
         const searchFilterTitle = this.getAttribute('data-vl-filter-title');
         if (searchFilterTitle !== undefined) {
-            this._zetTitelAttribuutOpSearchFilter(searchFilterTitle);
+            this._setTitleAttributeOnSearchFilter(searchFilterTitle);
         }
     }
 
-    _zetTitelAttribuutOpSearchFilter(title) {
+    _setTitleAttributeOnSearchFilter(title) {
         this.__searchFilter.setAttribute('data-vl-title', title);
     }
 
@@ -257,7 +274,7 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
     _data_vl_filter_titleChangedCallback(oldValue, newValue) {
         const searchFilter = this.__searchFilter;
         if (searchFilter) {
-            this._zetTitelAttribuutOpSearchFilter(newValue);
+            this._setTitleAttributeOnSearchFilter(newValue);
         }
     }
 
