@@ -131,12 +131,6 @@ describe('vl-rich-data-table', async () => {
 		await assert.eventually.isFalse(richDatatableWithoutCollapsedExtraSmall.isCollapsedExtraSmall());
 	});
 
-	it('Als gebruiker kan ik de titel van een search filter zien', async () => {
-		const richDataTableWithFilter = await vlRichDataTablePage.getRichDataTableFilter();
-		const searchFilter = await richDataTableWithFilter.getSearchFilter();
-		await assert.eventually.equal(searchFilter.getTitleText(), 'VERFIJN UW ZOEKOPDRACHT');
-	});
-
 	it('Als gebruiker kan ik op verschillende velden filteren', async() => {
 		const richDataTableWithFilter = await vlRichDataTablePage.getRichDataTableFilter();
 		const filterManagerLastNameVeld = await richDataTableWithFilter.getSearchFilterField('manager.lastName');
