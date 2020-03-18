@@ -73,6 +73,19 @@
         });
       });
 
+      test('Als de filtering gereset wordt, zal er een event met formdata gestuurd worden', (done) => {
+        const table = fixture('vl-rich-data-table-met-filter-fixture');
+        const searchFilter = table.__searchFilter;
+        const resetButton = searchFilter.querySelector('button[type="reset"]');
+
+        setInputValue(searchFilter.querySelector('input'), 'een beetje input');
+        table.addEventListener('change', (e) => {
+            expect(e.detail.formData.get('filter1')).to.equal('');
+            done();
+        });
+        resetButton.click();
+      });
+
       test('Als het filter-slot wijzigt wordt de nieuwe inhoud gekopieerd naar de searchfilter', (done) => {
         const table = fixture('vl-rich-data-table-met-filter-fixture');
         setTimeout(() => {

@@ -221,7 +221,6 @@
                     richDataTableFilter.data = richDataTableFilterData;
 
                     richDataTableFilter.addEventListener('change', (e) => {
-
                         let filteredData = richDataTableFilterData;
                         if (e.detail.formData) {
                             for (let entry of e.detail.formData.entries()) {
@@ -230,7 +229,6 @@
                         }
                         richDataTableFilter.data = filteredData;
                     });
-
 
                     function filter(data, pathToKey, value) {
                         if (value === "") {

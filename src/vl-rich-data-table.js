@@ -173,14 +173,14 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
     _getSearchFilterTemplate(content) {
         return this._template(`
             <div is="vl-search-filter" alt>
-                <form>
+                <form id="form" novalidate>
                     ${content}
                     <div>
                         <button is="vl-button" type="submit">Zoeken</button>
                     </div>
                 </form>
                 <div>
-                    <button is="vl-button-link" type="reset">Zoekopdracht verwijderen</button>
+                    <button is="vl-button-link" type="reset" form="form">Zoekopdracht verwijderen</button>
                 </div>
             </div>
         `);
@@ -240,6 +240,11 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
             this._searchElement.append(this._getSearchFilterTemplate(searchFilterContent));
             this.__searchFilter.addEventListener('input', e => {
                 this.__onFilterFieldChanged(e);
+            });
+            this.__searchFilterForm.addEventListener('reset', e => {
+                setTimeout(() => {
+                    this.__onFilterFieldChanged(e);
+                });
             });
         }
         this._setWidthForSearchFilter(searchFilterContent != ''? 4 : 0 );
@@ -312,6 +317,10 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
 
     get __searchFilter() {
         return this.shadowRoot.querySelector('[is="vl-search-filter"]');
+    }
+
+    get __searchFilterForm() {
+        return this.__searchFilter.querySelector('form');
     }
 
     get _searchFilterSlotContent() {
