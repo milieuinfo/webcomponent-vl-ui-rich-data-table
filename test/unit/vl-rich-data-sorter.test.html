@@ -15,19 +15,9 @@
         <vl-rich-data-sorter data-vl-for="foobar"></vl-rich-data-sorter>
     </template>
 </test-fixture>
-<test-fixture id="vl-rich-data-sorter-ascending-fixture">
-    <template>
-        <vl-rich-data-sorter data-vl-for="foobar" data-vl-direction="asc"></vl-rich-data-sorter>
-    </template>
-</test-fixture>
-<test-fixture id="vl-rich-data-sorter-descending-fixture">
-    <template>
-        <vl-rich-data-sorter data-vl-for="foobar" data-vl-direction="desc"></vl-rich-data-sorter>
-    </template>
-</test-fixture>
 <test-fixture id="vl-rich-data-sorter-priority-fixture">
     <template>
-        <vl-rich-data-sorter data-vl-for="foobar" data-vl-priority="2"></vl-rich-data-sorter>
+        <vl-rich-data-sorter data-vl-for="foobar" data-vl-direction="desc" data-vl-priority="2"></vl-rich-data-sorter>
     </template>
 </test-fixture>
 
@@ -58,11 +48,11 @@
             const sorter = fixture('vl-rich-data-sorter-fixture');
             assertDirectionIcon(sorter, undefined);
 
-            const ascendingSorter = fixture('vl-rich-data-sorter-ascending-fixture');
-            assertDirectionIcon(ascendingSorter, 'asc');
+            sorter.direction = 'asc';
+            assertDirectionIcon(sorter, 'asc');
 
-            const descendingSorter = fixture('vl-rich-data-sorter-descending-fixture');
-            assertDirectionIcon(descendingSorter, 'desc');
+            sorter.direction = 'desc';
+            assertDirectionIcon(sorter, 'desc');
         });
 
         test('De sorter toont de juiste priority', () => {
@@ -71,6 +61,14 @@
 
             const prioritySorter = fixture('vl-rich-data-sorter-priority-fixture');
             assertPriority(prioritySorter, '2');
+        });
+
+        test('De sorter toont de geen priority meer indien de sortering af werd gezet', () => {
+            const prioritySorter = fixture('vl-rich-data-sorter-priority-fixture');
+            assertPriority(prioritySorter, '2');
+
+            prioritySorter.direction = undefined;
+            assertPriority(prioritySorter, undefined);
         });
 
         test('Als men op het icoontje drukt, zal de direction worden aangepast', () => {
@@ -88,19 +86,19 @@
             should.equal(sorter.direction, undefined);
         });
 
-        test('Als men de direction aanpast, wordt er een event uitgestuurd', (done) => {
+        test('Als men de direction aanpast door te klikken, wordt er een event uitgestuurd', (done) => {
             const sorter = fixture('vl-rich-data-sorter-priority-fixture');
 
-            should.equal(sorter.direction, undefined);
+            should.equal(sorter.direction, 'desc');
 
             sorter.addEventListener('change', event => {
-                sorter.direction.should.equal('desc');
-                event.detail.direction.should.equal('desc');
-                event.detail.priority.should.equal('2');
+                sorter.direction.should.equal('asc');
+                event.detail.direction.should.equal('asc');
+                event.detail.priority.should.equal(2);
                 done();
             });
 
-            sorter.direction = 'desc';
+            sorter.__directionElement.click();
         });
     });
 </script>

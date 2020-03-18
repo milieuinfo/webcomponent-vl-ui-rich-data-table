@@ -326,24 +326,20 @@
         <h2>Rich data table met sortering</h2>
         <pre>
                 <code class="line-numbers language-markup">
-                    &lt;vl-rich-data-table id=&quot;rich-data-table-sorting&quot;&gt;
-                        &lt;vl-rich-data-field data-vl-name=&quot;id&quot; data-vl-label=&quot;ID&quot; data-vl-selector=&quot;id&quot; data-vl-sortable data-vl-sorting-direction=&quot;asc&quot; data-vl-sorting-priority=&quot;3&quot;&gt;&lt;/vl-rich-data-field&gt;
-                        &lt;vl-rich-data-field data-vl-name=&quot;name&quot; data-vl-label=&quot;Naam&quot; data-vl-selector=&quot;name&quot; data-vl-sortable data-vl-sorting-direction=&quot;asc&quot; data-vl-sorting-priority=&quot;2&quot;&gt;&lt;/vl-rich-data-field&gt;
-                        &lt;vl-rich-data-field data-vl-name=&quot;owner&quot; data-vl-label=&quot;Eigenaar&quot; data-vl-selector=&quot;owner&quot; data-vl-sortable data-vl-sorting-direction=&quot;desc&quot; data-vl-sorting-priority=&quot;1&quot;&gt;&lt;/vl-rich-data-field&gt;
+                    &lt;vl-rich-data-table id=&quot;rich-data-table-sorting&quot; data-vl-data=&apos;[{ &quot;id&quot;: 0, &quot;name&quot;: &quot;Project #1&quot;, &quot;owner&quot;: &quot;Jan Jansens&quot; }, { &quot;id&quot;: 1, &quot;name&quot;: &quot;Project #2&quot;, &quot;owner&quot;: &quot;Jan Jansens&quot; }]&apos;&gt;
+                        &lt;vl-rich-data-field data-vl-name=&quot;id&quot; data-vl-label=&quot;ID&quot; data-vl-selector=&quot;id&quot; data-vl-sortable data-vl-sorting-direction=&quot;asc&quot;&gt;&lt;/vl-rich-data-field&gt;
+                        &lt;vl-rich-data-field data-vl-name=&quot;name&quot; data-vl-label=&quot;Naam&quot; data-vl-selector=&quot;name&quot; data-vl-sortable&gt;&lt;/vl-rich-data-field&gt;
+                        &lt;vl-rich-data-field data-vl-name=&quot;owner&quot; data-vl-label=&quot;Eigenaar&quot; data-vl-selector=&quot;owner&quot; data-vl-sortable&gt;&lt;/vl-rich-data-field&gt;
                     &lt;/vl-rich-data-table&gt;
 
                     &lt;script&gt;
-                        customElements.whenDefined(&apos;vl-rich-data-table&apos;).then(() =&gt; {
-                            const richDataTableSorting = document.querySelector(&apos;#rich-data-table-sorting&apos;);
-                            const richDataTableSortingData = [
-                                {&quot;id&quot;: 0, &quot;name&quot;: &quot;Project #1&quot;, &quot;owner&quot;: &quot;Jan Jansens&quot;},
-                                {&quot;id&quot;: 1, &quot;name&quot;: &quot;Project #2&quot;, &quot;owner&quot;: &quot;Jan Jansens&quot;}
-                            ];
-                            richDataTableSorting.data = richDataTableSortingData;
-                            richDataTableSorting.addEventListener(&apos;change&apos;, event =&gt; {
+                        const tableSorter = table =&gt; {
+                            const originalTableData = [...table.data];
+                            return event =&gt; {
                                 const sorting = event.detail.sorting;
+                                const table = event.target;
                                 if (sorting) {
-                                    richDataTableSorting.data = [...richDataTableSortingData].sort((firstEl, secondEl) =&gt; {
+                                    table.data = [...originalTableData].sort((firstEl, secondEl) =&gt; {
                                         for (let i = 0; i &lt; sorting.length; i++) {
                                             const criteria = sorting[i];
                                             const firstValue = firstEl[criteria.name];
@@ -359,32 +355,33 @@
                                         return 0;
                                     });
                                 } else {
-                                    richDataTableSorting.data = richDataTableSortingData;
+                                    table.data = originalTableData;
                                 }
-                            });
+                            };
+                        };
+
+                        customElements.whenDefined(&apos;vl-rich-data-table&apos;).then(() =&gt; {
+                            const table = document.querySelector(&apos;#rich-data-table-sorting&apos;);
+                            table.addEventListener(&apos;change&apos;, tableSorter(table));
                         });
                     &lt;/script&gt;
                 </code>
             </pre>
         <div class="demo">
-            <vl-rich-data-table id="rich-data-table-sorting">
-                <vl-rich-data-field data-vl-name="id" data-vl-label="ID" data-vl-selector="id" data-vl-sortable data-vl-sorting-direction="asc" data-vl-sorting-priority="3"></vl-rich-data-field>
-                <vl-rich-data-field data-vl-name="name" data-vl-label="Naam" data-vl-selector="name" data-vl-sortable data-vl-sorting-direction="asc" data-vl-sorting-priority="2"></vl-rich-data-field>
-                <vl-rich-data-field data-vl-name="owner" data-vl-label="Eigenaar" data-vl-selector="owner" data-vl-sortable data-vl-sorting-direction="desc" data-vl-sorting-priority="1"></vl-rich-data-field>
+            <vl-rich-data-table id="rich-data-table-sorting" data-vl-data='[{ "id": 0, "name": "Project #1", "owner": "Jan Jansens" }, { "id": 1, "name": "Project #2", "owner": "Jan Jansens" }]'>
+                <vl-rich-data-field data-vl-name="id" data-vl-label="ID" data-vl-selector="id" data-vl-sortable data-vl-sorting-direction="asc"></vl-rich-data-field>
+                <vl-rich-data-field data-vl-name="name" data-vl-label="Naam" data-vl-selector="name" data-vl-sortable></vl-rich-data-field>
+                <vl-rich-data-field data-vl-name="owner" data-vl-label="Eigenaar" data-vl-selector="owner" data-vl-sortable></vl-rich-data-field>
             </vl-rich-data-table>
         </div>
         <script>
-            customElements.whenDefined('vl-rich-data-table').then(() => {
-                const richDataTableSorting = document.querySelector('#rich-data-table-sorting');
-                const richDataTableSortingData = [
-                    { "id": 0, "name": "Project #1", "owner": "Jan Jansens" },
-                    { "id": 1, "name": "Project #2", "owner": "Jan Jansens" }
-                ];
-                richDataTableSorting.data = richDataTableSortingData;
-                richDataTableSorting.addEventListener('change', event => {
+            const tableSorter = table => {
+                const originalTableData = [...table.data];
+                return event => {
                     const sorting = event.detail.sorting;
+                    const table = event.target;
                     if (sorting) {
-                        richDataTableSorting.data = [...richDataTableSortingData].sort((firstEl, secondEl) => {
+                        table.data = [...originalTableData].sort((firstEl, secondEl) => {
                             for (let i = 0; i < sorting.length; i++) {
                                 const criteria = sorting[i];
                                 const firstValue = firstEl[criteria.name];
@@ -400,9 +397,47 @@
                             return 0;
                         });
                     } else {
-                        richDataTableSorting.data = richDataTableSortingData;
+                        table.data = originalTableData;
                     }
-                });
+                };
+            };
+
+            customElements.whenDefined('vl-rich-data-table').then(() => {
+                const table = document.querySelector('#rich-data-table-sorting');
+                table.addEventListener('change', tableSorter(table));
+            });
+        </script>
+    </div>
+
+    <div>
+        <h2>Rich data table met sortering op meerdere kolommen tegelijkertijd</h2>
+        <pre>
+                <code class="line-numbers language-markup">
+                    &lt;vl-rich-data-table id=&quot;rich-data-table-multi-sorting&quot; data-vl-multisort data-vl-data=&apos;[{ &quot;id&quot;: 0, &quot;name&quot;: &quot;Project #1&quot;, &quot;owner&quot;: &quot;Jan Jansens&quot; }, { &quot;id&quot;: 1, &quot;name&quot;: &quot;Project #2&quot;, &quot;owner&quot;: &quot;Jan Jansens&quot; }]&apos;&gt;
+                        &lt;vl-rich-data-field data-vl-name=&quot;id&quot; data-vl-label=&quot;ID&quot; data-vl-selector=&quot;id&quot; data-vl-sortable data-vl-sorting-direction=&quot;asc&quot; data-vl-sorting-priority=&quot;3&quot;&gt;&lt;/vl-rich-data-field&gt;
+                        &lt;vl-rich-data-field data-vl-name=&quot;name&quot; data-vl-label=&quot;Naam&quot; data-vl-selector=&quot;name&quot; data-vl-sortable data-vl-sorting-direction=&quot;asc&quot; data-vl-sorting-priority=&quot;2&quot;&gt;&lt;/vl-rich-data-field&gt;
+                        &lt;vl-rich-data-field data-vl-name=&quot;owner&quot; data-vl-label=&quot;Eigenaar&quot; data-vl-selector=&quot;owner&quot; data-vl-sortable data-vl-sorting-direction=&quot;desc&quot; data-vl-sorting-priority=&quot;1&quot;&gt;&lt;/vl-rich-data-field&gt;
+                    &lt;/vl-rich-data-table&gt;
+
+                    &lt;script&gt;
+                        customElements.whenDefined(&apos;vl-rich-data-table&apos;).then(() =&gt; {
+                            const table = document.querySelector(&apos;#rich-data-table-multi-sorting&apos;);
+                            table.addEventListener(&apos;change&apos;, tableSorter(table));
+                        });
+                    &lt;/script&gt;
+                </code>
+            </pre>
+        <div class="demo">
+            <vl-rich-data-table id="rich-data-table-multi-sorting" data-vl-multisort data-vl-data='[{ "id": 0, "name": "Project #1", "owner": "Jan Jansens" }, { "id": 1, "name": "Project #2", "owner": "Jan Jansens" }]'>
+                <vl-rich-data-field data-vl-name="id" data-vl-label="ID" data-vl-selector="id" data-vl-sortable data-vl-sorting-direction="asc" data-vl-sorting-priority="3"></vl-rich-data-field>
+                <vl-rich-data-field data-vl-name="name" data-vl-label="Naam" data-vl-selector="name" data-vl-sortable data-vl-sorting-direction="asc" data-vl-sorting-priority="2"></vl-rich-data-field>
+                <vl-rich-data-field data-vl-name="owner" data-vl-label="Eigenaar" data-vl-selector="owner" data-vl-sortable data-vl-sorting-direction="desc" data-vl-sorting-priority="1"></vl-rich-data-field>
+            </vl-rich-data-table>
+        </div>
+        <script>
+            customElements.whenDefined('vl-rich-data-table').then(() => {
+                const table = document.querySelector('#rich-data-table-multi-sorting');
+                table.addEventListener('change', tableSorter(table));
             });
         </script>
     </div>

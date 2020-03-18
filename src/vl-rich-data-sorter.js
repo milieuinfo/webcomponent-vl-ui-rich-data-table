@@ -70,7 +70,12 @@ export class VlRichDataSorter extends VlElement(HTMLElement) {
             if (direction === undefined) {
                 this.priority = undefined;
             }
+        }
+    }
 
+    _setDirectionAndPublishEvent(direction) {
+        if (this.direction !== direction) {
+            this.direction = direction;
             this._changed();
         }
     }
@@ -81,7 +86,7 @@ export class VlRichDataSorter extends VlElement(HTMLElement) {
 
     set priority(priority) {
         if (this.__priority !== priority) {
-            this.__priority = priority;
+            this.__priority = Number(priority) || undefined;
             this.__priorityElement.textContent = this.priority;
         }
     }
@@ -108,13 +113,13 @@ export class VlRichDataSorter extends VlElement(HTMLElement) {
     _nextDirection() {
         switch (this.direction) {
             case VlRichDataSorter.DIRECTIONS.ascending:
-                this.direction = undefined;
+                this._setDirectionAndPublishEvent(undefined);
                 break;
             case VlRichDataSorter.DIRECTIONS.descending:
-                this.direction = VlRichDataSorter.DIRECTIONS.ascending;
+                this._setDirectionAndPublishEvent(VlRichDataSorter.DIRECTIONS.ascending);
                 break;
             default:
-                this.direction = VlRichDataSorter.DIRECTIONS.descending;
+                this._setDirectionAndPublishEvent(VlRichDataSorter.DIRECTIONS.descending);
         }
     };
 
