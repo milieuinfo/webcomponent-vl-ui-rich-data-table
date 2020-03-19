@@ -18,6 +18,10 @@ class VlRichDataTablePage extends Page {
         return this._getRichDataTable("#rich-data-table-sorting");
     }
 
+    async getRichDataTableMultiSorting() {
+        return this._getRichDataTable("#rich-data-table-multi-sorting");
+    }
+
     async getRichDataTableCollapsedMedium() {
     	return this._getRichDataTable('#rich-data-table-collapsed-medium');
     }

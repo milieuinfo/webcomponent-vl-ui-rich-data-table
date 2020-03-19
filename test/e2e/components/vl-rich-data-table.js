@@ -35,6 +35,10 @@ class VlRichDataTable extends VlElement {
     	return this.hasAttribute('data-vl-collapsed-xs');
 	}
 
+	async isMultisortingEnabled() {
+		return this.hasAttribute('data-vl-multisort');
+	}
+
 	async getSearchFilter() {
 		const searchFilter = await this.shadowRoot.findElement(By.css("[is='vl-search-filter']"));
 		return new VlSearchFilter(this.driver, searchFilter);

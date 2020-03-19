@@ -17,6 +17,7 @@ import { VlRichDataSorter } from "./vl-rich-data-sorter.js";
  * @property {boolean} data-vl-collaped-m - Vanaf een medium schermgrootte zullen de cellen van elke rij onder elkaar ipv naast elkaar getoond worden.
  * @property {boolean} data-vl-collaped-s - Vanaf een small schermgrootte zullen de cellen van elke rij onder elkaar ipv naast elkaar getoond worden.
  * @property {boolean} data-vl-collaped-xs - Vanaf een extra small schermgrootte zullen de cellen van elke rij onder elkaar ipv naast elkaar getoond worden.
+ * @property {boolean} data-vl-multisort - Laat de gebruiker sorteren op meer dan 1 kolom.
  * 
  * @slot filter - slot dat de velden bevat waarop gefilterd wordt. De formData van de search filter worden via een change event doorgegeven bij een wijziging. 
  * 
@@ -157,6 +158,10 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
     	return state;
     }
 
+    get _isMultisortingEnabled() {
+        return this.dataset.vlMultisort !== undefined;
+    }
+
     connectedCallback() {
         this._render();
     }
@@ -274,7 +279,11 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
     }
 
     __sortingChanged(event) {
-        this.__activeSorters.forEach((sorter, index) => sorter.priority = index + 1);
+        if(this._isMultisortingEnabled) {
+            this.__activeSorters.forEach((sorter, index) => sorter.priority = index + 1);
+        } else {
+            this.__activeSorters.filter(sorter => sorter !== event.target).forEach(sorter => sorter.direction = undefined);
+        }
         this.__onStateChange(event);
     }
 

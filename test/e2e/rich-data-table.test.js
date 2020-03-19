@@ -35,8 +35,40 @@ describe('vl-rich-data-table', async () => {
 		await assertRow(vlRichDataTablePaging, 0, [1, "Project #1"]);
 	});
 
-	it('Als gebruiker kan ik sorteren op de kolommen van een rich data table', async () => {
+	it('Als gebruiker kan ik sorteren op de kolommen van een single sort rich data table', async () => {
 		const vlRichDataTableSorting = await vlRichDataTablePage.getRichDataTableSorting();
+		await assert.eventually.isFalse(vlRichDataTableSorting.isMultisortingEnabled());
+
+		await assertAantalRows(vlRichDataTableSorting, 2);
+		await assertRow(vlRichDataTableSorting, 0, [0, "Project #1", "Jan Jansens"]);
+		await assertRow(vlRichDataTableSorting, 1, [1, "Project #2", "Jan Jansens"]);
+
+		const idSorter = await vlRichDataTableSorting.getSorter('id');
+		const nameSorter = await vlRichDataTableSorting.getSorter('name');
+		const ownerSorter = await vlRichDataTableSorting.getSorter('owner');
+
+		await assert.eventually.isTrue(idSorter.isAscending());
+		await assert.eventually.isTrue(nameSorter.isUnsorted());
+		await assert.eventually.isTrue(ownerSorter.isUnsorted());
+
+		// Sorteer op naam, descending.
+		await nameSorter.toggleSorting();
+		await assertRow(vlRichDataTableSorting, 0, [1, "Project #2", "Jan Jansens"]);
+		await assertRow(vlRichDataTableSorting, 1, [0, "Project #1", "Jan Jansens"]);
+		await assert.eventually.isTrue(nameSorter.isDescending());
+		await assert.eventually.isTrue(idSorter.isUnsorted());
+
+		// Sorteer op naam, ascending.
+		await nameSorter.toggleSorting();
+		await assertRow(vlRichDataTableSorting, 0, [0, "Project #1", "Jan Jansens"]);
+		await assertRow(vlRichDataTableSorting, 1, [1, "Project #2", "Jan Jansens"]);
+		await assert.eventually.isTrue(nameSorter.isAscending());
+	});
+
+	it('Als gebruiker kan ik sorteren op de kolommen van een multisort rich data table', async () => {
+		const vlRichDataTableSorting = await vlRichDataTablePage.getRichDataTableMultiSorting();
+		await assert.eventually.isTrue(vlRichDataTableSorting.isMultisortingEnabled());
+
 		await assertAantalRows(vlRichDataTableSorting, 2);
 		await assertRow(vlRichDataTableSorting, 0, [0, "Project #1", "Jan Jansens"]);
 		await assertRow(vlRichDataTableSorting, 1, [1, "Project #2", "Jan Jansens"]);
