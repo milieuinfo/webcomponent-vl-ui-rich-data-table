@@ -28,7 +28,7 @@ import { VlRichDataSorter } from "./vl-rich-data-sorter.js";
  */
 export class VlRichDataTable extends VlElement(HTMLElement) {
     static get _observedAttributes() {
-        return ['data-vl-data', 'data-vl-collapsed-m', 'data-vl-collapsed-s', 'data-vl-collapsed-xs'];
+        return ['data', 'collapsed-m', 'collapsed-s', 'collapsed-xs'];
     }
     
     static get _tableAttributes() {
@@ -119,11 +119,15 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
     }
 
     get __searchFilter() {
-        return this.__filter.querySelector('[is="vl-search-filter"]');
+        if (this.__filter) {
+            return this.__filter.querySelector('[is="vl-search-filter"]');
+        }
     }
 
     get __searchFilterForm() {
-        return this.__searchFilter.querySelector('form');
+        if (this.__searchFilter) {
+            return this.__searchFilter.querySelector('form');
+        }
     }
     
     __onStateChange(originalEvent) {
@@ -219,7 +223,7 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
         return this.shadowRoot.querySelector('#search');
     }
 
-    _data_vl_dataChangedCallback(oldValue, newValue) {
+    _dataChangedCallback(oldValue, newValue) {
         this.data = JSON.parse(newValue);
     }
 
@@ -339,25 +343,37 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
     }
 
     __processSearchFilter() {
-        if (this.__filter) {
+        if (this.__searchFilter) {
+            this.__searchFilter.setAttribute('alt', '');
             this.__setGridColumnWidth(4);
             this.__observeSearchFilter();
+        } else {
+            this.__setGridColumnWidth(0);
         }
     }
 
     __observeSearchFilter() {
-        this.__searchFilter.addEventListener('change', e => {
-            e.stopPropagation();
-            e.preventDefault();
-        });
-        this.__searchFilter.addEventListener('input', e => {
-            this.__onFilterFieldChanged(e);
-        });
-        this.__searchFilterForm.addEventListener('reset', e => {
-            setTimeout(() => {
+        if (this.__searchFilter) {
+            this.__searchFilter.addEventListener('change', e => {
+                e.stopPropagation();
+                e.preventDefault();
+            });
+            this.__searchFilter.addEventListener('input', e => {
                 this.__onFilterFieldChanged(e);
             });
-        });
+            if (this.__searchFilterForm) {
+                this.__searchFilterForm.addEventListener('reset', e => {
+                    setTimeout(() => {
+                        this.__onFilterFieldChanged(e);
+                    });
+                });
+            }
+
+            const observer = new MutationObserver(() => {
+                this.__processSearchFilter();
+            });
+            observer.observe(this, { childList: true, subtree: true });
+        }
     }
 
     __setGridColumnWidth(width) {

@@ -178,14 +178,11 @@ describe('vl-rich-data-table', async () => {
 		await assertRow(richDataTableWithFilter, 0, [0, "Project #1", "Riquier", "Kleykens", "Project #1 o.l.v. Pascal Riquier"]);
 
 		await filterIdVeld.clear();
-		await filterIdVeld.sendKeys(Key.BACK_SPACE);
-		await richDataTableWithFilter.search();
 		await assertAantalRows(richDataTableWithFilter, 2);
 		await assertRow(richDataTableWithFilter, 0, [0, "Project #1", "Riquier", "Kleykens", "Project #1 o.l.v. Pascal Riquier"]);
 		await assertRow(richDataTableWithFilter, 1, [2, "Project #3", "Riquier", "Beckers", "Project #3 o.l.v. Pascal Riquier"]);
 
 		await filterManagerLastNameVeld.clear();
-		await richDataTableWithFilter.search();
 		await assertAantalRows(richDataTableWithFilter, 3);
 		await assertRow(richDataTableWithFilter, 0, [0, "Project #1", "Riquier", "Kleykens", "Project #1 o.l.v. Pascal Riquier"]);
 		await assertRow(richDataTableWithFilter, 1, [1, "Project #2", "Coemans", "Wauters", "Project #2 o.l.v. Tom Coemans"]);

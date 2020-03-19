@@ -7,6 +7,13 @@
   <script src="../../../web-component-tester/browser.js"></script>
 
   <script type="module" src="../../src/vl-rich-data-table.js"></script>
+  <script type="module" src="/node_modules/vl-ui-search-filter/dist/vl-search-filter.js"></script>
+  <script type="module" src="/node_modules/vl-ui-input-field/dist/vl-input-field.js"></script>
+  <script type="module" src="/node_modules/vl-ui-button/dist/vl-button.js"></script>
+
+  <link rel="stylesheet" type="text/css" href="/node_modules/vl-ui-search-filter/dist/style.css"/>
+  <link rel="stylesheet" type="text/css" href="/node_modules/vl-ui-input-field/dist/style.css"/>
+  <link rel="stylesheet" type="text/css" href="/node_modules/vl-ui-button/dist/style.css"/>
 </head>
 
 <body>
@@ -25,8 +32,15 @@
         <vl-rich-data-field id="id-field" data-vl-label="ID" data-vl-selector="id"></vl-rich-data-field>
         <vl-rich-data-field id="name-field" data-vl-label="Naam" data-vl-selector="name"></vl-rich-data-field>
         <div slot="filter">
-          <label>Hier kunnen filtervelden komen</label>
-          <input type="text" name="filter1" />
+          <div is="vl-search-filter">
+            <form id="form">
+              <label>Hier kunnen filtervelden komen</label>
+              <input is="vl-input-field" type="text" name="filter1" />
+            </form>
+            <div>
+              <button is="vl-button-link" type="reset" form="form">Zoekopdracht verwijderen</button>
+            </div>
+          </div>
         </div>
       </vl-rich-data-table>
     </template>
@@ -41,39 +55,27 @@
         should.not.exist(table.__searchFilter);
       });
 
-      test('Wanneer wel een filterslot is bestaat, zal er een alt variant search filter aanwezig zijn', () => {
+      test('Wanneer wel een filterslot bestaat, zal de search filter aanwezig zijn met alt variant', () => {
         const table = fixture('vl-rich-data-table-met-filter-fixture');
         const searchFilter = table.__searchFilter;
         should.exist(searchFilter);
         assert.isTrue(searchFilter.hasAttribute('alt'));
       });
 
-      test('De inhoud van het filter-slot wordt gekopieerd in de searchfilter', (done) => {
-        const table = fixture('vl-rich-data-table-met-filter-fixture');
-        setTimeout(() => {
-          const searchFilter = table.__searchFilter;
-
-          expect(searchFilter.querySelector('label').textContent).to.equal('Hier kunnen filtervelden komen');
-          expect(searchFilter.querySelector('input').getAttribute('name')).to.equal('filter1');
-          done();
-        });
-      });
-
       test('Als er aan een input van de search filter iets wijzigt wordt er een event met formdata gestuurd', (done) => {
         const table = fixture('vl-rich-data-table-met-filter-fixture');
 
-        setTimeout(() => {
-          table.addEventListener('change', (e) => {
-            expect(e.detail.formData.get('filter1')).to.equal('een beetje input');
-            done();;
-          });
-
-          const searchFilter = table.__searchFilter;
-          setInputValue(searchFilter.querySelector('input'), 'een beetje input');
+        table.addEventListener('change', (e) => {
+          expect(e.detail.formData.get('filter1')).to.equal('een beetje input');
+          done();;
         });
+
+        const searchFilter = table.__searchFilter;
+        setInputValue(searchFilter.querySelector('input'), 'een beetje input');
       });
 
       test('Als de filtering gereset wordt, zal er een event met formdata gestuurd worden', (done) => {
+        debugger;
         const table = fixture('vl-rich-data-table-met-filter-fixture');
         const searchFilter = table.__searchFilter;
         const resetButton = searchFilter.querySelector('button[type="reset"]');
@@ -86,18 +88,6 @@
         resetButton.click();
       });
 
-      test('Als het filter-slot wijzigt wordt de nieuwe inhoud gekopieerd naar de searchfilter', (done) => {
-        const table = fixture('vl-rich-data-table-met-filter-fixture');
-        setTimeout(() => {
-          modifyFilterSlot(table, '<input type="text" name="filter2" />');
-          setTimeout(() => {
-            const searchFilter = table.__searchFilter;
-            expect(searchFilter.querySelector('input').getAttribute('name')).to.equal('filter2');
-            done();
-          });
-        });
-      });
-
       test('Als er geen searchfilter aanwezig is, wordt er geen plaats voor voorzien', () => {
         const table = fixture('vl-rich-data-table-zonder-filter-fixture');
         const content = table.shadowRoot.querySelector('#content');
@@ -106,35 +96,26 @@
         expect(search.getAttribute('size')).to.be.equal('0');
       });
 
-      test('Als er een searchfilter aanwezig is, wordt er ook plaats voor voorzien', (done) => {
+      test('Als er een searchfilter aanwezig is, wordt er plaats voor voorzien', () => {
         const table = fixture('vl-rich-data-table-met-filter-fixture');
-        setTimeout(() => {
-          const content = table.shadowRoot.querySelector('#content');
-          const search = table.shadowRoot.querySelector('#search');
-          expect(content.getAttribute('size')).to.be.equal('8');
-          expect(search.getAttribute('size')).to.be.equal('4');
-          done();
-        });
+        const content = table.shadowRoot.querySelector('#content');
+        const search = table.shadowRoot.querySelector('#search');
+        expect(content.getAttribute('size')).to.be.equal('8');
+        expect(search.getAttribute('size')).to.be.equal('4');
       });
 
       test('Als de searchfilter leeg gemaakt wordt, neemt de content terug de volledige breedte in', (done) => {
         const table = fixture('vl-rich-data-table-met-filter-fixture');
+        const filterSlot = table.querySelector("[slot=filter]");
+        filterSlot.innerHTML = '';
         setTimeout(() => {
-          modifyFilterSlot(table, '');
-          setTimeout(() => {
-            const content = table.shadowRoot.querySelector('#content');
-            const search = table.shadowRoot.querySelector('#search');
-            expect(content.getAttribute('size')).to.be.equal('12');
-            expect(search.getAttribute('size')).to.be.equal('0');
-            done();
-          });
+          const content = table.shadowRoot.querySelector('#content');
+          const search = table.shadowRoot.querySelector('#search');
+          expect(content.getAttribute('size')).to.be.equal('12');
+          expect(search.getAttribute('size')).to.be.equal('0');
+          done();
         });
       });
-
-      function modifyFilterSlot(fixture, html) {
-        const filterSlot = fixture.querySelector("[slot=filter]");
-        filterSlot.innerHTML = html;
-      }
 
       function setInputValue(input, value) {
         input.value = value;

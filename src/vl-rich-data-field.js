@@ -27,7 +27,7 @@ export class VlRichDataField extends VlElement(HTMLElement) {
     }
 
     static get _observedAttributes() {
-        return ['data-vl-name', 'data-vl-selector', 'data-vl-label', 'data-vl-sortable', 'data-vl-sorting-direction', 'data-vl-sorting-priority'];
+        return ['name', 'selector', 'label', 'sortable', 'sorting-direction', 'sorting-priority'];
     }
 
     static get is() {
@@ -117,37 +117,37 @@ export class VlRichDataField extends VlElement(HTMLElement) {
         return this.dataset.vlSortingPriority;
     }
 
-    _data_vl_nameChangedCallback(oldValue, newValue) {
+    _nameChangedCallback(oldValue, newValue) {
         if (oldValue !== newValue) {
             this._changed(['name']);
         }
     }
 
-    _data_vl_selectorChangedCallback(oldValue, newValue) {
+    _selectorChangedCallback(oldValue, newValue) {
         if (oldValue !== newValue) {
             this._changed(['selector']);
         }
     }
 
-    _data_vl_labelChangedCallback(oldValue, newValue) {
+    _labelChangedCallback(oldValue, newValue) {
         if (oldValue !== newValue) {
             this._changed(['label']);
         }
     }
 
-    _data_vl_sortableChangedCallback(oldValue, newValue) {
+    _sortableChangedCallback(oldValue, newValue) {
         if (oldValue !== newValue) {
             this._changed(['sortable']);
         }
     }
 
-    _data_vl_sorting_directionChangedCallback(oldValue, newValue) {
+    _sorting_directionChangedCallback(oldValue, newValue) {
         if (oldValue !== newValue) {
             this._changed(['sorting-direction']);
         }
     }
 
-    _data_vl_sorting_priorityChangedCallback(oldValue, newValue) {
+    _sorting_priorityChangedCallback(oldValue, newValue) {
         if (oldValue !== newValue) {
             this._changed(['sorting-priority']);
         }

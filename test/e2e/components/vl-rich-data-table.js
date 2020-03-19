@@ -40,7 +40,7 @@ class VlRichDataTable extends VlElement {
 	}
 
 	async getSearchFilter() {
-		const searchFilter = await this.shadowRoot.findElement(By.css("[is='vl-search-filter']"));
+		const searchFilter = await this.findElement(By.css("[is='vl-search-filter']"));
 		return new VlSearchFilter(this.driver, searchFilter);
 	}
 

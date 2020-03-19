@@ -17,7 +17,7 @@ export class VlRichDataSorter extends VlElement(HTMLElement) {
     }
 
     static get _observedAttributes() {
-        return ['data-vl-direction', 'data-vl-priority'];
+        return ['direction', 'priority'];
     }
 
     static get is() {
@@ -123,11 +123,11 @@ export class VlRichDataSorter extends VlElement(HTMLElement) {
         }
     };
 
-    _data_vl_directionChangedCallback(oldValue, newValue) {
+    _directionChangedCallback(oldValue, newValue) {
         this.direction = newValue;
     }
 
-    _data_vl_priorityChangedCallback(oldValue, newValue) {
+    _priorityChangedCallback(oldValue, newValue) {
         this.priority = newValue;
     }
 
