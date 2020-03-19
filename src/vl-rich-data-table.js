@@ -1,9 +1,6 @@
 import {VlElement, define} from '/node_modules/vl-ui-core/dist/vl-core.js';
 import '/node_modules/vl-ui-data-table/dist/vl-data-table.js';
-import '/node_modules/vl-ui-search-filter/dist/vl-search-filter.js';
 import '/node_modules/vl-ui-grid/dist/vl-grid.js';
-import '/node_modules/vl-ui-input-field/dist/vl-input-field.js';
-import '/node_modules/vl-ui-form-message/dist/vl-form-message.js';
 import '/node_modules/vl-ui-button/dist/vl-button.js';
 
 import { VlRichDataField } from "./vl-rich-data-field.js";
@@ -46,13 +43,12 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
             <style>
                 @import "/src/style.css";
                 @import "/node_modules/vl-ui-data-table/dist/style.css";
-                @import "/node_modules/vl-ui-search-filter/dist/style.css";
-                @import "/node_modules/vl-ui-input-field/dist/style.css";
-                @import "/node_modules/vl-ui-form-message/dist/style.css";
                 @import "/node_modules/vl-ui-button/dist/style.css";
             </style>
             <div is="vl-grid" is-stacked>
-                <div id="search" is="vl-column" size="0"></div>
+                <div id="search" is="vl-column" size="0">
+                    <slot name="filter"></slot>
+                </div>
                 <div id="content" is="vl-column" size="12">
                     <table is="vl-data-table">
                         <thead>
@@ -68,9 +64,11 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
         `);
 
         this.__copyTableAttributes();
+        this.__processSearchFilter();
+        
         this.__observeFields();
         this.__observeSorters();
-        this._renderSearchFilter();
+        
         if (this.__pager) {
         	this.__pager.setAttribute("align-right", true);
         	this.__pager.addEventListener('change', e => {
@@ -86,10 +84,6 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
     	}
     }
 
-    get _searchElement() {
-        return this.shadowRoot.querySelector('#search');
-    }
-    
     __copyTableAttributes() {
     	VlRichDataTable._tableAttributes.forEach(attr => {
     		if (this.hasAttribute(attr)) {
@@ -97,7 +91,7 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
     		}
     	});
     }
-    
+
     __setTableAttribute(attr, oldValue, newValue) {
     	const withoutDataVlPrefix = attr.substring("data-vl-".length);
     	if (newValue != undefined && newValue != null) {
@@ -109,6 +103,26 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
     
     get __pager() {
     	return this.querySelector("[slot='pager']");
+    }
+
+    get __filter() {
+    	return this.querySelector("[slot='filter']");
+    }
+
+    get __searchColumn() {
+        return this.shadowRoot.querySelector('#search');
+    }
+
+    get __contentColumn() {
+        return this.shadowRoot.querySelector('#content');
+    }
+
+    get __searchFilter() {
+        return this.__filter.querySelector('[is="vl-search-filter"]');
+    }
+
+    get __searchFilterForm() {
+        return this.__searchFilter.querySelector('form');
     }
     
     __onStateChange(originalEvent) {
@@ -170,22 +184,6 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
         return this.__data || [];
     }
 
-    _getSearchFilterTemplate(content) {
-        return this._template(`
-            <div is="vl-search-filter" alt>
-                <form id="form" novalidate>
-                    ${content}
-                    <div>
-                        <button is="vl-button" type="submit">Zoeken</button>
-                    </div>
-                </form>
-                <div>
-                    <button is="vl-button-link" type="reset" form="form">Zoekopdracht verwijderen</button>
-                </div>
-            </div>
-        `);
-    }
-
     _render() {
         this._renderHeaders();
         this._renderBody();
@@ -212,77 +210,8 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
         });
     }
 
-    _renderSearchFilter() {
-        const filterSlot = this.querySelector("[slot='filter']");
-        if (filterSlot) {
-            this.__observeFilterSlotElement(filterSlot, () => {
-                this._appendSearchFilter();
-            });
-            this._appendSearchFilter();
-        }
-    }
-
-    _appendSearchFilter() {
-        this._removeSearchFilter();
-        this._createSearchFilter();
-    }
-
-    _removeSearchFilter() {
-        const searchFilter = this.__searchFilter;
-        if (searchFilter) {
-            searchFilter.remove();
-        }
-    }
-
-    _createSearchFilter() {
-        const searchFilterContent = this._searchFilterSlotContent;
-        if (searchFilterContent != '') {
-            this._searchElement.append(this._getSearchFilterTemplate(searchFilterContent));
-            this.__searchFilter.addEventListener('input', e => {
-                this.__onFilterFieldChanged(e);
-            });
-            this.__searchFilterForm.addEventListener('reset', e => {
-                setTimeout(() => {
-                    this.__onFilterFieldChanged(e);
-                });
-            });
-        }
-        this._setWidthForSearchFilter(searchFilterContent != ''? 4 : 0 );
-    }
-
-    _setWidthForSearchFilter(width) {
-        this.__searchFilterLocation.setAttribute('size', width);
-        this.__contentLocation.setAttribute('size', 12-width);
-    }
-
     get __searchFilterLocation() {
         return this.shadowRoot.querySelector('#search');
-    }
-
-    get __contentLocation() {
-        return this.shadowRoot.querySelector('#content');
-    }
-
-    __observeFilterSlotElement(filterSlot, callback) {
-		const observer = new MutationObserver(callback);
-		observer.observe(filterSlot, { attributes: true, childList: true, characterData: true, subtree: true });
-		return observer;
-	}
-
-    __onFilterFieldChanged(originalEvent) {
-    	originalEvent.stopPropagation();
-    	originalEvent.preventDefault();
-        const event = {
-            detail: this.__filterFormData, 
-            bubbles: true
-        };
-    	this.dispatchEvent(new CustomEvent('change', event));
-    }
-
-    get __filterFormData() {
-        return {
-            formData: this.__searchFilter.formData
-        };
     }
 
     _data_vl_dataChangedCallback(oldValue, newValue) {
@@ -313,18 +242,6 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
         return Array.from(this.__sorters)
             .filter(sorter => sorter.direction !== undefined)
             .sort(VlRichDataSorter.PRIORITY_COMPARATOR);
-    }
-
-    get __searchFilter() {
-        return this.shadowRoot.querySelector('[is="vl-search-filter"]');
-    }
-
-    get __searchFilterForm() {
-        return this.__searchFilter.querySelector('form');
-    }
-
-    get _searchFilterSlotContent() {
-        return this.querySelector('[slot="filter"]').innerHTML;
     }
 
     __listenToFieldChanges(field) {
@@ -410,6 +327,45 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
             });
         });
         observer.observe(this.__tableHeaderRow, {childList: true});
+    }
+
+    __processSearchFilter() {
+        if (this.__filter) {
+            this.__setGridColumnWidth(4);
+            this.__observeSearchFilter();
+        }
+    }
+
+    __observeSearchFilter() {
+        this.__searchFilter.addEventListener('change', e => {
+            e.stopPropagation();
+            e.preventDefault();
+        });
+        this.__searchFilter.addEventListener('input', e => {
+            this.__onFilterFieldChanged(e);
+        });
+        this.__searchFilterForm.addEventListener('reset', e => {
+            setTimeout(() => {
+                this.__onFilterFieldChanged(e);
+            });
+        });
+    }
+
+    __setGridColumnWidth(width) {
+        this.__searchColumn.setAttribute('size', width);
+        this.__contentColumn.setAttribute('size', 12-width);
+    }
+
+    __onFilterFieldChanged(originalEvent) {
+    	originalEvent.stopPropagation();
+        originalEvent.preventDefault();
+        const event = {
+            detail: {
+                formData: this.__searchFilter.formData
+            },
+            bubbles: true
+        };
+    	this.dispatchEvent(new CustomEvent('change', event));
     }
 }
 
