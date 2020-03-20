@@ -256,10 +256,10 @@
             <code class="line-numbers language-markup"></code>
         </pre>
         <div class="demo">
-            <vl-rich-data-table id="rich-data-table-multi-sorting" data-vl-multisort data-vl-data='{"data": [{ "id": 0, "name": "Project #1", "owner": "Jan Jansens" }, { "id": 1, "name": "Project #2", "owner": "Jan Jansens" }]}'>
-                <vl-rich-data-field data-vl-name="id" data-vl-label="ID" data-vl-selector="id" data-vl-sortable data-vl-sorting-direction="asc" data-vl-sorting-priority="3"></vl-rich-data-field>
-                <vl-rich-data-field data-vl-name="name" data-vl-label="Naam" data-vl-selector="name" data-vl-sortable data-vl-sorting-direction="asc" data-vl-sorting-priority="2"></vl-rich-data-field>
-                <vl-rich-data-field data-vl-name="owner" data-vl-label="Eigenaar" data-vl-selector="owner" data-vl-sortable data-vl-sorting-direction="desc" data-vl-sorting-priority="1"></vl-rich-data-field>
+            <vl-rich-data-table id="rich-data-table-multi-sorting" data-vl-multisort data-vl-data='{"data": [{ "id": 1, "name": "Project #2", "owner": "Jan Jansens" }, { "id": 0, "name": "Project #1", "owner": "Jan Jansens" }]}'>
+                <vl-rich-data-field data-vl-name="id" data-vl-label="ID" data-vl-selector="id" data-vl-sortable data-vl-sorting-direction="desc" data-vl-sorting-priority="3"></vl-rich-data-field>
+                <vl-rich-data-field data-vl-name="name" data-vl-label="Naam" data-vl-selector="name" data-vl-sortable data-vl-sorting-direction="desc" data-vl-sorting-priority="2"></vl-rich-data-field>
+                <vl-rich-data-field data-vl-name="owner" data-vl-label="Eigenaar" data-vl-selector="owner" data-vl-sortable data-vl-sorting-direction="asc" data-vl-sorting-priority="1"></vl-rich-data-field>
             </vl-rich-data-table>
         </div>
         <script>

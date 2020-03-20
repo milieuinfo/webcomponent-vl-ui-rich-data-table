@@ -23,7 +23,7 @@
 <test-fixture id="vl-rich-data-table-multisort-fixture">
     <template>
         <vl-rich-data-table data-vl-multisort data-vl-data='{"data": [{"id": 0, "name": "Project #1", "owner": "Jan Jansens"}, {"id": 1, "name": "Project #2", "owner": "Jan Jansens"}]}'>
-            <vl-rich-data-field data-vl-name="id" data-vl-label="ID" data-vl-selector="id" data-vl-sortable data-vl-sorting-direction="desc" data-vl-sorting-priority="1"></vl-rich-data-field>
+            <vl-rich-data-field data-vl-name="id" data-vl-label="ID" data-vl-selector="id" data-vl-sortable data-vl-sorting-direction="asc" data-vl-sorting-priority="1"></vl-rich-data-field>
             <vl-rich-data-field data-vl-name="name" data-vl-label="Naam" data-vl-selector="name" data-vl-sortable></vl-rich-data-field>
             <vl-rich-data-field data-vl-name="owner" data-vl-label="Eigenaar" data-vl-selector="owner"></vl-rich-data-field>
         </vl-rich-data-table>
@@ -72,11 +72,11 @@
                 sorting.should.be.lengthOf(1);
 
                 sorting[0].name.should.equal('name');
-                sorting[0].direction.should.equal('desc');
+                sorting[0].direction.should.equal('asc');
 
                 should.equal(idSorter.direction, undefined);
                 should.equal(idSorter.priority, undefined);
-                should.equal(nameSorter.direction, 'desc');
+                should.equal(nameSorter.direction, 'asc');
                 should.equal(nameSorter.priority, undefined);
 
                 done();
@@ -92,7 +92,7 @@
             const idSorter = getSorter(richTable, 'id');
             const nameSorter = getSorter(richTable, 'name');
 
-            should.equal(idSorter.direction, 'desc');
+            should.equal(idSorter.direction, 'asc');
             should.equal(idSorter.priority, 1);
             should.equal(nameSorter.direction, undefined);
             should.equal(nameSorter.priority, undefined);
@@ -102,14 +102,14 @@
                 sorting.should.be.lengthOf(2);
 
                 sorting[0].name.should.equal('id');
-                sorting[0].direction.should.equal('desc');
+                sorting[0].direction.should.equal('asc');
 
                 sorting[1].name.should.equal('name');
-                sorting[1].direction.should.equal('desc');
+                sorting[1].direction.should.equal('asc');
 
-                should.equal(idSorter.direction, 'desc');
+                should.equal(idSorter.direction, 'asc');
                 should.equal(idSorter.priority, 1);
-                should.equal(nameSorter.direction, 'desc');
+                should.equal(nameSorter.direction, 'asc');
                 should.equal(nameSorter.priority, 2);
 
                 done();
@@ -137,16 +137,16 @@
                 const sorting = event.detail.sorting;
                 sorting.should.be.lengthOf(2);
 
-                sorting[0].name.should.equal('id');
-                sorting[0].direction.should.equal('desc');
+                sorting[0].name.should.equal('name');
+                sorting[0].direction.should.equal('asc');
 
                 sorting[1].name.should.equal('owner');
                 sorting[1].direction.should.equal('desc');
 
-                should.equal(idSorter.direction, 'desc');
-                should.equal(idSorter.priority, 1);
-                should.equal(nameSorter.direction, undefined);
-                should.equal(nameSorter.priority, undefined);
+                should.equal(idSorter.direction, undefined);
+                should.equal(idSorter.priority, undefined);
+                should.equal(nameSorter.direction, 'asc');
+                should.equal(nameSorter.priority, 1);
                 should.equal(ownerSorter.direction, 'desc');
                 should.equal(ownerSorter.priority, 2);
 
@@ -154,7 +154,7 @@
             });
 
             setTimeout(() => {
-                nameSorter.__directionElement.click();
+            	idSorter.__directionElement.click();
             });
         });
 
@@ -163,7 +163,7 @@
             const idSorter = getSorter(richTable, 'id');
             const nameSorter = getSorter(richTable, 'name');
 
-            should.equal(idSorter.direction, 'desc');
+            should.equal(idSorter.direction, 'asc');
             should.equal(idSorter.priority, 1);
             should.equal(nameSorter.direction, undefined);
             should.equal(nameSorter.priority, undefined);
@@ -173,9 +173,9 @@
                 sorting.should.be.lengthOf(1);
 
                 sorting[0].name.should.equal('id');
-                sorting[0].direction.should.equal('asc');
+                sorting[0].direction.should.equal('desc');
 
-                should.equal(idSorter.direction, 'asc');
+                should.equal(idSorter.direction, 'desc');
                 should.equal(idSorter.priority, 1);
                 should.equal(nameSorter.direction, undefined);
                 should.equal(nameSorter.priority, undefined);
