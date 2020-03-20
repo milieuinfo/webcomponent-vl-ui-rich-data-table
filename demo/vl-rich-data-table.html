@@ -325,8 +325,7 @@
     <div>
         <h2>Rich data table met search filter</h2>
         <pre>
-            <code class="line-numbers language-markup">
-            </code>
+            <code class="line-numbers language-markup"></code>
         </pre>
         <div class="demo">
             <vl-rich-data-table id="rich-data-table-filter-sorting-paging">
@@ -378,6 +377,8 @@
             <script>
                 customElements.whenDefined('vl-rich-data-table').then(() => {
                     const element = document.querySelector('#rich-data-table-filter-sorting-paging');
+                    const pager = element.querySelector('vl-pager');
+
                     const data = {
                         "data": [{
                             "id": 0,
@@ -504,11 +505,6 @@
                             "name": "Project #24",
                             "manager": { "firstName": "Pascal", "lastName": "Riquier" },
                             "medewerkers": [{ "firstName": "Pieter", "lastName": "Beckers" }]
-                        }, {
-                            "id": 25,
-                            "name": "Project #25",
-                            "manager": { "firstName": "Pascal", "lastName": "Riquier" },
-                            "medewerkers": [{ "firstName": "Pieter", "lastName": "Beckers" }]
                         }]
                     };
 
@@ -521,15 +517,14 @@
                         }
                         
                         if (e.detail.paging) {
-                            newData = page(e.detail.paging.currentPage, e.detail.paging.itemsPerPage, newData);
+                            newData = page(e.detail.paging.currentPage, pager.itemsPerPage, newData);
                         }
 
                         element.data = {
                             data: newData,
                             paging: {
                                 currentPage: e.detail.paging.currentPage,
-                                itemsPerPage: e.detail.paging.itemsPerPage,
-                                totalItems: e.detail.formData ? newData.length : data.length
+                                totalItems: e.detail.formData ? newData.length : data.data.length,
                             }
                         };
                     });
@@ -540,7 +535,6 @@
                         return data.slice(start, end);
                     }
 
-                    const pager = document.querySelector("#rich-data-table-filter-sorting-paging-pager");
                     element.data = {
                         data: page(1, 10, data.data)
                     };

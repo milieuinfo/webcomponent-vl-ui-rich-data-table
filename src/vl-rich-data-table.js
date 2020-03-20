@@ -400,15 +400,16 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
     __onFilterFieldChanged(originalEvent) {
     	originalEvent.stopPropagation();
         originalEvent.preventDefault();
-        const detail = {
-            formData: this.__searchFilter.formData,
-        };
+        const detail = {};
+
+        const bevatFiltering = [... this.__searchFilter.formData.values()].find(Boolean);
+        if (bevatFiltering) {
+            detail.formData = this.__searchFilter.formData;
+        }
 
         if (this.__pager) {
             detail.paging = {
-                currentPage: 1,
-                itemsPerPage: this.__pager.itemsPerPage,
-                totalItems: this.__pager.totalItems
+                currentPage: 1
             };
         }
 

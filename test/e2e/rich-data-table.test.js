@@ -193,7 +193,6 @@ describe('vl-rich-data-table', async () => {
 		const searchFilter = await richDataTable.getSearchFilter();
 		const filterManagerLastNameVeld = await new VlInputField(driver, await searchFilter.findElement(By.css('[name="manager.lastName"]')));
 		const pager = await richDataTable.getPager();
-		
 
 		await pager.goToNextPage();
 		let range = await pager.getRange();
@@ -201,7 +200,8 @@ describe('vl-rich-data-table', async () => {
 		await assert.equal(range.maximum, 20);
         await assert.eventually.equal(pager.getCurrentPage(), 2);
         await assert.eventually.equal(pager.getItemsPerPage(), 10);
-        await assert.eventually.equal(pager.getTotalItems(), 25);
+		await assert.eventually.equal(pager.getTotalItems(), 25);
+		
 		await filterManagerLastNameVeld.setValue('Coe');
 		await assertAantalRows(richDataTable, 2);
 		range = await pager.getRange();
@@ -211,6 +211,40 @@ describe('vl-rich-data-table', async () => {
         await assert.eventually.equal(pager.getTotalItems(), 2);
 		await assertRow(richDataTable, 0, [1, "Project #2", "Coemans", "Wauters", "Project #2 o.l.v. Tom Coemans"]);
 		await assertRow(richDataTable, 1, [2, "Project #3", "Coemans", "Wauters", "Project #3 o.l.v. Tom Coemans"]);
+
+		await filterManagerLastNameVeld.clear();
+	});
+
+	it('Als gebruiker zal ik de originele lijst te zien krijgen wanneer ik een filter verwijder', async () => {
+		const richDataTable = await vlRichDataTablePage.getRichDataTableFilterSortingPaging();
+		const searchFilter = await richDataTable.getSearchFilter();
+		const filterManagerLastNameVeld = await new VlInputField(driver, await searchFilter.findElement(By.css('[name="manager.lastName"]')));
+		const pager = await richDataTable.getPager();
+
+		let range = await pager.getRange();
+		await assert.equal(range.minimum, 1);
+		await assert.equal(range.maximum, 10);
+        await assert.eventually.equal(pager.getCurrentPage(), 1);
+        await assert.eventually.equal(pager.getItemsPerPage(), 10);
+		await assert.eventually.equal(pager.getTotalItems(), 25);
+		
+		await filterManagerLastNameVeld.setValue('Coe');
+		await assertAantalRows(richDataTable, 2);
+		range = await pager.getRange();
+		await assert.equal(range.minimum, 1);
+		await assert.equal(range.maximum, 2);
+        await assert.eventually.equal(pager.getItemsPerPage(), 2);
+        await assert.eventually.equal(pager.getTotalItems(), 2);
+		await assertRow(richDataTable, 0, [1, "Project #2", "Coemans", "Wauters", "Project #2 o.l.v. Tom Coemans"]);
+		await assertRow(richDataTable, 1, [2, "Project #3", "Coemans", "Wauters", "Project #3 o.l.v. Tom Coemans"]);
+
+		await filterManagerLastNameVeld.clear();
+		range = await pager.getRange();
+		await assert.equal(range.minimum, 1);
+		await assert.equal(range.maximum, 10);
+        await assert.eventually.equal(pager.getCurrentPage(), 1);
+        await assert.eventually.equal(pager.getItemsPerPage(), 10);
+		await assert.eventually.equal(pager.getTotalItems(), 25);
 	});
 
 	async function assertHeaders(richDataTable, expectedHeaders) {

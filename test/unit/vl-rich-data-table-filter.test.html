@@ -71,9 +71,7 @@
         table.addEventListener('change', (e) => {
           expect(e.detail.formData.get('filter1')).to.equal('een beetje input');
           expect(e.detail.paging).to.deep.equal({
-            currentPage: Number(pager.getAttribute('current-page')),
-            itemsPerPage: Number(pager.getAttribute('items-per-page')),
-            totalItems: Number(pager.getAttribute('total-items'))
+            currentPage: Number(pager.getAttribute('current-page'))
           });
           done();
         });
@@ -82,7 +80,7 @@
         setInputValue(searchFilter.querySelector('input'), 'een beetje input');
       });
 
-      test('Als de filtering gereset wordt, zal er een event met formdata en paginatie gestuurd worden', (done) => {
+      test('Als de filtering gereset wordt, zal er een event zonder formdata en met paginatie gestuurd worden', (done) => {
         const table = fixture('vl-rich-data-table-met-filter-fixture');
         const pager = table.querySelector('vl-pager');
         const searchFilter = table.__searchFilter;
@@ -90,11 +88,9 @@
 
         setInputValue(searchFilter.querySelector('input'), 'een beetje input');
         table.addEventListener('change', (e) => {
-            expect(e.detail.formData.get('filter1')).to.equal('');
+            expect(e.detail.formData).to.be.undefined;
             expect(e.detail.paging).to.deep.equal({
-              currentPage: Number(pager.getAttribute('current-page')),
-              itemsPerPage: Number(pager.getAttribute('items-per-page')),
-              totalItems: Number(pager.getAttribute('total-items'))
+              currentPage: Number(pager.getAttribute('current-page'))
             });
             done();
         });
