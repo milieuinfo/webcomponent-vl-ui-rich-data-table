@@ -73,7 +73,7 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
         if (this.__pager) {
         	this.__pager.setAttribute("align-right", true);
         	this.__pager.addEventListener('change', e => {
-        		this.__onStateChange(e);
+        		this.__onStateChange(e, {paging: true});
         	});
         }
     }
@@ -130,11 +130,13 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
         }
     }
     
-    __onStateChange(originalEvent) {
-    	originalEvent.stopPropagation();
-    	originalEvent.preventDefault();
-    	const event = {detail: this.__state, bubbles: true};
-    	this.dispatchEvent(new CustomEvent('change', event));
+    __onStateChange(event, {paging = false}={}) {
+    	event.stopPropagation();
+    	event.preventDefault();
+    	this.dispatchEvent(new CustomEvent('change', {
+            detail: this.__getState({paging}), 
+            bubbles: true
+        }));
     }
     
     get __pagingState() {
@@ -149,16 +151,30 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
     }
 
     get __sortingState() {
-        return this.__activeSorters.map(criteria => { return {
-            name: criteria.for,
-            direction: criteria.direction
-        } });
+        if (this.__activeSorters && this.__activeSorters.length > 0) {
+            return this.__activeSorters.map(criteria => { 
+                return {
+                    name: criteria.for,
+                    direction: criteria.direction
+                }
+            });
+        }
+    }
+
+    get __formDataState() {
+        if (this.__searchFilter && this.__searchFilter.formData) {
+            const bevatFiltering = [... this.__searchFilter.formData.values()].find(Boolean);
+            if (bevatFiltering) {
+                return this.__searchFilter.formData;
+            }
+        }
     }
     
-    get __state() {
+    __getState({paging}) {
     	const state = {};
-        state.paging = this.__pagingState;
         state.sorting = this.__sortingState;
+        state.formData = this.__formDataState;
+        state.paging = paging ? this.__pagingState : { currentPage: 1 };
     	return state;
     }
 
@@ -224,15 +240,17 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
     }
 
     _renderBody() {
-        this.__tableBody.innerHTML = '';
-        this.data.data.forEach(rowData => {
-            const rowTemplate = this._template(`<tr>
-                ${Array.from(this.__fields)
-                .map(field => field.renderCellValue ? field.renderCellValue(rowData) : '<td></td>')
-                .join('')}
-            </tr>`);
-            this.__tableBody.appendChild(rowTemplate);
-        });
+        if (this.data && this.data.data) {
+            this.__tableBody.innerHTML = '';
+            this.data.data.forEach(rowData => {
+                const rowTemplate = this._template(`<tr>
+                    ${Array.from(this.__fields)
+                    .map(field => field.renderCellValue ? field.renderCellValue(rowData) : '<td></td>')
+                    .join('')}
+                </tr>`);
+                this.__tableBody.appendChild(rowTemplate);
+            });
+        }
     }
 
     get __searchFilterLocation() {
@@ -397,27 +415,10 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
         this.__contentColumn.setAttribute('size', 12-width);
     }
 
-    __onFilterFieldChanged(originalEvent) {
-    	originalEvent.stopPropagation();
-        originalEvent.preventDefault();
-        const detail = {};
-
-        const bevatFiltering = [... this.__searchFilter.formData.values()].find(Boolean);
-        if (bevatFiltering) {
-            detail.formData = this.__searchFilter.formData;
-        }
-
-        if (this.__pager) {
-            detail.paging = {
-                currentPage: 1
-            };
-        }
-
-        const event = {
-            detail: detail,
-            bubbles: true
-        };
-    	this.dispatchEvent(new CustomEvent('change', event));
+    __onFilterFieldChanged(event) {
+    	event.stopPropagation();
+        event.preventDefault();
+    	this.dispatchEvent(new CustomEvent('change', this.__onStateChange(event)));
     }
 }
 

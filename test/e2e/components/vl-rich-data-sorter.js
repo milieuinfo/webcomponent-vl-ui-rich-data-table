@@ -20,7 +20,7 @@ class VlRichDataSorter extends VlElement {
 		return priorityLabel.getText();
 	}
 
-	async toggleSorting() {
+	async toggle() {
 		const icon = await this._getDirectionIcon();
 		await icon.click();
 	}

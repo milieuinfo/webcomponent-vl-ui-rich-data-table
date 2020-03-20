@@ -51,14 +51,14 @@ describe('vl-rich-data-table', async () => {
 		await assert.eventually.isTrue(ownerSorter.isUnsorted());
 
 		// Sorteer op naam, descending.
-		await nameSorter.toggleSorting();
+		await nameSorter.toggle();
 		await assertRow(vlRichDataTableSorting, 0, [1, "Project #2", "Jan Jansens"]);
 		await assertRow(vlRichDataTableSorting, 1, [0, "Project #1", "Jan Jansens"]);
 		await assert.eventually.isTrue(nameSorter.isDescending());
 		await assert.eventually.isTrue(idSorter.isUnsorted());
 
 		// Sorteer op naam, ascending.
-		await nameSorter.toggleSorting();
+		await nameSorter.toggle();
 		await assertRow(vlRichDataTableSorting, 0, [0, "Project #1", "Jan Jansens"]);
 		await assertRow(vlRichDataTableSorting, 1, [1, "Project #2", "Jan Jansens"]);
 		await assert.eventually.isTrue(nameSorter.isAscending());
@@ -90,19 +90,19 @@ describe('vl-rich-data-table', async () => {
 		await assert.eventually.equal(ownerSorter.getPriority(), "1");
 
 		// Zet alle sortering af.
-		await ownerSorter.toggleSorting();
+		await ownerSorter.toggle();
 		await assertRow(vlRichDataTableSorting, 0, [0, "Project #1", "Jan Jansens"]);
 		await assertRow(vlRichDataTableSorting, 1, [1, "Project #2", "Jan Jansens"]);
 
-		await ownerSorter.toggleSorting();
+		await ownerSorter.toggle();
 		await assertRow(vlRichDataTableSorting, 0, [0, "Project #1", "Jan Jansens"]);
 		await assertRow(vlRichDataTableSorting, 1, [1, "Project #2", "Jan Jansens"]);
 
-		await nameSorter.toggleSorting();
+		await nameSorter.toggle();
 		await assertRow(vlRichDataTableSorting, 0, [0, "Project #1", "Jan Jansens"]);
 		await assertRow(vlRichDataTableSorting, 1, [1, "Project #2", "Jan Jansens"]);
 
-		await idSorter.toggleSorting();
+		await idSorter.toggle();
 		await assertRow(vlRichDataTableSorting, 0, [0, "Project #1", "Jan Jansens"]);
 		await assertRow(vlRichDataTableSorting, 1, [1, "Project #2", "Jan Jansens"]);
 
@@ -114,28 +114,28 @@ describe('vl-rich-data-table', async () => {
 		await assert.eventually.equal(ownerSorter.getPriority(), "");
 
 		// Sorteer op owner, descending. Het resultaat blijft hetzelfde aangezien owner gelijk is voor alle rijen.
-		await ownerSorter.toggleSorting();
+		await ownerSorter.toggle();
 		await assertRow(vlRichDataTableSorting, 0, [0, "Project #1", "Jan Jansens"]);
 		await assertRow(vlRichDataTableSorting, 1, [1, "Project #2", "Jan Jansens"]);
 		await assert.eventually.isTrue(ownerSorter.isDescending());
 		await assert.eventually.equal(ownerSorter.getPriority(), "1");
 
 		// Sorteer op owner, ascending. Het resultaat blijft hetzelfde aangezien owner gelijk is voor alle rijen.
-		await ownerSorter.toggleSorting();
+		await ownerSorter.toggle();
 		await assertRow(vlRichDataTableSorting, 0, [0, "Project #1", "Jan Jansens"]);
 		await assertRow(vlRichDataTableSorting, 1, [1, "Project #2", "Jan Jansens"]);
 		await assert.eventually.isTrue(ownerSorter.isAscending());
 		await assert.eventually.equal(ownerSorter.getPriority(), "1");
 
 		// Sorteer op naam, descending.
-		await nameSorter.toggleSorting();
+		await nameSorter.toggle();
 		await assertRow(vlRichDataTableSorting, 0, [1, "Project #2", "Jan Jansens"]);
 		await assertRow(vlRichDataTableSorting, 1, [0, "Project #1", "Jan Jansens"]);
 		await assert.eventually.isTrue(nameSorter.isDescending());
 		await assert.eventually.equal(nameSorter.getPriority(), "2");
 
 		// Sorteer op naam, ascending.
-		await nameSorter.toggleSorting();
+		await nameSorter.toggle();
 		await assertRow(vlRichDataTableSorting, 0, [0, "Project #1", "Jan Jansens"]);
 		await assertRow(vlRichDataTableSorting, 1, [1, "Project #2", "Jan Jansens"]);
 		await assert.eventually.isTrue(nameSorter.isAscending());
@@ -245,6 +245,17 @@ describe('vl-rich-data-table', async () => {
         await assert.eventually.equal(pager.getCurrentPage(), 1);
         await assert.eventually.equal(pager.getItemsPerPage(), 10);
 		await assert.eventually.equal(pager.getTotalItems(), 25);
+	});
+
+	it('Als gebruiker zal ik altijd naar de eerste pagina doorverwezen worden bij het sorteren', async () => {
+		const richDataTable = await vlRichDataTablePage.getRichDataTableFilterSortingPaging();
+		const pager = await richDataTable.getPager();
+		const idSorter = await richDataTable.getSorter('id');
+
+		await pager.goToNextPage();
+		await idSorter.toggle();
+        await assert.eventually.equal(pager.getCurrentPage(), 1);
+		await assertRow(richDataTable, 0, [24, "Project #24", "Riquier", "Beckers", "Project #24 o.l.v. Pascal Riquier"]);
 	});
 
 	async function assertHeaders(richDataTable, expectedHeaders) {
