@@ -112,14 +112,14 @@ export class VlRichDataSorter extends VlElement(HTMLElement) {
 
     _nextDirection() {
         switch (this.direction) {
-            case VlRichDataSorter.DIRECTIONS.ascending:
+            case VlRichDataSorter.DIRECTIONS.descending:
                 this._setDirectionAndPublishEvent(undefined);
                 break;
-            case VlRichDataSorter.DIRECTIONS.descending:
-                this._setDirectionAndPublishEvent(VlRichDataSorter.DIRECTIONS.ascending);
+            case VlRichDataSorter.DIRECTIONS.ascending:
+                this._setDirectionAndPublishEvent(VlRichDataSorter.DIRECTIONS.descending);
                 break;
             default:
-                this._setDirectionAndPublishEvent(VlRichDataSorter.DIRECTIONS.descending);
+                this._setDirectionAndPublishEvent(VlRichDataSorter.DIRECTIONS.ascending);
         }
     };
 
