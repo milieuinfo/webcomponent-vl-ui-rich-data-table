@@ -7,6 +7,7 @@
   <script src="../../../web-component-tester/browser.js"></script>
 
   <script type="module" src="../../src/vl-rich-data-table.js"></script>
+  <script type="module" src="/node_modules/vl-ui-pager/dist/vl-pager.js"></script>
 </head>
 
 <body>
@@ -19,6 +20,14 @@
   <test-fixture id="vl-rich-data-table-fixture-responsive">
     <template>
       <vl-rich-data-table data-vl-collapsed-m data-vl-collapsed-s data-vl-collapsed-xs></vl-rich-data-table>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="vl-rich-data-table-pager-fixture">
+    <template>
+      <vl-rich-data-table>
+        <vl-pager slot="pager" total-items="20" items-per-page="5" current-page="1"></vl-pager>
+      </vl-rich-data-table>
     </template>
   </test-fixture>
 
@@ -70,31 +79,57 @@
 
       test('De data op een tabel kan gezet worden via het data-vl-data attribuut', () => {
         const richTable = fixture('vl-rich-data-table-fixture');
-        const value = [{ foo: 'bar' }];
+        const value = {
+          data: [{ foo: 'bar' }]
+        };
 
-        richTable.data.should.deep.equal([]);
+        richTable.data.should.deep.equal({ data: [] });
         richTable.dataset.vlData = JSON.stringify(value);
         richTable.data.should.deep.equal(value);
       });
 
-      test('De data op een tabel kan gezet worden via de "data" setter', () => {
+      test('De data op een tabel kan gezet worden via de data setter', () => {
         const richTable = fixture('vl-rich-data-table-fixture');
-        const value = [{ foo: 'bar' }];
+        const value = {
+          data: [{ foo: 'bar' }]
+        };
 
-        richTable.data.should.deep.equal([]);
+        richTable.data.should.deep.equal({ data: [] });
         richTable.data = value;
         richTable.data.should.deep.equal(value);
+      });
+
+      test('De paginatie van een tabel kan gezet worden via de data setter', () => {
+        const richTable = fixture('vl-rich-data-table-pager-fixture');
+        const value = { 
+          data: [{ foo: 'bar' }],
+          paging: {
+            currentPage: 1,
+            itemsPerPage: 2,
+            totalItems: 3
+          } 
+        };
+
+        richTable.data.should.deep.equal({ data: [] });
+        richTable.data = value;
+        richTable.data.should.deep.equal(value);
+        const pager = richTable.querySelector('vl-pager');
+        assert.equal(pager.currentPage, value.paging.currentPage);
+        assert.equal(pager.itemsPerPage, value.paging.itemsPerPage);
+        assert.equal(pager.totalItems, value.paging.totalItems);
       });
 
       test('De data op een tabel kan enkel doorgegeven worden als Array', (done) => {
         const richTable = fixture('vl-rich-data-table-fixture');
 
-        richTable.data.should.deep.equal([]);
+        richTable.data.should.deep.equal({ data: [] });
         try {
-          richTable.data = { foo: 'bar' };
+          richTable.data = {
+            data: { foo: 'bar' }
+          };
         } catch (error) {
           error.message.should.equal('vl-rich-data-table verwacht een Array als data');
-          richTable.data.should.deep.equal([]);
+          richTable.data.should.deep.equal({ data: [] });
           done();
         }
       });

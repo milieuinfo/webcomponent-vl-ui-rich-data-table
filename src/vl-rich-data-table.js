@@ -174,14 +174,30 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
      * Stelt in welke data de tabel moet tonen.
      * @param {Object[]} data - Een Array van objecten die de data voorstellen.
      */
-    set data(data) {
-        if (!Array.isArray(data)) {
-            throw new Error('vl-rich-data-table verwacht een Array als data');
-        }
+    set data(object) {
+        if (this.__data !== object) {
+            const { data, paging } = object
+            this._data = data;
+            this._paging = paging;
 
-        if (this.__data !== data) {
-            this.__data = data;
+            this.__data = object;
             this._renderBody();
+        }
+    }
+
+    set _data(data) {
+        if (data) {
+            if (!Array.isArray(data)) {
+                throw new Error('vl-rich-data-table verwacht een Array als data');
+            }
+        }
+    }
+
+    set _paging(paging) {
+        if (paging) {
+            !paging.currentPage || this.__pager.setAttribute('current-page', paging.currentPage);
+            !paging.itemsPerPage || this.__pager.setAttribute('items-per-page', paging.itemsPerPage);
+            !paging.totalItems || this.__pager.setAttribute('total-items', paging.totalItems);
         }
     }
 
@@ -190,7 +206,7 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
      * @returns {Object[]}
      */
     get data() {
-        return this.__data || [];
+        return this.__data || {data: []};
     }
 
     _render() {
@@ -209,7 +225,7 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
 
     _renderBody() {
         this.__tableBody.innerHTML = '';
-        this.data.forEach(rowData => {
+        this.data.data.forEach(rowData => {
             const rowTemplate = this._template(`<tr>
                 ${Array.from(this.__fields)
                 .map(field => field.renderCellValue ? field.renderCellValue(rowData) : '<td></td>')
@@ -384,10 +400,20 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
     __onFilterFieldChanged(originalEvent) {
     	originalEvent.stopPropagation();
         originalEvent.preventDefault();
+        const detail = {
+            formData: this.__searchFilter.formData,
+        };
+
+        if (this.__pager) {
+            detail.paging = {
+                currentPage: 1,
+                itemsPerPage: this.__pager.itemsPerPage,
+                totalItems: this.__pager.totalItems
+            };
+        }
+
         const event = {
-            detail: {
-                formData: this.__searchFilter.formData
-            },
+            detail: detail,
             bubbles: true
         };
     	this.dispatchEvent(new CustomEvent('change', event));

@@ -14,7 +14,7 @@
 <body>
   <test-fixture id="vl-rich-data-table-paging-fixture">
     <template>
-        <vl-rich-data-table id="rich-data-table-paging" data-vl-data='[{"id": 1, "name": "P1"}, {"id": 2, "name": "P2"}, {"id": 3, "name": "P3"}, {"id": 4, "name": "P4"}, {"id": 5, "name": "P5"}]'>
+        <vl-rich-data-table id="rich-data-table-paging" data-vl-data='{"data": [{"id": 1, "name": "P1"}, {"id": 2, "name": "P2"}, {"id": 3, "name": "P3"}, {"id": 4, "name": "P4"}, {"id": 5, "name": "P5"}]}'>
             <vl-rich-data-field data-vl-label="ID" data-vl-selector="id"></vl-rich-data-field>
             <vl-rich-data-field data-vl-label="Naam" data-vl-selector="name"></vl-rich-data-field>
             <vl-pager slot="pager" total-items="10" items-per-page="5" current-page="1"></vl-pager>
@@ -52,9 +52,9 @@
 			const page = e.detail.paging.currentPage;
 			let newPage;
 			if (page == 1) {
-				newPage = [{"id": 1, "name": "P1"}, {"id": 2, "name": "P2"}, {"id": 3, "name": "P3"}, {"id": 4, "name": "P4"}, {"id": 5, "name": "P5"}];
+				newPage = {"data": [{"id": 1, "name": "P1"}, {"id": 2, "name": "P2"}, {"id": 3, "name": "P3"}, {"id": 4, "name": "P4"}, {"id": 5, "name": "P5"}]};
 			} else if (page == 2) {
-				newPage = [{"id": 6, "name": "P6"}, {"id": 7, "name": "P7"}, {"id": 8, "name": "P8"}, {"id": 9, "name": "P9"}, {"id": 10, "name": "P10"}];
+				newPage = {"data": [{"id": 6, "name": "P6"}, {"id": 7, "name": "P7"}, {"id": 8, "name": "P8"}, {"id": 9, "name": "P9"}, {"id": 10, "name": "P10"}]};
 			}
     		richDataTablePaging.data = newPage;
 

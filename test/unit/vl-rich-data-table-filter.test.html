@@ -10,6 +10,7 @@
   <script type="module" src="/node_modules/vl-ui-search-filter/dist/vl-search-filter.js"></script>
   <script type="module" src="/node_modules/vl-ui-input-field/dist/vl-input-field.js"></script>
   <script type="module" src="/node_modules/vl-ui-button/dist/vl-button.js"></script>
+  <script type="module" src="/node_modules/vl-ui-pager/dist/vl-pager.js"></script>
 
   <link rel="stylesheet" type="text/css" href="/node_modules/vl-ui-search-filter/dist/style.css"/>
   <link rel="stylesheet" type="text/css" href="/node_modules/vl-ui-input-field/dist/style.css"/>
@@ -19,7 +20,7 @@
 <body>
   <test-fixture id="vl-rich-data-table-zonder-filter-fixture">
     <template>
-      <vl-rich-data-table data-vl-data='[]'>
+      <vl-rich-data-table data-vl-data='{"data": []}'>
         <vl-rich-data-field id="id-field" data-vl-label="ID" data-vl-selector="id"></vl-rich-data-field>
         <vl-rich-data-field id="name-field" data-vl-label="Naam" data-vl-selector="name"></vl-rich-data-field>
       </vl-rich-data-table>
@@ -28,7 +29,7 @@
 
   <test-fixture id="vl-rich-data-table-met-filter-fixture">
     <template>
-      <vl-rich-data-table data-vl-data='[]' data-vl-filter-title='title'>
+      <vl-rich-data-table data-vl-data='{"data": []}' data-vl-filter-title='title'>
         <vl-rich-data-field id="id-field" data-vl-label="ID" data-vl-selector="id"></vl-rich-data-field>
         <vl-rich-data-field id="name-field" data-vl-label="Naam" data-vl-selector="name"></vl-rich-data-field>
         <div slot="filter">
@@ -42,6 +43,7 @@
             </div>
           </div>
         </div>
+        <vl-pager slot="pager" total-items="20" items-per-page="5" current-page="1"></vl-pager>
       </vl-rich-data-table>
     </template>
   </test-fixture>
@@ -62,27 +64,38 @@
         assert.isTrue(searchFilter.hasAttribute('alt'));
       });
 
-      test('Als er aan een input van de search filter iets wijzigt wordt er een event met formdata gestuurd', (done) => {
+      test('Als er aan een input van de search filter iets wijzigt wordt er een event met formdata en paginatie gestuurd', (done) => {
         const table = fixture('vl-rich-data-table-met-filter-fixture');
+        const pager = table.querySelector('vl-pager');
 
         table.addEventListener('change', (e) => {
           expect(e.detail.formData.get('filter1')).to.equal('een beetje input');
-          done();;
+          expect(e.detail.paging).to.deep.equal({
+            currentPage: Number(pager.getAttribute('current-page')),
+            itemsPerPage: Number(pager.getAttribute('items-per-page')),
+            totalItems: Number(pager.getAttribute('total-items'))
+          });
+          done();
         });
 
         const searchFilter = table.__searchFilter;
         setInputValue(searchFilter.querySelector('input'), 'een beetje input');
       });
 
-      test('Als de filtering gereset wordt, zal er een event met formdata gestuurd worden', (done) => {
-        debugger;
+      test('Als de filtering gereset wordt, zal er een event met formdata en paginatie gestuurd worden', (done) => {
         const table = fixture('vl-rich-data-table-met-filter-fixture');
+        const pager = table.querySelector('vl-pager');
         const searchFilter = table.__searchFilter;
         const resetButton = searchFilter.querySelector('button[type="reset"]');
 
         setInputValue(searchFilter.querySelector('input'), 'een beetje input');
         table.addEventListener('change', (e) => {
             expect(e.detail.formData.get('filter1')).to.equal('');
+            expect(e.detail.paging).to.deep.equal({
+              currentPage: Number(pager.getAttribute('current-page')),
+              itemsPerPage: Number(pager.getAttribute('items-per-page')),
+              totalItems: Number(pager.getAttribute('total-items'))
+            });
             done();
         });
         resetButton.click();
