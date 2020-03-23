@@ -71,6 +71,21 @@
             assertPriority(prioritySorter, undefined);
         });
 
+        test('Als men op het icoontje drukt, zal de direction worden aangepast', () => {
+            const sorter = fixture('vl-rich-data-sorter-fixture');
+
+            should.equal(sorter.direction, undefined);
+
+            sorter.__directionElement.click();
+            should.equal(sorter.direction, 'asc');
+
+            sorter.__directionElement.click();
+            should.equal(sorter.direction, 'desc');
+
+            sorter.__directionElement.click();
+            should.equal(sorter.direction, undefined);
+        });
+
         test('Bij het overgaan naar de volgende sorteringsrichting, zal de direction worden aangepast', () => {
             const sorter = fixture('vl-rich-data-sorter-fixture');
 
