@@ -4,11 +4,11 @@ const { VlIcon } = require('vl-ui-icon').Test;
 
 class VlRichDataSorter extends VlElement {
 	async isDescending() {
-		return this._hasDirectionIcon('arrow-down');
+		return this._hasDirectionIcon('arrow-up');
 	}
 
 	async isAscending() {
-		return this._hasDirectionIcon('arrow-up');
+		return this._hasDirectionIcon('arrow-down');
 	}
 
 	async isUnsorted() {
@@ -18,6 +18,11 @@ class VlRichDataSorter extends VlElement {
 	async getPriority() {
 		const priorityLabel = await this._getPriorityLabel();
 		return priorityLabel.getText();
+	}
+
+	async toggleSorting() {
+		const icon = await this._getDirectionIcon();
+		await icon.click();
 	}
 
 	async _hasDirectionIcon(expectedIconType) {

@@ -23,7 +23,8 @@ class VlRichDataTable extends VlElement {
 		const header = await dataTable.getDataTableHeader();
 		const headerRows = await header.getRows();
 		const cells = await headerRows[0].getCells();
-		return await cells[index].click();
+		const link = await cells[index].findElement(By.css("a"));
+		return link.click();
 	}
 
 	async getSorter(field) {

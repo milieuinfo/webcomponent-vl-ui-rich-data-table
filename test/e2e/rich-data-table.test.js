@@ -249,7 +249,7 @@ describe('vl-rich-data-table', async () => {
 		await assert.eventually.equal(pager.getTotalItems(), 25);
 	});
 
-	it.only('Als gebruiker zal ik altijd naar de eerste pagina doorverwezen worden bij het sorteren', async () => {
+	it('Als gebruiker zal ik altijd naar de eerste pagina doorverwezen worden bij het sorteren', async () => {
 		const richDataTable = await vlRichDataTablePage.getRichDataTableFilterSortingPaging();
 		const pager = await richDataTable.getPager();
 		const idSorter = await richDataTable.getSorter('id');
