@@ -31,9 +31,9 @@
 
             let iconType = '';
             if (expectedDirection === 'asc') {
-                iconType = 'arrow-up';
-            } else if (expectedDirection === 'desc') {
                 iconType = 'arrow-down';
+            } else if (expectedDirection === 'desc') {
+                iconType = 'arrow-up';
             }
 
             directionIcon.getAttribute('icon').should.equal(iconType);

@@ -77,9 +77,9 @@ export class VlRichDataSorter extends VlElement(HTMLElement) {
     get _directionIcon() {
     	switch (this.direction) {
     		case VlRichDataSorter.DIRECTIONS.ascending:
-    			return 'arrow-up';
-    		case VlRichDataSorter.DIRECTIONS.descending:
     			return 'arrow-down';
+    		case VlRichDataSorter.DIRECTIONS.descending:
+    			return 'arrow-up';
     		default:
     			return '';
     	}
