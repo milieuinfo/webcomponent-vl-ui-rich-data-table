@@ -34,7 +34,7 @@ export class VlRichDataField extends VlElement(HTMLElement) {
         return 'vl-rich-data-field';
     }
 
-    labelTemplate() {
+    __labelTemplate() {
         if (this.label) {
             let template = this.label;
             if (this.sortable) {
@@ -54,6 +54,11 @@ export class VlRichDataField extends VlElement(HTMLElement) {
         } else {
             return this.__template(`${this.querySelector('template[slot="content"]').innerHTML}`, rowData);
         }
+    }
+    
+    renderCellHeader() {
+        const label = this.__labelTemplate ? this.__labelTemplate() : '';
+    	return `<th>${label}</th>`;
     }
     
     renderCellValue(rowData) {

@@ -115,12 +115,12 @@
 
       test('Men kan de template van de label van een field opvragen voor een bepaalde rij data', () => {
         const field = fixture('vl-rich-data-field-fixture');
-        field.labelTemplate().should.equal('Foo');
+        field.renderCellHeader().should.equal('<th>Foo</th>');
       });
 
       test('Indien er geen label attribuut aanwezig is, zal de template label slot gebruikt worden om de header te visualiseren', () => {
         const field = fixture('vl-rich-data-field-label-template-fixture');
-        field.labelTemplate().should.equal(field.querySelector('template[slot="label"]').innerHTML);
+        field.renderCellHeader().replace(/\s\s+/g, '').should.equal('<th><span>Foo</span></th>');
       });
 
       test('Indien er geen label attribuut aanwezig is, zal dit ook niet als data-title gezet worden op de value cell', () => {

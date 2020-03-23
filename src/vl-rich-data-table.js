@@ -233,10 +233,15 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
     _renderHeaders() {
         this.__tableHeaderRow.innerHTML = '';
         this.__fields.forEach(field => {
-            const label = field.labelTemplate ? field.labelTemplate() : '';
-            const headerTemplate = this._template(`<th>${label}</th>`);
+            const headerTemplate = field.renderCellHeader ? this._template(field.renderCellHeader()) : this._template('<th></th>');
             this.__tableHeaderRow.appendChild(headerTemplate);
-        })
+        });
+        this.__tableHeaderRow.querySelectorAll("th").forEach(th => { th.addEventListener('click', e => 	{
+        	const sorter = e.target.querySelector("vl-rich-data-sorter");
+        	if (sorter) {
+        		sorter.nextDirection();
+        	}
+        })});
     }
 
     _renderBody() {

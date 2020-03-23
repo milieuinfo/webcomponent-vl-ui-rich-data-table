@@ -29,11 +29,11 @@
             const directionIcon = sorter.__directionElement;
             directionIcon.getAttribute('is').should.equal('vl-icon');
 
-            let iconType = 'sort';
+            let iconType = '';
             if (expectedDirection === 'asc') {
-                iconType = 'nav-up';
+                iconType = 'arrow-up';
             } else if (expectedDirection === 'desc') {
-                iconType = 'nav-down';
+                iconType = 'arrow-down';
             }
 
             directionIcon.getAttribute('icon').should.equal(iconType);
@@ -71,22 +71,22 @@
             assertPriority(prioritySorter, undefined);
         });
 
-        test('Als men op het icoontje drukt, zal de direction worden aangepast', () => {
+        test('Bij het overgaan naar de volgende sorteringsrichting, zal de direction worden aangepast', () => {
             const sorter = fixture('vl-rich-data-sorter-fixture');
 
             should.equal(sorter.direction, undefined);
 
-            sorter.__directionElement.click();
+            sorter.nextDirection();
             should.equal(sorter.direction, 'asc');
 
-            sorter.__directionElement.click();
+            sorter.nextDirection();
             should.equal(sorter.direction, 'desc');
 
-            sorter.__directionElement.click();
+            sorter.nextDirection();
             should.equal(sorter.direction, undefined);
         });
 
-        test('Als men de direction aanpast door te klikken, wordt er een event uitgestuurd', (done) => {
+        test('Bij het overgaan naar de volgende sorteringsrichting, wordt er een event uitgestuurd', (done) => {
             const sorter = fixture('vl-rich-data-sorter-priority-fixture');
 
             should.equal(sorter.direction, 'asc');
@@ -98,7 +98,7 @@
                 done();
             });
 
-            sorter.__directionElement.click();
+            sorter.nextDirection();
         });
     });
 </script>

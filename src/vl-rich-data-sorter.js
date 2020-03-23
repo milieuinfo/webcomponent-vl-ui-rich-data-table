@@ -35,7 +35,6 @@ export class VlRichDataSorter extends VlElement(HTMLElement) {
                 
                 #direction {
                     vertical-align: middle;
-                    cursor: pointer;
                 }
                 
                 #priority {
@@ -44,14 +43,17 @@ export class VlRichDataSorter extends VlElement(HTMLElement) {
                 }
             </style>
             <div>
-                <span id="direction" is="vl-icon" icon="sort"></span>
+                <span id="direction" is="vl-icon" icon=""></span>
                 <label id="priority"></label>
             </div>
         `);
     }
 
     connectedCallback() {
-        this.__directionElement.addEventListener('click', this._nextDirection.bind(this));
+        this.__directionElement.addEventListener('click', e => {
+        	this.nextDirection();
+        	e.stopPropagation();
+        });
     }
 
     get for() {
@@ -73,6 +75,17 @@ export class VlRichDataSorter extends VlElement(HTMLElement) {
         }
     }
 
+    get _directionIcon() {
+    	switch (this.direction) {
+    		case VlRichDataSorter.DIRECTIONS.ascending:
+    			return 'arrow-up';
+    		case VlRichDataSorter.DIRECTIONS.descending:
+    			return 'arrow-down';
+    		default:
+    			return '';
+    	}
+    }
+    
     _setDirectionAndPublishEvent(direction) {
         if (this.direction !== direction) {
             this.direction = direction;
@@ -99,18 +112,7 @@ export class VlRichDataSorter extends VlElement(HTMLElement) {
         return this.shadowRoot.querySelector('#priority');
     }
 
-    get _directionIcon() {
-        switch (this.direction) {
-            case VlRichDataSorter.DIRECTIONS.ascending:
-                return 'nav-up';
-            case VlRichDataSorter.DIRECTIONS.descending:
-                return 'nav-down';
-            default:
-                return 'sort';
-        }
-    }
-
-    _nextDirection() {
+    nextDirection() {
         switch (this.direction) {
             case VlRichDataSorter.DIRECTIONS.descending:
                 this._setDirectionAndPublishEvent(undefined);
