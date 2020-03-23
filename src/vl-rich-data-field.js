@@ -34,18 +34,6 @@ export class VlRichDataField extends VlElement(HTMLElement) {
         return 'vl-rich-data-field';
     }
 
-    __labelTemplate() {
-        if (this.label) {
-            let template = this.label;
-            if (this.sortable) {
-                template += `<vl-rich-data-sorter data-vl-for="${this.name}" ${this.sortingDirection ? 'data-vl-direction="' + this.sortingDirection + '"' : ''} ${this.sortingPriority ? 'data-vl-priority="' + this.sortingPriority + '"' : ''}></vl-rich-data-sorter>`;
-            }
-            return template;
-        } else {
-            return this.__template(`${this.querySelector('template[slot="label"]').innerHTML}`);
-        }
-    }
-
     __valueTemplate(rowData) {
         if (this.selector) {
             return this.selector.split('.').reduce(function(prev, curr) {
@@ -57,8 +45,20 @@ export class VlRichDataField extends VlElement(HTMLElement) {
     }
     
     renderCellHeader() {
-        const label = this.__labelTemplate ? this.__labelTemplate() : '';
-    	return `<th>${label}</th>`;
+    	let template = ``;
+        if (this.label) {
+            template = this.label;
+        } else {
+            template = `${this.querySelector('template[slot="label"]').innerHTML}`;
+        }
+        if (this.sortable) {
+        	template += `<vl-rich-data-sorter data-vl-for="${this.name}" ${this.sortingDirection ? 'data-vl-direction="' + this.sortingDirection + '"' : ''} ${this.sortingPriority ? 'data-vl-priority="' + this.sortingPriority + '"' : ''}></vl-rich-data-sorter>`;
+        	return `<th class="sortable"><a>${template}</a></th>`;
+        } else {
+        	return `<th>${template}</th>`;
+        }
+
+    
     }
     
     renderCellValue(rowData) {

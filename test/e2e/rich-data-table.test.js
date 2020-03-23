@@ -249,19 +249,19 @@ describe('vl-rich-data-table', async () => {
 		await assert.eventually.equal(pager.getTotalItems(), 25);
 	});
 
-	it('Als gebruiker zal ik altijd naar de eerste pagina doorverwezen worden bij het sorteren', async () => {
+	it.only('Als gebruiker zal ik altijd naar de eerste pagina doorverwezen worden bij het sorteren', async () => {
 		const richDataTable = await vlRichDataTablePage.getRichDataTableFilterSortingPaging();
 		const pager = await richDataTable.getPager();
 		const idSorter = await richDataTable.getSorter('id');
 
 		await richDataTable.toggleSortOfColumn(0);
 		await assertRow(richDataTable, 0, [0, "Project #1", "Riquier", "Kleykens", "Project #1 o.l.v. Pascal Riquier"]);
-		await pager.goToNextPage();
+		await pager.goToPage(3);
 		await richDataTable.toggleSortOfColumn(0);
         await assert.eventually.equal(pager.getCurrentPage(), 1);
 		await assertRow(richDataTable, 0, [24, "Project #24", "Riquier", "Beckers", "Project #24 o.l.v. Pascal Riquier"]);
 	});
-
+	
 	async function assertHeaders(richDataTable, expectedHeaders) {
 		const table = await richDataTable.getDataTable();
 		const headers = await table.getDataTableHeader();

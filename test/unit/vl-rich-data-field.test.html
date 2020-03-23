@@ -16,6 +16,12 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="vl-rich-data-field-fixture-sortable">
+    <template>
+      <vl-rich-data-field data-vl-selector="foo" data-vl-label="Foo" data-vl-name="Foo" data-vl-sortable></vl-rich-data-field>
+    </template>
+  </test-fixture>
+
   <test-fixture id="vl-rich-data-field-fixture-nested-property">
     <template>
       <vl-rich-data-field data-vl-selector="foo.bar" data-vl-label="Foo"></vl-rich-data-field>
@@ -51,6 +57,16 @@
   <test-fixture id="vl-rich-data-field-label-template-fixture">
     <template>
       <vl-rich-data-field data-vl-selector="foo">
+        <template slot="label">
+          <span>Foo</span>
+        </template>
+      </vl-rich-data-field>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="vl-rich-data-field-label-template-fixture-sortable">
+    <template>
+      <vl-rich-data-field data-vl-selector="foo" data-vl-sortable data-vl-name="Foo">
         <template slot="label">
           <span>Foo</span>
         </template>
@@ -118,9 +134,19 @@
         field.renderCellHeader().should.equal('<th>Foo</th>');
       });
 
+      test('De template van de label van een field wrapt de volledige kolom in een anchor tag als de kolom sorteerbaar is', () => {
+        const field = fixture('vl-rich-data-field-fixture-sortable');
+        field.renderCellHeader().replace(/\s\s+/g, '').should.equal('<th class="sortable"><a>Foo<vl-rich-data-sorter data-vl-for="Foo"></vl-rich-data-sorter></a></th>');
+      });
+
       test('Indien er geen label attribuut aanwezig is, zal de template label slot gebruikt worden om de header te visualiseren', () => {
         const field = fixture('vl-rich-data-field-label-template-fixture');
         field.renderCellHeader().replace(/\s\s+/g, '').should.equal('<th><span>Foo</span></th>');
+      });
+
+      test('Indien er geen label attribuut aanwezig is, zal de template label slot gebruikt worden voor een sortable field om de header te visualiseren', () => {
+        const field = fixture('vl-rich-data-field-label-template-fixture-sortable');
+        field.renderCellHeader().replace(/\s\s+/g, '').should.equal('<th class="sortable"><a><span>Foo</span><vl-rich-data-sorter data-vl-for="Foo"></vl-rich-data-sorter></a></th>');
       });
 
       test('Indien er geen label attribuut aanwezig is, zal dit ook niet als data-title gezet worden op de value cell', () => {
