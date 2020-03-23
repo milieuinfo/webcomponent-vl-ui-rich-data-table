@@ -46,6 +46,11 @@
         function getSorter(table, field) {
             return Array.from(table.__sorters).find(sorter => sorter.for === field);
         }
+        
+        function toggleSortOfColumn(richTable, index) {
+           	richTable.shadowRoot.querySelector("[is='vl-data-table'] thead tr").querySelectorAll("th")[index].click();
+        }
+        
 
         test('De mogelijkheid voor te sorteren wordt in de headers getoond indien sortering is ingeschakeld', () => {
             const richTable = fixture('vl-rich-data-table-sort-fixture');
@@ -57,7 +62,7 @@
             should.not.exist(ownerSorter);
         });
 
-        test('Single sorting: Indien je op een nieuw veld gesorteerd wordt, wordt een event uitgestuurd vanuit de table waaruit blijkt dat er niet meer gesorteerd wordt op de oude kolom', (done) => {
+        test('Single sorting: Indien je op een nieuw veld gesorteerd wordt door op de kolom te klikken, wordt een event uitgestuurd vanuit de table waaruit blijkt dat er niet meer gesorteerd wordt op de oude kolom', (done) => {
             const richTable = fixture('vl-rich-data-table-sort-fixture');
             const idSorter = getSorter(richTable, 'id');
             const nameSorter = getSorter(richTable, 'name');
@@ -83,7 +88,37 @@
             });
 
             setTimeout(() => {
-                nameSorter.__directionElement.click();
+            	toggleSortOfColumn(richTable, 1);
+            });
+        });
+
+        test('Single sorting: Indien je op een nieuw veld gesorteerd wordt door op het sorteringsicoon te klikken, wordt een event uitgestuurd vanuit de table waaruit blijkt dat er niet meer gesorteerd wordt op de oude kolom', (done) => {
+            const richTable = fixture('vl-rich-data-table-sort-fixture');
+            const idSorter = getSorter(richTable, 'id');
+            const nameSorter = getSorter(richTable, 'name');
+
+            should.equal(idSorter.direction, 'asc');
+            should.equal(idSorter.priority, undefined);
+            should.equal(nameSorter.direction, undefined);
+            should.equal(nameSorter.priority, undefined);
+
+            richTable.addEventListener('change', event => {
+                const sorting = event.detail.sorting;
+                sorting.should.be.lengthOf(1);
+
+                sorting[0].name.should.equal('name');
+                sorting[0].direction.should.equal('asc');
+
+                should.equal(idSorter.direction, undefined);
+                should.equal(idSorter.priority, undefined);
+                should.equal(nameSorter.direction, 'asc');
+                should.equal(nameSorter.priority, undefined);
+
+                done();
+            });
+
+            setTimeout(() => {
+            	nameSorter.__directionElement.click();
             });
         });
 
@@ -116,7 +151,7 @@
             });
 
             setTimeout(() => {
-                nameSorter.__directionElement.click();
+            	toggleSortOfColumn(richTable, 1);
             });
         });
 
@@ -154,7 +189,7 @@
             });
 
             setTimeout(() => {
-            	idSorter.__directionElement.click();
+            	toggleSortOfColumn(richTable, 0);
             });
         });
 
@@ -184,7 +219,7 @@
             });
 
             setTimeout(() => {
-                idSorter.__directionElement.click();
+            	toggleSortOfColumn(richTable, 0);
             });
         });
     });
