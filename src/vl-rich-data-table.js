@@ -236,7 +236,7 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
             const headerTemplate = field.renderCellHeader ? this._template(field.renderCellHeader()) : this._template('<th></th>');
             this.__tableHeaderRow.appendChild(headerTemplate);
         });
-        this.__tableHeaderRow.querySelectorAll("th.sortable").forEach(th => { th.addEventListener('click', e => 	{
+        this.__tableHeaderRow.querySelectorAll("th.sortable > a").forEach(th => { th.addEventListener('click', e => 	{
         	th.querySelector("vl-rich-data-sorter").nextDirection();
         })});
     }
