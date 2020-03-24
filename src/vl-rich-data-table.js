@@ -423,7 +423,7 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
     __onFilterFieldChanged(event) {
     	event.stopPropagation();
         event.preventDefault();
-    	this.dispatchEvent(new CustomEvent('change', this.__onStateChange(event)));
+    	this.__onStateChange(event);
     }
 }
 

@@ -84,7 +84,7 @@
                     &lt;/vl-rich-data-field&gt;
                     &lt;div slot="filter"&gt;
                         &lt;div is="vl-search-filter" alt&gt;
-                            &lt;form id="form" novalidate&gt;
+                            &lt;form id="rich-data-table-filter-form" novalidate&gt;
                                 &lt;section&gt;
                                     &lt;h2&gt;Doorzoek projecten&lt;/h2&gt;
                                     &lt;div&gt;
@@ -108,7 +108,7 @@
                                 &lt;/div&gt;
                             &lt;/form&gt;
                             &lt;div&gt;
-                                &lt;button is="vl-button-link" type="reset" form="form"&gt;Zoekopdracht verwijderen&lt;/button&gt;
+                                &lt;button is="vl-button-link" type="reset" form="rich-data-table-filter-form"&gt;Zoekopdracht verwijderen&lt;/button&gt;
                             &lt;/div&gt;
                         &lt;/div&gt;
                     &lt;/div&gt;
@@ -163,7 +163,7 @@
                         }
     
                         function findValueByPath(element, pathToKey) {
-                            var keys = pathToKey.split('.');
+                            const keys = pathToKey.split('.');
     
                             let current = element;
                             for (let i = 0; i &lt; keys.length; i++) {
@@ -195,7 +195,7 @@
                 </vl-rich-data-field>
                 <div slot="filter">
                     <div is="vl-search-filter" alt>
-                        <form id="form" novalidate>
+                        <form id="rich-data-table-filter-form" novalidate>
                             <section>
                                 <h2>Doorzoek projecten</h2>
                                 <div>
@@ -219,7 +219,7 @@
                             </div>
                         </form>
                         <div>
-                            <button is="vl-button-link" type="reset" form="form">Zoekopdracht verwijderen</button>
+                            <button is="vl-button-link" type="reset" form="rich-data-table-filter-form">Zoekopdracht verwijderen</button>
                         </div>
                     </div>
                 </div>
@@ -274,7 +274,7 @@
                     }
 
                     function findValueByPath(element, pathToKey) {
-                        var keys = pathToKey.split('.');
+                        const keys = pathToKey.split('.');
 
                         let current = element;
                         for (let i = 0; i < keys.length; i++) {
@@ -584,7 +584,7 @@
                     &lt;/vl-rich-data-field&gt;
                     &lt;div slot="filter"&gt;
                         &lt;div is="vl-search-filter" alt&gt;
-                            &lt;form id="form" novalidate&gt;
+                            &lt;form id="rich-data-table-filter-sorting-paging-form" novalidate&gt;
                                 &lt;section&gt;
                                     &lt;h2&gt;Doorzoek projecten&lt;/h2&gt;
                                     &lt;div&gt;
@@ -608,7 +608,7 @@
                                 &lt;/div&gt;
                             &lt;/form&gt;
                             &lt;div&gt;
-                                &lt;button is="vl-button-link" type="reset" form="form"&gt;Zoekopdracht verwijderen&lt;/button&gt;
+                                &lt;button is="vl-button-link" type="reset" form="rich-data-table-filter-sorting-paging-form"&gt;Zoekopdracht verwijderen&lt;/button&gt;
                             &lt;/div&gt;
                         &lt;/div&gt;
                     &lt;/div&gt;
@@ -841,7 +841,7 @@
                 </vl-rich-data-field>
                 <div slot="filter">
                     <div is="vl-search-filter" alt>
-                        <form id="form" novalidate>
+                        <form id="rich-data-table-filter-sorting-paging-form" novalidate>
                             <section>
                                 <h2>Doorzoek projecten</h2>
                                 <div>
@@ -865,7 +865,7 @@
                             </div>
                         </form>
                         <div>
-                            <button is="vl-button-link" type="reset" form="form">Zoekopdracht verwijderen</button>
+                            <button is="vl-button-link" type="reset" form="rich-data-table-filter-sorting-paging-form">Zoekopdracht verwijderen</button>
                         </div>
                     </div>
                 </div>
