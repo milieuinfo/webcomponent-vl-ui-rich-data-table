@@ -174,7 +174,10 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
     	const state = {};
         state.sorting = this.__sortingState;
         state.formData = this.__formDataState;
-        state.paging = paging ? this.__pagingState : { currentPage: 1 };
+        state.paging = this.__pagingState;
+        if (!paging && state.paging) {
+            state.paging.currentPage = 1;
+        }
     	return state;
     }
 

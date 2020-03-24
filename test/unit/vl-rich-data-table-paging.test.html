@@ -8,17 +8,18 @@
 
   <script type="module" src="../../src/vl-rich-data-table.js"></script>
   <script type="module" src="/node_modules/vl-ui-pager/dist/vl-pager.js"></script>
-  <link rel="stylesheet" type="text/css" href="/node_modules/vl-ui-core/dist/style.css"/>
+  <link rel="stylesheet" type="text/css" href="/node_modules/vl-ui-core/dist/style.css" />
 </head>
 
 <body>
   <test-fixture id="vl-rich-data-table-paging-fixture">
     <template>
-        <vl-rich-data-table id="rich-data-table-paging" data-vl-data='{"data": [{"id": 1, "name": "P1"}, {"id": 2, "name": "P2"}, {"id": 3, "name": "P3"}, {"id": 4, "name": "P4"}, {"id": 5, "name": "P5"}]}'>
-            <vl-rich-data-field data-vl-label="ID" data-vl-selector="id"></vl-rich-data-field>
-            <vl-rich-data-field data-vl-label="Naam" data-vl-selector="name"></vl-rich-data-field>
-            <vl-pager slot="pager" total-items="10" items-per-page="5" current-page="1"></vl-pager>
-        </vl-rich-data-table>
+      <vl-rich-data-table id="rich-data-table-paging"
+        data-vl-data='{"data": [{"id": 1, "name": "P1"}, {"id": 2, "name": "P2"}, {"id": 3, "name": "P3"}, {"id": 4, "name": "P4"}, {"id": 5, "name": "P5"}]}'>
+        <vl-rich-data-field data-vl-label="ID" data-vl-selector="id"></vl-rich-data-field>
+        <vl-rich-data-field data-vl-label="Naam" data-vl-selector="name"></vl-rich-data-field>
+        <vl-pager slot="pager" total-items="10" items-per-page="5" current-page="1"></vl-pager>
+      </vl-rich-data-table>
     </template>
   </test-fixture>
 
@@ -44,30 +45,28 @@
 
       test('Wanneer de pager verandert, wordt een change event gegooid zodat de afnemer andere data kan opzoeken en zetten', (done) => {
         const richDataTablePaging = fixture('vl-rich-data-table-paging-fixture');
-		const firstRow = richDataTablePaging.shadowRoot.querySelectorAll("table tbody tr")[0];
-		firstRow.querySelectorAll("td")[0].textContent.should.equal("1");
-		firstRow.querySelectorAll("td")[1].textContent.should.equal("P1");
-		
-		richDataTablePaging.addEventListener('change', (e) => {
-			const page = e.detail.paging.currentPage;
-			let newPage;
-			if (page == 1) {
-				newPage = {"data": [{"id": 1, "name": "P1"}, {"id": 2, "name": "P2"}, {"id": 3, "name": "P3"}, {"id": 4, "name": "P4"}, {"id": 5, "name": "P5"}]};
-			} else if (page == 2) {
-				newPage = {"data": [{"id": 6, "name": "P6"}, {"id": 7, "name": "P7"}, {"id": 8, "name": "P8"}, {"id": 9, "name": "P9"}, {"id": 10, "name": "P10"}]};
-			}
-    		richDataTablePaging.data = newPage;
+        const firstRow = richDataTablePaging.shadowRoot.querySelectorAll("table tbody tr")[0];
+        firstRow.querySelectorAll("td")[0].textContent.should.equal("1");
+        firstRow.querySelectorAll("td")[1].textContent.should.equal("P1");
 
-    		const firstRowSecondPage = richDataTablePaging.shadowRoot.querySelectorAll("table tbody tr")[0];
-    		firstRowSecondPage.querySelectorAll("td")[0].textContent.should.equal("6");
-    		firstRowSecondPage.querySelectorAll("td")[1].textContent.should.equal("P6");
-    		done();
-    	});
-		const pager = richDataTablePaging.shadowRoot.querySelector('slot[name="pager"]').assignedElements()[0];
-		pager.shadowRoot.querySelector("#page-forward-link").click()
-		
+        richDataTablePaging.addEventListener('change', (e) => {
+          const page = e.detail.paging.currentPage;
+          let newPage;
+          if (page == 1) {
+            newPage = { "data": [{ "id": 1, "name": "P1" }, { "id": 2, "name": "P2" }, { "id": 3, "name": "P3" }, { "id": 4, "name": "P4" }, { "id": 5, "name": "P5" }] };
+          } else if (page == 2) {
+            newPage = { "data": [{ "id": 6, "name": "P6" }, { "id": 7, "name": "P7" }, { "id": 8, "name": "P8" }, { "id": 9, "name": "P9" }, { "id": 10, "name": "P10" }] };
+          }
+          richDataTablePaging.data = newPage;
+
+          const firstRowSecondPage = richDataTablePaging.shadowRoot.querySelectorAll("table tbody tr")[0];
+          firstRowSecondPage.querySelectorAll("td")[0].textContent.should.equal("6");
+          firstRowSecondPage.querySelectorAll("td")[1].textContent.should.equal("P6");
+          done();
+        });
+        const pager = richDataTablePaging.shadowRoot.querySelector('slot[name="pager"]').assignedElements()[0];
+        pager.shadowRoot.querySelector("#page-forward-link").click()
       });
-
     });
   </script>
 </body>

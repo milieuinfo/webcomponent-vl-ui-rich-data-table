@@ -12,9 +12,9 @@
   <script type="module" src="/node_modules/vl-ui-button/dist/vl-button.js"></script>
   <script type="module" src="/node_modules/vl-ui-pager/dist/vl-pager.js"></script>
 
-  <link rel="stylesheet" type="text/css" href="/node_modules/vl-ui-search-filter/dist/style.css"/>
-  <link rel="stylesheet" type="text/css" href="/node_modules/vl-ui-input-field/dist/style.css"/>
-  <link rel="stylesheet" type="text/css" href="/node_modules/vl-ui-button/dist/style.css"/>
+  <link rel="stylesheet" type="text/css" href="/node_modules/vl-ui-search-filter/dist/style.css" />
+  <link rel="stylesheet" type="text/css" href="/node_modules/vl-ui-input-field/dist/style.css" />
+  <link rel="stylesheet" type="text/css" href="/node_modules/vl-ui-button/dist/style.css" />
 </head>
 
 <body>
@@ -64,14 +64,18 @@
         assert.isTrue(searchFilter.hasAttribute('alt'));
       });
 
-      test('Als er aan een input van de search filter iets wijzigt wordt er een event met formdata en paginatie gestuurd', (done) => {
+      test('Als er aan een input van de search filter iets wijzigt wordt er een event zonder sortering maar met formdata en paginatie gestuurd', (done) => {
         const table = fixture('vl-rich-data-table-met-filter-fixture');
         const pager = table.querySelector('vl-pager');
 
         table.addEventListener('change', (e) => {
           expect(e.detail.formData.get('filter1')).to.equal('een beetje input');
+          expect(e.detail.sorting).to.be.undefined;
           expect(e.detail.paging).to.deep.equal({
-            currentPage: Number(pager.getAttribute('current-page'))
+            currentPage: Number(pager.getAttribute('current-page')),
+            totalPages: Number(4),
+            itemsPerPage: Number(pager.getAttribute('items-per-page')),
+            totalItems: Number(pager.getAttribute('total-items'))
           });
           done();
         });
@@ -80,7 +84,7 @@
         setInputValue(searchFilter.querySelector('input'), 'een beetje input');
       });
 
-      test('Als de filtering gereset wordt, zal er een event zonder formdata en met paginatie gestuurd worden', (done) => {
+      test('Als de filtering gereset wordt, zal er een event zonder formdata en sortering maar met paginatie gestuurd worden', (done) => {
         const table = fixture('vl-rich-data-table-met-filter-fixture');
         const pager = table.querySelector('vl-pager');
         const searchFilter = table.__searchFilter;
@@ -88,11 +92,15 @@
 
         setInputValue(searchFilter.querySelector('input'), 'een beetje input');
         table.addEventListener('change', (e) => {
-            expect(e.detail.formData).to.be.undefined;
-            expect(e.detail.paging).to.deep.equal({
-              currentPage: Number(pager.getAttribute('current-page'))
-            });
-            done();
+          expect(e.detail.formData).to.be.undefined;
+          expect(e.detail.sorting).to.be.undefined;
+          expect(e.detail.paging).to.deep.equal({
+            currentPage: Number(pager.getAttribute('current-page')),
+            totalPages: Number(4),
+            itemsPerPage: Number(pager.getAttribute('items-per-page')),
+            totalItems: Number(pager.getAttribute('total-items'))
+          });
+          done();
         });
         resetButton.click();
       });

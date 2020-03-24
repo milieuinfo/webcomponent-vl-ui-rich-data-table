@@ -62,7 +62,7 @@
             should.not.exist(ownerSorter);
         });
 
-        test('Single sorting: Indien je op een nieuw veld gesorteerd wordt door op de kolom te klikken, wordt een event uitgestuurd vanuit de table waaruit blijkt dat er niet meer gesorteerd wordt op de oude kolom', (done) => {
+        test('Single sorting: indien je op een nieuw veld gesorteerd wordt door op de kolom te klikken, wordt een event uitgestuurd vanuit de table waaruit blijkt dat er niet meer gesorteerd wordt op de oude kolom', (done) => {
             const richTable = fixture('vl-rich-data-table-sort-fixture');
             const idSorter = getSorter(richTable, 'id');
             const nameSorter = getSorter(richTable, 'name');
@@ -92,7 +92,7 @@
             });
         });
 
-        test('Single sorting: Indien je op een nieuw veld gesorteerd wordt door op het sorteringsicoon te klikken, wordt een event uitgestuurd vanuit de table waaruit blijkt dat er niet meer gesorteerd wordt op de oude kolom', (done) => {
+        test('Single sorting: indien je op een nieuw veld gesorteerd wordt door op het sorteringsicoon te klikken, wordt een event uitgestuurd vanuit de table waaruit blijkt dat er niet meer gesorteerd wordt op de oude kolom', (done) => {
             const richTable = fixture('vl-rich-data-table-sort-fixture');
             const idSorter = getSorter(richTable, 'id');
             const nameSorter = getSorter(richTable, 'name');
@@ -122,7 +122,7 @@
             });
         });
 
-        test('Multi sorting: Indien op een nieuw veld gesorteerd wordt, wordt een event uitgestuurd vanuit de table met de juiste informatie en zijn de sorteerprioriteiten van de velden correct', (done) => {
+        test('Multi sorting: indien op een nieuw veld gesorteerd wordt, wordt een event uitgestuurd vanuit de table met de juiste informatie en zijn de sorteerprioriteiten van de velden correct', (done) => {
             const richTable = fixture('vl-rich-data-table-multisort-fixture');
             const idSorter = getSorter(richTable, 'id');
             const nameSorter = getSorter(richTable, 'name');
@@ -155,7 +155,7 @@
             });
         });
 
-        test('Multi sorting: Indien niet langer op een veld gesorteerd wordt, wordt een event uitgestuurd vanuit de table met de juiste informatie en zijn de sorteerprioriteiten van de velden correct', (done) => {
+        test('Multi sorting: indien niet langer op een veld gesorteerd wordt, wordt een event uitgestuurd vanuit de table met de juiste informatie en zijn de sorteerprioriteiten van de velden correct', (done) => {
             const richTable = fixture('vl-rich-data-table-multisort-multiple-sortings-fixture');
             const idSorter = getSorter(richTable, 'id');
             const nameSorter = getSorter(richTable, 'name');
@@ -193,7 +193,7 @@
             });
         });
 
-        test('Multi sorting: Indien de sorteerrichting van een veld aangepast wordt, wordt een event uitgestuurd vanuit de table met de juiste informatie en zijn de sorteerprioriteiten van de velden correct', (done) => {
+        test('Multi sorting: indien de sorteerrichting van een veld aangepast wordt, wordt een event uitgestuurd vanuit de table met de juiste informatie en zijn de sorteerprioriteiten van de velden correct', (done) => {
             const richTable = fixture('vl-rich-data-table-multisort-fixture');
             const idSorter = getSorter(richTable, 'id');
             const nameSorter = getSorter(richTable, 'name');
