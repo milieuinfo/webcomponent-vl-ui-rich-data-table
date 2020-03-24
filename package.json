@@ -1,63 +1,71 @@
 {
-  "name": "vl-rich-table",
-  "version": "0.0.0",
-  "description": "Een configureerbare data-table met paginering, sortering en zoeken op basis van een dynamische lijst van data.",
-  "scripts": {
-    "prepare": "npm update --dev vl-ui-util && npm run prepare:util",
-    "prepare:util": "npm explore vl-ui-util -- npm run install:copy && npm explore vl-ui-util -- npm run install:bamboo",
-    "test": "wct -l chrome,firefox --npm",
-    "release": "np",
-    "release:prepare": "npm run release:prepare:build && npm run release:prepare:css && npm run release:prepare:commit",
-    "release:prepare:build": "npm run build",
-    "release:prepare:css": "replace '\\.\\./style.css' '/node_modules/vl-ui-rich-table/style.css' vl-rich-table.js",
-    "release:prepare:commit": "git add -f vl-rich-table.js && git commit --amend --no-edit && git pull",
-    "release:testless": "np --yolo",
-    "dev": "concurrently \"npm:bundle:watch\" \"http-server\"",
-    "build": "npm run bundle:build && npm run bundle:build:imports",
-    "bundle:watch": "rollup --config rollup.config.js --watch",
-    "bundle:build": "rollup --config rollup.config.js",
-    "bundle:build:imports": "replace '\"[../]+/node_modules' '\"/node_modules' vl-rich-table.js",
-    "demo": "npm run dev"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/milieuinfo/webcomponent-vl-rich-table.git"
-  },
-  "author": "DIDM",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/milieuinfo/webcomponent-vl-rich-table/issues"
-  },
-  "homepage": "https://github.com/milieuinfo/webcomponent-vl-rich-table#readme",
-  "dependencies": {
-    "vl-ui-button": "1.3.2",
-    "vl-ui-core": "^2.0.0",
-    "vl-ui-data-table": "1.0.7",
-    "vl-ui-grid": "1.0.12",
-    "vl-ui-icon": "2.1.0",
-    "vl-ui-pager": "0.0.4"
-  },
-  "devDependencies": {
-    "@govflanders/vl-ui-util": "^3.9.1",
-    "concurrently": "5.0.0",
-    "http-server": "^0.11.1",
-    "np": "3.0.4",
-    "replace": "^1.1.1",
-    "rollup": "1.25.1",
-    "rollup-plugin-postcss": "2.0.3",
-    "rollup-plugin-terser": "5.1.2",
-    "sass": "1.23.6",
-    "uglify-js-es6": "2.8.9",
-    "vl-ui-datepicker": "github:milieuinfo/webcomponent-vl-ui-datepicker#change_event_propageren",
-    "vl-ui-form-message": "3.0.0",
-    "vl-ui-input-field": "1.1.2",
-    "vl-ui-search-filter": "0.0.1",
-    "vl-ui-select": "2.0.1",
-    "vl-ui-util": "^3.4.4",
-    "wct-browser-legacy": "1.0.2",
-    "web-component-tester": "6.9.2"
-  },
-  "publishConfig": {
-    "registry": "http://artifactory-pr-build.lb.cumuli.be:8081/artifactory/api/npm/acd-npm/"
-  }
+	"name": "vl-ui-rich-data-table",
+	"version": "0.0.0",
+	"description": "Een configureerbare data-table met paginering, sortering en zoeken op basis van een dynamische lijst van data.",
+	"author": "DIDM",
+	"license": "MIT",
+	"main": "./src/index.js",
+	"exports": {
+		"require": "./index.js",
+		"import": "./src/index.js",
+		"node": "./index.js",
+		"default": "./index.js"
+	},
+	"homepage": "https://github.com/milieuinfo/webcomponent-vl-ui-rich-data-table#readme",
+	"bugs": {
+		"url": "https://github.com/milieuinfo/webcomponent-vl-ui-rich-data-table/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/milieuinfo/webcomponent-vl-ui-rich-data-table.git"
+	},
+	"publishConfig": {
+		"registry": "http://artifactory-pr-build.lb.cumuli.be:8081/artifactory/api/npm/acd-npm/"
+	},
+	"scripts": {
+		"prepare": "npm update --dev vl-ui-util && npm run prepare:util",
+		"prepare:util": "npm explore vl-ui-util -- npm run util",
+		"test": "npm run test:unit && npm run test:e2e",
+		"test:unit": "wct --config-file ./wct.local.conf.json",
+		"test:e2e": "npm run test:server:start && npm run test:e2e:chrome && npm run test:e2e:firefox",
+		"test:e2e:grid": "npm run test:server:start && npm run test:e2e:chrome:grid && npm run test:e2e:firefox:grid",
+		"test:grid": "wct --config-file ./wct.docker.conf.json && npm run test:e2e:grid",
+		"posttest:e2e": "pkill -f http-server",
+		"test:e2e:chrome": "mocha --chrome",
+		"test:e2e:chrome:grid": "mocha --chrome --grid",
+		"test:e2e:firefox": "mocha --firefox",
+		"test:e2e:firefox:grid": "mocha --firefox --grid",
+		"test:e2e:opera": "mocha --opera",
+		"test:e2e:safari": "mocha --safari",
+		"test:server:start": "http-server &",
+		"release": "np",
+		"release:prepare": "npm explore vl-ui-util -- npm run release-component:prepare $(pwd) rich-data-table",
+		"release:testless": "np --yolo",
+		"demo": "http-server"
+	},
+	"dependencies": {
+		"vl-ui-button": "^5.0.1",
+		"vl-ui-core": "^5.1.0",
+		"vl-ui-data-table": "^3.1.0",
+		"vl-ui-grid": "^3.0.1",
+		"vl-ui-icon": "^4.0.1",
+		"vl-ui-link": "^4.0.0",
+		"vl-ui-pager": "^3.0.1",
+		"vl-ui-search-filter": "^3.1.0"
+	},
+	"peerDependencies": {
+		"vl-ui-core": "^5.0.3",
+		"vl-ui-icon": "^4.0.1",
+		"vl-ui-data-table": "^3.1.0",
+		"vl-ui-search-filter": "^3.1.0",
+		"vl-ui-pager": "^3.0.1",
+		"vl-ui-grid": "^3.0.1",
+		"vl-ui-link": "^4.0.0"
+	},
+	"devDependencies": {
+		"@govflanders/vl-ui-util": "3.9.1",
+		"vl-ui-util": "^5.0.9",
+		"vl-ui-input-field": "^3.1.0",
+		"vl-ui-form-message": "^5.0.0"
+	}
 }

@@ -1,27 +1,28 @@
-# vl-rich-table
-![GitHub issues](https://img.shields.io/github/issues-raw/milieuinfo/webcomponent-vl-ui-rich-table) ![GitHub pull requests](https://img.shields.io/github/issues-pr-raw/milieuinfo/webcomponent-vl-ui-rich-table) ![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/milieuinfo/webcomponent-vl-ui-rich-table)
+# vl-ui-rich-data-table
+![GitHub issues](https://img.shields.io/github/issues-raw/milieuinfo/webcomponent-vl-ui-rich-data-table) ![GitHub pull requests](https://img.shields.io/github/issues-pr-raw/milieuinfo/webcomponent-vl-ui-rich-data-table) ![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/milieuinfo/webcomponent-vl-ui-rich-data-table)
+
 Een configureerbare data-table met paginering, sortering en zoeken op basis van een dynamische lijst van data.
 
 ## Installatie
-```
-npm install --save vl-ui-rich-table
+``` bash
+$ npm install --save vl-ui-rich-data-table
 ```
 
 ## API
-De [API](https://webcomponenten.omgeving.vlaanderen.be/doc/VlRichTable.html) bevat een overzicht van de ondersteunde attributen en een beschrijving van de beschikbare functies.
+De [API](https://webcomponenten.omgeving.vlaanderen.be/doc/VlRichDataTable.html) bevat een overzicht van de ondersteunde attributen en een beschrijving van de beschikbare functies.
 
 ## Demo
-De [demo](https://webcomponenten.omgeving.vlaanderen.be/demo/vl-rich-table.html) pagina bevat een overzicht van de mogelijkheden met code voorbeelden. Lokaal opstarten kan met onderstaand [NPM](https://www.npmjs.com) script.
-```
-npm run demo
+De [demo](https://webcomponenten.omgeving.vlaanderen.be/demo/vl-rich-data-table.html) pagina bevat een overzicht van de mogelijkheden met code voorbeelden. Lokaal opstarten kan met onderstaand [NPM](https://www.npmjs.com) script.
+``` bash
+$ npm run demo
 ```
 
 ## Testen
 De webcomponent bevat verschillende unit testen die bij elke commit geautomatiseerd in Chrome en Firefox draaien. Hierdoor kunnen we bij elke release een minimum aan kwaliteit garanderen. Later zullen er ook nog UI testen toegevoegd worden zodat al de functionaliteit uitgebreid getest wordt.
 
 De testen kunnen lokaal opgestart worden met onderstaand [NPM](https://www.npmjs.com) script.
-```
-npm run test
+``` bash
+$ npm run test
 ```
 
 ## Issues
@@ -36,7 +37,7 @@ Uiteraard is het ook toegelaten om mee te ontwikkelen door gebruik te maken van 
 3. Elke PR moet een issue verwijzing hebben, zodat deze automatisch opgenomen kan worden in de release notes
 
 ## Versionering
-We gebruiken [Semantic Versioning](https://semver.org) en voorzien elke release van release notes, zie een overzicht van de [releases](https://github.com/milieuinfo/webcomponent-vl-ui-rich-table/releases).
+We gebruiken [Semantic Versioning](https://semver.org) en voorzien elke release van release notes, zie een overzicht van de [releases](https://github.com/milieuinfo/webcomponent-vl-ui-rich-data-table/releases).
 
 ## Browser ondersteuning
 De webcomponenten zijn ontwikkeld door uitsluitend gebruik te maken van web standaarden (JavaScript, HTML, CSS). Hierdoor worden al de evergreen browser automatisch ondersteund.
@@ -46,7 +47,7 @@ De webcomponenten zijn ontwikkeld door uitsluitend gebruik te maken van web stan
 | <center>Chrome</center> | <center>Firefox</center> | <center>Safari</center> | <center>Opera</center> | <center>Edge</center> |
 
 ## Credits
-Zie de lijst van [ontwikkelaars](https://github.com/milieuinfo/webcomponent-vl-ui-rich-table/graphs/contributors) die meegewerkt hebben aan de webcomponent.
+Zie de lijst van [ontwikkelaars](https://github.com/milieuinfo/webcomponent-vl-ui-rich-data-table/graphs/contributors) die meegewerkt hebben aan de webcomponent.
 
 ## Contact
 Heb je suggesties, opmerkingen of tips? Voel je dan vrij om ons te contacteren via help@omgevingvlaanderen.be.

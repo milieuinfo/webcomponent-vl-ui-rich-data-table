@@ -1,605 +1,1088 @@
 <!DOCTYPE html>
-<html class="js">
+<html>
+
 <head>
-  <title>vl-rich-data-table voorbeeld</title>
-  <script type="module" src="demo.js"></script>
-  <link rel="stylesheet" type="text/css" href="demo.css">
-  <script type="module" src="/vl-rich-data-table.js"></script>
-  <script type="module" src="/node_modules/vl-ui-search-filter/vl-search-filter.js"></script>
-  <script type="module" src="/node_modules/vl-ui-select/vl-select.js"></script>
-  <script type="module" src="/node_modules/vl-ui-input-field/vl-input-field.js"></script>
-  <script type="module" src="/node_modules/vl-ui-datepicker/vl-datepicker.js"></script>
-  <script type="module" src="/node_modules/vl-ui-form-message/vl-form-message.js"></script>
-
-  <script>
-    const data = [
-      {
-        id: 1,
-        name: "Lorem ipsum1",
-        description: "Lorem",
-        "tijdstip": "2000-01-12T17:22:33.123456+01:00",
-        "datum": "2000-01-12T00:00:00.000000+01:00"
-      },
-      {
-        id: 2,
-        name: "Lorem ipsum2",
-        description: "ipsum",
-        "tijdstip": "2001-02-11T17:22:33.123456+01:00",
-        "datum": "2000-01-12T00:00:00.000000+01:00"
-      },
-      {
-        id: 3,
-        name: "Lorem ipsum3",
-        description: "dolor",
-        "tijdstip": "2002-03-10T17:22:33.123456+01:00",
-        "datum": "2002-03-10T00:00:00.000000+01:00"
-      },
-      {
-        id: 4,
-        name: "Lorem ipsum4",
-        description: "sit",
-        "tijdstip": "2003-04-09T17:22:33.123456+02:00",
-        "datum": "2003-04-09T00:00:00.000000+02:00"
-      },
-      {
-        id: 5,
-        name: "Lorem ipsum5",
-        description: "amet",
-        "tijdstip": "2004-05-08T17:22:33.123456+02:00",
-        "datum": "2004-05-08T00:00:00.000000+02:00"
-      },
-      {
-        id: 6,
-        name: "Lorem ipsum6",
-        description: "consectetur",
-        "tijdstip": "2005-06-07T17:22:33.123456+02:00",
-        "datum": "2005-06-07T00:00:00.000000+02:00"
-      },
-      {
-        id: 7,
-        name: "Lorem ipsum7",
-        description: "adipisicing",
-        "tijdstip": "2006-07-06T17:22:33.123456+02:00",
-        "datum": "2006-07-06T00:00:00.000000+02:00"
-      },
-      {
-        id: 8,
-        name: "Lorem ipsum8",
-        description: "elit",
-        "tijdstip": "2007-08-05T17:22:33.123456+02:00",
-        "datum": "2007-08-05T00:00:00.000000+02:00"
-      },
-      {
-        id: 9,
-        name: "Lorem ipsum9",
-        description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
-        "tijdstip": "2019-01-01T01:22:33.123456+01:00",
-        "datum": "2019-01-01T00:00:00.000000+01:00"
-      },
-      {
-        id: 10,
-        name: "Lorem ipsum10",
-        description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
-        "tijdstip": "2019-02-02T03:22:33.123456+01:00",
-        "datum": "2019-02-02T00:00:00.000000+01:00"
-      },
-      {
-        id: 11,
-        name: "Lorem ipsum11",
-        description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
-        "tijdstip": "2019-03-03T05:22:33.123456+01:00",
-        "datum": "2019-03-03T00:00:00.000000+01:00"
-      },
-      {
-        id: 12,
-        name: "Lorem ipsum12",
-        description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
-        "tijdstip": "2019-04-04T07:22:33.123456+02:00",
-        "datum": "2019-04-04T00:00:00.000000+02:00"
-      },
-      {
-        id: 13,
-        name: "Lorem ipsum13",
-        description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
-        "tijdstip": "2019-05-05T09:22:33.123456+02:00",
-        "datum": "2019-05-05T00:00:00.000000+02:00"
-      },
-      {
-        id: 14,
-        name: "Lorem ipsum14",
-        description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
-        "tijdstip": "2019-06-06T11:22:33.123456+02:00",
-        "datum": "2019-06-06T00:00:00.000000+02:00"
-      },
-      {
-        id: 15,
-        name: "Lorem ipsum15",
-        description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
-        "tijdstip": "2019-07-07T13:22:33.123456+02:00",
-        "datum": "2019-07-07T00:00:00.000000+02:00"
-      },
-      {
-        id: 16,
-        name: "Lorem ipsum16",
-        description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
-        "tijdstip": "2019-08-08T15:22:33.123456+02:00",
-        "datum": "2019-08-08T00:00:00.000000+02:00"
-      },
-      {
-        id: 17,
-        name: "Lorem ipsum17",
-        description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
-        "tijdstip": "2019-09-09T17:22:33.123456+02:00",
-        "datum": "2019-09-09T00:00:00.000000+02:00"
-      },
-      {
-        id: 18,
-        name: "Lorem ipsum18",
-        description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
-        "tijdstip": "2019-10-10T19:22:33.123456+02:00",
-        "datum": "2019-10-10T00:00:00.000000+02:00"
-      },
-      {
-        id: 19,
-        name: "Lorem ipsum19",
-        description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
-        "tijdstip": "2019-11-11T21:22:33.123456+01:00",
-        "datum": "2019-11-11T00:00:00.000000+01:00"
-      },
-      {
-        id: 20,
-        name: "Lorem ipsum20",
-        description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
-        "tijdstip": "2019-12-12T23:22:33.123456+01:00",
-        "datum": "2019-12-12T00:00:00.000000+01:00"
-      },
-    ];
-
-    let size = 9;
-    const queryData = (page = 0, search, sort) => {
-      const filteredData = data
-      .filter(record => {
-        if (search && search.name) {
-          return record.name
-              && record.name.toLocaleLowerCase().includes(search.name.toLocaleLowerCase());
-        }
-        return true
-      })
-      .filter(record => {
-        if (search && search.datum) {
-
-          if (search.datum.date) {
-            return new Date(record.datum).getTime() === search.datum.date.getTime();
-          }
-
-          if (search.datum.dateFrom && search.datum.dateTo) {
-            const time = new Date(record.datum).getTime();
-            return time >= search.datum.dateFrom.getTime() && time <= search.datum.dateTo.getTime();
-          }
-
-          return false
-        }
-        return true;
-      })
-      .filter(record => {
-        if (search && search.description) {
-          return record.description
-              && record.description.toLocaleLowerCase().includes(search.description.toLocaleLowerCase());
-        }
-        return true
-      });
-
-      const content = filteredData.sort((record1, record2) => {
-        const criteria = sort ? sort[0] : null;
-        if (criteria) {
-          if (criteria.direction === 'desc') {
-            return record2[criteria.name].localeCompare(record1[criteria.name]);
-          } else {
-            return record1[criteria.name].localeCompare(record2[criteria.name]);
-          }
-        }
-        return 0;
-      })
-      .sort((record1, record2) => {
-        let result = 0;
-        if (sort) {
-          const criteria1 = sort[0],
-                criteria2 = sort[1];
-          if (criteria1) {
-            if (criteria1.direction === 'desc') {
-              result = record2[criteria1.name].localeCompare(record1[criteria1.name]);
-            } else {
-              result = record1[criteria1.name].localeCompare(record2[criteria1.name]);
-            }
-          }
-          if (result === 0 && criteria2) {
-            if (criteria2.direction === 'desc') {
-              result = record2[criteria2.name].localeCompare(record1[criteria2.name]);
-            } else {
-              result = record1[criteria2.name].localeCompare(record2[criteria2.name]);
-            }
-          }
-        }
-        return result;
-      })
-      .slice(page * size, page * size + size);
-      return {
-        content: content,
-        size: size,
-        totalElements: filteredData.length,
-        number: page
-      };
-    }
-
-  </script>
+    <title>vl-rich-data-table voorbeeld</title>
+    <script type="module" src="demo.js"></script>
+    <script type="module" src="/src/vl-rich-data-table.js"></script>
+    <script type="module" src="/src/vl-rich-data-field.js"></script>
+    <script type="module" src="/src/vl-rich-data-sorter.js"></script>
+    <script type="module" src="/node_modules/vl-ui-pager/dist/vl-pager.js"></script>
+    <script type="module" src="/node_modules/vl-ui-input-field/dist/vl-input-field.js"></script>
+    <script type="module" src="/node_modules/vl-ui-form-message/dist/vl-form-message.js"></script>
+    <script type="module" src="/node_modules/vl-ui-search-filter/dist/vl-search-filter.js"></script>
+    <script type="module" src="/node_modules/vl-ui-button/dist/vl-button.js"></script>
+    <link rel="stylesheet" type="text/css" href="/node_modules/vl-ui-input-field/dist/style.css"/>
+    <link rel="stylesheet" type="text/css" href="/node_modules/vl-ui-form-message/dist/style.css"/>
+    <link rel="stylesheet" type="text/css" href="/node_modules/vl-ui-search-filter/dist/style.css"/>
+    <link rel="stylesheet" type="text/css" href="/node_modules/vl-ui-button/dist/style.css"/>
+    <link rel="stylesheet" type="text/css" href="/node_modules/vl-ui-core/dist/style.css"/>
 </head>
 
 <body>
-
-<h1>vl-ui-rich-data-table demo</h1>
-
-<div>
-  <h2>Rich data table</h2>
-  <div class="demo">
-    <vl-rich-data-table>
-      <vl-rich-data-table-field data-value="id" label="ID"></vl-rich-data-table-field>
-      <vl-rich-data-table-field data-value="name" label="Naam"></vl-rich-data-table-field>
-      <vl-rich-data-table-field data-value="description" label="Beschrijving"></vl-rich-data-table-field>
-      <vl-rich-data-table-field data-value="tijdstip" label="Tijdstip" data-type="datetime"></vl-rich-data-table-field>
-      <vl-rich-data-table-field data-value="datum" label="Datum" data-type="date"></vl-rich-data-table-field>
-    </vl-rich-data-table>
-    <script>
-      document.querySelector('vl-rich-data-table').data = data;
-    </script>
-  </div>
-</div>
-
-<!-- <div>
-  <h2>Rich table met dynamische data en custom renderer</h2>
-  <pre>
-    <code class="line-numbers language-markup">
-      &lt;vl-rich-data-table id=&quot;dynamic-data&quot;&gt;
-        &lt;vl-rich-data-table-field data-value=&quot;id&quot; label=&quot;ID&quot;&gt;&lt;/vl-rich-data-table-field&gt;
-        &lt;vl-rich-data-table-field id=&quot;strong-field&quot; data-value=&quot;name&quot; label=&quot;Naam&quot;&gt;&lt;/vl-rich-data-table-field&gt;
-        &lt;vl-rich-data-table-field id=&quot;date-field&quot; data-value=&quot;date&quot; data-type=&quot;date&quot; label=&quot;Datum (volgens BIN-norm)&quot;&gt;&lt;/vl-rich-data-table-field&gt;
-        &lt;vl-rich-data-table-field id=&quot;date-field-with-slash&quot; data-value=&quot;date&quot; data-type=&quot;date&quot; label=&quot;Datum (dd/mm/jjjj)&quot;&gt;&lt;/vl-rich-data-table-field&gt;
-      &lt;/vl-rich-data-table&gt;
-      &lt;button type=&quot;button&quot; onclick=&#39;document.getElementById(&quot;dynamic-data&quot;).data = [{id: 1, name:&quot;Test&quot;, &quot;date&quot;: &quot;2020-01-31&quot;}, {id: 2, name:&quot;Test2&quot;, &quot;date&quot;: &quot;2020-10-01&quot;}, {id: 3, name:&quot;Test3&quot;, &quot;date&quot;: &quot;2020-12-12&quot;}]&#39;&gt;Voeg testdata toe&lt;/button&gt;
-      &lt;button type=&quot;button&quot; onclick=&#39;document.getElementById(&quot;dynamic-data&quot;).data = []&#39;&gt;Verwijder data&lt;/button&gt;
-      &lt;button type=&quot;button&quot;
-              onclick=&#39;document.getElementById(&quot;strong-field&quot;).renderTableData = (content) =&gt; {const div = document.createElement(&quot;div&quot;); div.innerHTML = &quot;&lt;strong&gt;&quot;+content+&quot;&lt;/strong&gt;&quot;; return div;}&#39;&gt;
-        Verander renderer voor naam
-      &lt;/button&gt;
-      &lt;script&gt;
-        const fnDateFormat = (string) =&gt; new Date(string).toLocaleDateString(&#39;nl-BE&#39;, {year: &#39;numeric&#39;, month: &#39;2-digit&#39;, day: &#39;2-digit&#39;});
-        document.querySelector(&quot;#date-field-with-slash&quot;).renderTableData = (content) =&gt;  document.createTextNode(fnDateFormat(content));
-      &lt;/script&gt;
-    </code>
-  </pre>
-  <div class="demo">
-    <vl-rich-data-table id="dynamic-data">
-      <vl-rich-data-table-field data-value="id" label="ID"></vl-rich-data-table-field>
-      <vl-rich-data-table-field id="strong-field" data-value="name" label="Naam"></vl-rich-data-table-field>
-      <vl-rich-data-table-field id="date-field" data-value="date" data-type="date" label="Datum (volgens BIN-norm)"></vl-rich-data-table-field>
-      <vl-rich-data-table-field id="date-field-with-slash" data-value="date" data-type="date" label="Datum (dd/mm/jjjj)"></vl-rich-data-table-field>
-    </vl-rich-data-table>
-    <button type="button"
-            onclick='document.getElementById("dynamic-data").data = [{id: 1, name:"Test", "date": "2020-01-31"}, {id: 2, name:"Test2", "date": "2020-10-01"}, {id: 3, name:"Test3", "date": "2020-12-12"}]'>
-      Voeg testdata toe
-    </button>
-    <button type="button" onclick='document.getElementById("dynamic-data").data = []'>Verwijder data</button>
-    <button type="button"
-            onclick='document.getElementById("strong-field").renderTableData = (content) => {const div = document.createElement("div"); div.innerHTML = "<strong>"+content+"</strong>"; return div;}'>
-      Verander renderer voor naam
-    </button>
-    <script>
-      const fnDateFormat = (string) => new Date(string).toLocaleDateString('nl-BE', {year: 'numeric', month: '2-digit', day: '2-digit'});
-      document.querySelector("#date-field-with-slash").renderTableData = (content) => document.createTextNode(fnDateFormat(content));
-    </script>
-  </div>
-</div>
-
-<div>
-  <h2>Rich table met voorgedefinieerde data en zebra stijl</h2>
-  <pre>
-    <code class="line-numbers language-markup">
-      &lt;vl-rich-data-table
-          data=&#39;[
-            {&quot;id&quot;: 1, &quot;name&quot;: &quot;Lorem ipsum&quot;, &quot;description&quot;: &quot;Lorem ipsum dolor sit amet, consectetur adipisicing elit.&quot;},
-            {&quot;id&quot;: 2, &quot;name&quot;: &quot;Amet aut&quot;, &quot;description&quot;: &quot;Amet aut, blanditiis dignissimos, earum et eveniet explicabo in labore minus odio odit optio, perferendis provident quas quis quod totam vel vero.&quot;}
-          ]&#39;
-          zebra&gt;
-        &lt;vl-rich-data-table-field data-value=&quot;name&quot; label=&quot;Naam&quot;&gt;&lt;/vl-rich-data-table-field&gt;
-        &lt;vl-rich-data-table-field data-value=&quot;description&quot; label=&quot;Omschrijving&quot;&gt;&lt;/vl-rich-data-table-field&gt;
-      &lt;/vl-rich-data-table&gt;
-    </code>
-  </pre>
-  <div class="demo">
-    <vl-rich-data-table
-        data='[
-          {"id": 1, "name": "Lorem ipsum", "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit."},
-          {"id": 2, "name": "Amet aut", "description": "Amet aut, blanditiis dignissimos, earum et eveniet explicabo in labore minus odio odit optio, perferendis provident quas quis quod totam vel vero."}
-        ]'
-        zebra>
-      <vl-rich-data-table-field data-value="name" label="Naam"></vl-rich-data-table-field>
-      <vl-rich-data-table-field data-value="description" label="Omschrijving"></vl-rich-data-table-field>
-    </vl-rich-data-table>
-  </div>
-
-  <div>
-    <h2>Rich table met voorgedefinieerde data (Spring JPA Rest response)</h2>
-    <pre>
-      <code class="line-numbers language-markup">
-        &lt;vl-rich-data-table
-            data=&#39;{
-                    &quot;content&quot;:[
-                              {&quot;id&quot;: 1, &quot;name&quot;: &quot;Lorem ipsum&quot;, &quot;description&quot;: &quot;Lorem ipsum dolor sit amet, consectetur adipisicing elit.&quot;},
-                              {&quot;id&quot;: 2, &quot;name&quot;: &quot;Amet aut&quot;, &quot;description&quot;: &quot;Amet aut, blanditiis dignissimos, earum et eveniet explicabo in labore minus odio odit optio, perferendis provident quas quis quod totam vel vero.&quot;}
-                              ],
-                    &quot;size&quot;: 2,
-                    &quot;totalElements&quot;:20,
-                    &quot;number&quot;: 0
-                  }&#39;
-            zebra&gt;
-          &lt;vl-rich-data-table-field data-value=&quot;name&quot; label=&quot;Naam&quot;&gt;&lt;/vl-rich-data-table-field&gt;
-          &lt;vl-rich-data-table-field data-value=&quot;description&quot; label=&quot;Omschrijving&quot;&gt;&lt;/vl-rich-data-table-field&gt;
-        &lt;/vl-rich-data-table&gt;
-      </code>
-    </pre>
-    <div class="demo">
-      <vl-rich-data-table
-          data='{
-                 "content":[
-                            {"id": 1, "name": "Lorem ipsum", "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit."},
-                            {"id": 2, "name": "Amet aut", "description": "Amet aut, blanditiis dignissimos, earum et eveniet explicabo in labore minus odio odit optio, perferendis provident quas quis quod totam vel vero."}
-                           ],
-                 "size": 2,
-                 "totalElements":20,
-                 "number": 0
-                }'
-          zebra>
-        <vl-rich-data-table-field data-value="name" label="Naam"></vl-rich-data-table-field>
-        <vl-rich-data-table-field data-value="description" label="Omschrijving"></vl-rich-data-table-field>
-      </vl-rich-data-table>
-    </div>
-  </div>
-
-  <div>
-    <h2>Rich table met pager</h2>
-    <pre>
-      <code class="line-numbers language-markup">
-        &lt;vl-rich-data-table id=&quot;pageableTable&quot;&gt;
-          &lt;vl-rich-data-table-field data-value=&quot;name&quot; label=&quot;Naam&quot;&gt;&lt;/vl-rich-data-table-field&gt;
-          &lt;vl-rich-data-table-field data-value=&quot;description&quot; label=&quot;Omschrijving&quot;&gt;&lt;/vl-rich-data-table-field&gt;
-          &lt;vl-rich-data-table-pager align-right&gt;&lt;/vl-rich-data-table-pager&gt;
-        &lt;/vl-rich-data-table&gt;
-      </code>
-    </pre>
-    <div class="demo">
-      <vl-rich-data-table id="pageableTable">
-        <vl-rich-data-table-field data-value="name" label="Naam"></vl-rich-data-table-field>
-        <vl-rich-data-table-field data-value="description" label="Omschrijving"></vl-rich-data-table-field>
-        <vl-rich-data-table-pager align-right></vl-rich-data-table-pager>
-      </vl-rich-data-table>
-    </div>
-    Page criteria:<p id="pagecriteria"></p>
-    <script>
-      const pageableTable = document.querySelector('#pageableTable');
-      let page = 0;
-
-      customElements.whenDefined('vl-rich-data-table').then(() => {
-        pageableTable.data = queryData(0, null, null);
-      });
-
-      pageableTable.addEventListener('pagechanged', (e) => {
-        let criteria = e.detail;
-        if (page !== criteria.newPage) {
-          page = criteria.newPage;
-          document.querySelector('#pagecriteria').innerHTML = JSON.stringify(criteria);
-          pageableTable.data = queryData(criteria.newPage - 1, null, null);
-        }
-      });
-    </script>
-  </div>
-
-  <div>
-    <h2>Sortable</h2>
-    <pre>
-      <code class="line-numbers language-markup">
-        &lt;vl-rich-data-table id=&quot;sortableTable&quot;&gt;
-          &lt;vl-rich-data-table-field sortable direction=&quot;desc&quot; priority=&quot;2&quot; data-value=&quot;name&quot;
-                                label=&quot;Naam&quot;&gt;&lt;/vl-rich-data-table-field&gt;
-          &lt;vl-rich-data-table-field sortable direction=&quot;asc&quot; priority=&quot;1&quot; data-value=&quot;description&quot;
-                                label=&quot;Omschrijving&quot;&gt;&lt;/vl-rich-data-table-field&gt;
-        &lt;/vl-rich-data-table&gt;
-      </code>
-    </pre>
-    <div class="demo">
-      <vl-rich-data-table id="sortableTable">
-        <vl-rich-data-table-field sortable direction="desc" priority="2" data-value="name"
-                             label="Naam"></vl-rich-data-table-field>
-        <vl-rich-data-table-field sortable direction="asc" priority="1" data-value="description"
-                             label="Omschrijving"></vl-rich-data-table-field>
-      </vl-rich-data-table>
-      Sort criteria:<p id="sortcriteria"></p>
-      <script>
-        const sortableTable = document.querySelector('#sortableTable');
-
-        customElements.whenDefined('vl-rich-data-table').then(() => {
-          sortableTable.data = queryData(0, null, null);
-        });
-
-        document.querySelector('#sortableTable').addEventListener('sort', (e) => {
-          let criteria = e.detail.sortCriteria;
-          document.querySelector('#sortcriteria').innerHTML = JSON.stringify(criteria);
-          document.querySelector('#sortableTable').data = queryData(null, null, criteria);
-        });
-      </script>
-    </div>
-  </div>
-
-  <div>
-    <h2>Search</h2>
-    <pre>
-      <code class="line-numbers language-markup">
-        &lt;vl-rich-data-table id=&quot;searchableTable&quot;&gt;
-          &lt;vl-rich-data-table-field data-value=&quot;name&quot; label=&quot;Naam&quot;&gt;&lt;/vl-rich-data-table-field&gt;
-          &lt;vl-rich-data-table-field data-value=&quot;description&quot; label=&quot;Omschrijving&quot;&gt;&lt;/vl-rich-data-table-field&gt;
-          &lt;vl-rich-data-table-field data-value=&quot;datum&quot; data-type=&quot;date&quot; label=&quot;Datum&quot;&gt;&lt;/vl-rich-data-table-field&gt;
-          &lt;div slot=&quot;filter&quot; data-vl-closable=&quot;false&quot;&gt;
-            &lt;input is=&quot;vl-input-field&quot; data-vl-search-criterium=&quot;name&quot; placeholder=&quot;Zoeken op naam...&quot;&gt;
-            &lt;div&gt;
-              &lt;label is=&quot;vl-form-label&quot; for=&quot;search-filter-date&quot;&gt;Datum&lt;/label&gt;
-              &lt;vl-datepicker id=&quot;search-filter-date&quot; data-vl-search-criterium=&quot;datum&quot;&gt;&lt;/vl-datepicker&gt;
-            &lt;/div&gt;
-          &lt;/div&gt;
-        &lt;/vl-rich-data-table&gt;
-      </code>
-    </pre>
-    <div class="demo">
-      <vl-rich-data-table id="searchableTable">
-        <vl-rich-data-table-field data-value="name" label="Naam"></vl-rich-data-table-field>
-        <vl-rich-data-table-field data-value="description" label="Omschrijving"></vl-rich-data-table-field>
-        <vl-rich-data-table-field data-value="datum" data-type="date" label="Datum"></vl-rich-data-table-field>
-        <div slot="filter" data-vl-closable="false">
-          <input is="vl-input-field" data-vl-search-criterium="name" placeholder="Zoeken op naam...">
-          <div>
-            <label is="vl-form-label" for="search-filter-date">Datum</label>
-            <vl-datepicker id="search-filter-date" data-vl-search-criterium="datum"></vl-datepicker>
-          </div>
+    <h1>vl-ui-rich-data-table demo</h1>
+    <div>
+        <h2>Basis rich data table</h2>
+        <pre>
+            <code class="line-numbers language-markup">
+                &gt;&lt;vl-rich-data-table id="rich-data-table"
+                    data-vl-data='{"data": [{"id": 0, "name": "Project #1", "manager": {"firstName": "Pascal", "lastName": "Riquier"}, "medewerkers": [{"firstName": "Sander", "lastName": "Kleykens"}]}, 
+                        {"id": 1, "name": "Project #2", "manager": {"firstName": "Tom", "lastName": "Coemans"}, "medewerkers": [{"firstName": "Guy", "lastName": "Wauters"}]}]}'&gt;
+                    &lt;vl-rich-data-field data-vl-label="ID" data-vl-selector="id"&gt;&lt;/vl-rich-data-field&gt;
+                    &lt;vl-rich-data-field data-vl-label="Naam" data-vl-selector="name"&gt;&lt;/vl-rich-data-field&gt;
+                    &lt;vl-rich-data-field data-vl-label="Naam manager" data-vl-selector="manager.lastName"&gt;&lt;/vl-rich-data-field&gt;
+                    &lt;vl-rich-data-field data-vl-label="Eerste medewerker" data-vl-selector="medewerkers.0.lastName"&gt;&lt;/vl-rich-data-field&gt;
+                    &lt;vl-rich-data-field&gt;
+                        &lt;template slot="label"&gt;
+                            &lt;span style="font-weight: normal"&gt;Project o.l.v.&lt;/span&gt; &lt;strong&gt;manager&lt;/strong&gt;
+                        &lt;/template&gt;
+                        &lt;template slot="content"&gt;
+                            &lt;span&gt;${item.name}&lt;/span&gt; o.l.v. &lt;strong&gt;${item.manager.firstName}
+                                ${item.manager.lastName}&lt;/strong&gt;
+                        &lt;/template&gt;
+                    &lt;/vl-rich-data-field&gt;
+                &lt;/vl-rich-data-table&gt;
+            </code>
+        </pre>
+        <div class="demo">
+            <vl-rich-data-table id="rich-data-table"
+                data-vl-data='{"data": [{"id": 0, "name": "Project #1", "manager": {"firstName": "Pascal", "lastName": "Riquier"}, "medewerkers": [{"firstName": "Sander", "lastName": "Kleykens"}]}, 
+                	{"id": 1, "name": "Project #2", "manager": {"firstName": "Tom", "lastName": "Coemans"}, "medewerkers": [{"firstName": "Guy", "lastName": "Wauters"}]}]}'>
+                <vl-rich-data-field data-vl-label="ID" data-vl-selector="id"></vl-rich-data-field>
+                <vl-rich-data-field data-vl-label="Naam" data-vl-selector="name"></vl-rich-data-field>
+                <vl-rich-data-field data-vl-label="Naam manager" data-vl-selector="manager.lastName"></vl-rich-data-field>
+                <vl-rich-data-field data-vl-label="Eerste medewerker" data-vl-selector="medewerkers.0.lastName"></vl-rich-data-field>
+                <vl-rich-data-field>
+                    <template slot="label">
+                        <span style="font-weight: normal">Project o.l.v.</span> <strong>manager</strong>
+                    </template>
+                    <template slot="content">
+                        <span>${item.name}</span> o.l.v. <strong>${item.manager.firstName}
+                            ${item.manager.lastName}</strong>
+                    </template>
+                </vl-rich-data-field>
+            </vl-rich-data-table>
         </div>
-      </vl-rich-data-table>
-      Search criteria:<p id="searchCriteria"></p>
-      <script>
-        const searchableTable = document.querySelector('#searchableTable');
-        customElements.whenDefined('vl-rich-data-table').then(() => {
-          searchableTable.data = queryData(0, null, null);
-        });
-        searchableTable.addEventListener('search', (e) => {
-          document.querySelector('#searchCriteria').innerHTML = JSON.stringify(
-              e.detail.searchCriteria);
-          searchableTable.data = queryData(null, e.detail.searchCriteria, null);
-        });
-      </script>
     </div>
-  </div>
 
-  <div>
-    <h2>Search, sort en paginatie gecombineerd met search filter</h2>
-    <pre>
-      <code class="line-numbers language-markup">
-        &lt;vl-rich-data-table id=&quot;gecombineerd&quot;&gt;
-          &lt;vl-rich-data-table-field sortable direction=&quot;desc&quot; priority=&quot;2&quot; data-value=&quot;name&quot; label=&quot;Naam&quot;&gt;&lt;/vl-rich-data-table-field&gt;
-          &lt;vl-rich-data-table-field sortable direction=&quot;asc&quot; priority=&quot;1&quot;
-                                data-value=&quot;description&quot; label=&quot;Omschrijving&quot;&gt;&lt;/vl-rich-data-table-field&gt;
-          &lt;vl-rich-data-table-field data-value=&quot;tijdstip&quot; data-type=&quot;datetime&quot;
-                                label=&quot;Tijdstip&quot;&gt;&lt;/vl-rich-data-table-field&gt;
-          &lt;vl-rich-data-table-field data-value=&quot;datum&quot; data-type=&quot;date&quot;
-                                label=&quot;Datum&quot;&gt;&lt;/vl-rich-data-table-field&gt;
-          &lt;vl-rich-data-table-pager align-right total-items=&quot;100&quot; items-per-page=&quot;10&quot;
-                                current-page=&quot;1&quot;&gt;&lt;/vl-rich-data-table-pager&gt;
-          &lt;div slot=&quot;filter&quot; is=&quot;vl-search-filter&quot; data-vl-title=&quot;Verfijn uw zoekopdracht&quot; alt data-vl-closed-on-start&gt;
-            &lt;style&gt;
-              @import &quot;/node_modules/vl-ui-search-filter/style.css&quot;;
-            &lt;/style&gt;
-            &lt;form novalidate&gt;
-              &lt;section&gt;
-                &lt;div&gt;
-                  &lt;label is=&quot;vl-form-label&quot; for=&quot;search-filter-name&quot;&gt;Naam&lt;/label&gt;
-                  &lt;select is=&quot;vl-select&quot; data-vl-select id=&quot;search-filter-name&quot; data-vl-search-criterium=&quot;name&quot; data-vl-select-deletable&gt;
-                    &lt;option placeholder value=&quot;&quot;&gt;Kies een naam&lt;/option&gt;
-                    &lt;option value=&quot;Lorem ipsum&quot;&gt;Lorem ipsum&lt;/option&gt;
-                    &lt;option value=&quot;Lorem ipsum7&quot;&gt;Lorem ipsum7&lt;/option&gt;
-                    &lt;option value=&quot;Amet aut&quot;&gt;Amet aut&lt;/option&gt;
-                  &lt;/select&gt;
-                &lt;/div&gt;
-                &lt;div&gt;
-                  &lt;label is=&quot;vl-form-label&quot; for=&quot;search-filter-date-range&quot;&gt;Datum&lt;/label&gt;
-                  &lt;vl-datepicker id=&quot;search-filter-date-range&quot; type=&quot;range&quot; data-vl-search-criterium=&quot;datum&quot;&gt;&lt;/vl-datepicker&gt;
-                &lt;/div&gt;
-                &lt;div&gt;
-                  &lt;label is=&quot;vl-form-label&quot; for=&quot;search-filter-description&quot;&gt;Omschrijving&lt;/label&gt;
-                  &lt;input is=&quot;vl-input-field&quot; type=&quot;text&quot; id=&quot;search-filter-description&quot; data-vl-search-criterium=&quot;description&quot; value=&quot;&quot; block/&gt;
-                &lt;/div&gt;
-              &lt;/section&gt;
-            &lt;/form&gt;
-          &lt;/div&gt;
-        &lt;/vl-rich-data-table&gt;
-      </code>
-    </pre>
-    <div class="demo">
-      <vl-rich-data-table id="gecombineerd">
-        <vl-rich-data-table-field sortable direction="desc" priority="2" data-value="name" label="Naam"></vl-rich-data-table-field>
-        <vl-rich-data-table-field sortable direction="asc" priority="1"
-                             data-value="description" label="Omschrijving"></vl-rich-data-table-field>
-        <vl-rich-data-table-field data-value="tijdstip" data-type="datetime"
-                             label="Tijdstip"></vl-rich-data-table-field>
-        <vl-rich-data-table-field data-value="datum" data-type="date"
-                             label="Datum"></vl-rich-data-table-field>
-        <vl-rich-data-table-pager align-right total-items="100" items-per-page="10"
-                             current-page="1"></vl-rich-data-table-pager>
-        <div slot="filter" is="vl-search-filter" data-vl-title="Verfijn uw zoekopdracht" alt data-vl-closed-on-start>
-          <style>
-            @import "/node_modules/vl-ui-search-filter/style.css";
-          </style>
-          <form novalidate>
-            <section>
-              <div>
-                <label is="vl-form-label" for="search-filter-name">Naam</label>
-                <select is="vl-select" data-vl-select id="search-filter-name" data-vl-search-criterium="name" data-vl-select-deletable>
-                  <option placeholder value="">Kies een naam</option>
-                  <option value="Lorem ipsum">Lorem ipsum</option>
-                  <option value="Lorem ipsum7">Lorem ipsum7</option>
-                  <option value="Amet aut">Amet aut</option>
-                </select>
-              </div>
-              <div>
-                <label is="vl-form-label" for="search-filter-date-range">Datum</label>
-                <vl-datepicker id="search-filter-date-range" type="range" data-vl-search-criterium="datum"></vl-datepicker>
-              </div>
-              <div>
-                <label is="vl-form-label" for="search-filter-description">Omschrijving</label>
-                <input is="vl-input-field" type="text" id="search-filter-description" data-vl-search-criterium="description" value="" block/>
-              </div>
-            </section>
-          </form>
+    <div>
+        <h2>Rich data table met search filter</h2>
+        <pre>
+            <code class="line-numbers language-markup">
+                &lt;vl-rich-data-table id="rich-data-table-filter"&gt;
+                    &lt;vl-rich-data-field data-vl-label="ID" data-vl-selector="id"&gt;&lt;/vl-rich-data-field&gt;
+                    &lt;vl-rich-data-field data-vl-label="Naam Project" data-vl-selector="name"&gt;&lt;/vl-rich-data-field&gt;
+                    &lt;vl-rich-data-field data-vl-label="Naam Manager" data-vl-selector="manager.lastName"&gt;&lt;/vl-rich-data-field&gt;
+                    &lt;vl-rich-data-field data-vl-label="Eerste medewerker" data-vl-selector="medewerkers.0.lastName"&gt;&lt;/vl-rich-data-field&gt;
+                    &lt;vl-rich-data-field&gt;
+                        &lt;template slot="label"&gt;
+                            &lt;span style="font-weight: normal"&gt;Project o.l.v.&lt;/span&gt; &lt;strong&gt;manager&lt;/strong&gt;
+                        &lt;/template&gt;
+                        &lt;template slot="content"&gt;
+                            &lt;span&gt;${item.name}&lt;/span&gt; o.l.v. &lt;strong&gt;${item.manager.firstName} ${item.manager.lastName}&lt;/strong&gt;
+                        &lt;/template&gt;
+                    &lt;/vl-rich-data-field&gt;
+                    &lt;div slot="filter"&gt;
+                        &lt;div is="vl-search-filter" alt&gt;
+                            &lt;form id="rich-data-table-filter-form" novalidate&gt;
+                                &lt;section&gt;
+                                    &lt;h2&gt;Doorzoek projecten&lt;/h2&gt;
+                                    &lt;div&gt;
+                                        &lt;p is="vl-form-annotation" for="filterOpId"&gt;Project id&lt;/p&gt;
+                                        &lt;input is="vl-input-field" id="filterOpId" type="text" name="id" value="" block/&gt;
+                                    &lt;/div&gt;
+                                &lt;/section&gt;
+                                &lt;section&gt;
+                                    &lt;h2&gt;Project details&lt;/h2&gt;
+                                    &lt;div&gt;
+                                        &lt;p is="vl-form-annotation" for="filterOpNaamProject"&gt;Project naam&lt;/p&gt;
+                                        &lt;input is="vl-input-field" id="filterOpNaamProject" type="text" name="name" value="" block/&gt;
+                                    &lt;/div&gt;
+                                    &lt;div&gt;
+                                        &lt;p is="vl-form-annotation" for="filterOpNaamManager"&gt;Manager familienaam&lt;/p&gt;
+                                        &lt;input is="vl-input-field" id="filterOpNaamManager" type="text" name="manager.lastName" value="" block/&gt;
+                                    &lt;/div&gt;
+                                &lt;/section&gt;
+                                &lt;div&gt;
+                                    &lt;button is="vl-button" type="button"&gt;Zoeken&lt;/button&gt;
+                                &lt;/div&gt;
+                            &lt;/form&gt;
+                            &lt;div&gt;
+                                &lt;button is="vl-button-link" type="reset" form="rich-data-table-filter-form"&gt;Zoekopdracht verwijderen&lt;/button&gt;
+                            &lt;/div&gt;
+                        &lt;/div&gt;
+                    &lt;/div&gt;
+                &lt;/vl-rich-data-table&gt;
+    
+                &lt;script&gt;
+                    customElements.whenDefined('vl-rich-data-table').then(() =&gt; {
+    
+                        const richDataTableFilter = document.querySelector('#rich-data-table-filter');
+                        const richDataTableFilterData = {
+                            "data": [{
+                                "id": 0,
+                                "name": "Project #1",
+                                "manager": { "firstName": "Pascal", "lastName": "Riquier" },
+                                "medewerkers": [{ "firstName": "Sander", "lastName": "Kleykens" }]
+                            }, {
+                                "id": 1, "name":
+                                    "Project #2",
+                                "manager": { "firstName": "Tom", "lastName": "Coemans" },
+                                "medewerkers": [{ "firstName": "Guy", "lastName": "Wauters" }]
+                            }, {
+                                "id": 2,
+                                "name": "Project #3",
+                                "manager": { "firstName": "Pascal", "lastName": "Riquier" },
+                                "medewerkers": [{ "firstName": "Pieter", "lastName": "Beckers" }]
+                            }]
+                        };
+                        richDataTableFilter.data = richDataTableFilterData;
+    
+                        richDataTableFilter.addEventListener('change', (e) =&gt; {
+                            let filteredData = richDataTableFilterData;
+                            if (e.detail.formData) {
+                                for (let entry of e.detail.formData.entries()) {
+                                    filteredData = filter(filteredData, entry[0], entry[1]);
+                                }
+                            }
+                            richDataTableFilter.data = filteredData;
+                        });
+    
+                        function filter({data}, pathToKey, value) {
+                            if (value === "") {
+                                return {
+                                    data: data
+                                };
+                            }
+                            return {
+                                data: data.filter(element =&gt; {
+                                    const valueByPath = findValueByPath(element, pathToKey);
+                                    return valueByPath.includes(value);
+                                })
+                            };
+                        }
+    
+                        function findValueByPath(element, pathToKey) {
+                            const keys = pathToKey.split('.');
+    
+                            let current = element;
+                            for (let i = 0; i &lt; keys.length; i++) {
+                                if (current[keys[i]] !== undefined) {
+                                    current = current[keys[i]];
+                                } else {
+                                    return undefined;
+                                }
+                            }
+                            return current.toString();
+                        }
+                    });
+                &lt;/script&gt;
+            </code>
+        </pre>
+        <div class="demo">
+            <vl-rich-data-table id="rich-data-table-filter">
+                <vl-rich-data-field data-vl-label="ID" data-vl-selector="id"></vl-rich-data-field>
+                <vl-rich-data-field data-vl-label="Naam Project" data-vl-selector="name"></vl-rich-data-field>
+                <vl-rich-data-field data-vl-label="Naam Manager" data-vl-selector="manager.lastName"></vl-rich-data-field>
+                <vl-rich-data-field data-vl-label="Eerste medewerker" data-vl-selector="medewerkers.0.lastName"></vl-rich-data-field>
+                <vl-rich-data-field>
+                    <template slot="label">
+                        <span style="font-weight: normal">Project o.l.v.</span> <strong>manager</strong>
+                    </template>
+                    <template slot="content">
+                        <span>${item.name}</span> o.l.v. <strong>${item.manager.firstName} ${item.manager.lastName}</strong>
+                    </template>
+                </vl-rich-data-field>
+                <div slot="filter">
+                    <div is="vl-search-filter" alt>
+                        <form id="rich-data-table-filter-form" novalidate>
+                            <section>
+                                <h2>Doorzoek projecten</h2>
+                                <div>
+                                    <p is="vl-form-annotation" for="filterOpId">Project id</p>
+                                    <input is="vl-input-field" id="filterOpId" type="text" name="id" value="" block/>
+                                </div>
+                            </section>
+                            <section>
+                                <h2>Project details</h2>
+                                <div>
+                                    <p is="vl-form-annotation" for="filterOpNaamProject">Project naam</p>
+                                    <input is="vl-input-field" id="filterOpNaamProject" type="text" name="name" value="" block/>
+                                </div>
+                                <div>
+                                    <p is="vl-form-annotation" for="filterOpNaamManager">Manager familienaam</p>
+                                    <input is="vl-input-field" id="filterOpNaamManager" type="text" name="manager.lastName" value="" block/>
+                                </div>
+                            </section>
+                            <div>
+                                <button is="vl-button" type="button">Zoeken</button>
+                            </div>
+                        </form>
+                        <div>
+                            <button is="vl-button-link" type="reset" form="rich-data-table-filter-form">Zoekopdracht verwijderen</button>
+                        </div>
+                    </div>
+                </div>
+            </vl-rich-data-table>
+
+            <script>
+                customElements.whenDefined('vl-rich-data-table').then(() => {
+
+                    const richDataTableFilter = document.querySelector('#rich-data-table-filter');
+                    const richDataTableFilterData = {
+                        "data": [{
+                            "id": 0,
+                            "name": "Project #1",
+                            "manager": { "firstName": "Pascal", "lastName": "Riquier" },
+                            "medewerkers": [{ "firstName": "Sander", "lastName": "Kleykens" }]
+                        }, {
+                            "id": 1, "name":
+                                "Project #2",
+                            "manager": { "firstName": "Tom", "lastName": "Coemans" },
+                            "medewerkers": [{ "firstName": "Guy", "lastName": "Wauters" }]
+                        }, {
+                            "id": 2,
+                            "name": "Project #3",
+                            "manager": { "firstName": "Pascal", "lastName": "Riquier" },
+                            "medewerkers": [{ "firstName": "Pieter", "lastName": "Beckers" }]
+                        }]
+                    };
+                    richDataTableFilter.data = richDataTableFilterData;
+
+                    richDataTableFilter.addEventListener('change', (e) => {
+                        let filteredData = richDataTableFilterData;
+                        if (e.detail.formData) {
+                            for (let entry of e.detail.formData.entries()) {
+                                filteredData = filter(filteredData, entry[0], entry[1]);
+                            }
+                        }
+                        richDataTableFilter.data = filteredData;
+                    });
+
+                    function filter({data}, pathToKey, value) {
+                        if (value === "") {
+                            return {
+                                data: data
+                            };
+                        }
+                        return {
+                            data: data.filter(element => {
+                                const valueByPath = findValueByPath(element, pathToKey);
+                                return valueByPath.includes(value);
+                            })
+                        };
+                    }
+
+                    function findValueByPath(element, pathToKey) {
+                        const keys = pathToKey.split('.');
+
+                        let current = element;
+                        for (let i = 0; i < keys.length; i++) {
+                            if (current[keys[i]] !== undefined) {
+                                current = current[keys[i]];
+                            } else {
+                                return undefined;
+                            }
+                        }
+                        return current.toString();
+                    }
+                });
+            </script>
         </div>
-      </vl-rich-data-table>
-      <script>
-        const gecombineerd = document.querySelector('#gecombineerd');
-        let searchCriteria;
-        let currentPage = 0;
-        let sortCriteria;
-
-        customElements.whenDefined('vl-rich-data-table').then(() => {
-          gecombineerd.data = queryData(0, null, null);
-        });
-
-        const query = () => {
-          gecombineerd.data = queryData(currentPage - 1, searchCriteria, sortCriteria);
-        };
-
-        gecombineerd.addEventListener('search', (e) => {
-          currentPage = 1;
-          searchCriteria = e.detail.searchCriteria;
-          currentPage = 1;
-          query();
-        });
-
-        gecombineerd.addEventListener('pagechanged', (e) => {
-          if (currentPage !== e.detail.newPage) {
-            currentPage = e.detail.newPage;
-            query();
-          }
-        });
-        gecombineerd.addEventListener('sort', (e) => {
-          currentPage = 1;
-          sortCriteria = e.detail.sortCriteria;
-          query();
-        });
-      </script>
     </div>
-  </div>
-</div> -->
+    
+    <div>
+        <h2>Rich data table met paginering</h2>
+        <pre>
+            <code class="line-numbers language-markup">
+                &lt;vl-rich-data-table id="rich-data-table-paging"&gt;
+                    &lt;vl-rich-data-field data-vl-label="ID" data-vl-selector="id"&gt;&lt;/vl-rich-data-field&gt;
+                    &lt;vl-rich-data-field data-vl-label="Naam" data-vl-selector="name"&gt;&lt;/vl-rich-data-field&gt;
+                    &lt;vl-pager id="rich-data-table-paging-pager" slot="pager" total-items="20" items-per-page="5" current-page="1" align-center&gt;&lt;/vl-pager&gt;
+                &lt;/vl-rich-data-table&gt;
+                &lt;script&gt;
+                    customElements.whenDefined('vl-rich-data-table').then(() =&gt; {
+                        const richDataTablePagingData = [];
+                        for (let i = 1; i &lt;= 20; i++) {
+                            richDataTablePagingData.push({ "id": i, "name": `Project #${i}` })
+                        }
+    
+                        function page(page, itemsPerPage, data) {
+                            const start = (page - 1) * itemsPerPage;
+                            const end = start + itemsPerPage;
+                            return {
+                                data: data.slice(start, end)
+                            };
+                        }
+    
+                        const richDataTablePaging = document.querySelector("#rich-data-table-paging");
+                        richDataTablePaging.data = page(1, 5, richDataTablePagingData);
+                        richDataTablePaging.addEventListener('change', (e) =&gt; {
+                            const newPage = page(e.detail.paging.currentPage, e.detail.paging.itemsPerPage, richDataTablePagingData);
+                            richDataTablePaging.data = newPage;
+                        });
+                    });
+                &lt;/script&gt;
+            </code>
+        </pre>
+        <div class="demo">
+            <vl-rich-data-table id="rich-data-table-paging">
+                <vl-rich-data-field data-vl-label="ID" data-vl-selector="id"></vl-rich-data-field>
+                <vl-rich-data-field data-vl-label="Naam" data-vl-selector="name"></vl-rich-data-field>
+                <vl-pager id="rich-data-table-paging-pager" slot="pager" total-items="20" items-per-page="5" current-page="1" align-center></vl-pager>
+            </vl-rich-data-table>
+            <script>
+                customElements.whenDefined('vl-rich-data-table').then(() => {
+                    const richDataTablePagingData = [];
+                    for (let i = 1; i <= 20; i++) {
+                        richDataTablePagingData.push({ "id": i, "name": `Project #${i}` })
+                    }
+
+                    function page(page, itemsPerPage, data) {
+                        const start = (page - 1) * itemsPerPage;
+                        const end = start + itemsPerPage;
+                        return {
+                            data: data.slice(start, end)
+                        };
+                    }
+
+                    const richDataTablePaging = document.querySelector("#rich-data-table-paging");
+                    richDataTablePaging.data = page(1, 5, richDataTablePagingData);
+                    richDataTablePaging.addEventListener('change', (e) => {
+                        const newPage = page(e.detail.paging.currentPage, e.detail.paging.itemsPerPage, richDataTablePagingData);
+                        richDataTablePaging.data = newPage;
+                    });
+                });
+            </script>
+        </div>
+    </div>
+
+    <div>
+        <h2>Rich data table met sortering</h2>
+        <pre>
+            <code class="line-numbers language-markup">
+                &lt;vl-rich-data-table id="rich-data-table-sorting" data-vl-data='{"data": [{ "id": 0, "name": "Project #1", "owner": "Jan Jansens" }, { "id": 1, "name": "Project #2", "owner": "Jan Jansens" }]}'&gt;
+                    &lt;vl-rich-data-field data-vl-name="id" data-vl-label="ID" data-vl-selector="id" data-vl-sortable data-vl-sorting-direction="asc"&gt;&lt;/vl-rich-data-field&gt;
+                    &lt;vl-rich-data-field data-vl-name="name" data-vl-label="Naam" data-vl-selector="name" data-vl-sortable&gt;&lt;/vl-rich-data-field&gt;
+                    &lt;vl-rich-data-field data-vl-name="owner" data-vl-selector="owner" data-vl-sortable&gt;
+                        &lt;template slot="label"&gt;
+                            &lt;span&gt;Eigenaar&lt;/span&gt;
+                        &lt;/template&gt;
+                    &lt;/vl-rich-data-field&gt;
+                &lt;/vl-rich-data-table&gt;
+                &lt;script&gt;
+                    const tableSorter = table =&gt; {
+                        const originalTableData = [...table.data.data];
+                        return event =&gt; {
+                            const sorting = event.detail.sorting;
+                            const table = event.target;
+                            if (sorting) {
+                                table.data = {
+                                    data: [...originalTableData].sort((firstEl, secondEl) =&gt; {
+                                        for (let i = 0; i &lt; sorting.length; i++) {
+                                            const criteria = sorting[i];
+                                            const firstValue = firstEl[criteria.name];
+                                            const secondValue = secondEl[criteria.name];
+                                            const isAscending = criteria.direction === 'asc';
+                                            if (firstValue &lt; secondValue) {
+                                                return isAscending ? -1 : 1;
+                                            } else if (firstValue &gt; secondValue) {
+                                                return isAscending ? 1 : -1;
+                                            }
+                                        }
+    
+                                        return 0;
+                                    })
+                                };
+                            } else {
+                                table.data = originalTableData;
+                            }
+                        };
+                    };
+    
+                    customElements.whenDefined('vl-rich-data-table').then(() =&gt; {
+                        const table = document.querySelector('#rich-data-table-sorting');
+                        table.addEventListener('change', tableSorter(table));
+                    });
+                &lt;/script&gt;
+            </code>
+        </pre>
+        <div class="demo">
+            <vl-rich-data-table id="rich-data-table-sorting" data-vl-data='{"data": [{ "id": 0, "name": "Project #1", "owner": "Jan Jansens" }, { "id": 1, "name": "Project #2", "owner": "Jan Jansens" }]}'>
+                <vl-rich-data-field data-vl-name="id" data-vl-label="ID" data-vl-selector="id" data-vl-sortable data-vl-sorting-direction="asc"></vl-rich-data-field>
+                <vl-rich-data-field data-vl-name="name" data-vl-label="Naam" data-vl-selector="name" data-vl-sortable></vl-rich-data-field>
+                <vl-rich-data-field data-vl-name="owner" data-vl-selector="owner" data-vl-sortable>
+                    <template slot="label">
+                        <span>Eigenaar</span>
+                    </template>
+                </vl-rich-data-field>
+            </vl-rich-data-table>
+            <script>
+                const tableSorter = table => {
+                    const originalTableData = [...table.data.data];
+                    return event => {
+                        const sorting = event.detail.sorting;
+                        const table = event.target;
+                        if (sorting) {
+                            table.data = {
+                                data: [...originalTableData].sort((firstEl, secondEl) => {
+                                    for (let i = 0; i < sorting.length; i++) {
+                                        const criteria = sorting[i];
+                                        const firstValue = firstEl[criteria.name];
+                                        const secondValue = secondEl[criteria.name];
+                                        const isAscending = criteria.direction === 'asc';
+                                        if (firstValue < secondValue) {
+                                            return isAscending ? -1 : 1;
+                                        } else if (firstValue > secondValue) {
+                                            return isAscending ? 1 : -1;
+                                        }
+                                    }
+
+                                    return 0;
+                                })
+                            };
+                        } else {
+                            table.data = originalTableData;
+                        }
+                    };
+                };
+
+                customElements.whenDefined('vl-rich-data-table').then(() => {
+                    const table = document.querySelector('#rich-data-table-sorting');
+                    table.addEventListener('change', tableSorter(table));
+                });
+            </script>
+        </div>
+    </div>
+
+    <div>
+        <h2>Rich data table met sortering op meerdere kolommen tegelijkertijd</h2>
+        <pre>
+            <code class="line-numbers language-markup">
+                &lt;vl-rich-data-table id="rich-data-table-multi-sorting" data-vl-multisort data-vl-data='{"data": [{ "id": 1, "name": "Project #2", "owner": "Jan Jansens" }, { "id": 0, "name": "Project #1", "owner": "Jan Jansens" }]}'&gt;
+                    &lt;vl-rich-data-field data-vl-name="id" data-vl-label="ID" data-vl-selector="id" data-vl-sortable data-vl-sorting-direction="desc" data-vl-sorting-priority="3"&gt;&lt;/vl-rich-data-field&gt;
+                    &lt;vl-rich-data-field data-vl-name="name" data-vl-label="Naam" data-vl-selector="name" data-vl-sortable data-vl-sorting-direction="desc" data-vl-sorting-priority="2"&gt;&lt;/vl-rich-data-field&gt;
+                    &lt;vl-rich-data-field data-vl-name="owner" data-vl-label="Eigenaar" data-vl-selector="owner" data-vl-sortable data-vl-sorting-direction="asc" data-vl-sorting-priority="1"&gt;&lt;/vl-rich-data-field&gt;
+                &lt;/vl-rich-data-table&gt;
+                &lt;script&gt;
+                    customElements.whenDefined('vl-rich-data-table').then(() =&gt; {
+                        const table = document.querySelector('#rich-data-table-multi-sorting');
+                        table.addEventListener('change', tableSorter(table));
+                    });
+                &lt;/script&gt;
+            </code>
+        </pre>
+        <div class="demo">
+            <vl-rich-data-table id="rich-data-table-multi-sorting" data-vl-multisort data-vl-data='{"data": [{ "id": 1, "name": "Project #2", "owner": "Jan Jansens" }, { "id": 0, "name": "Project #1", "owner": "Jan Jansens" }]}'>
+                <vl-rich-data-field data-vl-name="id" data-vl-label="ID" data-vl-selector="id" data-vl-sortable data-vl-sorting-direction="desc" data-vl-sorting-priority="3"></vl-rich-data-field>
+                <vl-rich-data-field data-vl-name="name" data-vl-label="Naam" data-vl-selector="name" data-vl-sortable data-vl-sorting-direction="desc" data-vl-sorting-priority="2"></vl-rich-data-field>
+                <vl-rich-data-field data-vl-name="owner" data-vl-label="Eigenaar" data-vl-selector="owner" data-vl-sortable data-vl-sorting-direction="asc" data-vl-sorting-priority="1"></vl-rich-data-field>
+            </vl-rich-data-table>
+            <script>
+                customElements.whenDefined('vl-rich-data-table').then(() => {
+                    const table = document.querySelector('#rich-data-table-multi-sorting');
+                    table.addEventListener('change', tableSorter(table));
+                });
+            </script>
+        </div>
+    </div>
+
+    <div>
+        <h2>Rich data table responsive medium</h2>
+        <pre>
+            <code class="line-numbers language-markup">
+                &lt;vl-rich-data-table id="rich-data-table-collapsed-medium" data-vl-collapsed-m
+                    data-vl-data='{"data": [{"firstName": "Pascal", "lastName": "Riquier", "birthDate": "22/12/1980", "address": "Kerkstraat 7, 153O Zwevezele"},
+                        {"firstName": "Albert", "lastName": "Einstein", "birthDate": "14/03/1879", "address": "Dorpsstraat 145, 9877 Aalbeke"}]}'&gt;
+                    &lt;vl-rich-data-field data-vl-label="Voornaam" data-vl-selector="firstName"&gt;&lt;/vl-rich-data-field&gt;
+                    &lt;vl-rich-data-field data-vl-label="Achternaam" data-vl-selector="lastName"&gt;&lt;/vl-rich-data-field&gt;
+                    &lt;vl-rich-data-field data-vl-label="Geboortedatum" data-vl-selector="birthDate"&gt;&lt;/vl-rich-data-field&gt;
+                    &lt;vl-rich-data-field data-vl-label="Adres" data-vl-selector="address"&gt;&lt;/vl-rich-data-field&gt;
+                &lt;/vl-rich-data-table&gt;
+            </code>
+        </pre>
+        <div class="demo">
+            <vl-rich-data-table id="rich-data-table-collapsed-medium" data-vl-collapsed-m
+                data-vl-data='{"data": [{"firstName": "Pascal", "lastName": "Riquier", "birthDate": "22/12/1980", "address": "Kerkstraat 7, 153O Zwevezele"},
+                    {"firstName": "Albert", "lastName": "Einstein", "birthDate": "14/03/1879", "address": "Dorpsstraat 145, 9877 Aalbeke"}]}'>
+                <vl-rich-data-field data-vl-label="Voornaam" data-vl-selector="firstName"></vl-rich-data-field>
+                <vl-rich-data-field data-vl-label="Achternaam" data-vl-selector="lastName"></vl-rich-data-field>
+                <vl-rich-data-field data-vl-label="Geboortedatum" data-vl-selector="birthDate"></vl-rich-data-field>
+                <vl-rich-data-field data-vl-label="Adres" data-vl-selector="address"></vl-rich-data-field>
+            </vl-rich-data-table>
+        </div>
+    </div>
+
+    <div>
+        <h2>Rich data table responsive small</h2>
+        <pre>
+            <code class="line-numbers language-markup">
+                &lt;vl-rich-data-table id="rich-data-table-collapsed-small" data-vl-collapsed-s
+                    data-vl-data='{"data": [{"firstName": "Pascal", "lastName": "Riquier", "birthDate": "22/12/1980", "address": "Kerkstraat 7, 153O Zwevezele"},
+                        {"firstName": "Albert", "lastName": "Einstein", "birthDate": "14/03/1879", "address": "Dorpsstraat 145, 9877 Aalbeke"}]}'&gt;
+                    &lt;vl-rich-data-field data-vl-label="Voornaam" data-vl-selector="firstName"&gt;&lt;/vl-rich-data-field&gt;
+                    &lt;vl-rich-data-field data-vl-label="Achternaam" data-vl-selector="lastName"&gt;&lt;/vl-rich-data-field&gt;
+                    &lt;vl-rich-data-field data-vl-label="Geboortedatum" data-vl-selector="birthDate"&gt;&lt;/vl-rich-data-field&gt;
+                    &lt;vl-rich-data-field data-vl-label="Adres" data-vl-selector="address"&gt;&lt;/vl-rich-data-field&gt;
+                &lt;/vl-rich-data-table&gt;
+            </code>
+        </pre>
+        <div class="demo">
+            <vl-rich-data-table id="rich-data-table-collapsed-small" data-vl-collapsed-s
+                data-vl-data='{"data": [{"firstName": "Pascal", "lastName": "Riquier", "birthDate": "22/12/1980", "address": "Kerkstraat 7, 153O Zwevezele"},
+                    {"firstName": "Albert", "lastName": "Einstein", "birthDate": "14/03/1879", "address": "Dorpsstraat 145, 9877 Aalbeke"}]}'>
+                <vl-rich-data-field data-vl-label="Voornaam" data-vl-selector="firstName"></vl-rich-data-field>
+                <vl-rich-data-field data-vl-label="Achternaam" data-vl-selector="lastName"></vl-rich-data-field>
+                <vl-rich-data-field data-vl-label="Geboortedatum" data-vl-selector="birthDate"></vl-rich-data-field>
+                <vl-rich-data-field data-vl-label="Adres" data-vl-selector="address"></vl-rich-data-field>
+            </vl-rich-data-table>
+        </div>
+    </div>
+
+    <div>
+        <h2>Rich data table responsive extra small</h2>
+        <pre>
+            <code class="line-numbers language-markup">
+                &lt;vl-rich-data-table id="rich-data-table-collapsed-extra-small" data-vl-collapsed-xs
+                    data-vl-data='{"data": [{"firstName": "Pascal", "lastName": "Riquier", "birthDate": "22/12/1980", "address": "Kerkstraat 7, 153O Zwevezele"},
+                        {"firstName": "Albert", "lastName": "Einstein", "birthDate": "14/03/1879", "address": "Dorpsstraat 145, 9877 Aalbeke"}]}'&gt;
+                    &lt;vl-rich-data-field data-vl-label="Voornaam" data-vl-selector="firstName"&gt;&lt;/vl-rich-data-field&gt;
+                    &lt;vl-rich-data-field data-vl-label="Achternaam" data-vl-selector="lastName"&gt;&lt;/vl-rich-data-field&gt;
+                    &lt;vl-rich-data-field data-vl-label="Geboortedatum" data-vl-selector="birthDate"&gt;&lt;/vl-rich-data-field&gt;
+                    &lt;vl-rich-data-field data-vl-label="Adres" data-vl-selector="address"&gt;&lt;/vl-rich-data-field&gt;
+                &lt;/vl-rich-data-table&gt;
+            </code>
+        </pre>
+        <div class="demo">
+            <vl-rich-data-table id="rich-data-table-collapsed-extra-small" data-vl-collapsed-xs
+                data-vl-data='{"data": [{"firstName": "Pascal", "lastName": "Riquier", "birthDate": "22/12/1980", "address": "Kerkstraat 7, 153O Zwevezele"},
+                    {"firstName": "Albert", "lastName": "Einstein", "birthDate": "14/03/1879", "address": "Dorpsstraat 145, 9877 Aalbeke"}]}'>
+                <vl-rich-data-field data-vl-label="Voornaam" data-vl-selector="firstName"></vl-rich-data-field>
+                <vl-rich-data-field data-vl-label="Achternaam" data-vl-selector="lastName"></vl-rich-data-field>
+                <vl-rich-data-field data-vl-label="Geboortedatum" data-vl-selector="birthDate"></vl-rich-data-field>
+                <vl-rich-data-field data-vl-label="Adres" data-vl-selector="address"></vl-rich-data-field>
+            </vl-rich-data-table>
+        </div>
+    </div>
+
+    <div>
+        <h2>Rich data table met search filter</h2>
+        <pre>
+            <code class="line-numbers language-markup">
+                &lt;vl-rich-data-table id="rich-data-table-filter-sorting-paging"&gt;
+                    &lt;vl-rich-data-field data-vl-name="id" data-vl-label="ID" data-vl-selector="id" data-vl-sortable&gt;&lt;/vl-rich-data-field&gt;
+                    &lt;vl-rich-data-field data-vl-label="Naam Project" data-vl-selector="name"&gt;&lt;/vl-rich-data-field&gt;
+                    &lt;vl-rich-data-field data-vl-label="Naam Manager" data-vl-selector="manager.lastName"&gt;&lt;/vl-rich-data-field&gt;
+                    &lt;vl-rich-data-field data-vl-label="Eerste medewerker" data-vl-selector="medewerkers.0.lastName"&gt;&lt;/vl-rich-data-field&gt;
+                    &lt;vl-rich-data-field&gt;
+                        &lt;template slot="label"&gt;
+                            &lt;span style="font-weight: normal"&gt;Project o.l.v.&lt;/span&gt; &lt;strong&gt;manager&lt;/strong&gt;
+                        &lt;/template&gt;
+                        &lt;template slot="content"&gt;
+                            &lt;span&gt;${item.name}&lt;/span&gt; o.l.v. &lt;strong&gt;${item.manager.firstName} ${item.manager.lastName}&lt;/strong&gt;
+                        &lt;/template&gt;
+                    &lt;/vl-rich-data-field&gt;
+                    &lt;div slot="filter"&gt;
+                        &lt;div is="vl-search-filter" alt&gt;
+                            &lt;form id="rich-data-table-filter-sorting-paging-form" novalidate&gt;
+                                &lt;section&gt;
+                                    &lt;h2&gt;Doorzoek projecten&lt;/h2&gt;
+                                    &lt;div&gt;
+                                        &lt;p is="vl-form-annotation" for="filterOpId"&gt;Project id&lt;/p&gt;
+                                        &lt;input is="vl-input-field" id="filterOpId" type="text" name="id" value="" block/&gt;
+                                    &lt;/div&gt;
+                                &lt;/section&gt;
+                                &lt;section&gt;
+                                    &lt;h2&gt;Project details&lt;/h2&gt;
+                                    &lt;div&gt;
+                                        &lt;p is="vl-form-annotation" for="filterOpNaamProject"&gt;Project naam&lt;/p&gt;
+                                        &lt;input is="vl-input-field" id="filterOpNaamProject" type="text" name="name" value="" block/&gt;
+                                    &lt;/div&gt;
+                                    &lt;div&gt;
+                                        &lt;p is="vl-form-annotation" for="filterOpNaamManager"&gt;Manager familienaam&lt;/p&gt;
+                                        &lt;input is="vl-input-field" id="filterOpNaamManager" type="text" name="manager.lastName" value="" block/&gt;
+                                    &lt;/div&gt;
+                                &lt;/section&gt;
+                                &lt;div&gt;
+                                    &lt;button is="vl-button" type="button"&gt;Zoeken&lt;/button&gt;
+                                &lt;/div&gt;
+                            &lt;/form&gt;
+                            &lt;div&gt;
+                                &lt;button is="vl-button-link" type="reset" form="rich-data-table-filter-sorting-paging-form"&gt;Zoekopdracht verwijderen&lt;/button&gt;
+                            &lt;/div&gt;
+                        &lt;/div&gt;
+                    &lt;/div&gt;
+                    &lt;vl-pager id="rich-data-table-filter-sorting-paging-pager" slot="pager" total-items="25" items-per-page="10" current-page="1" align-center&gt;&lt;/vl-pager&gt;
+                &lt;/vl-rich-data-table&gt;
+    
+                &lt;script&gt;
+                    customElements.whenDefined('vl-rich-data-table').then(() =&gt; {
+                        const element = document.querySelector('#rich-data-table-filter-sorting-paging');
+                        const pager = element.querySelector('vl-pager');
+    
+                        const data = {
+                            "data": [{
+                                "id": 0,
+                                "name": "Project #1",
+                                "manager": { "firstName": "Pascal", "lastName": "Riquier" },
+                                "medewerkers": [{ "firstName": "Sander", "lastName": "Kleykens" }]
+                            }, {
+                                "id": 1, 
+                                "name": "Project #2",
+                                "manager": { "firstName": "Tom", "lastName": "Coemans" },
+                                "medewerkers": [{ "firstName": "Guy", "lastName": "Wauters" }]
+                            }, {
+                                "id": 2,
+                                "name": "Project #3",
+                                "manager": { "firstName": "Tom", "lastName": "Coemans" },
+                                "medewerkers": [{ "firstName": "Guy", "lastName": "Wauters" }]
+                            }, {
+                                "id": 3,
+                                "name": "Project #4",
+                                "manager": { "firstName": "Pascal", "lastName": "Riquier" },
+                                "medewerkers": [{ "firstName": "Pieter", "lastName": "Beckers" }]
+                            }, {
+                                "id": 4,
+                                "name": "Project #5",
+                                "manager": { "firstName": "Pascal", "lastName": "Riquier" },
+                                "medewerkers": [{ "firstName": "Pieter", "lastName": "Beckers" }]
+                            }, {
+                                "id": 5,
+                                "name": "Project #6",
+                                "manager": { "firstName": "Pascal", "lastName": "Riquier" },
+                                "medewerkers": [{ "firstName": "Pieter", "lastName": "Beckers" }]
+                            }, {
+                                "id": 6,
+                                "name": "Project #7",
+                                "manager": { "firstName": "Pascal", "lastName": "Riquier" },
+                                "medewerkers": [{ "firstName": "Pieter", "lastName": "Beckers" }]
+                            }, {
+                                "id": 7,
+                                "name": "Project #8",
+                                "manager": { "firstName": "Pascal", "lastName": "Riquier" },
+                                "medewerkers": [{ "firstName": "Pieter", "lastName": "Beckers" }]
+                            }, {
+                                "id": 8,
+                                "name": "Project #9",
+                                "manager": { "firstName": "Pascal", "lastName": "Riquier" },
+                                "medewerkers": [{ "firstName": "Pieter", "lastName": "Beckers" }]
+                            }, {
+                                "id": 9,
+                                "name": "Project #10",
+                                "manager": { "firstName": "Pascal", "lastName": "Riquier" },
+                                "medewerkers": [{ "firstName": "Pieter", "lastName": "Beckers" }]
+                            }, {
+                                "id": 10,
+                                "name": "Project #11",
+                                "manager": { "firstName": "Pascal", "lastName": "Riquier" },
+                                "medewerkers": [{ "firstName": "Pieter", "lastName": "Beckers" }]
+                            }, {
+                                "id": 11,
+                                "name": "Project #12",
+                                "manager": { "firstName": "Pascal", "lastName": "Riquier" },
+                                "medewerkers": [{ "firstName": "Pieter", "lastName": "Beckers" }]
+                            }, {
+                                "id": 12,
+                                "name": "Project #13",
+                                "manager": { "firstName": "Pascal", "lastName": "Riquier" },
+                                "medewerkers": [{ "firstName": "Pieter", "lastName": "Beckers" }]
+                            }, {
+                                "id": 13,
+                                "name": "Project #14",
+                                "manager": { "firstName": "Pascal", "lastName": "Riquier" },
+                                "medewerkers": [{ "firstName": "Pieter", "lastName": "Beckers" }]
+                            }, {
+                                "id": 14,
+                                "name": "Project #15",
+                                "manager": { "firstName": "Pascal", "lastName": "Riquier" },
+                                "medewerkers": [{ "firstName": "Pieter", "lastName": "Beckers" }]
+                            }, {
+                                "id": 15,
+                                "name": "Project #15",
+                                "manager": { "firstName": "Pascal", "lastName": "Riquier" },
+                                "medewerkers": [{ "firstName": "Pieter", "lastName": "Beckers" }]
+                            }, {
+                                "id": 16,
+                                "name": "Project #16",
+                                "manager": { "firstName": "Pascal", "lastName": "Riquier" },
+                                "medewerkers": [{ "firstName": "Pieter", "lastName": "Beckers" }]
+                            }, {
+                                "id": 17,
+                                "name": "Project #17",
+                                "manager": { "firstName": "Pascal", "lastName": "Riquier" },
+                                "medewerkers": [{ "firstName": "Pieter", "lastName": "Beckers" }]
+                            }, {
+                                "id": 18,
+                                "name": "Project #18",
+                                "manager": { "firstName": "Pascal", "lastName": "Riquier" },
+                                "medewerkers": [{ "firstName": "Pieter", "lastName": "Beckers" }]
+                            }, {
+                                "id": 19,
+                                "name": "Project #19",
+                                "manager": { "firstName": "Pascal", "lastName": "Riquier" },
+                                "medewerkers": [{ "firstName": "Pieter", "lastName": "Beckers" }]
+                            }, {
+                                "id": 20,
+                                "name": "Project #20",
+                                "manager": { "firstName": "Pascal", "lastName": "Riquier" },
+                                "medewerkers": [{ "firstName": "Pieter", "lastName": "Beckers" }]
+                            }, {
+                                "id": 21,
+                                "name": "Project #21",
+                                "manager": { "firstName": "Pascal", "lastName": "Riquier" },
+                                "medewerkers": [{ "firstName": "Pieter", "lastName": "Beckers" }]
+                            }, {
+                                "id": 22,
+                                "name": "Project #22",
+                                "manager": { "firstName": "Pascal", "lastName": "Riquier" },
+                                "medewerkers": [{ "firstName": "Pieter", "lastName": "Beckers" }]
+                            }, {
+                                "id": 23,
+                                "name": "Project #23",
+                                "manager": { "firstName": "Pascal", "lastName": "Riquier" },
+                                "medewerkers": [{ "firstName": "Pieter", "lastName": "Beckers" }]
+                            }, {
+                                "id": 24,
+                                "name": "Project #24",
+                                "manager": { "firstName": "Pascal", "lastName": "Riquier" },
+                                "medewerkers": [{ "firstName": "Pieter", "lastName": "Beckers" }]
+                            }]
+                        };
+    
+                        element.addEventListener('change', (e) =&gt; {
+                            let newData = data.data;
+                            if (e.detail.formData) {
+                                for (let entry of e.detail.formData.entries()) {
+                                    newData = filter(newData, entry[0], entry[1]);
+                                }
+                            }
+    
+                            if (e.detail.sorting) {
+                                const sorting = e.detail.sorting;
+                                newData = [...newData].sort((firstEl, secondEl) =&gt; {
+                                    for (let i = 0; i &lt; sorting.length; i++) {
+                                        const criteria = sorting[i];
+                                        const firstValue = firstEl[criteria.name];
+                                        const secondValue = secondEl[criteria.name];
+                                        const isAscending = criteria.direction === 'asc';
+                                        if (firstValue &lt; secondValue) {
+                                            return isAscending ? -1 : 1;
+                                        } else if (firstValue &gt; secondValue) {
+                                            return isAscending ? 1 : -1;
+                                        }
+                                    }
+                                    return 0;
+                                });
+                            }
+                            
+                            if (e.detail.paging) {
+                                newData = page(e.detail.paging.currentPage, pager.itemsPerPage, newData);
+                            }
+    
+                            element.data = {
+                                data: newData,
+                                paging: {
+                                    currentPage: e.detail.paging.currentPage,
+                                    totalItems: e.detail.formData ? newData.length : data.data.length,
+                                }
+                            };
+                        });
+    
+                        function page(page, itemsPerPage, data) {
+                            const start = (page - 1) * itemsPerPage;
+                            const end = start + itemsPerPage;
+                            return data.slice(start, end);
+                        }
+    
+                        element.data = {
+                            data: page(1, 10, data.data)
+                        };
+    
+                        function filter(data, pathToKey, value) {
+                            if (value === "") {
+                                return data;
+                            }
+                            return data.filter(element =&gt; {
+                                const valueByPath = findValueByPath(element, pathToKey);
+                                return valueByPath.includes(value);
+                            });
+                        }
+    
+                        function findValueByPath(element, pathToKey) {
+                            var keys = pathToKey.split('.');
+    
+                            let current = element;
+                            for (let i = 0; i &lt; keys.length; i++) {
+                                if (current[keys[i]] !== undefined) {
+                                    current = current[keys[i]];
+                                } else {
+                                    return undefined;
+                                }
+                            }
+                            return current.toString();
+                        }
+                    });
+                &lt;/script&gt;
+            </code>
+        </pre>
+        <div class="demo">
+            <vl-rich-data-table id="rich-data-table-filter-sorting-paging">
+                <vl-rich-data-field data-vl-name="id" data-vl-label="ID" data-vl-selector="id" data-vl-sortable></vl-rich-data-field>
+                <vl-rich-data-field data-vl-label="Naam Project" data-vl-selector="name"></vl-rich-data-field>
+                <vl-rich-data-field data-vl-label="Naam Manager" data-vl-selector="manager.lastName"></vl-rich-data-field>
+                <vl-rich-data-field data-vl-label="Eerste medewerker" data-vl-selector="medewerkers.0.lastName"></vl-rich-data-field>
+                <vl-rich-data-field>
+                    <template slot="label">
+                        <span style="font-weight: normal">Project o.l.v.</span> <strong>manager</strong>
+                    </template>
+                    <template slot="content">
+                        <span>${item.name}</span> o.l.v. <strong>${item.manager.firstName} ${item.manager.lastName}</strong>
+                    </template>
+                </vl-rich-data-field>
+                <div slot="filter">
+                    <div is="vl-search-filter" alt>
+                        <form id="rich-data-table-filter-sorting-paging-form" novalidate>
+                            <section>
+                                <h2>Doorzoek projecten</h2>
+                                <div>
+                                    <p is="vl-form-annotation" for="filterOpId">Project id</p>
+                                    <input is="vl-input-field" id="filterOpId" type="text" name="id" value="" block/>
+                                </div>
+                            </section>
+                            <section>
+                                <h2>Project details</h2>
+                                <div>
+                                    <p is="vl-form-annotation" for="filterOpNaamProject">Project naam</p>
+                                    <input is="vl-input-field" id="filterOpNaamProject" type="text" name="name" value="" block/>
+                                </div>
+                                <div>
+                                    <p is="vl-form-annotation" for="filterOpNaamManager">Manager familienaam</p>
+                                    <input is="vl-input-field" id="filterOpNaamManager" type="text" name="manager.lastName" value="" block/>
+                                </div>
+                            </section>
+                            <div>
+                                <button is="vl-button" type="button">Zoeken</button>
+                            </div>
+                        </form>
+                        <div>
+                            <button is="vl-button-link" type="reset" form="rich-data-table-filter-sorting-paging-form">Zoekopdracht verwijderen</button>
+                        </div>
+                    </div>
+                </div>
+                <vl-pager id="rich-data-table-filter-sorting-paging-pager" slot="pager" total-items="25" items-per-page="10" current-page="1" align-center></vl-pager>
+            </vl-rich-data-table>
+
+            <script>
+                customElements.whenDefined('vl-rich-data-table').then(() => {
+                    const element = document.querySelector('#rich-data-table-filter-sorting-paging');
+                    const pager = element.querySelector('vl-pager');
+
+                    const data = {
+                        "data": [{
+                            "id": 0,
+                            "name": "Project #1",
+                            "manager": { "firstName": "Pascal", "lastName": "Riquier" },
+                            "medewerkers": [{ "firstName": "Sander", "lastName": "Kleykens" }]
+                        }, {
+                            "id": 1, 
+                            "name": "Project #2",
+                            "manager": { "firstName": "Tom", "lastName": "Coemans" },
+                            "medewerkers": [{ "firstName": "Guy", "lastName": "Wauters" }]
+                        }, {
+                            "id": 2,
+                            "name": "Project #3",
+                            "manager": { "firstName": "Tom", "lastName": "Coemans" },
+                            "medewerkers": [{ "firstName": "Guy", "lastName": "Wauters" }]
+                        }, {
+                            "id": 3,
+                            "name": "Project #4",
+                            "manager": { "firstName": "Pascal", "lastName": "Riquier" },
+                            "medewerkers": [{ "firstName": "Pieter", "lastName": "Beckers" }]
+                        }, {
+                            "id": 4,
+                            "name": "Project #5",
+                            "manager": { "firstName": "Pascal", "lastName": "Riquier" },
+                            "medewerkers": [{ "firstName": "Pieter", "lastName": "Beckers" }]
+                        }, {
+                            "id": 5,
+                            "name": "Project #6",
+                            "manager": { "firstName": "Pascal", "lastName": "Riquier" },
+                            "medewerkers": [{ "firstName": "Pieter", "lastName": "Beckers" }]
+                        }, {
+                            "id": 6,
+                            "name": "Project #7",
+                            "manager": { "firstName": "Pascal", "lastName": "Riquier" },
+                            "medewerkers": [{ "firstName": "Pieter", "lastName": "Beckers" }]
+                        }, {
+                            "id": 7,
+                            "name": "Project #8",
+                            "manager": { "firstName": "Pascal", "lastName": "Riquier" },
+                            "medewerkers": [{ "firstName": "Pieter", "lastName": "Beckers" }]
+                        }, {
+                            "id": 8,
+                            "name": "Project #9",
+                            "manager": { "firstName": "Pascal", "lastName": "Riquier" },
+                            "medewerkers": [{ "firstName": "Pieter", "lastName": "Beckers" }]
+                        }, {
+                            "id": 9,
+                            "name": "Project #10",
+                            "manager": { "firstName": "Pascal", "lastName": "Riquier" },
+                            "medewerkers": [{ "firstName": "Pieter", "lastName": "Beckers" }]
+                        }, {
+                            "id": 10,
+                            "name": "Project #11",
+                            "manager": { "firstName": "Pascal", "lastName": "Riquier" },
+                            "medewerkers": [{ "firstName": "Pieter", "lastName": "Beckers" }]
+                        }, {
+                            "id": 11,
+                            "name": "Project #12",
+                            "manager": { "firstName": "Pascal", "lastName": "Riquier" },
+                            "medewerkers": [{ "firstName": "Pieter", "lastName": "Beckers" }]
+                        }, {
+                            "id": 12,
+                            "name": "Project #13",
+                            "manager": { "firstName": "Pascal", "lastName": "Riquier" },
+                            "medewerkers": [{ "firstName": "Pieter", "lastName": "Beckers" }]
+                        }, {
+                            "id": 13,
+                            "name": "Project #14",
+                            "manager": { "firstName": "Pascal", "lastName": "Riquier" },
+                            "medewerkers": [{ "firstName": "Pieter", "lastName": "Beckers" }]
+                        }, {
+                            "id": 14,
+                            "name": "Project #15",
+                            "manager": { "firstName": "Pascal", "lastName": "Riquier" },
+                            "medewerkers": [{ "firstName": "Pieter", "lastName": "Beckers" }]
+                        }, {
+                            "id": 15,
+                            "name": "Project #15",
+                            "manager": { "firstName": "Pascal", "lastName": "Riquier" },
+                            "medewerkers": [{ "firstName": "Pieter", "lastName": "Beckers" }]
+                        }, {
+                            "id": 16,
+                            "name": "Project #16",
+                            "manager": { "firstName": "Pascal", "lastName": "Riquier" },
+                            "medewerkers": [{ "firstName": "Pieter", "lastName": "Beckers" }]
+                        }, {
+                            "id": 17,
+                            "name": "Project #17",
+                            "manager": { "firstName": "Pascal", "lastName": "Riquier" },
+                            "medewerkers": [{ "firstName": "Pieter", "lastName": "Beckers" }]
+                        }, {
+                            "id": 18,
+                            "name": "Project #18",
+                            "manager": { "firstName": "Pascal", "lastName": "Riquier" },
+                            "medewerkers": [{ "firstName": "Pieter", "lastName": "Beckers" }]
+                        }, {
+                            "id": 19,
+                            "name": "Project #19",
+                            "manager": { "firstName": "Pascal", "lastName": "Riquier" },
+                            "medewerkers": [{ "firstName": "Pieter", "lastName": "Beckers" }]
+                        }, {
+                            "id": 20,
+                            "name": "Project #20",
+                            "manager": { "firstName": "Pascal", "lastName": "Riquier" },
+                            "medewerkers": [{ "firstName": "Pieter", "lastName": "Beckers" }]
+                        }, {
+                            "id": 21,
+                            "name": "Project #21",
+                            "manager": { "firstName": "Pascal", "lastName": "Riquier" },
+                            "medewerkers": [{ "firstName": "Pieter", "lastName": "Beckers" }]
+                        }, {
+                            "id": 22,
+                            "name": "Project #22",
+                            "manager": { "firstName": "Pascal", "lastName": "Riquier" },
+                            "medewerkers": [{ "firstName": "Pieter", "lastName": "Beckers" }]
+                        }, {
+                            "id": 23,
+                            "name": "Project #23",
+                            "manager": { "firstName": "Pascal", "lastName": "Riquier" },
+                            "medewerkers": [{ "firstName": "Pieter", "lastName": "Beckers" }]
+                        }, {
+                            "id": 24,
+                            "name": "Project #24",
+                            "manager": { "firstName": "Pascal", "lastName": "Riquier" },
+                            "medewerkers": [{ "firstName": "Pieter", "lastName": "Beckers" }]
+                        }]
+                    };
+
+                    element.addEventListener('change', (e) => {
+                        let newData = data.data;
+                        if (e.detail.formData) {
+                            for (let entry of e.detail.formData.entries()) {
+                                newData = filter(newData, entry[0], entry[1]);
+                            }
+                        }
+
+                        if (e.detail.sorting) {
+                            const sorting = e.detail.sorting;
+                            newData = [...newData].sort((firstEl, secondEl) => {
+                                for (let i = 0; i < sorting.length; i++) {
+                                    const criteria = sorting[i];
+                                    const firstValue = firstEl[criteria.name];
+                                    const secondValue = secondEl[criteria.name];
+                                    const isAscending = criteria.direction === 'asc';
+                                    if (firstValue < secondValue) {
+                                        return isAscending ? -1 : 1;
+                                    } else if (firstValue > secondValue) {
+                                        return isAscending ? 1 : -1;
+                                    }
+                                }
+                                return 0;
+                            });
+                        }
+                        
+                        if (e.detail.paging) {
+                            newData = page(e.detail.paging.currentPage, pager.itemsPerPage, newData);
+                        }
+
+                        element.data = {
+                            data: newData,
+                            paging: {
+                                currentPage: e.detail.paging.currentPage,
+                                totalItems: e.detail.formData ? newData.length : data.data.length,
+                            }
+                        };
+                    });
+
+                    function page(page, itemsPerPage, data) {
+                        const start = (page - 1) * itemsPerPage;
+                        const end = start + itemsPerPage;
+                        return data.slice(start, end);
+                    }
+
+                    element.data = {
+                        data: page(1, 10, data.data)
+                    };
+
+                    function filter(data, pathToKey, value) {
+                        if (value === "") {
+                            return data;
+                        }
+                        return data.filter(element => {
+                            const valueByPath = findValueByPath(element, pathToKey);
+                            return valueByPath.includes(value);
+                        });
+                    }
+
+                    function findValueByPath(element, pathToKey) {
+                        var keys = pathToKey.split('.');
+
+                        let current = element;
+                        for (let i = 0; i < keys.length; i++) {
+                            if (current[keys[i]] !== undefined) {
+                                current = current[keys[i]];
+                            } else {
+                                return undefined;
+                            }
+                        }
+                        return current.toString();
+                    }
+                });
+            </script>
+        </div>
+    </div>
+
 </body>
+
 </html>

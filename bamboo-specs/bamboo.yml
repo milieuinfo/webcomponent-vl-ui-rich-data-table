@@ -2,11 +2,12 @@
 version: 2
 plan:
   project-key: WEBCO
-  key: VLRICHTABLE
-  name: webcomponent-vl-rich-table
+  key: VLUIRICHDATATABLE
+  name: webcomponent-vl-ui-rich-data-table
 
 triggers:
   - polling: 130
+  - cron: 0 0 1,3,12,19,21 ? * * *
 
 variables:
   release_version: patch
@@ -50,7 +51,7 @@ Release:
 ---
 version: 2
 plan:
-  key: VLRICHTABLE
+  key: WEBCO-VLUIRICHDATATABLE
 
 plan-permissions:
   - groups:

@@ -1,0 +1,145 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <script src="../../../@webcomponents/webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../../web-component-tester/browser.js"></script>
+
+  <script type="module" src="../../src/vl-rich-data-table.js"></script>
+  <script type="module" src="/node_modules/vl-ui-search-filter/dist/vl-search-filter.js"></script>
+  <script type="module" src="/node_modules/vl-ui-input-field/dist/vl-input-field.js"></script>
+  <script type="module" src="/node_modules/vl-ui-button/dist/vl-button.js"></script>
+  <script type="module" src="/node_modules/vl-ui-pager/dist/vl-pager.js"></script>
+
+  <link rel="stylesheet" type="text/css" href="/node_modules/vl-ui-search-filter/dist/style.css" />
+  <link rel="stylesheet" type="text/css" href="/node_modules/vl-ui-input-field/dist/style.css" />
+  <link rel="stylesheet" type="text/css" href="/node_modules/vl-ui-button/dist/style.css" />
+</head>
+
+<body>
+  <test-fixture id="vl-rich-data-table-zonder-filter-fixture">
+    <template>
+      <vl-rich-data-table data-vl-data='{"data": []}'>
+        <vl-rich-data-field id="id-field" data-vl-label="ID" data-vl-selector="id"></vl-rich-data-field>
+        <vl-rich-data-field id="name-field" data-vl-label="Naam" data-vl-selector="name"></vl-rich-data-field>
+      </vl-rich-data-table>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="vl-rich-data-table-met-filter-fixture">
+    <template>
+      <vl-rich-data-table data-vl-data='{"data": []}' data-vl-filter-title='title'>
+        <vl-rich-data-field id="id-field" data-vl-label="ID" data-vl-selector="id"></vl-rich-data-field>
+        <vl-rich-data-field id="name-field" data-vl-label="Naam" data-vl-selector="name"></vl-rich-data-field>
+        <div slot="filter">
+          <div is="vl-search-filter">
+            <form id="form">
+              <label>Hier kunnen filtervelden komen</label>
+              <input is="vl-input-field" type="text" name="filter1" />
+            </form>
+            <div>
+              <button is="vl-button-link" type="reset" form="form">Zoekopdracht verwijderen</button>
+            </div>
+          </div>
+        </div>
+        <vl-pager slot="pager" total-items="20" items-per-page="5" current-page="1"></vl-pager>
+      </vl-rich-data-table>
+    </template>
+  </test-fixture>
+
+  <script>
+    suite('vl-rich-data-table met filter', () => {
+      const should = chai.should();
+
+      test('Wanneer geen filterslot bestaat, zal er geen search filter aanwezig zijn', () => {
+        const table = fixture('vl-rich-data-table-zonder-filter-fixture');
+        should.not.exist(table.__searchFilter);
+      });
+
+      test('Wanneer wel een filterslot bestaat, zal de search filter aanwezig zijn met alt variant', () => {
+        const table = fixture('vl-rich-data-table-met-filter-fixture');
+        const searchFilter = table.__searchFilter;
+        should.exist(searchFilter);
+        assert.isTrue(searchFilter.hasAttribute('alt'));
+      });
+
+      test('Als er aan een input van de search filter iets wijzigt wordt er een event zonder sortering maar met formdata en paginatie gestuurd', (done) => {
+        const table = fixture('vl-rich-data-table-met-filter-fixture');
+        const pager = table.querySelector('vl-pager');
+
+        table.addEventListener('change', (e) => {
+          expect(e.detail.formData.get('filter1')).to.equal('een beetje input');
+          expect(e.detail.sorting).to.be.undefined;
+          expect(e.detail.paging).to.deep.equal({
+            currentPage: Number(pager.getAttribute('current-page')),
+            totalPages: Number(4),
+            itemsPerPage: Number(pager.getAttribute('items-per-page')),
+            totalItems: Number(pager.getAttribute('total-items'))
+          });
+          done();
+        });
+
+        const searchFilter = table.__searchFilter;
+        setInputValue(searchFilter.querySelector('input'), 'een beetje input');
+      });
+
+      test('Als de filtering gereset wordt, zal er een event zonder formdata en sortering maar met paginatie gestuurd worden', (done) => {
+        const table = fixture('vl-rich-data-table-met-filter-fixture');
+        const pager = table.querySelector('vl-pager');
+        const searchFilter = table.__searchFilter;
+        const resetButton = searchFilter.querySelector('button[type="reset"]');
+
+        setInputValue(searchFilter.querySelector('input'), 'een beetje input');
+        table.addEventListener('change', (e) => {
+          expect(e.detail.formData).to.be.undefined;
+          expect(e.detail.sorting).to.be.undefined;
+          expect(e.detail.paging).to.deep.equal({
+            currentPage: Number(pager.getAttribute('current-page')),
+            totalPages: Number(4),
+            itemsPerPage: Number(pager.getAttribute('items-per-page')),
+            totalItems: Number(pager.getAttribute('total-items'))
+          });
+          done();
+        });
+        resetButton.click();
+      });
+
+      test('Als er geen searchfilter aanwezig is, wordt er geen plaats voor voorzien', () => {
+        const table = fixture('vl-rich-data-table-zonder-filter-fixture');
+        const content = table.shadowRoot.querySelector('#content');
+        const search = table.shadowRoot.querySelector('#search');
+        expect(content.getAttribute('size')).to.be.equal('12');
+        expect(search.getAttribute('size')).to.be.equal('0');
+      });
+
+      test('Als er een searchfilter aanwezig is, wordt er plaats voor voorzien', () => {
+        const table = fixture('vl-rich-data-table-met-filter-fixture');
+        const content = table.shadowRoot.querySelector('#content');
+        const search = table.shadowRoot.querySelector('#search');
+        expect(content.getAttribute('size')).to.be.equal('8');
+        expect(search.getAttribute('size')).to.be.equal('4');
+      });
+
+      test('Als de searchfilter leeg gemaakt wordt, neemt de content terug de volledige breedte in', (done) => {
+        const table = fixture('vl-rich-data-table-met-filter-fixture');
+        const filterSlot = table.querySelector("[slot=filter]");
+        filterSlot.innerHTML = '';
+        setTimeout(() => {
+          const content = table.shadowRoot.querySelector('#content');
+          const search = table.shadowRoot.querySelector('#search');
+          expect(content.getAttribute('size')).to.be.equal('12');
+          expect(search.getAttribute('size')).to.be.equal('0');
+          done();
+        });
+      });
+
+      function setInputValue(input, value) {
+        input.value = value;
+        input.dispatchEvent(new CustomEvent('input', { detail: 'dummy-event', bubbles: true }));
+      }
+    });
+  </script>
+</body>
+
+</html>

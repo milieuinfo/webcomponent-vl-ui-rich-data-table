@@ -1,0 +1,107 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <script src="../../../@webcomponents/webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../../web-component-tester/browser.js"></script>
+
+    <script type="module" src="../../src/vl-rich-data-table.js"></script>
+</head>
+
+<body>
+<test-fixture id="vl-rich-data-sorter-fixture">
+    <template>
+        <vl-rich-data-sorter data-vl-for="foobar"></vl-rich-data-sorter>
+    </template>
+</test-fixture>
+<test-fixture id="vl-rich-data-sorter-priority-fixture">
+    <template>
+        <vl-rich-data-sorter data-vl-for="foobar" data-vl-direction="asc" data-vl-priority="2"></vl-rich-data-sorter>
+    </template>
+</test-fixture>
+
+<script>
+    suite('<vl-rich-data-sorter>', () => {
+        const should = chai.should();
+
+        function assertDirectionIcon(sorter, expectedDirection) {
+            const directionIcon = sorter.__directionElement;
+            directionIcon.getAttribute('is').should.equal('vl-icon');
+
+            let iconType = '';
+            if (expectedDirection === 'asc') {
+                iconType = 'arrow-down';
+            } else if (expectedDirection === 'desc') {
+                iconType = 'arrow-up';
+            }
+
+            directionIcon.getAttribute('icon').should.equal(iconType);
+        }
+
+        function assertPriority(sorter, priority) {
+            const priorityLabel = sorter.__priorityElement;
+            priorityLabel.textContent.should.equal(priority === undefined ? '' : priority);
+        }
+
+        test('De sorter toont het juiste icoon', () => {
+            const sorter = fixture('vl-rich-data-sorter-fixture');
+            assertDirectionIcon(sorter, undefined);
+
+            sorter.direction = 'asc';
+            assertDirectionIcon(sorter, 'asc');
+
+            sorter.direction = 'desc';
+            assertDirectionIcon(sorter, 'desc');
+        });
+
+        test('De sorter toont de juiste priority', () => {
+            const sorter = fixture('vl-rich-data-sorter-fixture');
+            assertPriority(sorter, undefined);
+
+            const prioritySorter = fixture('vl-rich-data-sorter-priority-fixture');
+            assertPriority(prioritySorter, '2');
+        });
+
+        test('De sorter toont de geen priority meer indien de sortering af werd gezet', () => {
+            const prioritySorter = fixture('vl-rich-data-sorter-priority-fixture');
+            assertPriority(prioritySorter, '2');
+
+            prioritySorter.direction = undefined;
+            assertPriority(prioritySorter, undefined);
+        });
+
+        test('Bij het overgaan naar de volgende sorteringsrichting, zal de direction worden aangepast', () => {
+            const sorter = fixture('vl-rich-data-sorter-fixture');
+
+            should.equal(sorter.direction, undefined);
+
+            sorter.nextDirection();
+            should.equal(sorter.direction, 'asc');
+
+            sorter.nextDirection();
+            should.equal(sorter.direction, 'desc');
+
+            sorter.nextDirection();
+            should.equal(sorter.direction, undefined);
+        });
+
+        test('Bij het overgaan naar de volgende sorteringsrichting, wordt er een event uitgestuurd', (done) => {
+            const sorter = fixture('vl-rich-data-sorter-priority-fixture');
+
+            should.equal(sorter.direction, 'asc');
+
+            sorter.addEventListener('change', event => {
+                sorter.direction.should.equal('desc');
+                event.detail.direction.should.equal('desc');
+                event.detail.priority.should.equal(2);
+                done();
+            });
+
+            sorter.nextDirection();
+        });
+    });
+</script>
+</body>
+
+</html>
