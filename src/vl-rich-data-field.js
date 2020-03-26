@@ -42,8 +42,8 @@ export class VlRichDataField extends VlElement(HTMLElement) {
     renderCellHeader() {
         let template = this.label || `${this.querySelector('template[slot="label"]').innerHTML}`;
         if (this.sortable) {
-            const direction = `${this.sortingDirection ? 'data-vl-direction="' + this.sortingDirection + '"' : ''}`;
-            const priority = `${this.sortingPriority ? 'data-vl-priority="' + this.sortingPriority + '"' : ''}`;
+            const direction = this.sortingDirection ? `data-vl-direction="${this.sortingDirection}"` : '';
+            const priority = this.sortingPriority ? `data-vl-priority="${this.sortingPriority}"` : '';
             template += `<vl-rich-data-sorter data-vl-for="${this.name}" ${direction} ${priority}></vl-rich-data-sorter>`;
             return `<th class="sortable"><a>${template}</a></th>`;
         } else {
@@ -52,12 +52,9 @@ export class VlRichDataField extends VlElement(HTMLElement) {
     }
 
     renderCellValue(rowData) {
-    	const value = this.__valueTemplate(rowData);
-    	if (this.label) {
-    		return `<td data-title="${this.label}">${value}</td>`;
-    	} else {
-    		return `<td>${value}</td>`;
-    	}
+        const value = this.__valueTemplate(rowData);
+        const title = this.label ? ` data-title="${this.label}"` : '';
+        return `<td${title}>${value}</td>`;
     }
 
     __template(literal, data) {
