@@ -62,7 +62,6 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
             </div>
         `);
 
-        this.__copyTableAttributes();
         this.__processSearchFilter();
         
         this.__observeFields();
@@ -77,17 +76,9 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
     	}
     }
 
-    __copyTableAttributes() {
-    	VlRichDataTable._tableAttributes.forEach(attr => {
-    		if (this.hasAttribute(attr)) {
-    			this.__setTableAttribute(attr, null, "");
-    		}
-    	});
-    }
-
     __setTableAttribute(attr, oldValue, newValue) {
     	const withoutDataVlPrefix = attr.substring("data-vl-".length);
-    	if (newValue != undefined && newValue != null) {
+    	if (newValue != null) {
     		this.__table.setAttribute(withoutDataVlPrefix, "");
     	} else {
     		this.__table.removeAttribute(withoutDataVlPrefix);
