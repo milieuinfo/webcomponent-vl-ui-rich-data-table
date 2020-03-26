@@ -11,8 +11,8 @@ import {VlElement, define} from '/node_modules/vl-ui-core/dist/vl-core.js';
  * @property {string} data-vl-label - Een naam die getoond kan worden aan de gebruiker.
  * @property {string} data-vl-selector - De selector die gebruikt wordt om de juiste waarde uit de data te halen.
  * @property {boolean} data-vl-sortable - Of er gesorteerd moet kunnen worden.
- * @property {asc | desc} data-vl-sorting-direction - In welke volgorde er gesorteerd wordt. Default wordt er nog niet gesorteerd op dit veld.
- * @property {number} data-vl-sorting-priority - Welke prioriteit er gebruikt wordt voor de sortering. Default is er nog geen prioriteit gekozen.
+ * @property {asc | desc} data-vl-sorting-direction - In welke volgorde er initieel gesorteerd wordt. Indien leeg, is er nog geen sorteringsrichting voorgedefinieerd.
+ * @property {number} data-vl-sorting-priority - Welke prioriteit er initieel gebruikt wordt voor de sortering. Indien leeg, is er nog geen prioriteit gekozen. 1 is de hoogste prioriteit, 2 is een lagere prioriteit, en zo verder.
  *
  * @see {@link https://www.github.com/milieuinfo/webcomponent-vl-ui-rich-data-table/releases/latest|Release notes}
  * @see {@link https://www.github.com/milieuinfo/webcomponent-vl-ui-rich-data-table/issues|Issues}
