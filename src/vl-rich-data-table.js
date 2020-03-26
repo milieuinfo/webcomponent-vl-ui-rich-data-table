@@ -1,7 +1,6 @@
 import {VlElement, define} from '/node_modules/vl-ui-core/dist/vl-core.js';
 import '/node_modules/vl-ui-data-table/dist/vl-data-table.js';
 import '/node_modules/vl-ui-grid/dist/vl-grid.js';
-import '/node_modules/vl-ui-button/dist/vl-button.js';
 
 import { VlRichDataField } from "./vl-rich-data-field.js";
 import { VlRichDataSorter } from "./vl-rich-data-sorter.js";
@@ -32,7 +31,7 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
     }
     
     static get _tableAttributes() {
-    	return [ "data-vl-collapsed-m", "data-vl-collapsed-s", "data-vl-collapsed-xs"];
+        return ['data-vl-collapsed-m', 'data-vl-collapsed-s', 'data-vl-collapsed-xs'];
     }
 
     static get is() {
@@ -44,7 +43,6 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
             <style>
                 @import "/src/style.css";
                 @import "/node_modules/vl-ui-data-table/dist/style.css";
-                @import "/node_modules/vl-ui-button/dist/style.css";
             </style>
             <div is="vl-grid" is-stacked>
                 <div id="search" is="vl-column" size="0">
