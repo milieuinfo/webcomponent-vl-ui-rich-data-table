@@ -67,13 +67,7 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
         
         this.__observeFields();
         this.__observeSorters();
-        
-        if (this.__pager) {
-        	this.__pager.setAttribute("align-right", true);
-        	this.__pager.addEventListener('change', e => {
-        		this.__onStateChange(e, {paging: true});
-        	});
-        }
+        this.__observePager();
     }
     
     attributeChangedCallback(attr, oldValue, newValue) {
@@ -377,6 +371,15 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
             });
         });
         observer.observe(this.__tableHeaderRow, {childList: true});
+    }
+
+    __observePager() {
+        if (this.__pager) {
+            this.__pager.setAttribute("align-right", true);
+            this.__pager.addEventListener('change', e => {
+                this.__onStateChange(e, {paging: true});
+            });
+        }
     }
 
     __processSearchFilter() {
