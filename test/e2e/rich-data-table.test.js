@@ -249,6 +249,22 @@ describe('vl-rich-data-table', async () => {
 		await assert.eventually.equal(pager.getTotalItems(), 25);
 	});
 
+  it('Als gebruiker zal ik de originele lijst te zien krijgen wanneer ik de volledige zoekopdracht verwijder',async () => {
+		const richDataTable = await vlRichDataTablePage.getRichDataTableFilterSortingPaging();
+		const searchFilter = await richDataTable.getSearchFilter();
+    const filterIdVeld = await new VlInputField(driver, await searchFilter.findElement(By.css('[name="id"]')));
+    await filterIdVeld.setValue('0');
+    const filterNameVeld = await new VlInputField(driver, await searchFilter.findElement(By.css('[name="name"]')));
+    await filterNameVeld.setValue('20');
+    await assertAantalRows(richDataTable, 1);
+    await assertRow(richDataTable, 0, [20, "Project #20", "Riquier", "Beckers", "Project #20 o.l.v. Pascal Riquier"]);
+
+    const zoekOpdrachtenVerwijderen = await searchFilter.findElement(By.css('button[type="reset"]'));
+    zoekOpdrachtenVerwijderen.click();
+
+    await assertAantalRows(richDataTable, 10);
+	});
+
 	it('Als gebruiker zal ik altijd naar de eerste pagina doorverwezen worden bij het sorteren', async () => {
 		const richDataTable = await vlRichDataTablePage.getRichDataTableFilterSortingPaging();
 		const pager = await richDataTable.getPager();
