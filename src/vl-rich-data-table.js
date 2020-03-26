@@ -346,6 +346,15 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
         observer.observe(this, {childList: true});
     }
 
+    __observePager() {
+        if (this.__pager) {
+            this.__pager.setAttribute("align-right", true);
+            this.__pager.addEventListener('change', e => {
+                this.__onStateChange(e, {paging: true});
+            });
+        }
+    }
+
     __observeSorters() {
         const observer = new MutationObserver(mutationsList => {
             mutationsList.forEach(mutation => {
@@ -371,15 +380,6 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
             });
         });
         observer.observe(this.__tableHeaderRow, {childList: true});
-    }
-
-    __observePager() {
-        if (this.__pager) {
-            this.__pager.setAttribute("align-right", true);
-            this.__pager.addEventListener('change', e => {
-                this.__onStateChange(e, {paging: true});
-            });
-        }
     }
 
     __processSearchFilter() {
