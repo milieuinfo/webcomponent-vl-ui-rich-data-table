@@ -3,11 +3,11 @@ import {VlElement, define} from '/node_modules/vl-ui-core/dist/vl-core.js';
 /**
  * VlRichDataField
  * @class
- * @classdesc De definitie van een rich data veld.
+ * @classdesc De definitie van een rich data veld, onderdeel van een rich data table om een table header weer te geven.
  *
  * @extends VlElement
  *
- * @property {string} data-vl-name - Een naam die gebruikt kan worden om het veld te identificeren.
+ * @property {string} data-vl-name - Een naam die gebruikt kan worden om het veld te benoemen. Dit wordt gebruikt voor de sortering.
  * @property {string} data-vl-label - Een naam die getoond kan worden aan de gebruiker.
  * @property {string} data-vl-selector - De selector die gebruikt wordt om de juiste waarde uit de data te halen.
  * @property {boolean} data-vl-sortable - Of er gesorteerd moet kunnen worden.
