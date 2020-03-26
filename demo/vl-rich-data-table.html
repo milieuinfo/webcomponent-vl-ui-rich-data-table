@@ -1008,9 +1008,11 @@
 
                     element.addEventListener('change', (e) => {
                         let newData = data.data;
+                        let totalItems = data.data.length;
                         if (e.detail.formData) {
                             for (let entry of e.detail.formData.entries()) {
                                 newData = filter(newData, entry[0], entry[1]);
+                                totalItems = newData.length;
                             }
                         }
 
@@ -1040,7 +1042,7 @@
                             data: newData,
                             paging: {
                                 currentPage: e.detail.paging.currentPage,
-                                totalItems: e.detail.formData ? newData.length : data.data.length,
+                                totalItems: totalItems,
                             }
                         };
                     });
