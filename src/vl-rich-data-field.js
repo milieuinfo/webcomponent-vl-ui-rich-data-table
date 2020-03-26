@@ -20,11 +20,6 @@ import {VlElement, define} from '/node_modules/vl-ui-core/dist/vl-core.js';
  *
  */
 export class VlRichDataField extends VlElement(HTMLElement) {
-    static get EVENTS() {
-        return {
-            change: 'change'
-        }
-    }
 
     static get _observedAttributes() {
         return ['name', 'selector', 'label', 'sortable', 'sorting-direction', 'sorting-priority'];
@@ -159,7 +154,7 @@ export class VlRichDataField extends VlElement(HTMLElement) {
     }
 
     _changed(properties) {
-        this.dispatchEvent(new CustomEvent(VlRichDataField.EVENTS.change, {
+        this.dispatchEvent(new CustomEvent('change', {
             detail: {
                 properties: properties
             }

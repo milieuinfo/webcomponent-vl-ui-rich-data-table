@@ -10,12 +10,6 @@ export class VlRichDataSorter extends VlElement(HTMLElement) {
         }
     }
 
-    static get EVENTS() {
-        return {
-            'change': 'change'
-        }
-    }
-
     static get _observedAttributes() {
         return ['direction', 'priority'];
     }
@@ -133,7 +127,7 @@ export class VlRichDataSorter extends VlElement(HTMLElement) {
     }
 
     _changed() {
-        this.dispatchEvent(new CustomEvent(VlRichDataSorter.EVENTS.change, {
+        this.dispatchEvent(new CustomEvent('change', {
             detail: {
                 direction: this.direction,
                 priority: this.priority

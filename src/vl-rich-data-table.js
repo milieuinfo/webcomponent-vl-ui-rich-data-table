@@ -293,19 +293,19 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
     }
 
     __listenToFieldChanges(field) {
-        field.addEventListener(VlRichDataField.EVENTS.change, this.__fieldChanged.bind(this));
+        field.addEventListener('change', this.__fieldChanged.bind(this));
     }
 
     __stopListeningToFieldChanges(field) {
-        field.removeEventListener(VlRichDataField.EVENTS.change, this.__fieldChanged.bind(this));
+        field.removeEventListener('change', this.__fieldChanged.bind(this));
     }
 
     __listenToSortChanges(sorter) {
-        sorter.addEventListener(VlRichDataSorter.EVENTS.change, this.__sortingChanged.bind(this));
+        sorter.addEventListener('change', this.__sortingChanged.bind(this));
     }
 
     __stopListeningToSortChanges(sorter) {
-        sorter.removeEventListener(VlRichDataSorter.EVENTS.change, this.__sortingChanged.bind(this));
+        sorter.removeEventListener('change', this.__sortingChanged.bind(this));
     }
 
     __fieldChanged(event) {
