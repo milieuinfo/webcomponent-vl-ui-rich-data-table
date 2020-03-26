@@ -31,7 +31,7 @@ export class VlRichDataField extends VlElement(HTMLElement) {
 
     __valueTemplate(rowData) {
         if (this.selector) {
-            return this.selector.split('.').reduce(function(prev, curr) {
+            return this.selector.split('.').reduce((prev, curr) => {
                 return prev ? prev[curr] : null
             }, rowData);
         } else {
