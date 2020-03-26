@@ -38,24 +38,19 @@ export class VlRichDataField extends VlElement(HTMLElement) {
             return this.__template(`${this.querySelector('template[slot="content"]').innerHTML}`, rowData);
         }
     }
-    
-    renderCellHeader() {
-    	let template = ``;
-        if (this.label) {
-            template = this.label;
-        } else {
-            template = `${this.querySelector('template[slot="label"]').innerHTML}`;
-        }
-        if (this.sortable) {
-        	template += `<vl-rich-data-sorter data-vl-for="${this.name}" ${this.sortingDirection ? 'data-vl-direction="' + this.sortingDirection + '"' : ''} ${this.sortingPriority ? 'data-vl-priority="' + this.sortingPriority + '"' : ''}></vl-rich-data-sorter>`;
-        	return `<th class="sortable"><a>${template}</a></th>`;
-        } else {
-        	return `<th>${template}</th>`;
-        }
 
-    
+    renderCellHeader() {
+        let template = this.label || `${this.querySelector('template[slot="label"]').innerHTML}`;
+        if (this.sortable) {
+            const direction = `${this.sortingDirection ? 'data-vl-direction="' + this.sortingDirection + '"' : ''}`;
+            const priority = `${this.sortingPriority ? 'data-vl-priority="' + this.sortingPriority + '"' : ''}`;
+            template += `<vl-rich-data-sorter data-vl-for="${this.name}" ${direction} ${priority}></vl-rich-data-sorter>`;
+            return `<th class="sortable"><a>${template}</a></th>`;
+        } else {
+            return `<th>${template}</th>`;
+        }
     }
-    
+
     renderCellValue(rowData) {
     	const value = this.__valueTemplate(rowData);
     	if (this.label) {
