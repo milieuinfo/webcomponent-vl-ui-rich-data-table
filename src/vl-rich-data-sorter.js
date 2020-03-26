@@ -43,12 +43,6 @@ export class VlRichDataSorter extends VlElement(HTMLElement) {
         `);
     }
 
-    connectedCallback() {
-        this.__directionElement.addEventListener('click', e => {
-//        	this.nextDirection();
-        });
-    }
-
     get for() {
         return this.dataset.vlFor;
     }
