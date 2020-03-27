@@ -117,10 +117,10 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
     get __pagingState() {
     	if (this.__pager) {
     		return {
-    			currentPage: Number(this.__pager.currentPage), 
+    			currentPage: this.__pager.currentPage,
     			totalPages: this.__pager.totalPages, 
     			itemsPerPage: this.__pager.itemsPerPage, 
-    			totalItems: this.__pager.totalItems	
+    			totalItems: this.__pager.totalItems
     		};
     	}
     }
