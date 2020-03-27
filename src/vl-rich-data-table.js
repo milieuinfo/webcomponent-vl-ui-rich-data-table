@@ -72,16 +72,8 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
     attributeChangedCallback(attr, oldValue, newValue) {
     	super.attributeChangedCallback(attr, oldValue, newValue);
     	if (VlRichDataTable._tableAttributes.includes(attr)) {
-    		this.__setTableAttribute(attr, oldValue, newValue);
-    	}
-    }
-
-    __setTableAttribute(attr, oldValue, newValue) {
-    	const withoutDataVlPrefix = attr.substring("data-vl-".length);
-    	if (newValue != null) {
-    		this.__table.setAttribute(withoutDataVlPrefix, "");
-    	} else {
-    		this.__table.removeAttribute(withoutDataVlPrefix);
+        const withoutDataVlPrefix = attr.substring("data-vl-".length);
+        this.__table.toggleAttribute(withoutDataVlPrefix);
     	}
     }
     
