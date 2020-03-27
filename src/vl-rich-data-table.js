@@ -213,7 +213,7 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
     }
 
     /**
-     * Geeft de data terug die de tabel toont.
+     * Geeft de data terug die in de tabel wordt getoond.
      * @returns {Object[]}
      */
     get data() {
