@@ -190,9 +190,15 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
 
     set _paging(paging) {
         if (paging) {
-            !paging.currentPage || this.__pager.setAttribute('current-page', paging.currentPage);
-            !paging.itemsPerPage || this.__pager.setAttribute('items-per-page', paging.itemsPerPage);
-            !paging.totalItems || this.__pager.setAttribute('total-items', paging.totalItems);
+            if (paging.currentPage) {
+                this.__pager.setAttribute('current-page', paging.currentPage);
+            }
+            if (paging.itemsPerPage) {
+                this.__pager.setAttribute('items-per-page', paging.itemsPerPage);
+            }
+            if (paging.totalItems) {
+                this.__pager.setAttribute('total-items', paging.totalItems);
+            }
         }
     }
 
