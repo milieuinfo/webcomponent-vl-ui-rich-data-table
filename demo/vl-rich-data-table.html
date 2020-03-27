@@ -437,9 +437,9 @@
                                             return isAscending ? 1 : -1;
                                         }
                                     }
-
                                     return 0;
-                                })
+                                }),
+                                sorting: sorting
                             };
                         } else {
                             table.data = originalTableData;
@@ -1016,8 +1016,9 @@
                             }
                         }
 
+                        let sorting;
                         if (e.detail.sorting) {
-                            const sorting = e.detail.sorting;
+                            sorting = e.detail.sorting;
                             newData = [...newData].sort((firstEl, secondEl) => {
                                 for (let i = 0; i < sorting.length; i++) {
                                     const criteria = sorting[i];
@@ -1040,6 +1041,7 @@
 
                         element.data = {
                             data: newData,
+                            sorting: sorting,
                             paging: {
                                 currentPage: e.detail.paging.currentPage,
                                 totalItems: totalItems,

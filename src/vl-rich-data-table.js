@@ -130,6 +130,7 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
             return this.__activeSorters.map(criteria => { 
                 return {
                     name: criteria.for,
+                    priority: criteria.priority,
                     direction: criteria.direction
                 }
             });
@@ -166,20 +167,20 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
 
     /**
      * Stelt in welke data de tabel moet tonen.
-     * @param {Object[]} data - Een Array van objecten die de data voorstellen.
+     * @param {Object[]} object - Een Array van objecten die de data voorstellen.
      */
     set data(object) {
         if (this.__data !== object) {
-            const { data, paging } = object
-            this._data = data;
+            const { data, paging, sorting } = object;
+            this._validate(data);
             this._paging = paging;
-
+            this._sorting = sorting;
             this.__data = object;
             this._renderBody();
         }
     }
 
-    set _data(data) {
+    _validate(data) {
         if (data) {
             if (!Array.isArray(data)) {
                 throw new Error('vl-rich-data-table verwacht een Array als data');
@@ -192,6 +193,16 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
             !paging.currentPage || this.__pager.setAttribute('current-page', paging.currentPage);
             !paging.itemsPerPage || this.__pager.setAttribute('items-per-page', paging.itemsPerPage);
             !paging.totalItems || this.__pager.setAttribute('total-items', paging.totalItems);
+        }
+    }
+
+    set _sorting(sorting) {
+        if (sorting) {
+            this.__sorters.forEach(sorter => {
+                const matchedSorter = sorting.find(sort => sort.name === sorter.for);
+                sorter.direction = matchedSorter ? matchedSorter.direction : undefined;
+                sorter.priority = matchedSorter ? matchedSorter.priority : undefined;
+            });
         }
     }
 
