@@ -138,8 +138,8 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
 
     get __formDataState() {
         if (this.__searchFilter && this.__searchFilter.formData) {
-            const bevatFiltering = [... this.__searchFilter.formData.values()].find(Boolean);
-            if (bevatFiltering) {
+            const hasFilterValue = [... this.__searchFilter.formData.values()].find(Boolean);
+            if (hasFilterValue) {
                 return this.__searchFilter.formData;
             }
         }
