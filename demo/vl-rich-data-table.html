@@ -1009,10 +1009,17 @@
                     element.addEventListener('change', (e) => {
                         let newData = data.data;
                         let totalItems = data.data.length;
+
+                        let filterEntries = undefined;
                         if (e.detail.formData) {
+                            filterEntries = [];
                             for (let entry of e.detail.formData.entries()) {
                                 newData = filter(newData, entry[0], entry[1]);
                                 totalItems = newData.length;
+                                filterEntries.push({
+                                    name: entry[0],
+                                    value: entry[1]
+                                });
                             }
                         }
 
@@ -1045,7 +1052,8 @@
                             paging: {
                                 currentPage: e.detail.paging.currentPage,
                                 totalItems: totalItems,
-                            }
+                            },
+                            filter: filterEntries
                         };
                     });
 

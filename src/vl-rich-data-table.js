@@ -171,10 +171,11 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
      */
     set data(object) {
         if (this.__data !== object) {
-            const { data, paging, sorting } = object;
+            const { data, paging, sorting, filter } = object;
             this._validate(data);
             this._paging = paging;
             this._sorting = sorting;
+            this._filter = filter;
             this.__data = object;
             this._renderBody();
         }
@@ -209,6 +210,20 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
                 sorter.direction = matchedSorter ? matchedSorter.direction : undefined;
                 sorter.priority = matchedSorter ? matchedSorter.priority : undefined;
             });
+        }
+    }
+
+    set _filter(filter) {
+        if (filter && this.__searchFilter) {
+            const form = this.__searchFilter.querySelector('form');
+            if (form) {
+                filter.forEach((entry) => {
+                    const formElement = form.elements[entry.name];
+                    if (formElement) {
+                        formElement.value = entry.value;
+                    }
+                });
+            }
         }
     }
 
