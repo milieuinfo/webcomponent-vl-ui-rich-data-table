@@ -257,7 +257,7 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
             this.data.data.forEach(rowData => {
                 const rowTemplate = this._template(`<tr>
                     ${Array.from(this.__fields)
-                    .map(field => field.renderCellValue ? field.renderCellValue(rowData) : '<td></td>')
+                    .map(field => field.renderCellValue(rowData))
                     .join('')}
                 </tr>`);
                 this.__tableBody.appendChild(rowTemplate);
