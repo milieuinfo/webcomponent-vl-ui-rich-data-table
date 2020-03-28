@@ -443,8 +443,5 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
     }
 }
 
-
-
-
-
-define(VlRichDataTable.is, VlRichDataTable);
+Promise.all([customElements.whenDefined(VlRichDataField.is), customElements.whenDefined(VlRichDataSorter.is)])
+    .then(() => define(VlRichDataTable.is, VlRichDataTable));
