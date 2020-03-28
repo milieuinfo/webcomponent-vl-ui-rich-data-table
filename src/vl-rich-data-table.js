@@ -265,10 +265,6 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
         }
     }
 
-    get __searchFilterLocation() {
-        return this.shadowRoot.querySelector('#search');
-    }
-
     _dataChangedCallback(oldValue, newValue) {
         this.data = JSON.parse(newValue);
     }
