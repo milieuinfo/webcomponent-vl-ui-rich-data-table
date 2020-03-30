@@ -38,30 +38,22 @@
             tableShouldHaveDataRows(richTable, [ '3', 'Foobar' ]);
         });
 
-        test.only('Een aanpassing van de label van een field wordt zichtbaar in de tabel', (done) => {
+        test('Een aanpassing van de label van een field wordt zichtbaar in de tabel', () => {
             const richTable = fixture('vl-rich-data-table-fixture');
             const idField = richTable.querySelector('#id-field');
-            setTimeout(() => {
-                debugger;
-                idField.dataset.vlLabel = 'Identifier';
+            idField.dataset.vlLabel = 'Identifier';
 
-                tableShouldHaveHeaders(richTable, 'Identifier', 'Naam');
-                tableShouldHaveDataRows(richTable, ['0', 'Foo'], ['1', 'Bar']);
-                done();
-            }, 2000);
+            tableShouldHaveHeaders(richTable, 'Identifier', 'Naam');
+            tableShouldHaveDataRows(richTable, ['0', 'Foo'], ['1', 'Bar']);
         });
 
-        test.only('Een aanpassing van de selector van een field wordt zichtbaar in de tabel', (done) => {
+        test('Een aanpassing van de selector van een field wordt zichtbaar in de tabel', () => {
             const richTable = fixture('vl-rich-data-table-fixture');
             const nameField = richTable.querySelector('#name-field');
-            setTimeout(() => {
-                debugger;
-                nameField.dataset.vlSelector = 'extendedName';
+            nameField.dataset.vlSelector = 'extendedName';
 
-                tableShouldHaveHeaders(richTable, 'ID', 'Naam');
-                tableShouldHaveDataRows(richTable, [ '0', 'Foobar' ], [ '1', 'Barfoo' ]);
-                done();
-            }, 2000);
+            tableShouldHaveHeaders(richTable, 'ID', 'Naam');
+            tableShouldHaveDataRows(richTable, [ '0', 'Foobar' ], [ '1', 'Barfoo' ]);
         });
 
         test('Een field verwijderen zal ervoor zorgen dat deze kolom ook niet langer in de tabel getoond wordt', (done) => {
