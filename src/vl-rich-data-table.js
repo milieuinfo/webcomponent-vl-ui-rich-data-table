@@ -76,21 +76,71 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
         this.__table.toggleAttribute(withoutDataVlPrefix);
     	}
     }
-    
-    get __pager() {
-    	return this.querySelector("[slot='pager']");
+
+    get __activeSorters() {
+        return Array.from(this.__sorters)
+            .filter(sorter => sorter.direction !== undefined)
+            .sort(VlRichDataSorter.PRIORITY_COMPARATOR);
+    }
+
+    get __contentColumn() {
+        return this.shadowRoot.querySelector('#content');
+    }
+
+    get __fields() {
+        return this.querySelectorAll(VlRichDataField.is);
     }
 
     get __filter() {
     	return this.querySelector("[slot='filter']");
     }
 
-    get __searchColumn() {
-        return this.shadowRoot.querySelector('#search');
+    get __formDataState() {
+        if (this.__searchFilter && this.__searchFilter.formData) {
+            const hasFilterValue = [... this.__searchFilter.formData.values()].find(Boolean);
+            if (hasFilterValue) {
+                return this.__searchFilter.formData;
+            }
+        }
     }
 
-    get __contentColumn() {
-        return this.shadowRoot.querySelector('#content');
+    get __pager() {
+        return this.querySelector("[slot='pager']");
+    }
+
+    get __pagingState() {
+        if (this.__pager) {
+            return {
+                currentPage: this.__pager.currentPage,
+                totalPages: this.__pager.totalPages,
+                itemsPerPage: this.__pager.itemsPerPage,
+                totalItems: this.__pager.totalItems
+            };
+        }
+    }
+
+    get __richDataFields() {
+        return [... this.__fields].filter(field => field.constructor === VlRichDataField);
+    }
+
+    get __sorters() {
+        return this.__tableHeaderRow.querySelectorAll(VlRichDataSorter.is);
+    }
+
+    get __sortingState() {
+        if (this.__activeSorters && this.__activeSorters.length > 0) {
+            return this.__activeSorters.map(criteria => {
+                return {
+                    name: criteria.for,
+                    priority: criteria.priority,
+                    direction: criteria.direction
+                }
+            });
+        }
+    }
+
+    get __searchColumn() {
+        return this.shadowRoot.querySelector('#search');
     }
 
     get __searchFilter() {
@@ -104,6 +154,18 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
             return this.__searchFilter.querySelector('form');
         }
     }
+
+    get __table() {
+        return this.shadowRoot.querySelector('table');
+    }
+
+    get __tableHeaderRow() {
+        return this.__table.querySelector('thead > tr');
+    }
+
+    get __tableBody() {
+        return this.__table.querySelector('tbody');
+    }
     
     __onStateChange(event, {paging = false}={}) {
     	event.stopPropagation();
@@ -113,39 +175,7 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
             bubbles: true
         }));
     }
-    
-    get __pagingState() {
-    	if (this.__pager) {
-    		return {
-    			currentPage: this.__pager.currentPage,
-    			totalPages: this.__pager.totalPages, 
-    			itemsPerPage: this.__pager.itemsPerPage, 
-    			totalItems: this.__pager.totalItems
-    		};
-    	}
-    }
 
-    get __sortingState() {
-        if (this.__activeSorters && this.__activeSorters.length > 0) {
-            return this.__activeSorters.map(criteria => { 
-                return {
-                    name: criteria.for,
-                    priority: criteria.priority,
-                    direction: criteria.direction
-                }
-            });
-        }
-    }
-
-    get __formDataState() {
-        if (this.__searchFilter && this.__searchFilter.formData) {
-            const hasFilterValue = [... this.__searchFilter.formData.values()].find(Boolean);
-            if (hasFilterValue) {
-                return this.__searchFilter.formData;
-            }
-        }
-    }
-    
     __getState({paging}) {
     	const state = {};
         state.sorting = this.__sortingState;
@@ -267,36 +297,6 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
 
     _dataChangedCallback(oldValue, newValue) {
         this.data = JSON.parse(newValue);
-    }
-
-    get __table() {
-        return this.shadowRoot.querySelector('table');
-    }
-
-    get __tableHeaderRow() {
-        return this.__table.querySelector('thead > tr');
-    }
-
-    get __tableBody() {
-        return this.__table.querySelector('tbody');
-    }
-
-    get __fields() {
-        return this.querySelectorAll(VlRichDataField.is);
-    }
-
-    get __richDataFields() {
-        return [... this.__fields].filter(field => field.constructor === VlRichDataField);
-    }
-
-    get __sorters() {
-        return this.__tableHeaderRow.querySelectorAll(VlRichDataSorter.is);
-    }
-
-    get __activeSorters() {
-        return Array.from(this.__sorters)
-            .filter(sorter => sorter.direction !== undefined)
-            .sort(VlRichDataSorter.PRIORITY_COMPARATOR);
     }
 
     __listenToFieldChanges(field) {
