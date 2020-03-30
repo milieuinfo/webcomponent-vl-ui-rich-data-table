@@ -318,11 +318,11 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
     __fieldChanged(event) {
         const propertiesChanged = event.detail.properties;
         if (propertiesChanged) {
-            if (propertiesChanged.some(property => ['name', 'label', 'sortable', 'sorting-direction', 'sorting-priority'].includes(property))) {
+            if (propertiesChanged.some(property => VlRichDataField.headerAttributes.includes(property))) {
                 this._renderHeaders();
             }
 
-            if (propertiesChanged.some(property => ['selector'].includes(property))) {
+            if (propertiesChanged.some(property => VlRichDataField.bodyAttributes.includes(property))) {
                 this._renderBody();
             }
         }

@@ -21,8 +21,16 @@ import {VlElement, define} from '/node_modules/vl-ui-core/dist/vl-core.js';
  */
 export class VlRichDataField extends VlElement(HTMLElement) {
 
+    static get headerAttributes() {
+        return ['name', 'label', 'sortable', 'sorting-direction', 'sorting-priority'];
+    }
+
+    static get bodyAttributes() {
+        return ['selector'];
+    }
+
     static get _observedAttributes() {
-        return ['name', 'selector', 'label', 'sortable', 'sorting-direction', 'sorting-priority'];
+        return this.headerAttributes.concat(this.bodyAttributes);
     }
 
     static get is() {
