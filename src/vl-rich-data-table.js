@@ -63,8 +63,7 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
         `);
 
         this.__processSearchFilter();
-        
-        this.__observeFields();
+
         this.__observeSorters();
         this.__observePager();
     }
@@ -193,6 +192,7 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
 
     connectedCallback() {
         this._render();
+        this.__observeFields();
     }
 
     /**
