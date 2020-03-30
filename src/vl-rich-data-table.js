@@ -242,7 +242,7 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
 
     _renderHeaders() {
         this.__tableHeaderRow.innerHTML = '';
-        [... this.__fields].filter(field => field.constructor === VlRichDataField).forEach(field => {
+        this.__richDataFields.forEach(field => {
             const headerTemplate = this._template(field.renderCellHeader());
             this.__tableHeaderRow.appendChild(headerTemplate);
         });
@@ -256,8 +256,7 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
             this.__tableBody.innerHTML = '';
             this.data.data.forEach(rowData => {
                 const rowTemplate = this._template(`<tr>
-                    ${[... this.__fields]
-                    .filter(field => field.constructor === VlRichDataField)
+                    ${this.__richDataFields
                     .map(field => field.renderCellValue(rowData))
                     .join('')}
                 </tr>`);
@@ -284,6 +283,10 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
 
     get __fields() {
         return this.querySelectorAll(VlRichDataField.is);
+    }
+
+    get __richDataFields() {
+        return [... this.__fields].filter(field => field.constructor === VlRichDataField);
     }
 
     get __sorters() {
