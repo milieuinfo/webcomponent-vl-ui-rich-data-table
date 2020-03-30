@@ -3,9 +3,9 @@
     "npm": true,
     "plugins": {
         "local": {
-            "browsers": ["chrome", "firefox"]
+            "browsers": ["chrome"]
         }
     },
-    "suites": ["test/unit/*.test.html"]
+    "suites": ["test/unit/vl-rich-data-table-and-field.test.html"]
   }
   
