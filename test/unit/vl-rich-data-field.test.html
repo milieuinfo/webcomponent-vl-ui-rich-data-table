@@ -74,6 +74,12 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="vl-rich-data-field">
+    <template>
+      <vl-rich-data-field></vl-rich-data-field>
+    </template>
+  </test-fixture>
+
   <script>
     suite('<vl-rich-data-field>', () => {
       const should = chai.should();
@@ -119,6 +125,16 @@
         field.renderCellValue().replace(/\s\s+/g, '').should.equal('<td data-title="Foo"><span>foo</span></td>');
       });
 
+      test('Indien er geen selector attribuut en geen template content slot aanwezig is, zal er een foutmelding komen bij het renderen', () => {
+        const field = fixture('vl-rich-data-field');
+        try {
+          field.renderCellValue();
+          should.fail();
+        } catch (error) {
+          should.exist(error);
+        }
+      });
+
       test('In de template content slot kan er gebruik gemaakt worden van de field data om de kolom te visualiseren', () => {
         const dataRow = {
           foo: {
@@ -142,6 +158,16 @@
       test('Indien er geen label attribuut aanwezig is, zal de template label slot gebruikt worden om de header te visualiseren', () => {
         const field = fixture('vl-rich-data-field-label-template-fixture');
         field.renderCellHeader().replace(/\s\s+/g, '').should.equal('<th><span>Foo</span></th>');
+      });
+
+      test('Indien er geen label attribuut en geen template label slot aanwezig is, zal er een foutmelding komen', () => {
+        const field = fixture('vl-rich-data-field');
+        try {
+          field.renderCellHeader();
+          should.fail();
+        } catch (error) {
+          should.exist(error);
+        }
       });
 
       test('Indien er geen label attribuut aanwezig is, zal de template label slot gebruikt worden voor een sortable field om de header te visualiseren', () => {
