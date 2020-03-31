@@ -121,6 +121,32 @@
             expect(search.getAttribute('size')).to.be.equal('4');
         });
 
+        test('Als er een searchfilter wordt toegevoegd, wordt er plaats voor voorzien', (done) => {
+            const table = fixture('vl-rich-data-table-zonder-filter-fixture');
+
+            const filter = document.createElement('div');
+            filter.setAttribute('slot', 'filter');
+            filter.innerHTML = `
+                <div is="vl-search-filter">
+                    <form id="form">
+                        <label>Hier kunnen filtervelden komen</label>
+                        <input is="vl-input-field" type="text" name="filter1"/>
+                    </form>
+                    <div>
+                        <button is="vl-button-link" type="reset" form="form">Zoekopdracht verwijderen</button>
+                    </div>
+                </div>`;
+            table.appendChild(filter);
+
+            setTimeout(() => {
+                const content = table.shadowRoot.querySelector('#content');
+                const search = table.shadowRoot.querySelector('#search');
+                expect(content.getAttribute('size')).to.be.equal('8');
+                expect(search.getAttribute('size')).to.be.equal('4');
+                done();
+            });
+        });
+
         test('Als de searchfilter leeg gemaakt wordt, neemt de content terug de volledige breedte in', (done) => {
             const table = fixture('vl-rich-data-table-met-filter-fixture');
             const filterSlot = table.querySelector("[slot=filter]");

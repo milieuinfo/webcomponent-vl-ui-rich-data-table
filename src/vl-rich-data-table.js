@@ -193,6 +193,7 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
     connectedCallback() {
         this._render();
         this.__observeFields();
+        this.__observeSearchFilter();
     }
 
     /**
@@ -387,43 +388,43 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
         ).observe(this.__tableHeaderRow, {childList: true});
     }
 
+    __observeSearchFilter() {
+        const observer = new MutationObserver(() => {
+            this.__processSearchFilter();
+        });
+        observer.observe(this, { childList: true, subtree: true });
+    }
+
     __processSearchFilter() {
         if (this.__searchFilter) {
             this.__searchFilter.setAttribute('alt', '');
             this.__setGridColumnWidth(4);
-            this.__observeSearchFilter();
+            this.__addSearchFilterEventListeners();
         } else {
             this.__setGridColumnWidth(0);
-        }
-    }
-
-    __observeSearchFilter() {
-        if (this.__searchFilter) {
-            this.__searchFilter.addEventListener('change', e => {
-                e.stopPropagation();
-                e.preventDefault();
-            });
-            this.__searchFilter.addEventListener('input', e => {
-                this.__onFilterFieldChanged(e);
-            });
-            if (this.__searchFilterForm) {
-                this.__searchFilterForm.addEventListener('reset', e => {
-                    setTimeout(() => {
-                        this.__onFilterFieldChanged(e);
-                    });
-                });
-            }
-
-            const observer = new MutationObserver(() => {
-                this.__processSearchFilter();
-            });
-            observer.observe(this, { childList: true, subtree: true });
         }
     }
 
     __setGridColumnWidth(width) {
         this.__searchColumn.setAttribute('size', width);
         this.__contentColumn.setAttribute('size', 12-width);
+    }
+
+    __addSearchFilterEventListeners() {
+        this.__searchFilter.addEventListener('change', e => {
+            e.stopPropagation();
+            e.preventDefault();
+        });
+        this.__searchFilter.addEventListener('input', e => {
+            this.__onFilterFieldChanged(e);
+        });
+        if (this.__searchFilterForm) {
+            this.__searchFilterForm.addEventListener('reset', e => {
+                setTimeout(() => {
+                    this.__onFilterFieldChanged(e);
+                });
+            });
+        }
     }
 
     __onFilterFieldChanged(event) {
