@@ -49,16 +49,6 @@ class VlRichDataTable extends VlElement {
 		const searchFilter = await this.findElement(By.css("[is='vl-search-filter']"));
 		return new VlSearchFilter(this.driver, searchFilter);
 	}
-
-	async search() {
-		const button = await this._getSearchButton();
-		return button.click();
-	}
-
-	async _getSearchButton() {
-		const searchFilter = await this.getSearchFilter();
-		return new VlButton(this.driver, await searchFilter.findElement(By.css('button')));
-	}
 }
 
 module.exports = VlRichDataTable;
