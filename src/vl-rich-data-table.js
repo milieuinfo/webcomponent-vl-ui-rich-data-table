@@ -339,26 +339,28 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
 
     __observeFields() {
         this.__fields.forEach(this.__listenToFieldChanges.bind(this));
-        const observer = new MutationObserver(mutationsList => {
+        const observer = this.__createObserver(this.__listenToFieldChanges.bind(this), this.__stopListeningToFieldChanges.bind(this), true);
+        observer.observe(this, {childList: true});
+    }
+
+    __createObserver(doWhenNodeIsAdded, doWhenNodeIsRemoved, render) {
+        return new MutationObserver(mutationsList => {
             let shouldRender = false;
             mutationsList.forEach(mutation => {
                 if (mutation.addedNodes || mutation.removedNodes) {
                     shouldRender = true;
-
                     if (mutation.addedNodes) {
-                        mutation.addedNodes.forEach(this.__listenToFieldChanges.bind(this));
+                        mutation.addedNodes.forEach(doWhenNodeIsAdded);
                     }
-
                     if (mutation.removedNodes) {
-                        mutation.removedNodes.forEach(this.__stopListeningToFieldChanges.bind(this));
+                        mutation.removedNodes.forEach(doWhenNodeIsRemoved);
                     }
                 }
             });
-            if (shouldRender) {
+            if (render && shouldRender) {
                 this._render();
             }
         });
-        observer.observe(this, {childList: true});
     }
 
     __observePager() {
@@ -371,30 +373,18 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
     }
 
     __observeSorters() {
-        const observer = new MutationObserver(mutationsList => {
-            mutationsList.forEach(mutation => {
-                if (mutation.addedNodes || mutation.removedNodes) {
-                    if (mutation.addedNodes) {
-                        mutation.addedNodes.forEach(node => {
-                            const sorter = node.querySelector(VlRichDataSorter.is);
-                            if (sorter) {
-                                this.__listenToSortChanges(sorter);
-                            }
-                        });
-                    }
-
-                    if (mutation.removedNodes) {
-                        mutation.removedNodes.forEach(node => {
-                            const sorter = node.querySelector(VlRichDataSorter.is);
-                            if (sorter) {
-                                this.__stopListeningToSortChanges(sorter);
-                            }
-                        });
-                    }
+        const nodeToSorter = (doWithSorter) => {
+            return (node) => {
+                const sorter = node.querySelector(VlRichDataSorter.is);
+                if (sorter) {
+                    doWithSorter(sorter);
                 }
-            });
-        });
-        observer.observe(this.__tableHeaderRow, {childList: true});
+            }
+        };
+        this.__createObserver(
+            nodeToSorter(sorter => this.__listenToSortChanges(sorter)),
+            nodeToSorter(sorter => this.__stopListeningToSortChanges(sorter))
+        ).observe(this.__tableHeaderRow, {childList: true});
     }
 
     __processSearchFilter() {
