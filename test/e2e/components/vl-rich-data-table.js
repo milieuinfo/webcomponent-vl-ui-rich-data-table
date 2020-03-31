@@ -18,13 +18,10 @@ class VlRichDataTable extends VlElement {
 		return new VlDataTable(this.driver, dataTable);
 	}
 
-	async toggleSortOfColumn(index) {
-		const dataTable = await this.getDataTable();
-		const header = await dataTable.getDataTableHeader();
-		const headerRows = await header.getRows();
-		const cells = await headerRows[0].getCells();
-		const link = await cells[index].findElement(By.css("a"));
-		return link.click();
+	async toggleSortOfColumn(field) {
+		const sorter = await this.getSorter(field);
+        const parent = await sorter.findElement(By.xpath('..'));
+		return parent.click();
 	}
 
 	async getSorter(field) {
