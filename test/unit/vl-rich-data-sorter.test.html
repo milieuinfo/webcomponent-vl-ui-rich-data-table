@@ -29,14 +29,13 @@
             const directionIcon = sorter.__directionElement;
             directionIcon.getAttribute('is').should.equal('vl-icon');
 
-            let iconType = '';
+            let iconType = null;
             if (expectedDirection === 'asc') {
                 iconType = 'arrow-down';
             } else if (expectedDirection === 'desc') {
                 iconType = 'arrow-up';
             }
-
-            directionIcon.getAttribute('icon').should.equal(iconType);
+            should.equal(directionIcon.getAttribute('icon'), iconType);
         }
 
         function assertPriority(sorter, priority) {

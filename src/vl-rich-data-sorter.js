@@ -37,7 +37,7 @@ export class VlRichDataSorter extends VlElement(HTMLElement) {
                 }
             </style>
             <div>
-                <span id="direction" is="vl-icon" icon=""></span>
+                <span id="direction" is="vl-icon" class="vl-u-visually-hidden"></span>
                 <label id="priority"></label>
             </div>
         `);
@@ -54,7 +54,14 @@ export class VlRichDataSorter extends VlElement(HTMLElement) {
     set direction(direction) {
         if (this.__direction !== direction) {
             this.__direction = direction;
-            this.__directionElement.setAttribute('icon', this._directionIcon);
+
+            const directionIcon = this._directionIcon;
+            if (directionIcon) {
+                this.__directionElement.setAttribute('icon', this._directionIcon);
+                this.__directionElement.classList.remove('vl-u-visually-hidden');
+            } else {
+                this.__directionElement.classList.add('vl-u-visually-hidden');
+            }
 
             if (direction === undefined) {
                 this.priority = undefined;
@@ -69,7 +76,7 @@ export class VlRichDataSorter extends VlElement(HTMLElement) {
     		case VlRichDataSorter.DIRECTIONS.descending:
     			return 'arrow-up';
     		default:
-    			return '';
+    			return null;
     	}
     }
     

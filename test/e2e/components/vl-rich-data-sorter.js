@@ -12,7 +12,8 @@ class VlRichDataSorter extends VlElement {
 	}
 
 	async isUnsorted() {
-		return this._hasDirectionIcon('');
+	    const icon = await this._getDirectionIcon('');
+	    return icon.hasClass('vl-u-visually-hidden');
 	}
 
 	async getPriority() {
