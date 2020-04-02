@@ -70,16 +70,16 @@ export class VlRichDataSorter extends VlElement(HTMLElement) {
     }
 
     get _directionIcon() {
-    	switch (this.direction) {
-    		case VlRichDataSorter.DIRECTIONS.ascending:
-    			return 'arrow-down';
-    		case VlRichDataSorter.DIRECTIONS.descending:
-    			return 'arrow-up';
-    		default:
-    			return null;
-    	}
+        switch (this.direction) {
+            case VlRichDataSorter.DIRECTIONS.ascending:
+                return 'arrow-down';
+            case VlRichDataSorter.DIRECTIONS.descending:
+                return 'arrow-up';
+            default:
+                return null;
+        }
     }
-    
+
     _setDirectionAndPublishEvent(direction) {
         if (this.direction !== direction) {
             this.direction = direction;

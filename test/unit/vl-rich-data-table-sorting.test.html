@@ -13,28 +13,40 @@
 <body>
 <test-fixture id="vl-rich-data-table-sort-fixture">
     <template>
-        <vl-rich-data-table data-vl-data='{"data": [{"id": 0, "name": "Project #1", "owner": "Jan Jansens"}, {"id": 1, "name": "Project #2", "owner": "Jan Jansens"}]}'>
-            <vl-rich-data-field data-vl-name="id" data-vl-label="ID" data-vl-selector="id" data-vl-sortable data-vl-sorting-direction="asc"></vl-rich-data-field>
-            <vl-rich-data-field data-vl-name="name" data-vl-label="Naam" data-vl-selector="name" data-vl-sortable></vl-rich-data-field>
-            <vl-rich-data-field data-vl-name="owner" data-vl-label="Eigenaar" data-vl-selector="owner"></vl-rich-data-field>
+        <vl-rich-data-table
+                data-vl-data='{"data": [{"id": 0, "name": "Project #1", "owner": "Jan Jansens"}, {"id": 1, "name": "Project #2", "owner": "Jan Jansens"}]}'>
+            <vl-rich-data-field data-vl-name="id" data-vl-label="ID" data-vl-selector="id" data-vl-sortable
+                                data-vl-sorting-direction="asc"></vl-rich-data-field>
+            <vl-rich-data-field data-vl-name="name" data-vl-label="Naam" data-vl-selector="name"
+                                data-vl-sortable></vl-rich-data-field>
+            <vl-rich-data-field data-vl-name="owner" data-vl-label="Eigenaar"
+                                data-vl-selector="owner"></vl-rich-data-field>
         </vl-rich-data-table>
     </template>
 </test-fixture>
 <test-fixture id="vl-rich-data-table-multisort-fixture">
     <template>
-        <vl-rich-data-table data-vl-multisort data-vl-data='{"data": [{"id": 0, "name": "Project #1", "owner": "Jan Jansens"}, {"id": 1, "name": "Project #2", "owner": "Jan Jansens"}]}'>
-            <vl-rich-data-field data-vl-name="id" data-vl-label="ID" data-vl-selector="id" data-vl-sortable data-vl-sorting-direction="asc" data-vl-sorting-priority="1"></vl-rich-data-field>
-            <vl-rich-data-field data-vl-name="name" data-vl-label="Naam" data-vl-selector="name" data-vl-sortable></vl-rich-data-field>
-            <vl-rich-data-field data-vl-name="owner" data-vl-label="Eigenaar" data-vl-selector="owner"></vl-rich-data-field>
+        <vl-rich-data-table data-vl-multisort
+                            data-vl-data='{"data": [{"id": 0, "name": "Project #1", "owner": "Jan Jansens"}, {"id": 1, "name": "Project #2", "owner": "Jan Jansens"}]}'>
+            <vl-rich-data-field data-vl-name="id" data-vl-label="ID" data-vl-selector="id" data-vl-sortable
+                                data-vl-sorting-direction="asc" data-vl-sorting-priority="1"></vl-rich-data-field>
+            <vl-rich-data-field data-vl-name="name" data-vl-label="Naam" data-vl-selector="name"
+                                data-vl-sortable></vl-rich-data-field>
+            <vl-rich-data-field data-vl-name="owner" data-vl-label="Eigenaar"
+                                data-vl-selector="owner"></vl-rich-data-field>
         </vl-rich-data-table>
     </template>
 </test-fixture>
 <test-fixture id="vl-rich-data-table-multisort-multiple-sortings-fixture">
     <template>
-        <vl-rich-data-table data-vl-multisort data-vl-data='{"data": [{"id": 0, "name": "Project #1", "owner": "Jan Jansens"}, {"id": 1, "name": "Project #2", "owner": "Jan Jansens"}]}'>
-            <vl-rich-data-field data-vl-name="id" data-vl-label="ID" data-vl-selector="id" data-vl-sortable data-vl-sorting-direction="desc" data-vl-sorting-priority="1"></vl-rich-data-field>
-            <vl-rich-data-field data-vl-name="name" data-vl-label="Naam" data-vl-selector="name" data-vl-sortable data-vl-sorting-direction="asc" data-vl-sorting-priority="2"></vl-rich-data-field>
-            <vl-rich-data-field data-vl-name="owner" data-vl-label="Eigenaar" data-vl-selector="owner" data-vl-sortable data-vl-sorting-direction="desc" data-vl-sorting-priority="3"></vl-rich-data-field>
+        <vl-rich-data-table data-vl-multisort
+                            data-vl-data='{"data": [{"id": 0, "name": "Project #1", "owner": "Jan Jansens"}, {"id": 1, "name": "Project #2", "owner": "Jan Jansens"}]}'>
+            <vl-rich-data-field data-vl-name="id" data-vl-label="ID" data-vl-selector="id" data-vl-sortable
+                                data-vl-sorting-direction="desc" data-vl-sorting-priority="1"></vl-rich-data-field>
+            <vl-rich-data-field data-vl-name="name" data-vl-label="Naam" data-vl-selector="name" data-vl-sortable
+                                data-vl-sorting-direction="asc" data-vl-sorting-priority="2"></vl-rich-data-field>
+            <vl-rich-data-field data-vl-name="owner" data-vl-label="Eigenaar" data-vl-selector="owner" data-vl-sortable
+                                data-vl-sorting-direction="desc" data-vl-sorting-priority="3"></vl-rich-data-field>
         </vl-rich-data-table>
     </template>
 </test-fixture>
@@ -46,11 +58,11 @@
         function getSorter(table, field) {
             return Array.from(table.__sorters).find(sorter => sorter.for === field);
         }
-        
+
         function toggleSortOfColumn(richTable, index) {
-           	richTable.shadowRoot.querySelector("[is='vl-data-table'] thead tr").querySelectorAll("th > a")[index].click();
+            richTable.shadowRoot.querySelector("[is='vl-data-table'] thead tr").querySelectorAll("th > a")[index].click();
         }
-        
+
 
         test('De mogelijkheid voor te sorteren wordt in de headers getoond indien sortering is ingeschakeld', () => {
             const richTable = fixture('vl-rich-data-table-sort-fixture');
@@ -112,7 +124,7 @@
             });
 
             setTimeout(() => {
-            	toggleSortOfColumn(richTable, 1);
+                toggleSortOfColumn(richTable, 1);
             });
         });
 
@@ -142,7 +154,7 @@
             });
 
             setTimeout(() => {
-            	nameSorter.__directionElement.click();
+                nameSorter.__directionElement.click();
             });
         });
 
@@ -201,7 +213,7 @@
             });
 
             setTimeout(() => {
-            	toggleSortOfColumn(richTable, 1);
+                toggleSortOfColumn(richTable, 1);
             });
         });
 
@@ -239,7 +251,7 @@
             });
 
             setTimeout(() => {
-            	toggleSortOfColumn(richTable, 0);
+                toggleSortOfColumn(richTable, 0);
             });
         });
 
@@ -269,7 +281,7 @@
             });
 
             setTimeout(() => {
-            	toggleSortOfColumn(richTable, 0);
+                toggleSortOfColumn(richTable, 0);
             });
         });
     });
