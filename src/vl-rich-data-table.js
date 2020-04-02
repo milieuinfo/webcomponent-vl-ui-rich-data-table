@@ -13,9 +13,9 @@ import {VlRichDataSorter} from "./vl-rich-data-sorter.js";
  * @extends VlElement
  *
  * @property {string} data-vl-data - De data die door de tabel getoond moet worden in JSON formaat.
- * @property {boolean} data-vl-collaped-m - Vanaf een medium schermgrootte zullen de cellen van elke rij onder elkaar ipv naast elkaar getoond worden.
- * @property {boolean} data-vl-collaped-s - Vanaf een small schermgrootte zullen de cellen van elke rij onder elkaar ipv naast elkaar getoond worden.
- * @property {boolean} data-vl-collaped-xs - Vanaf een extra small schermgrootte zullen de cellen van elke rij onder elkaar ipv naast elkaar getoond worden.
+ * @property {boolean} data-vl-collapsed-m - Vanaf een medium schermgrootte zullen de cellen van elke rij onder elkaar ipv naast elkaar getoond worden.
+ * @property {boolean} data-vl-collapsed-s - Vanaf een small schermgrootte zullen de cellen van elke rij onder elkaar ipv naast elkaar getoond worden.
+ * @property {boolean} data-vl-collapsed-xs - Vanaf een extra small schermgrootte zullen de cellen van elke rij onder elkaar ipv naast elkaar getoond worden.
  * @property {boolean} data-vl-multisort - Laat de gebruiker sorteren op meer dan 1 kolom.
  *
  * @slot filter - slot dat de velden bevat waarop gefilterd wordt. De formData van de search filter worden via een change event doorgegeven bij een wijziging.
@@ -46,6 +46,7 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
             </style>
             <div is="vl-grid" is-stacked>
                 <div id="search" is="vl-column" size="0">
+                    
                     <slot name="filter"></slot>
                 </div>
                 <div id="content" is="vl-column" size="12">
