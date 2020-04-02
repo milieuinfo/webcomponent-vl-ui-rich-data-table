@@ -17,6 +17,8 @@
 // Components
 // ==========================================================================
 
-th.sortable {
-	cursor: pointer;
+th[data-vl-sortable] {
+	a {
+		cursor: pointer;
+	}
 }

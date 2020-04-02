@@ -53,7 +53,7 @@ export class VlRichDataField extends VlElement(HTMLElement) {
             const direction = this.sortingDirection ? `data-vl-direction="${this.sortingDirection}"` : '';
             const priority = this.sortingPriority ? `data-vl-priority="${this.sortingPriority}"` : '';
             template += `<vl-rich-data-sorter data-vl-for="${this.name}" ${direction} ${priority}></vl-rich-data-sorter>`;
-            return `<th class="sortable"><a>${template}</a></th>`;
+            return `<th data-vl-sortable><a>${template}</a></th>`;
         } else {
             return `<th>${template}</th>`;
         }
