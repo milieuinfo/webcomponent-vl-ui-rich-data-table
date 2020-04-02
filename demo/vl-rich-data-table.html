@@ -748,23 +748,33 @@
                                 "medewerkers": [{ "firstName": "Pieter", "lastName": "Beckers" }]
                             }]
                         };
-    
-                        element.addEventListener('change', (e) =&gt; {
+
+                        element.addEventListener(&apos;change&apos;, (e) =&gt; {
                             let newData = data.data;
+                            let totalItems = data.data.length;
+
+                            let filterEntries = undefined;
                             if (e.detail.formData) {
+                                filterEntries = [];
                                 for (let entry of e.detail.formData.entries()) {
                                     newData = filter(newData, entry[0], entry[1]);
+                                    totalItems = newData.length;
+                                    filterEntries.push({
+                                        name: entry[0],
+                                        value: entry[1]
+                                    });
                                 }
                             }
-    
+
+                            let sorting;
                             if (e.detail.sorting) {
-                                const sorting = e.detail.sorting;
+                                sorting = e.detail.sorting;
                                 newData = [...newData].sort((firstEl, secondEl) =&gt; {
                                     for (let i = 0; i &lt; sorting.length; i++) {
                                         const criteria = sorting[i];
                                         const firstValue = firstEl[criteria.name];
                                         const secondValue = secondEl[criteria.name];
-                                        const isAscending = criteria.direction === 'asc';
+                                        const isAscending = criteria.direction === &apos;asc&apos;;
                                         if (firstValue &lt; secondValue) {
                                             return isAscending ? -1 : 1;
                                         } else if (firstValue &gt; secondValue) {
@@ -774,32 +784,34 @@
                                     return 0;
                                 });
                             }
-                            
+
                             if (e.detail.paging) {
                                 newData = page(e.detail.paging.currentPage, pager.itemsPerPage, newData);
                             }
-    
+
                             element.data = {
                                 data: newData,
+                                sorting: sorting,
                                 paging: {
                                     currentPage: e.detail.paging.currentPage,
-                                    totalItems: e.detail.formData ? newData.length : data.data.length,
-                                }
+                                    totalItems: totalItems,
+                                },
+                                filter: filterEntries
                             };
                         });
-    
+
                         function page(page, itemsPerPage, data) {
                             const start = (page - 1) * itemsPerPage;
                             const end = start + itemsPerPage;
                             return data.slice(start, end);
                         }
-    
+
                         element.data = {
                             data: page(1, 10, data.data)
                         };
-    
+
                         function filter(data, pathToKey, value) {
-                            if (value === "") {
+                            if (value === &quot;&quot;) {
                                 return data;
                             }
                             return data.filter(element =&gt; {
@@ -807,10 +819,10 @@
                                 return valueByPath.includes(value);
                             });
                         }
-    
+
                         function findValueByPath(element, pathToKey) {
-                            var keys = pathToKey.split('.');
-    
+                            var keys = pathToKey.split(&apos;.&apos;);
+
                             let current = element;
                             for (let i = 0; i &lt; keys.length; i++) {
                                 if (current[keys[i]] !== undefined) {

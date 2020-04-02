@@ -41,7 +41,7 @@
 		"release": "np",
 		"release:prepare": "npm explore vl-ui-util -- npm run release-component:prepare $(pwd) rich-data-table",
 		"release:testless": "np --yolo",
-		"demo": "http-server -p 8090"
+		"demo": "http-server"
 	},
 	"dependencies": {
 		"vl-ui-core": "^5.1.2",
