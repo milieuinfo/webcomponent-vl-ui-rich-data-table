@@ -2,8 +2,8 @@ import {VlElement, define} from '/node_modules/vl-ui-core/dist/vl-core.js';
 import '/node_modules/vl-ui-data-table/dist/vl-data-table.js';
 import '/node_modules/vl-ui-grid/dist/vl-grid.js';
 
-import {VlRichDataField} from "./vl-rich-data-field.js";
-import {VlRichDataSorter} from "./vl-rich-data-sorter.js";
+import { VlRichDataField } from "./vl-rich-data-field.js";
+import { VlRichDataSorter } from "./vl-rich-data-sorter.js";
 
 /**
  * VlRichDataTable
@@ -13,13 +13,13 @@ import {VlRichDataSorter} from "./vl-rich-data-sorter.js";
  * @extends VlElement
  *
  * @property {string} data-vl-data - De data die door de tabel getoond moet worden in JSON formaat.
- * @property {boolean} data-vl-collapsed-m - Vanaf een medium schermgrootte zullen de cellen van elke rij onder elkaar ipv naast elkaar getoond worden.
- * @property {boolean} data-vl-collapsed-s - Vanaf een small schermgrootte zullen de cellen van elke rij onder elkaar ipv naast elkaar getoond worden.
- * @property {boolean} data-vl-collapsed-xs - Vanaf een extra small schermgrootte zullen de cellen van elke rij onder elkaar ipv naast elkaar getoond worden.
+ * @property {boolean} data-vl-collaped-m - Vanaf een medium schermgrootte zullen de cellen van elke rij onder elkaar ipv naast elkaar getoond worden.
+ * @property {boolean} data-vl-collaped-s - Vanaf een small schermgrootte zullen de cellen van elke rij onder elkaar ipv naast elkaar getoond worden.
+ * @property {boolean} data-vl-collaped-xs - Vanaf een extra small schermgrootte zullen de cellen van elke rij onder elkaar ipv naast elkaar getoond worden.
  * @property {boolean} data-vl-multisort - Laat de gebruiker sorteren op meer dan 1 kolom.
- *
- * @slot filter - slot dat de velden bevat waarop gefilterd wordt. De formData van de search filter worden via een change event doorgegeven bij een wijziging.
- *
+ * 
+ * @slot filter - slot dat de velden bevat waarop gefilterd wordt. De formData van de search filter worden via een change event doorgegeven bij een wijziging. 
+ * 
  * @see {@link https://www.github.com/milieuinfo/webcomponent-vl-ui-rich-data-table/releases/latest|Release notes}
  * @see {@link https://www.github.com/milieuinfo/webcomponent-vl-ui-rich-data-table/issues|Issues}
  * @see {@link https://webcomponenten.omgeving.vlaanderen.be/demo/vl-rich-data-table.html|Demo}
@@ -29,7 +29,7 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
     static get _observedAttributes() {
         return ['data', 'collapsed-m', 'collapsed-s', 'collapsed-xs'];
     }
-
+    
     static get _tableAttributes() {
         return ['data-vl-collapsed-m', 'data-vl-collapsed-s', 'data-vl-collapsed-xs'];
     }
@@ -41,12 +41,11 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
     constructor() {
         super(`
             <style>
-                @import "/src/style.css";
+                @import '/node_modules/vl-ui-rich-data-table/dist/style.css';
                 @import "/node_modules/vl-ui-data-table/dist/style.css";
             </style>
             <div is="vl-grid" is-stacked>
                 <div id="search" is="vl-column" size="0">
-                    
                     <slot name="filter"></slot>
                 </div>
                 <div id="content" is="vl-column" size="12">
@@ -68,13 +67,13 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
         this.__observeSorters();
         this.__observePager();
     }
-
+    
     attributeChangedCallback(attr, oldValue, newValue) {
-        super.attributeChangedCallback(attr, oldValue, newValue);
-        if (VlRichDataTable._tableAttributes.includes(attr)) {
-            const withoutDataVlPrefix = attr.substring("data-vl-".length);
-            this.__table.toggleAttribute(withoutDataVlPrefix);
-        }
+    	super.attributeChangedCallback(attr, oldValue, newValue);
+    	if (VlRichDataTable._tableAttributes.includes(attr)) {
+        const withoutDataVlPrefix = attr.substring("data-vl-".length);
+        this.__table.toggleAttribute(withoutDataVlPrefix);
+    	}
     }
 
     get __activeSorters() {
@@ -92,7 +91,7 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
     }
 
     get __filter() {
-        return this.querySelector("[slot='filter']");
+    	return this.querySelector("[slot='filter']");
     }
 
     get __formDataState() {
@@ -120,7 +119,7 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
     }
 
     get __richDataFields() {
-        return [...this.__fields].filter(field => field.constructor === VlRichDataField);
+        return [... this.__fields].filter(field => field.constructor === VlRichDataField);
     }
 
     get __sorters() {
@@ -166,25 +165,25 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
     get __tableBody() {
         return this.__table.querySelector('tbody');
     }
-
-    __onStateChange(event, {paging = false} = {}) {
-        event.stopPropagation();
-        event.preventDefault();
-        this.dispatchEvent(new CustomEvent('change', {
-            detail: this.__getState({paging}),
+    
+    __onStateChange(event, {paging = false}={}) {
+    	event.stopPropagation();
+    	event.preventDefault();
+    	this.dispatchEvent(new CustomEvent('change', {
+            detail: this.__getState({paging}), 
             bubbles: true
         }));
     }
 
     __getState({paging}) {
-        const state = {};
+    	const state = {};
         state.sorting = this.__sortingState;
         state.formData = this.__formDataState;
         state.paging = this.__pagingState;
         if (!paging && state.paging) {
             state.paging.currentPage = 1;
         }
-        return state;
+    	return state;
     }
 
     get _isMultisortingEnabled() {
@@ -203,7 +202,7 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
      */
     set data(object) {
         if (this.__data !== object) {
-            const {data, paging, sorting, filter} = object;
+            const { data, paging, sorting, filter } = object;
             this._validate(data);
             this._paging = paging;
             this._sorting = sorting;
@@ -278,11 +277,9 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
             const headerTemplate = this._template(field.renderCellHeader());
             this.__tableHeaderRow.appendChild(headerTemplate);
         });
-        this.__tableHeaderRow.querySelectorAll("th[data-vl-sortable] > a").forEach(th => {
-            th.addEventListener('click', e => {
-                th.querySelector("vl-rich-data-sorter").nextDirection();
-            })
-        });
+        this.__tableHeaderRow.querySelectorAll("th[data-vl-sortable] > a").forEach(th => { th.addEventListener('click', e => 	{
+        	th.querySelector("vl-rich-data-sorter").nextDirection();
+        })});
     }
 
     _renderBody() {
@@ -333,7 +330,7 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
     }
 
     __sortingChanged(event) {
-        if (this._isMultisortingEnabled) {
+        if(this._isMultisortingEnabled) {
             this.__activeSorters.forEach((sorter, index) => sorter.priority = index + 1);
         } else {
             this.__activeSorters.filter(sorter => sorter !== event.target).forEach(sorter => sorter.direction = undefined);
@@ -395,7 +392,7 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
         const observer = new MutationObserver(() => {
             this.__processSearchFilter();
         });
-        observer.observe(this, {childList: true, subtree: true});
+        observer.observe(this, { childList: true, subtree: true });
     }
 
     __processSearchFilter() {
@@ -410,7 +407,7 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
 
     __setGridColumnWidth(width) {
         this.__searchColumn.setAttribute('size', width);
-        this.__contentColumn.setAttribute('size', 12 - width);
+        this.__contentColumn.setAttribute('size', 12-width);
     }
 
     __addSearchFilterEventListeners() {
@@ -431,9 +428,9 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
     }
 
     __onFilterFieldChanged(event) {
-        event.stopPropagation();
+    	event.stopPropagation();
         event.preventDefault();
-        this.__onStateChange(event);
+    	this.__onStateChange(event);
     }
 }
 

@@ -1,4 +1,4 @@
-import {VlElement, define} from '/node_modules/vl-ui-core/dist/vl-core.js';
+import {VlElement, define} from 'vl-ui-core';
 
 /**
  * VlRichDataField

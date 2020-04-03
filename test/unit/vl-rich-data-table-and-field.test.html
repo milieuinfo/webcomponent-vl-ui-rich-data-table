@@ -12,7 +12,8 @@
 <body>
 <test-fixture id="vl-rich-data-table-fixture">
     <template>
-        <vl-rich-data-table data-vl-data='{"data": [{"id": 0, "name": "Foo", "extendedName": "Foobar"}, {"id": 1, "name": "Bar", "extendedName": "Barfoo"}]}'>
+        <vl-rich-data-table
+                data-vl-data='{"data": [{"id": 0, "name": "Foo", "extendedName": "Foobar"}, {"id": 1, "name": "Bar", "extendedName": "Barfoo"}]}'>
             <vl-rich-data-field id="id-field" data-vl-label="ID" data-vl-selector="id"></vl-rich-data-field>
             <vl-rich-data-field id="name-field" data-vl-label="Naam" data-vl-selector="name"></vl-rich-data-field>
         </vl-rich-data-table>
@@ -27,7 +28,7 @@
             const richTable = fixture('vl-rich-data-table-fixture');
 
             tableShouldHaveHeaders(richTable, 'ID', 'Naam');
-            tableShouldHaveDataRows(richTable, [ '0', 'Foo' ], [ '1', 'Bar' ]);
+            tableShouldHaveDataRows(richTable, ['0', 'Foo'], ['1', 'Bar']);
         });
 
         test('Een aanpassing van de data wordt zichtbaar in de tabel', () => {
@@ -35,7 +36,7 @@
             richTable.data = {"data": [{"id": 3, "name": "Foobar"}]};
 
             tableShouldHaveHeaders(richTable, 'ID', 'Naam');
-            tableShouldHaveDataRows(richTable, [ '3', 'Foobar' ]);
+            tableShouldHaveDataRows(richTable, ['3', 'Foobar']);
         });
 
         test('Een aanpassing van de label van een field wordt zichtbaar in de tabel', () => {
@@ -44,7 +45,7 @@
             idField.dataset.vlLabel = 'Identifier';
 
             tableShouldHaveHeaders(richTable, 'Identifier', 'Naam');
-            tableShouldHaveDataRows(richTable, [ '0', 'Foo' ], [ '1', 'Bar' ]);
+            tableShouldHaveDataRows(richTable, ['0', 'Foo'], ['1', 'Bar']);
         });
 
         test('Een aanpassing van de selector van een field wordt zichtbaar in de tabel', () => {
@@ -53,7 +54,7 @@
             nameField.dataset.vlSelector = 'extendedName';
 
             tableShouldHaveHeaders(richTable, 'ID', 'Naam');
-            tableShouldHaveDataRows(richTable, [ '0', 'Foobar' ], [ '1', 'Barfoo' ]);
+            tableShouldHaveDataRows(richTable, ['0', 'Foobar'], ['1', 'Barfoo']);
         });
 
         test('Een field verwijderen zal ervoor zorgen dat deze kolom ook niet langer in de tabel getoond wordt', (done) => {
@@ -63,7 +64,7 @@
 
             setTimeout(() => {
                 tableShouldHaveHeaders(richTable, 'Naam');
-                tableShouldHaveDataRows(richTable, [ 'Foo' ], [ 'Bar' ]);
+                tableShouldHaveDataRows(richTable, ['Foo'], ['Bar']);
                 done();
             });
         });
@@ -77,7 +78,7 @@
 
             setTimeout(() => {
                 tableShouldHaveHeaders(richTable, 'ID', 'Naam', 'Uitgebreide naam');
-                tableShouldHaveDataRows(richTable, [ '0', 'Foo', 'Foobar' ], [ '1', 'Bar', 'Barfoo' ]);
+                tableShouldHaveDataRows(richTable, ['0', 'Foo', 'Foobar'], ['1', 'Bar', 'Barfoo']);
                 done();
             });
         });
