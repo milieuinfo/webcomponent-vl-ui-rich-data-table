@@ -85,6 +85,21 @@
             should.equal(sorter.direction, undefined);
         });
 
+        test('Bij het overgaan naar de volgende sorteringsrichting, zal de zichtbaarheid van de container worden aangepast', () => {
+            const sorter = fixture('vl-rich-data-sorter-fixture');
+
+            assert.isTrue(sorter.__containerElement.classList.contains('vl-u-visually-hidden'));
+
+            sorter.nextDirection();
+            assert.isFalse(sorter.__containerElement.classList.contains('vl-u-visually-hidden'));
+
+            sorter.nextDirection();
+            assert.isFalse(sorter.__containerElement.classList.contains('vl-u-visually-hidden'));
+
+            sorter.nextDirection();
+            assert.isTrue(sorter.__containerElement.classList.contains('vl-u-visually-hidden'));
+        });
+
         test('Bij het overgaan naar de volgende sorteringsrichting, wordt er een event uitgestuurd', (done) => {
             const sorter = fixture('vl-rich-data-sorter-priority-fixture');
 
