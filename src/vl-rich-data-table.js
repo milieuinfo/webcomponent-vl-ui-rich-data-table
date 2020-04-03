@@ -19,6 +19,7 @@ import {VlRichDataSorter} from "./vl-rich-data-sorter.js";
  * @property {boolean} data-vl-multisort - Laat de gebruiker sorteren op meer dan 1 kolom.
  *
  * @slot filter - slot dat de velden bevat waarop gefilterd wordt. De formData van de search filter worden via een change event doorgegeven bij een wijziging.
+ * @property {boolean} data-vl-filter-closable - Attribuut dat de filter sluitbaar maakt en een knop getoond wordt om de filter te tonen en terug te verbergen.
  *
  * @see {@link https://www.github.com/milieuinfo/webcomponent-vl-ui-rich-data-table/releases/latest|Release notes}
  * @see {@link https://www.github.com/milieuinfo/webcomponent-vl-ui-rich-data-table/issues|Issues}
@@ -27,7 +28,7 @@ import {VlRichDataSorter} from "./vl-rich-data-sorter.js";
  */
 export class VlRichDataTable extends VlElement(HTMLElement) {
     static get _observedAttributes() {
-        return ['data', 'collapsed-m', 'collapsed-s', 'collapsed-xs'];
+        return ['data', 'collapsed-m', 'collapsed-s', 'collapsed-xs', 'filter-closable'];
     }
 
     static get _tableAttributes() {
@@ -42,14 +43,23 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
         super(`
             <style>
                 @import "/src/style.css";
+                @import "/node_modules/vl-ui-action-group/dist/style.css";
+                @import "/node_modules/vl-ui-icon/dist/style.css";
+                @import "/node_modules/vl-ui-button/dist/style.css";
+                @import "/node_modules/vl-ui-link/dist/style.css";
                 @import "/node_modules/vl-ui-data-table/dist/style.css";
             </style>
             <div is="vl-grid" is-stacked>
                 <div id="search" is="vl-column" size="0">
-                    
+                    <div is="vl-action-group" id="close-filter" align="right" hidden>
+                        <button is="vl-button-link" type="button" aria-label="Verberg de filter"><span is="vl-icon" icon="close" before></span>Sluiten</button>
+                    </div>
                     <slot name="filter"></slot>
                 </div>
                 <div id="content" is="vl-column" size="12">
+                    <div is="vl-action-group" id="toggle-filter" align="right" hidden>
+                        <button is="vl-button-link" type="button" aria-label="Toon de filter"><span is="vl-icon" icon="content-filter" before></span>Filter</button>
+                    </div>
                     <table is="vl-data-table">
                         <thead>
                             <tr></tr>
@@ -67,6 +77,7 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
 
         this.__observeSorters();
         this.__observePager();
+        this.__observeFilterButtons();
     }
 
     attributeChangedCallback(attr, oldValue, newValue) {
@@ -93,6 +104,14 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
 
     get __filter() {
         return this.querySelector("[slot='filter']");
+    }
+
+    get __filterCloseButton() {
+        return this.shadowRoot.querySelector("#close-filter");
+    }
+
+    get __filterToggleButton() {
+        return this.shadowRoot.querySelector("#toggle-filter");
     }
 
     get __formDataState() {
@@ -303,6 +322,19 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
         this.data = JSON.parse(newValue);
     }
 
+    _filter_closableChangedCallback(oldValue, newValue) {
+        console.log('_filterClosableChangedCallback', newValue);
+        if (newValue != null) {
+            this.__filterCloseButton.hidden = false;
+            // if (this.isFilterClosed()) {
+            //     this.__filterToggleButton.hidden = false; //todo?
+            // }
+        } else {
+            this.__filterCloseButton.hidden = true;
+            this.__filterToggleButton.hidden = true;
+        }
+    }
+
     __listenToFieldChanges(field) {
         field.addEventListener('change', this.__fieldChanged.bind(this));
     }
@@ -364,6 +396,21 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
             if (render && shouldRender) {
                 this._render();
             }
+        });
+    }
+
+    __observeFilterButtons() {
+        this.__filterCloseButton.addEventListener('click', () => {
+            this.__filter.hidden = true;
+            this.__filterCloseButton.hidden = true;
+            this.__setGridColumnWidth(0);
+            this.__filterToggleButton.hidden = false;
+        });
+        this.__filterToggleButton.addEventListener('click', () => {
+            this.__setGridColumnWidth(4);
+            this.__filter.hidden = false;
+            this.__filterCloseButton.hidden = false;
+            this.__filterToggleButton.hidden = true;
         });
     }
 
