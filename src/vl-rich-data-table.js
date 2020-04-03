@@ -39,6 +39,10 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
         return 'vl-rich-data-table';
     }
 
+    static get defaultSearchColumnSize() {
+        return 4;
+    }
+
     constructor() {
         super(`
             <style>
@@ -323,16 +327,8 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
     }
 
     _filter_closableChangedCallback(oldValue, newValue) {
-        console.log('_filterClosableChangedCallback', newValue);
-        if (newValue != null) {
-            this.__filterCloseButton.hidden = false;
-            // if (this.isFilterClosed()) {
-            //     this.__filterToggleButton.hidden = false; //todo?
-            // }
-        } else {
-            this.__filterCloseButton.hidden = true;
-            this.__filterToggleButton.hidden = true;
-        }
+        this.__filterCloseButton.hidden = newValue == null;
+        this.__filterToggleButton.hidden = newValue == null;
     }
 
     __listenToFieldChanges(field) {
@@ -401,17 +397,15 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
 
     __observeFilterButtons() {
         this.__filterCloseButton.addEventListener('click', () => {
-            this.__filter.hidden = true;
-            this.__filterCloseButton.hidden = true;
             this.__setGridColumnWidth(0);
-            this.__filterToggleButton.hidden = false;
         });
         this.__filterToggleButton.addEventListener('click', () => {
-            this.__setGridColumnWidth(4);
-            this.__filter.hidden = false;
-            this.__filterCloseButton.hidden = false;
-            this.__filterToggleButton.hidden = true;
+            this.__setGridColumnWidth(this.__searchColumnShown ? 0 : VlRichDataTable.defaultSearchColumnSize);
         });
+    }
+
+    get __searchColumnShown() {
+        return Number(this.__searchColumn.getAttribute('size')) === VlRichDataTable.defaultSearchColumnSize;
     }
 
     __observePager() {
@@ -448,7 +442,7 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
     __processSearchFilter() {
         if (this.__searchFilter) {
             this.__searchFilter.setAttribute('alt', '');
-            this.__setGridColumnWidth(4);
+            this.__setGridColumnWidth(VlRichDataTable.defaultSearchColumnSize);
             this.__addSearchFilterEventListeners();
         } else {
             this.__setGridColumnWidth(0);
@@ -456,6 +450,7 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
     }
 
     __setGridColumnWidth(width) {
+        this.__searchColumn.hidden = width === 0;
         this.__searchColumn.setAttribute('size', width);
         this.__contentColumn.setAttribute('size', 12 - width);
     }
