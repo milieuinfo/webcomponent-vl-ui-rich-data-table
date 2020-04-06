@@ -44,17 +44,15 @@
 		"demo": "http-server"
 	},
 	"dependencies": {
-		"vl-ui-action-group": "^3.0.1",
-		"vl-ui-button": "^5.0.1",
-		"vl-ui-core": "^5.1.2",
+        "vl-ui-button": "^5.0.1",
+        "vl-ui-core": "^5.1.2",
 		"vl-ui-data-table": "^3.1.0",
 		"vl-ui-grid": "^3.0.1",
 		"vl-ui-icon": "^4.0.1"
 	},
 	"peerDependencies": {
-		"vl-ui-action-group": "^3.0.1",
-		"vl-ui-button": "^5.0.1",
-		"vl-ui-core": "^5.1.2",
+        "vl-ui-button": "^5.0.1",
+        "vl-ui-core": "^5.1.2",
 		"vl-ui-data-table": "^3.1.0",
 		"vl-ui-grid": "^3.0.1",
 		"vl-ui-icon": "^4.0.1"
