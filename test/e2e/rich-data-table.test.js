@@ -278,6 +278,33 @@ describe('vl-rich-data-table', async () => {
         await assertRow(richDataTable, 0, [24, "Project #24", "Riquier", "Beckers", "Project #24 o.l.v. Pascal Riquier"]);
     });
 
+    it('Als gebruiker kan ik de filter sluiten met de sluit knop en terug openen met de filter knop', async () => {
+        const richDataTable = await vlRichDataTablePage.getRichDataTableFilterSortingPaging();
+        const filter = await richDataTable.getSearchFilter();
+        await assert.eventually.isTrue(filter.isDisplayed());
+        const closeButton = await richDataTable.getFilterCloseButton();
+
+        await closeButton.click();
+        await assert.eventually.isFalse(filter.isDisplayed());
+
+        const filterToggleButton = await richDataTable.getFilterToggleButton();
+        await filterToggleButton.click();
+        await assert.eventually.isTrue(filter.isDisplayed());
+    });
+
+    it('Als gebruiker kan ik de filter sluiten en terug openen met de filter knop', async () => {
+        const richDataTable = await vlRichDataTablePage.getRichDataTableFilterSortingPaging();
+        const filter = await richDataTable.getSearchFilter();
+        await assert.eventually.isTrue(filter.isDisplayed());
+        const filterToggleButton = await richDataTable.getFilterToggleButton();
+
+        await filterToggleButton.click();
+        await assert.eventually.isFalse(filter.isDisplayed());
+
+        await filterToggleButton.click();
+        await assert.eventually.isTrue(filter.isDisplayed());
+    });
+
     async function assertHeaders(richDataTable, expectedHeaders) {
         const table = await richDataTable.getDataTable();
         const headers = await table.getDataTableHeader();

@@ -22,3 +22,12 @@ th[data-vl-sortable] {
         cursor: pointer;
     }
 }
+
+.vl-filter__close {
+    position: absolute;
+    top: .2rem;
+    right: .2rem;
+    padding: 1rem;
+    border: 0;
+    overflow: hidden;
+}

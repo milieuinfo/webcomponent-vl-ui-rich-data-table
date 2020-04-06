@@ -39,7 +39,7 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
         return 'vl-rich-data-table';
     }
 
-    static get defaultSearchColumnSize() {
+    static get _defaultSearchColumnSize() {
         return 4;
     }
 
@@ -47,23 +47,22 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
         super(`
             <style>
                 @import "/src/style.css";
-                @import "/node_modules/vl-ui-action-group/dist/style.css";
                 @import "/node_modules/vl-ui-icon/dist/style.css";
                 @import "/node_modules/vl-ui-button/dist/style.css";
-                @import "/node_modules/vl-ui-link/dist/style.css";
                 @import "/node_modules/vl-ui-data-table/dist/style.css";
             </style>
             <div is="vl-grid" is-stacked>
+                <div is="vl-column" id="toggle-filter" class="vl-u-align-right" hidden size="12">
+                    <button id="toggle-filter-button" is="vl-button-link" type="button" aria-label="Toon de filter"><span is="vl-icon" icon="content-filter" before></span>Filter</button>
+                </div>
                 <div id="search" is="vl-column" size="0">
-                    <div is="vl-action-group" id="close-filter" align="right" hidden>
-                        <button is="vl-button-link" type="button" aria-label="Verberg de filter"><span is="vl-icon" icon="close" before></span>Sluiten</button>
-                    </div>
+                    <button id="close-filter-button" class="vl-filter__close" hidden type="button">
+                        <span is="vl-icon" icon="close"></span>
+                        <span class="vl-u-visually-hidden">Filter sluiten</span>
+                    </button>
                     <slot name="filter"></slot>
                 </div>
                 <div id="content" is="vl-column" size="12">
-                    <div is="vl-action-group" id="toggle-filter" align="right" hidden>
-                        <button is="vl-button-link" type="button" aria-label="Toon de filter"><span is="vl-icon" icon="content-filter" before></span>Filter</button>
-                    </div>
                     <table is="vl-data-table">
                         <thead>
                             <tr></tr>
@@ -111,11 +110,15 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
     }
 
     get __filterCloseButton() {
-        return this.shadowRoot.querySelector("#close-filter");
+        return this.shadowRoot.querySelector("#close-filter-button");
+    }
+
+    get __filterToggleContainer() {
+        return this.shadowRoot.querySelector("#toggle-filter");
     }
 
     get __filterToggleButton() {
-        return this.shadowRoot.querySelector("#toggle-filter");
+        return this.shadowRoot.querySelector("#toggle-filter-button");
     }
 
     get __formDataState() {
@@ -218,6 +221,14 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
         this._render();
         this.__observeFields();
         this.__observeSearchFilter();
+    }
+
+    hideFilterColumn() {
+        this.__setGridColumnWidth(0);
+    }
+
+    showFilterColumn() {
+        this.__setGridColumnWidth(VlRichDataTable._defaultSearchColumnSize);
     }
 
     /**
@@ -328,7 +339,7 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
 
     _filter_closableChangedCallback(oldValue, newValue) {
         this.__filterCloseButton.hidden = newValue == null;
-        this.__filterToggleButton.hidden = newValue == null;
+        this.__filterToggleContainer.hidden = newValue == null;
     }
 
     __listenToFieldChanges(field) {
@@ -397,15 +408,19 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
 
     __observeFilterButtons() {
         this.__filterCloseButton.addEventListener('click', () => {
-            this.__setGridColumnWidth(0);
+            this.hideFilterColumn();
         });
         this.__filterToggleButton.addEventListener('click', () => {
-            this.__setGridColumnWidth(this.__searchColumnShown ? 0 : VlRichDataTable.defaultSearchColumnSize);
+            if (this.__searchColumnShown) {
+                this.hideFilterColumn();
+            } else {
+                this.showFilterColumn();
+            }
         });
     }
 
     get __searchColumnShown() {
-        return Number(this.__searchColumn.getAttribute('size')) === VlRichDataTable.defaultSearchColumnSize;
+        return Number(this.__searchColumn.getAttribute('size')) === VlRichDataTable._defaultSearchColumnSize;
     }
 
     __observePager() {
@@ -442,10 +457,10 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
     __processSearchFilter() {
         if (this.__searchFilter) {
             this.__searchFilter.setAttribute('alt', '');
-            this.__setGridColumnWidth(VlRichDataTable.defaultSearchColumnSize);
+            this.showFilterColumn();
             this.__addSearchFilterEventListeners();
         } else {
-            this.__setGridColumnWidth(0);
+            this.hideFilterColumn();
         }
     }
 
