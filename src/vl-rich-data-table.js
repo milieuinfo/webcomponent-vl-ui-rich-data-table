@@ -342,9 +342,9 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
 
     _filter_closedChangedCallback(oldValue, newValue) {
         if (newValue == null) {
-            this.__setGridColumnWidth(VlRichDataTable._defaultSearchColumnSize);
+            this.__showSearchColumn();
         } else {
-            this.__setGridColumnWidth(0);
+            this.__hideSearchColumn();
         }
     }
 
@@ -455,15 +455,24 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
     __processSearchFilter() {
         if (this.__searchFilter) {
             this.__searchFilter.setAttribute('alt', '');
-            this.__setGridColumnWidth(VlRichDataTable._defaultSearchColumnSize);
+            this.__showSearchColumn();
             this.__addSearchFilterEventListeners();
         } else {
-            this.__setGridColumnWidth(0);
+            this.__hideSearchColumn();
         }
     }
 
+    __hideSearchColumn() {
+        this.__searchColumn.hidden = true;
+        this.__setGridColumnWidth(0);
+    }
+
+    __showSearchColumn() {
+        this.__searchColumn.hidden = false;
+        this.__setGridColumnWidth(VlRichDataTable._defaultSearchColumnSize);
+    }
+
     __setGridColumnWidth(width) {
-        this.__searchColumn.hidden = width === 0;
         this.__searchColumn.setAttribute('size', width);
         this.__contentColumn.setAttribute('size', 12 - width);
     }
