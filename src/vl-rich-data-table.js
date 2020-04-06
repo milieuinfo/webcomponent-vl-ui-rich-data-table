@@ -20,6 +20,10 @@ import {VlRichDataSorter} from "./vl-rich-data-sorter.js";
  *
  * @slot filter - slot dat de velden bevat waarop gefilterd wordt. De formData van de search filter worden via een change event doorgegeven bij een wijziging.
  * @property {boolean} data-vl-filter-closable - Attribuut dat de filter sluitbaar maakt en een knop getoond wordt om de filter te tonen en terug te verbergen.
+ * @property {boolean} data-vl-filter-closed - Attribuut dat aangeeft of dat de filter gesloten is.
+ *
+ * @slot toggle-filter-button-text - slot om de tekst te kunnen wijzigen van de toggle filter knop. Default: Filter.
+ * @slot close-filter-button-text - slot om de onzichtbare tekst te kunnen wijzigen van de filter sluit knop. Default: Filter sluiten.
  *
  * @see {@link https://www.github.com/milieuinfo/webcomponent-vl-ui-rich-data-table/releases/latest|Release notes}
  * @see {@link https://www.github.com/milieuinfo/webcomponent-vl-ui-rich-data-table/issues|Issues}
@@ -28,7 +32,7 @@ import {VlRichDataSorter} from "./vl-rich-data-sorter.js";
  */
 export class VlRichDataTable extends VlElement(HTMLElement) {
     static get _observedAttributes() {
-        return ['data', 'collapsed-m', 'collapsed-s', 'collapsed-xs', 'filter-closable'];
+        return ['data', 'collapsed-m', 'collapsed-s', 'collapsed-xs', 'filter-closable', 'filter-closed'];
     }
 
     static get _tableAttributes() {
@@ -53,12 +57,14 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
             </style>
             <div is="vl-grid" is-stacked>
                 <div is="vl-column" id="toggle-filter" class="vl-u-align-right" hidden size="12">
-                    <button id="toggle-filter-button" is="vl-button-link" type="button" aria-label="Toon de filter"><span is="vl-icon" icon="content-filter" before></span>Filter</button>
+                    <button id="toggle-filter-button" is="vl-button-link" type="button" aria-label="Toon de filter">
+                        <span is="vl-icon" icon="content-filter" before></span><slot name="toggle-filter-button-text">Filter</slot>
+                    </button>
                 </div>
                 <div id="search" is="vl-column" size="0">
                     <button id="close-filter-button" class="vl-filter__close" hidden type="button">
                         <span is="vl-icon" icon="close"></span>
-                        <span class="vl-u-visually-hidden">Filter sluiten</span>
+                        <span class="vl-u-visually-hidden"><slot name="close-filter-button-text">Filter sluiten</slot></span>
                     </button>
                     <slot name="filter"></slot>
                 </div>
@@ -348,6 +354,14 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
         this.__filterToggleContainer.hidden = newValue == null;
     }
 
+    _filter_closedChangedCallback(oldValue, newValue) {
+        if (newValue == null) {
+            this.showFilterColumn();
+        } else {
+            this.hideFilterColumn();
+        }
+    }
+
     __listenToFieldChanges(field) {
         field.addEventListener('change', this.__fieldChanged.bind(this));
     }
@@ -414,19 +428,11 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
 
     __observeFilterButtons() {
         this.__filterCloseButton.addEventListener('click', () => {
-            this.hideFilterColumn();
+            this.setAttribute('data-vl-filter-closed', '');
         });
         this.__filterToggleButton.addEventListener('click', () => {
-            if (this.__searchColumnShown) {
-                this.hideFilterColumn();
-            } else {
-                this.showFilterColumn();
-            }
+            this.toggleAttribute('data-vl-filter-closed');
         });
-    }
-
-    get __searchColumnShown() {
-        return Number(this.__searchColumn.getAttribute('size')) === VlRichDataTable._defaultSearchColumnSize;
     }
 
     __observePager() {

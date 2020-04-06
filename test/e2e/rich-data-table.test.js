@@ -282,13 +282,12 @@ describe('vl-rich-data-table', async () => {
         const richDataTable = await vlRichDataTablePage.getRichDataTableFilterSortingPaging();
         const filter = await richDataTable.getSearchFilter();
         await assert.eventually.isTrue(filter.isDisplayed());
-        const closeButton = await richDataTable.getFilterCloseButton();
 
-        await closeButton.click();
+        await richDataTable.closeFilter();
+
         await assert.eventually.isFalse(filter.isDisplayed());
 
-        const filterToggleButton = await richDataTable.getFilterToggleButton();
-        await filterToggleButton.click();
+        await richDataTable.toggleFilter();
         await assert.eventually.isTrue(filter.isDisplayed());
     });
 
@@ -296,12 +295,11 @@ describe('vl-rich-data-table', async () => {
         const richDataTable = await vlRichDataTablePage.getRichDataTableFilterSortingPaging();
         const filter = await richDataTable.getSearchFilter();
         await assert.eventually.isTrue(filter.isDisplayed());
-        const filterToggleButton = await richDataTable.getFilterToggleButton();
 
-        await filterToggleButton.click();
+        await richDataTable.toggleFilter();
         await assert.eventually.isFalse(filter.isDisplayed());
 
-        await filterToggleButton.click();
+        await richDataTable.toggleFilter();
         await assert.eventually.isTrue(filter.isDisplayed());
     });
 

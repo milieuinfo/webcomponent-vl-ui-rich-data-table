@@ -24,14 +24,14 @@ class VlRichDataTable extends VlElement {
         return parent.click();
     }
 
-    async getFilterCloseButton() {
+    async closeFilter() {
         const button = await this.shadowRoot.findElement(By.css('#close-filter-button'));
-        return new VlButton(this.driver, button);
+        return button.click();
     }
 
-    async getFilterToggleButton() {
+    async toggleFilter() {
         const button = await this.shadowRoot.findElement(By.css('#toggle-filter-button'));
-        return new VlButton(this.driver, button);
+        return button.click();
     }
 
     async getSorter(field) {
