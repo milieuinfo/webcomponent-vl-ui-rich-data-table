@@ -223,10 +223,16 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
         this.__observeSearchFilter();
     }
 
+    /**
+     * Verberg de filter search kolom. Enkel relevant als het filter slot wordt gebruikt.
+     */
     hideFilterColumn() {
         this.__setGridColumnWidth(0);
     }
 
+    /**
+     * Toon de filter search kolom. Enkel relevant als het filter slot wordt gebruikt.
+     */
     showFilterColumn() {
         this.__setGridColumnWidth(VlRichDataTable._defaultSearchColumnSize);
     }
