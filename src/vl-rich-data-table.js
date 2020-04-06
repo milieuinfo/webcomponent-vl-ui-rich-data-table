@@ -230,20 +230,6 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
     }
 
     /**
-     * Verberg de filter search kolom. Enkel relevant als het filter slot wordt gebruikt.
-     */
-    hideFilterColumn() {
-        this.__setGridColumnWidth(0);
-    }
-
-    /**
-     * Toon de filter search kolom. Enkel relevant als het filter slot wordt gebruikt.
-     */
-    showFilterColumn() {
-        this.__setGridColumnWidth(VlRichDataTable._defaultSearchColumnSize);
-    }
-
-    /**
      * Stelt in welke data de tabel moet tonen.
      * @param {Object[]} object - Een Array van objecten die de data voorstellen.
      */
@@ -356,9 +342,9 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
 
     _filter_closedChangedCallback(oldValue, newValue) {
         if (newValue == null) {
-            this.showFilterColumn();
+            this.__setGridColumnWidth(VlRichDataTable._defaultSearchColumnSize);
         } else {
-            this.hideFilterColumn();
+            this.__setGridColumnWidth(0);
         }
     }
 
@@ -469,10 +455,10 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
     __processSearchFilter() {
         if (this.__searchFilter) {
             this.__searchFilter.setAttribute('alt', '');
-            this.showFilterColumn();
+            this.__setGridColumnWidth(VlRichDataTable._defaultSearchColumnSize);
             this.__addSearchFilterEventListeners();
         } else {
-            this.hideFilterColumn();
+            this.__setGridColumnWidth(0);
         }
     }
 

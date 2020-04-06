@@ -233,27 +233,6 @@
             expect(richTable.__filterCloseButton.hidden).to.be.false;
         });
 
-        test('De filter column kan verborgen en getoond worden', () => {
-            const richTable = fixture('vl-rich-data-table-met-closable-filter-fixture');
-            const content = richTable.shadowRoot.querySelector('#content');
-            const search = richTable.shadowRoot.querySelector('#search');
-            expect(content.getAttribute('size')).to.be.equal('8');
-            expect(search.getAttribute('size')).to.be.equal('4');
-            expect(search.hidden).to.be.false;
-
-            richTable.hideFilterColumn();
-
-            expect(content.getAttribute('size')).to.be.equal('12');
-            expect(search.getAttribute('size')).to.be.equal('0');
-            expect(search.hidden).to.be.true;
-
-            richTable.showFilterColumn();
-
-            expect(content.getAttribute('size')).to.be.equal('8');
-            expect(search.getAttribute('size')).to.be.equal('4');
-            expect(search.hidden).to.be.false;
-        });
-
         test('Door het attribuut data-vl-filter-closed te zetten, kan de filter gesloten worden', () => {
             const richTable = fixture('vl-rich-data-table-met-closable-filter-fixture');
             const content = richTable.shadowRoot.querySelector('#content');
