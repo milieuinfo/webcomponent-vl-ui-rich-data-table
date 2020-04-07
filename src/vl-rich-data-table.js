@@ -56,10 +56,15 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
                 @import "/node_modules/vl-ui-data-table/dist/style.css";
             </style>
             <div is="vl-grid" is-stacked>
-                <div is="vl-column" id="toggle-filter" class="vl-u-align-right" hidden size="12">
-                    <button id="toggle-filter-button" is="vl-button-link" type="button" aria-label="Toon de filter">
+                <div id="toggle-filter" is="vl-column" class="vl-u-align-right" hidden size="12">
+                    <button id="toggle-filter-button" is="vl-button-link" type="button" aria-label="Toon de filter" data-vl-modal-open="filter-modal">
                         <span is="vl-icon" icon="content-filter" before></span><slot name="toggle-filter-button-text">Filter</slot>
                     </button>
+                </div>
+                <div id="modal-search" is="vl-column" size="0" small-size="12">
+                    <vl-modal id="filter-modal" closable not-cancellable>
+                        <slot name="filter" slot="content"></slot>
+                    </vl-modal>
                 </div>
                 <div id="search" is="vl-column" size="0">
                     <button id="close-filter-button" class="vl-filter__close" hidden type="button">
