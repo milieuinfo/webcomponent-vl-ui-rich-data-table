@@ -1,6 +1,7 @@
 import {VlElement, define} from '/node_modules/vl-ui-core/dist/vl-core.js';
 import '/node_modules/vl-ui-data-table/dist/vl-data-table.js';
 import '/node_modules/vl-ui-grid/dist/vl-grid.js';
+import '/node_modules/vl-ui-modal/dist/vl-modal.js';
 
 import {VlRichDataField} from "./vl-rich-data-field.js";
 import {VlRichDataSorter} from "./vl-rich-data-sorter.js";
@@ -54,36 +55,40 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
                 @import "/node_modules/vl-ui-icon/dist/style.css";
                 @import "/node_modules/vl-ui-button/dist/style.css";
                 @import "/node_modules/vl-ui-data-table/dist/style.css";
+                @import "/node_modules/vl-ui-modal/dist/style.css";
             </style>
-            <div is="vl-grid" is-stacked>
-                <div id="toggle-filter" is="vl-column" class="vl-u-align-right" hidden size="12">
-                    <button id="toggle-filter-button" is="vl-button-link" type="button" aria-label="Toon de filter" data-vl-modal-open="filter-modal">
-                        <span is="vl-icon" icon="content-filter" before></span><slot name="toggle-filter-button-text">Filter</slot>
-                    </button>
+            <div>
+                <div is="vl-grid" is-stacked>
+                    <div id="toggle-filter" is="vl-column" class="vl-u-align-right vl-u-hidden--s" hidden size="12">
+                        <button id="toggle-filter-button" class="" is="vl-button-link" type="button" aria-label="Toon de filter">
+                            <span is="vl-icon" icon="content-filter" before></span><slot name="toggle-filter-button-text">Filter</slot>
+                        </button>
+                    </div>
+                    <div id="open-filter" is="vl-column" class="vl-u-align-right vl-u-hidden" size="12">
+                        <button id="open-filter-button" is="vl-button-link" type="button" aria-label="Toon de filter">
+                            <span is="vl-icon" icon="content-filter" before></span><slot name="toggle-filter-button-text">Filter</slot>
+                        </button>
+                    </div>
+                    <div id="search" is="vl-column" size="0" small-size="0">
+                        <button id="close-filter-button" class="vl-filter__close" hidden type="button">
+                            <span is="vl-icon" icon="close"></span>
+                            <span class="vl-u-visually-hidden"><slot name="close-filter-button-text">Filter sluiten</slot></span>
+                        </button>
+                        <slot id="filter-slot" name="filter"></slot>
+                    </div>
+                    <div id="content" is="vl-column" size="12" small-size="12">
+                        <table is="vl-data-table">
+                            <thead>
+                                <tr></tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <div id="pager" is="vl-column" size="12">
+                        <slot name="pager"></slot>
+                    </div>
                 </div>
-                <div id="modal-search" is="vl-column" size="0" small-size="12">
-                    <vl-modal id="filter-modal" closable not-cancellable>
-                        <slot name="filter" slot="content"></slot>
-                    </vl-modal>
-                </div>
-                <div id="search" is="vl-column" size="0">
-                    <button id="close-filter-button" class="vl-filter__close" hidden type="button">
-                        <span is="vl-icon" icon="close"></span>
-                        <span class="vl-u-visually-hidden"><slot name="close-filter-button-text">Filter sluiten</slot></span>
-                    </button>
-                    <slot name="filter"></slot>
-                </div>
-                <div id="content" is="vl-column" size="12">
-                    <table is="vl-data-table">
-                        <thead>
-                            <tr></tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
-                <div id="pager" is="vl-column" size="12">
-                    <slot name="pager"></slot>
-                </div>
+                <vl-modal id="filter-modal" closable not-cancellable></vl-modal>
             </div>
         `);
 
@@ -122,6 +127,22 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
 
     get __filterCloseButton() {
         return this.shadowRoot.querySelector("#close-filter-button");
+    }
+
+    get __filterModal() {
+        return this.shadowRoot.querySelector("#filter-modal");
+    }
+
+    get __filterSlot() {
+        return this.shadowRoot.querySelector("#filter-slot");
+    }
+
+    get __filterOpenContainer() {
+        return this.shadowRoot.querySelector("#open-filter");
+    }
+
+    get __filterOpenButton() {
+        return this.shadowRoot.querySelector("#open-filter-button");
     }
 
     get __filterToggleContainer() {
@@ -343,6 +364,15 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
     _filter_closableChangedCallback(oldValue, newValue) {
         this.__filterCloseButton.hidden = newValue == null;
         this.__filterToggleContainer.hidden = newValue == null;
+        this.__filterOpenContainer.hidden = newValue == null;
+        if (newValue == null) {
+            console.log('removing...');
+            this.__filterOpenContainer.classList.remove('vl-u-visible--s');
+            this.__searchColumn.classList.remove('vl-u-hidden--s');
+        } else {
+            this.__filterOpenContainer.classList.add('vl-u-visible--s');
+            this.__searchColumn.classList.add('vl-u-hidden--s');
+        }
     }
 
     _filter_closedChangedCallback(oldValue, newValue) {
@@ -422,7 +452,15 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
             this.setAttribute('data-vl-filter-closed', '');
         });
         this.__filterToggleButton.addEventListener('click', () => {
+            this.__filterSlot.removeAttribute('slot');
+            this.__searchColumn.appendChild(this.__filterSlot);
             this.toggleAttribute('data-vl-filter-closed');
+        });
+        this.__filterOpenButton.addEventListener('click', () => {
+            this.setAttribute('data-vl-filter-closed', ''); // first close to make sure when resized that it doesn't show without proper slot
+            this.__filterSlot.setAttribute('slot', 'content');
+            this.__filterModal.appendChild(this.__filterSlot);
+            this.__filterModal.open();
         });
     }
 
