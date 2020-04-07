@@ -3,7 +3,7 @@ const {By} = require('vl-ui-core').Test.Setup;
 const {VlPager} = require('vl-ui-pager').Test;
 const {VlDataTable} = require('vl-ui-data-table').Test;
 const {VlSearchFilter} = require('vl-ui-search-filter').Test;
-const {VlButton} = require('vl-ui-button').Test;
+const {VlModal} = require('vl-ui-modal').Test;
 const VlRichDataSorter = require('./vl-rich-data-sorter');
 
 class VlRichDataTable extends VlElement {
@@ -32,6 +32,17 @@ class VlRichDataTable extends VlElement {
     async toggleFilter() {
         const button = await this.shadowRoot.findElement(By.css('#toggle-filter-button'));
         return button.click();
+    }
+
+    async openModalFilter() {
+        const button = await this.shadowRoot.findElement(By.css('#open-filter-button'));
+        return button.click();
+    }
+
+    async closeModalFilter() {
+        const modalElement = await this.shadowRoot.findElement(By.css('#filter-modal'));
+        const modal = await new VlModal(this.driver, modalElement);
+        return modal.close();
     }
 
     async getSorter(field) {
