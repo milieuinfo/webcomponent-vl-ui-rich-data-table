@@ -254,6 +254,28 @@
             expect(search.hidden).to.be.false;
         });
 
+        test('Als op de sluitknop wordt geklikt, wordt het attribuut data-vl-filter-closed gezet', () => {
+            const richTable = fixture('vl-rich-data-table-met-closable-filter-fixture');
+            expect(richTable.getAttribute('data-vl-filter-closed')).to.be.null;
+
+            richTable.__filterCloseButton.click();
+
+            expect(richTable.getAttribute('data-vl-filter-closed')).to.be.equal('');
+        });
+
+        test('Als op de filter toggle knop tweemaal geklikt wordt, wordt het attribuut data-vl-filter-closed eerst gezet en dan terug afgehaald', () => {
+            const richTable = fixture('vl-rich-data-table-met-closable-filter-fixture');
+            expect(richTable.getAttribute('data-vl-filter-closed')).to.be.null;
+
+            richTable.__filterToggleButton.click();
+
+            expect(richTable.getAttribute('data-vl-filter-closed')).to.be.equal('');
+
+            richTable.__filterToggleButton.click();
+
+            expect(richTable.getAttribute('data-vl-filter-closed')).to.be.null;
+        });
+
         test('Door slots te zetten, kunnen de teksten van de filter en toggle knoppen gewijzigd worden', () => {
             const richTable = fixture('vl-rich-data-table-met-andere-teksten');
             const toggleButton = richTable.__filterToggleButton;
