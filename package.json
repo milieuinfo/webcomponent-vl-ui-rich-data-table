@@ -44,12 +44,14 @@
 		"demo": "http-server"
 	},
 	"dependencies": {
+		"vl-ui-button": "^5.0.1",
 		"vl-ui-core": "^5.1.2",
 		"vl-ui-data-table": "^3.1.0",
 		"vl-ui-grid": "^3.0.1",
 		"vl-ui-icon": "^4.0.1"
 	},
 	"peerDependencies": {
+		"vl-ui-button": "^5.0.1",
 		"vl-ui-core": "^5.1.2",
 		"vl-ui-data-table": "^3.1.0",
 		"vl-ui-grid": "^3.0.1",
@@ -57,7 +59,6 @@
 	},
 	"devDependencies": {
 		"@govflanders/vl-ui-util": "3.9.1",
-		"vl-ui-button": "^5.0.1",
 		"vl-ui-form-message": "^5.0.0",
 		"vl-ui-input-field": "^3.1.0",
 		"vl-ui-link": "^4.0.0",

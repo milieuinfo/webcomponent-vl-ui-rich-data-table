@@ -48,6 +48,50 @@
     </template>
 </test-fixture>
 
+<test-fixture id="vl-rich-data-table-met-closable-filter-fixture">
+    <template>
+        <vl-rich-data-table data-vl-data='{"data": []}' data-vl-filter-title='title' data-vl-filter-closable>
+            <vl-rich-data-field id="id-field" data-vl-label="ID" data-vl-selector="id"></vl-rich-data-field>
+            <vl-rich-data-field id="name-field" data-vl-label="Naam" data-vl-selector="name"></vl-rich-data-field>
+            <div slot="filter">
+                <div is="vl-search-filter">
+                    <form id="form">
+                        <label>Hier kunnen filtervelden komen</label>
+                        <input is="vl-input-field" type="text" name="filter1"/>
+                    </form>
+                    <div>
+                        <button is="vl-button-link" type="reset" form="form">Zoekopdracht verwijderen</button>
+                    </div>
+                </div>
+            </div>
+            <vl-pager slot="pager" total-items="20" items-per-page="5" current-page="1"></vl-pager>
+        </vl-rich-data-table>
+    </template>
+</test-fixture>
+
+<test-fixture id="vl-rich-data-table-met-andere-teksten">
+    <template>
+        <vl-rich-data-table data-vl-data='{"data": []}' data-vl-filter-title='title' data-vl-filter-closable>
+            <vl-rich-data-field id="id-field" data-vl-label="ID" data-vl-selector="id"></vl-rich-data-field>
+            <vl-rich-data-field id="name-field" data-vl-label="Naam" data-vl-selector="name"></vl-rich-data-field>
+            <div slot="filter">
+                <div is="vl-search-filter">
+                    <form id="form">
+                        <label>Hier kunnen filtervelden komen</label>
+                        <input is="vl-input-field" type="text" name="filter1"/>
+                    </form>
+                    <div>
+                        <button is="vl-button-link" type="reset" form="form">Zoekopdracht verwijderen</button>
+                    </div>
+                </div>
+            </div>
+            <vl-pager slot="pager" total-items="20" items-per-page="5" current-page="1"></vl-pager>
+            <span slot="toggle-filter-button-text">Foo</span>
+            <span slot="close-filter-button-text">Bar</span>
+        </vl-rich-data-table>
+    </template>
+</test-fixture>
+
 <script>
     suite('vl-rich-data-table met filter', () => {
         const should = chai.should();
@@ -176,6 +220,71 @@
             const searchFilter = richTable.__searchFilter;
             expect(searchFilter.formData.get('filter1')).to.equal('foobar');
             expect(searchFilter.querySelector('input').value).to.equal('foobar');
+        });
+
+        test('Als het data-vl-filter-closable attribuut wordt gezet, worden de sluit knop en filter container met filter knop getoond', () => {
+            const richTable = fixture('vl-rich-data-table-met-filter-fixture');
+            expect(richTable.__filterToggleContainer.hidden).to.be.true;
+            expect(richTable.__filterCloseButton.hidden).to.be.true;
+
+            richTable.setAttribute('data-vl-filter-closable', '');
+
+            expect(richTable.__filterToggleContainer.hidden).to.be.false;
+            expect(richTable.__filterCloseButton.hidden).to.be.false;
+        });
+
+        test('Door het attribuut data-vl-filter-closed te zetten, kan de filter gesloten worden', () => {
+            const richTable = fixture('vl-rich-data-table-met-closable-filter-fixture');
+            const content = richTable.shadowRoot.querySelector('#content');
+            const search = richTable.shadowRoot.querySelector('#search');
+            expect(content.getAttribute('size')).to.be.equal('8');
+            expect(search.getAttribute('size')).to.be.equal('4');
+            expect(search.hidden).to.be.false;
+
+            richTable.setAttribute('data-vl-filter-closed', '');
+
+            expect(content.getAttribute('size')).to.be.equal('12');
+            expect(search.getAttribute('size')).to.be.equal('0');
+            expect(search.hidden).to.be.true;
+
+            richTable.removeAttribute('data-vl-filter-closed');
+
+            expect(content.getAttribute('size')).to.be.equal('8');
+            expect(search.getAttribute('size')).to.be.equal('4');
+            expect(search.hidden).to.be.false;
+        });
+
+        test('Als op de sluitknop wordt geklikt, wordt het attribuut data-vl-filter-closed gezet', () => {
+            const richTable = fixture('vl-rich-data-table-met-closable-filter-fixture');
+            expect(richTable.getAttribute('data-vl-filter-closed')).to.be.null;
+
+            richTable.__filterCloseButton.click();
+
+            expect(richTable.getAttribute('data-vl-filter-closed')).to.be.equal('');
+        });
+
+        test('Als op de filter toggle knop tweemaal geklikt wordt, wordt het attribuut data-vl-filter-closed eerst gezet en dan terug afgehaald', () => {
+            const richTable = fixture('vl-rich-data-table-met-closable-filter-fixture');
+            expect(richTable.getAttribute('data-vl-filter-closed')).to.be.null;
+
+            richTable.__filterToggleButton.click();
+
+            expect(richTable.getAttribute('data-vl-filter-closed')).to.be.equal('');
+
+            richTable.__filterToggleButton.click();
+
+            expect(richTable.getAttribute('data-vl-filter-closed')).to.be.null;
+        });
+
+        test('Door slots te zetten, kunnen de teksten van de filter en toggle knoppen gewijzigd worden', () => {
+            const richTable = fixture('vl-rich-data-table-met-andere-teksten');
+            const toggleButton = richTable.__filterToggleButton;
+            const filterCloseButton = richTable.__filterCloseButton;
+            const toggleText = toggleButton.querySelector('slot[name=toggle-filter-button-text]').assignedElements()[0].innerHTML;
+            const closeText = filterCloseButton.querySelector('slot[name=close-filter-button-text]').assignedElements()[0].innerHTML;
+
+            expect(toggleText).to.be.equal('Foo');
+            expect(closeText).to.be.equal('Bar');
         });
 
         function setInputValue(input, value) {

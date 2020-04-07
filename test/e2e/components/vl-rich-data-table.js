@@ -24,6 +24,16 @@ class VlRichDataTable extends VlElement {
         return parent.click();
     }
 
+    async closeFilter() {
+        const button = await this.shadowRoot.findElement(By.css('#close-filter-button'));
+        return button.click();
+    }
+
+    async toggleFilter() {
+        const button = await this.shadowRoot.findElement(By.css('#toggle-filter-button'));
+        return button.click();
+    }
+
     async getSorter(field) {
         const element = await this.shadowRoot.findElement(By.css(`vl-rich-data-sorter[data-vl-for="${field}"]`));
         return new VlRichDataSorter(this.driver, element);
