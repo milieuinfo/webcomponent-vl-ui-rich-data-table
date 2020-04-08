@@ -74,7 +74,9 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
                             <span is="vl-icon" icon="close"></span>
                             <span class="vl-u-visually-hidden"><slot name="close-filter-button-text">Filter sluiten</slot></span>
                         </button>
-                        <slot id="filter-slot" name="filter"></slot>
+                        <div id="filter-slot-container">
+                            <slot id="filter-slot" name="filter"></slot>
+                        </div>
                     </div>
                     <div id="content" is="vl-column" size="12" small-size="12">
                         <table is="vl-data-table">
@@ -133,8 +135,8 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
         return this.shadowRoot.querySelector("#filter-modal");
     }
 
-    get __filterSlot() {
-        return this.shadowRoot.querySelector("#filter-slot");
+    get __filterSlotContainer() {
+        return this.shadowRoot.querySelector("#filter-slot-container");
     }
 
     get __filterOpenContainer() {
@@ -451,14 +453,14 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
             this.setAttribute('data-vl-filter-closed', '');
         });
         this.__filterToggleButton.addEventListener('click', () => {
-            this.__filterSlot.removeAttribute('slot');
-            this.__searchColumn.appendChild(this.__filterSlot);
+            this.__filterSlotContainer.removeAttribute('slot');
+            this.__searchColumn.appendChild(this.__filterSlotContainer);
             this.toggleAttribute('data-vl-filter-closed');
         });
         this.__filterOpenButton.addEventListener('click', () => {
             this.setAttribute('data-vl-filter-closed', ''); // first close to make sure when resized that it doesn't show without proper slot
-            this.__filterSlot.setAttribute('slot', 'content');
-            this.__filterModal.appendChild(this.__filterSlot);
+            this.__filterSlotContainer.setAttribute('slot', 'content');
+            this.__filterModal.appendChild(this.__filterSlotContainer);
             this.__filterModal.open();
         });
     }

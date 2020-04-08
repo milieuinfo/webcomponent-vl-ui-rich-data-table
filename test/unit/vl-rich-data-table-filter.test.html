@@ -291,13 +291,13 @@
             const richTable = fixture('vl-rich-data-table-met-closable-filter-fixture');
             expect(richTable.getAttribute('data-vl-filter-closed')).to.be.null;
             expect(richTable.__filterModal._dialogElement.hasAttribute('open')).to.be.false;
-            expect(richTable.__filterModal.querySelector('slot[name=filter][slot=content]')).to.be.null;
+            expect(richTable.__filterModal.querySelector('div[slot=content]')).to.be.null;
 
             richTable.__filterOpenButton.click();
 
             expect(richTable.getAttribute('data-vl-filter-closed')).to.be.equal('');
             expect(richTable.__filterModal._dialogElement.hasAttribute('open')).to.be.true;
-            expect(richTable.__filterModal.querySelector('slot[name=filter][slot=content]')).to.not.be.null;
+            expect(richTable.__filterModal.querySelector('div[slot=content]')).to.not.be.null;
         });
 
         test('Als op de filter toggle knop tweemaal geklikt wordt, wordt het attribuut data-vl-filter-closed eerst gezet en dan terug afgehaald', () => {
@@ -320,9 +320,9 @@
 
             richTable.__filterToggleButton.click();
 
-            expect(richTable.__filterModal.querySelector('slot[name=filter][slot=content]')).to.be.null;
+            expect(richTable.__filterModal.querySelector('div[slot=content]')).to.be.null;
             expect(richTable.__searchColumn.querySelector('slot[name=filter]')).to.not.be.null;
-            expect(richTable.__searchColumn.querySelector('slot[slot=content]')).to.be.null;
+            expect(richTable.__searchColumn.querySelector('div[slot=content]')).to.be.null;
         });
 
         test('Door slots te zetten, kunnen de teksten van de filter en toggle knoppen gewijzigd worden', () => {
