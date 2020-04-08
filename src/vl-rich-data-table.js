@@ -64,7 +64,7 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
                             <span is="vl-icon" icon="content-filter" before></span><slot name="toggle-filter-button-text">Filter</slot>
                         </button>
                     </div>
-                    <div id="open-filter" is="vl-column" class="vl-u-align-right vl-u-hidden" size="12">
+                    <div id="open-filter" is="vl-column" class="vl-u-align-right vl-u-hidden" hidden size="12">
                         <button id="open-filter-button" is="vl-button-link" type="button" aria-label="Toon de filter">
                             <span is="vl-icon" icon="content-filter" before></span><slot name="toggle-filter-button-text">Filter</slot>
                         </button>
@@ -366,7 +366,6 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
         this.__filterToggleContainer.hidden = newValue == null;
         this.__filterOpenContainer.hidden = newValue == null;
         if (newValue == null) {
-            console.log('removing...');
             this.__filterOpenContainer.classList.remove('vl-u-visible--s');
             this.__searchColumn.classList.remove('vl-u-hidden--s');
         } else {

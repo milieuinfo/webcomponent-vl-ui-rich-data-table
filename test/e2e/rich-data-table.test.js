@@ -303,7 +303,7 @@ describe('vl-rich-data-table', async () => {
         await assert.eventually.isTrue(filter.isDisplayed());
     });
 
-    it('Als mobiele gebruiker kan ik de filter openen als modal, gebruiken en terug sluiten', async () => {
+    it('Als gebruiker met een klein scherm, kan ik de filter openen als modal, gebruiken en terug sluiten', async () => {
         const rect = await driver.manage().window().getRect();
         const originalWidth = rect.width;
         await driver.manage().window().setRect({height: rect.height, width: 750}); // small size
