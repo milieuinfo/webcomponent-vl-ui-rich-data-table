@@ -55,7 +55,6 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
                 @import "/node_modules/vl-ui-icon/dist/style.css";
                 @import "/node_modules/vl-ui-button/dist/style.css";
                 @import "/node_modules/vl-ui-data-table/dist/style.css";
-                @import "/node_modules/vl-ui-modal/dist/style.css";
             </style>
             <div>
                 <div is="vl-grid" is-stacked>

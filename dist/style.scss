@@ -18,5 +18,16 @@
 // ==========================================================================
 
 th[data-vl-sortable] {
-	cursor: pointer;
+    a {
+        cursor: pointer;
+    }
+}
+
+.vl-filter__close {
+    position: absolute;
+    top: 1.5rem;
+    right: 0;
+    padding: 0;
+    border: 0;
+    overflow: hidden;
 }
