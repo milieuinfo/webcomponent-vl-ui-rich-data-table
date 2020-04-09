@@ -244,12 +244,6 @@
 
             assert.isTrue(richTable.__filterOpenContainer.classList.contains('vl-u-visible--s'));
             assert.isTrue(richTable.__searchColumn.classList.contains('vl-u-hidden--s'));
-        });
-
-        test('Als het data-vl-filter-closable attribuut wordt afgezet, wordt de open knop niet meer getoond bij een klein scherm en het zoekscherm wordt niet meer verborgen bij een klein scherm', () => {
-            const richTable = fixture('vl-rich-data-table-met-closable-filter-fixture');
-            assert.isTrue(richTable.__filterOpenContainer.classList.contains('vl-u-visible--s'));
-            assert.isTrue(richTable.__searchColumn.classList.contains('vl-u-hidden--s'));
 
             richTable.removeAttribute('data-vl-filter-closable');
 

@@ -60,7 +60,7 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
             <div>
                 <div is="vl-grid" is-stacked>
                     <div id="toggle-filter" is="vl-column" class="vl-u-align-right vl-u-hidden--s" hidden size="12">
-                        <button id="toggle-filter-button" class="" is="vl-button-link" type="button" aria-label="Toon de filter">
+                        <button id="toggle-filter-button" is="vl-button-link" type="button" aria-label="Toon de filter">
                             <span is="vl-icon" icon="content-filter" before></span><slot name="toggle-filter-button-text">Filter</slot>
                         </button>
                     </div>
