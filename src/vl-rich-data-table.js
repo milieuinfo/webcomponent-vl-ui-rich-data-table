@@ -20,7 +20,8 @@ import {VlRichDataSorter} from "./vl-rich-data-sorter.js";
  * @property {boolean} data-vl-multisort - Laat de gebruiker sorteren op meer dan 1 kolom.
  *
  * @slot filter - slot dat de velden bevat waarop gefilterd wordt. De formData van de search filter worden via een change event doorgegeven bij een wijziging.
- * @property {boolean} data-vl-filter-closable - Attribuut dat de filter sluitbaar maakt en een knop getoond wordt om de filter te tonen en terug te verbergen.
+ *
+ * @property {boolean} data-vl-filter-closable - Attribuut dat de filter sluitbaar maakt en een knop getoond wordt om de filter te tonen en terug te verbergen. Op een klein scherm wordt een modal geopend bij het klikken op de filter knop ipv een de filter naast de tabel te tonen. Om elementen van de filter te verbergen enkel in de modal, kan het attribuut data-vl-hidden-in-modal gezet worden.
  * @property {boolean} data-vl-filter-closed - Attribuut dat aangeeft of dat de filter gesloten is.
  *
  * @slot toggle-filter-button-text - slot om de tekst te kunnen wijzigen van de toggle filter knop. Default: Filter.
@@ -454,14 +455,28 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
         this.__filterToggleButton.addEventListener('click', () => {
             this.__filterSlotContainer.removeAttribute('slot');
             this.__searchColumn.appendChild(this.__filterSlotContainer);
+            this.__showHiddenInModalElements();
             this.toggleAttribute('data-vl-filter-closed');
         });
         this.__filterOpenButton.addEventListener('click', () => {
             this.setAttribute('data-vl-filter-closed', ''); // first close to make sure when resized that it doesn't show without proper slot
             this.__filterSlotContainer.setAttribute('slot', 'content');
             this.__filterModal.appendChild(this.__filterSlotContainer);
+            this.__hideHiddenInModalElements();
             this.__filterModal.open();
         });
+    }
+
+    __showHiddenInModalElements() {
+        this.__setHiddenInModalElements(false);
+    }
+
+    __hideHiddenInModalElements() {
+        this.__setHiddenInModalElements(true);
+    }
+
+    __setHiddenInModalElements(hidden) {
+        this.__filter.querySelectorAll('[data-vl-hidden-in-modal]').forEach(element => element.hidden = hidden);
     }
 
     __observePager() {

@@ -59,7 +59,7 @@
                         <label>Hier kunnen filtervelden komen</label>
                         <input is="vl-input-field" type="text" name="filter1"/>
                     </form>
-                    <div>
+                    <div id="hidden-in-modal" data-vl-hidden-in-modal>
                         <button is="vl-button-link" type="reset" form="form">Zoekopdracht verwijderen</button>
                     </div>
                 </div>
@@ -317,6 +317,19 @@
             expect(richTable.__filterModal.querySelector('div[slot=content]')).to.be.null;
             expect(richTable.__searchColumn.querySelector('slot[name=filter]')).to.not.be.null;
             expect(richTable.__searchColumn.querySelector('div[slot=content]')).to.be.null;
+        });
+
+        test('Als de filter modal wordt geopend, worden de velden met data-vl-hidden-in-modal niet getoond', () => {
+            const richTable = fixture('vl-rich-data-table-met-closable-filter-fixture');
+            expect(richTable.querySelector('#hidden-in-modal').hidden).to.be.false;
+
+            richTable.__filterOpenButton.click();
+
+            expect(richTable.querySelector('#hidden-in-modal').hidden).to.be.true;
+            richTable.__filterModal.close();
+            richTable.__filterToggleButton.click();
+
+            expect(richTable.querySelector('#hidden-in-modal').hidden).to.be.false;
         });
 
         test('Door slots te zetten, kunnen de teksten van de filter en toggle knoppen gewijzigd worden', () => {
