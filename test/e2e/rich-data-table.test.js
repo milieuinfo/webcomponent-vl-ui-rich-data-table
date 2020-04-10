@@ -303,6 +303,30 @@ describe('vl-rich-data-table', async () => {
         await assert.eventually.isTrue(filter.isDisplayed());
     });
 
+    it('Als gebruiker met een klein scherm, kan ik de filter openen als modal, gebruiken en terug sluiten', async () => {
+        await changeWindowWidth(750);
+        const richDataTable = await vlRichDataTablePage.getRichDataTableFilterSortingPaging();
+        const filter = await richDataTable.getSearchFilter();
+
+        await richDataTable.openModalFilter();
+        const filterIdVeld = await new VlInputField(driver, await filter.findElement(By.css('[name="id"]')));
+        await filterIdVeld.setValue('0');
+        const filterNameVeld = await new VlInputField(driver, await filter.findElement(By.css('[name="name"]')));
+        await filterNameVeld.setValue('20');
+        await richDataTable.closeModalFilter();
+
+        await assertAantalRows(richDataTable, 1);
+        await assertRow(richDataTable, 0, [20, "Project #20", "Riquier", "Beckers", "Project #20 o.l.v. Pascal Riquier"]);
+    });
+
+    afterEach(async () => {
+        if (this.originalWindowWidth != null) {
+            const rect = await driver.manage().window().getRect();
+            await driver.manage().window().setRect({height: rect.height, width: this.originalWindowWidth});
+            this.originalWindowWidth = null;
+        }
+    });
+
     async function assertHeaders(richDataTable, expectedHeaders) {
         const table = await richDataTable.getDataTable();
         const headers = await table.getDataTableHeader();
@@ -330,5 +354,11 @@ describe('vl-rich-data-table', async () => {
         for (let i = 0; i < cells.length; i++) {
             await assert.eventually.equal(cells[i].getText(), values[i])
         }
+    }
+
+    async function changeWindowWidth(size) {
+        const rect = await driver.manage().window().getRect();
+        this.originalWindowWidth = rect.width;
+        await driver.manage().window().setRect({height: rect.height, width: size});
     }
 });

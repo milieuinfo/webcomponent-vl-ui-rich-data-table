@@ -59,7 +59,7 @@
                         <label>Hier kunnen filtervelden komen</label>
                         <input is="vl-input-field" type="text" name="filter1"/>
                     </form>
-                    <div>
+                    <div id="hidden-in-modal" data-vl-hidden-in-modal>
                         <button is="vl-button-link" type="reset" form="form">Zoekopdracht verwijderen</button>
                     </div>
                 </div>
@@ -222,15 +222,33 @@
             expect(searchFilter.querySelector('input').value).to.equal('foobar');
         });
 
-        test('Als het data-vl-filter-closable attribuut wordt gezet, worden de sluit knop en filter container met filter knop getoond', () => {
+        test('Als het data-vl-filter-closable attribuut wordt gezet, worden de sluit knop, open knop en filter container met filter knop getoond', () => {
             const richTable = fixture('vl-rich-data-table-met-filter-fixture');
             expect(richTable.__filterToggleContainer.hidden).to.be.true;
             expect(richTable.__filterCloseButton.hidden).to.be.true;
+            expect(richTable.__filterOpenContainer.hidden).to.be.true;
 
             richTable.setAttribute('data-vl-filter-closable', '');
 
             expect(richTable.__filterToggleContainer.hidden).to.be.false;
             expect(richTable.__filterCloseButton.hidden).to.be.false;
+            expect(richTable.__filterOpenContainer.hidden).to.be.false;
+        });
+
+        test('Als het data-vl-filter-closable attribuut wordt gezet, wordt de open knop enkel getoond bij een klein scherm en het zoekscherm verborgen', () => {
+            const richTable = fixture('vl-rich-data-table-met-filter-fixture');
+            assert.isFalse(richTable.__filterOpenContainer.classList.contains('vl-u-visible--s'));
+            assert.isFalse(richTable.__searchColumn.classList.contains('vl-u-hidden--s'));
+
+            richTable.setAttribute('data-vl-filter-closable', '');
+
+            assert.isTrue(richTable.__filterOpenContainer.classList.contains('vl-u-visible--s'));
+            assert.isTrue(richTable.__searchColumn.classList.contains('vl-u-hidden--s'));
+
+            richTable.removeAttribute('data-vl-filter-closable');
+
+            assert.isFalse(richTable.__filterOpenContainer.classList.contains('vl-u-visible--s'));
+            assert.isFalse(richTable.__searchColumn.classList.contains('vl-u-hidden--s'));
         });
 
         test('Door het attribuut data-vl-filter-closed te zetten, kan de filter gesloten worden', () => {
@@ -263,6 +281,19 @@
             expect(richTable.getAttribute('data-vl-filter-closed')).to.be.equal('');
         });
 
+        test('Als op de openknop wordt geklikt, wordt het attribuut data-vl-filter-closed gezet en de filter modal geopend met de filter als content', () => {
+            const richTable = fixture('vl-rich-data-table-met-closable-filter-fixture');
+            expect(richTable.getAttribute('data-vl-filter-closed')).to.be.null;
+            expect(richTable.__filterModal._dialogElement.hasAttribute('open')).to.be.false;
+            expect(richTable.__filterModal.querySelector('div[slot=content]')).to.be.null;
+
+            richTable.__filterOpenButton.click();
+
+            expect(richTable.getAttribute('data-vl-filter-closed')).to.be.equal('');
+            expect(richTable.__filterModal._dialogElement.hasAttribute('open')).to.be.true;
+            expect(richTable.__filterModal.querySelector('div[slot=content]')).to.not.be.null;
+        });
+
         test('Als op de filter toggle knop tweemaal geklikt wordt, wordt het attribuut data-vl-filter-closed eerst gezet en dan terug afgehaald', () => {
             const richTable = fixture('vl-rich-data-table-met-closable-filter-fixture');
             expect(richTable.getAttribute('data-vl-filter-closed')).to.be.null;
@@ -274,6 +305,31 @@
             richTable.__filterToggleButton.click();
 
             expect(richTable.getAttribute('data-vl-filter-closed')).to.be.null;
+        });
+
+        test('Als op de filter toggle knop wordt geklikt na het openen en sluiten van de modal, wordt de filter content terug op de search kolom gezet zonder slot content', () => {
+            const richTable = fixture('vl-rich-data-table-met-closable-filter-fixture');
+            richTable.__filterOpenButton.click();
+            richTable.__filterModal.close();
+
+            richTable.__filterToggleButton.click();
+
+            expect(richTable.__filterModal.querySelector('div[slot=content]')).to.be.null;
+            expect(richTable.__searchColumn.querySelector('slot[name=filter]')).to.not.be.null;
+            expect(richTable.__searchColumn.querySelector('div[slot=content]')).to.be.null;
+        });
+
+        test('Als de filter modal wordt geopend, worden de velden met data-vl-hidden-in-modal niet getoond', () => {
+            const richTable = fixture('vl-rich-data-table-met-closable-filter-fixture');
+            expect(richTable.querySelector('#hidden-in-modal').hidden).to.be.false;
+
+            richTable.__filterOpenButton.click();
+
+            expect(richTable.querySelector('#hidden-in-modal').hidden).to.be.true;
+            richTable.__filterModal.close();
+            richTable.__filterToggleButton.click();
+
+            expect(richTable.querySelector('#hidden-in-modal').hidden).to.be.false;
         });
 
         test('Door slots te zetten, kunnen de teksten van de filter en toggle knoppen gewijzigd worden', () => {

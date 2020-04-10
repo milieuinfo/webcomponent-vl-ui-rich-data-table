@@ -1,6 +1,7 @@
 import {VlElement, define} from '/node_modules/vl-ui-core/dist/vl-core.js';
 import '/node_modules/vl-ui-data-table/dist/vl-data-table.js';
 import '/node_modules/vl-ui-grid/dist/vl-grid.js';
+import '/node_modules/vl-ui-modal/dist/vl-modal.js';
 
 import {VlRichDataField} from "./vl-rich-data-field.js";
 import {VlRichDataSorter} from "./vl-rich-data-sorter.js";
@@ -19,7 +20,8 @@ import {VlRichDataSorter} from "./vl-rich-data-sorter.js";
  * @property {boolean} data-vl-multisort - Laat de gebruiker sorteren op meer dan 1 kolom.
  *
  * @slot filter - slot dat de velden bevat waarop gefilterd wordt. De formData van de search filter worden via een change event doorgegeven bij een wijziging.
- * @property {boolean} data-vl-filter-closable - Attribuut dat de filter sluitbaar maakt en een knop getoond wordt om de filter te tonen en terug te verbergen.
+ *
+ * @property {boolean} data-vl-filter-closable - Attribuut dat de filter sluitbaar maakt en een knop getoond wordt om de filter te tonen en terug te verbergen. Op een klein scherm wordt een modal geopend bij het klikken op de filter knop ipv een de filter naast de tabel te tonen. Om elementen van de filter te verbergen enkel in de modal, kan het attribuut data-vl-hidden-in-modal gezet worden.
  * @property {boolean} data-vl-filter-closed - Attribuut dat aangeeft of dat de filter gesloten is.
  *
  * @slot toggle-filter-button-text - slot om de tekst te kunnen wijzigen van de toggle filter knop. Default: Filter.
@@ -55,30 +57,40 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
                 @import "/node_modules/vl-ui-button/dist/style.css";
                 @import "/node_modules/vl-ui-data-table/dist/style.css";
             </style>
-            <div is="vl-grid" is-stacked>
-                <div is="vl-column" id="toggle-filter" class="vl-u-align-right" hidden size="12">
-                    <button id="toggle-filter-button" is="vl-button-link" type="button" aria-label="Toon de filter">
-                        <span is="vl-icon" icon="content-filter" before></span><slot name="toggle-filter-button-text">Filter</slot>
-                    </button>
+            <div>
+                <div is="vl-grid" is-stacked>
+                    <div id="toggle-filter" is="vl-column" class="vl-u-align-right vl-u-hidden--s" hidden size="12">
+                        <button id="toggle-filter-button" is="vl-button-link" type="button" aria-label="Toon de filter">
+                            <span is="vl-icon" icon="content-filter" before></span><slot name="toggle-filter-button-text">Filter</slot>
+                        </button>
+                    </div>
+                    <div id="open-filter" is="vl-column" class="vl-u-align-right vl-u-hidden" hidden size="12">
+                        <button id="open-filter-button" is="vl-button-link" type="button" aria-label="Toon de filter">
+                            <span is="vl-icon" icon="content-filter" before></span><slot name="toggle-filter-button-text">Filter</slot>
+                        </button>
+                    </div>
+                    <div id="search" is="vl-column" size="0" small-size="0">
+                        <button id="close-filter-button" class="vl-filter__close" hidden type="button">
+                            <span is="vl-icon" icon="close"></span>
+                            <span class="vl-u-visually-hidden"><slot name="close-filter-button-text">Filter sluiten</slot></span>
+                        </button>
+                        <div id="filter-slot-container">
+                            <slot id="filter-slot" name="filter"></slot>
+                        </div>
+                    </div>
+                    <div id="content" is="vl-column" size="12" small-size="12">
+                        <table is="vl-data-table">
+                            <thead>
+                                <tr></tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <div id="pager" is="vl-column" size="12">
+                        <slot name="pager"></slot>
+                    </div>
                 </div>
-                <div id="search" is="vl-column" size="0">
-                    <button id="close-filter-button" class="vl-filter__close" hidden type="button">
-                        <span is="vl-icon" icon="close"></span>
-                        <span class="vl-u-visually-hidden"><slot name="close-filter-button-text">Filter sluiten</slot></span>
-                    </button>
-                    <slot name="filter"></slot>
-                </div>
-                <div id="content" is="vl-column" size="12">
-                    <table is="vl-data-table">
-                        <thead>
-                            <tr></tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
-                <div id="pager" is="vl-column" size="12">
-                    <slot name="pager"></slot>
-                </div>
+                <vl-modal id="filter-modal" closable not-cancellable></vl-modal>
             </div>
         `);
 
@@ -117,6 +129,22 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
 
     get __filterCloseButton() {
         return this.shadowRoot.querySelector("#close-filter-button");
+    }
+
+    get __filterModal() {
+        return this.shadowRoot.querySelector("#filter-modal");
+    }
+
+    get __filterSlotContainer() {
+        return this.shadowRoot.querySelector("#filter-slot-container");
+    }
+
+    get __filterOpenContainer() {
+        return this.shadowRoot.querySelector("#open-filter");
+    }
+
+    get __filterOpenButton() {
+        return this.shadowRoot.querySelector("#open-filter-button");
     }
 
     get __filterToggleContainer() {
@@ -338,6 +366,14 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
     _filter_closableChangedCallback(oldValue, newValue) {
         this.__filterCloseButton.hidden = newValue == null;
         this.__filterToggleContainer.hidden = newValue == null;
+        this.__filterOpenContainer.hidden = newValue == null;
+        if (newValue == null) {
+            this.__filterOpenContainer.classList.remove('vl-u-visible--s');
+            this.__searchColumn.classList.remove('vl-u-hidden--s');
+        } else {
+            this.__filterOpenContainer.classList.add('vl-u-visible--s');
+            this.__searchColumn.classList.add('vl-u-hidden--s');
+        }
     }
 
     _filter_closedChangedCallback(oldValue, newValue) {
@@ -417,8 +453,30 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
             this.setAttribute('data-vl-filter-closed', '');
         });
         this.__filterToggleButton.addEventListener('click', () => {
+            this.__filterSlotContainer.removeAttribute('slot');
+            this.__searchColumn.appendChild(this.__filterSlotContainer);
+            this.__showHiddenInModalElements();
             this.toggleAttribute('data-vl-filter-closed');
         });
+        this.__filterOpenButton.addEventListener('click', () => {
+            this.setAttribute('data-vl-filter-closed', ''); // first close to make sure when resized that it doesn't show without proper slot
+            this.__filterSlotContainer.setAttribute('slot', 'content');
+            this.__filterModal.appendChild(this.__filterSlotContainer);
+            this.__hideHiddenInModalElements();
+            this.__filterModal.open();
+        });
+    }
+
+    __showHiddenInModalElements() {
+        this.__setHiddenInModalElements(false);
+    }
+
+    __hideHiddenInModalElements() {
+        this.__setHiddenInModalElements(true);
+    }
+
+    __setHiddenInModalElements(hidden) {
+        this.__filter.querySelectorAll('[data-vl-hidden-in-modal]').forEach(element => element.hidden = hidden);
     }
 
     __observePager() {
