@@ -37,8 +37,8 @@ export class VlRichDataSorter extends VlElement(HTMLElement) {
                     vertical-align: super;
                 }
             </style>
-            <div>
-                <span id="direction" is="vl-icon" class="vl-u-visually-hidden"></span>
+            <div id="container" class="vl-u-visually-hidden">
+                <span id="direction" is="vl-icon"></span>
                 <label id="priority"></label>
             </div>
         `);
@@ -59,9 +59,9 @@ export class VlRichDataSorter extends VlElement(HTMLElement) {
             const directionIcon = this._directionIcon;
             if (directionIcon) {
                 this.__directionElement.setAttribute('icon', this._directionIcon);
-                this.__directionElement.classList.remove('vl-u-visually-hidden');
+                this.__containerElement.classList.remove('vl-u-visually-hidden');
             } else {
-                this.__directionElement.classList.add('vl-u-visually-hidden');
+                this.__containerElement.classList.add('vl-u-visually-hidden');
             }
 
             if (direction === undefined) {
@@ -71,16 +71,16 @@ export class VlRichDataSorter extends VlElement(HTMLElement) {
     }
 
     get _directionIcon() {
-    	switch (this.direction) {
-    		case VlRichDataSorter.DIRECTIONS.ascending:
-    			return 'arrow-down';
-    		case VlRichDataSorter.DIRECTIONS.descending:
-    			return 'arrow-up';
-    		default:
-    			return null;
-    	}
+        switch (this.direction) {
+            case VlRichDataSorter.DIRECTIONS.ascending:
+                return 'arrow-down';
+            case VlRichDataSorter.DIRECTIONS.descending:
+                return 'arrow-up';
+            default:
+                return null;
+        }
     }
-    
+
     _setDirectionAndPublishEvent(direction) {
         if (this.direction !== direction) {
             this.direction = direction;
@@ -101,6 +101,10 @@ export class VlRichDataSorter extends VlElement(HTMLElement) {
 
     get __directionElement() {
         return this.shadowRoot.querySelector('#direction');
+    }
+
+    get __containerElement() {
+        return this.shadowRoot.querySelector('#container');
     }
 
     get __priorityElement() {
