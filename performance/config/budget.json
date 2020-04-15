@@ -1,0 +1,29 @@
+{
+  "budget": {
+    "timings": {
+      "firstPaint": 100000,
+      "pageLoadTime": 200000,
+      "fullyLoaded": 200000,
+      "FirstVisualChange": 100000,
+      "LastVisualChange": 120000,
+      "SpeedIndex": 120000,
+      "PerceptualSpeedIndex": 120000,
+      "VisualReadiness": 20000,
+      "VisualComplete95": 119000
+    },
+    "transferSize": {
+      "total": 4000000000,
+      "html": 2000000000,
+      "javascript": 100000000,
+      "css": 100000000,
+      "image": 200000000,
+      "font": 10000000
+    },
+    "score": {
+      "accessibility": 50,
+      "bestpractice": 50,
+      "privacy": 50,
+      "performance": 50
+    }
+  }
+}
