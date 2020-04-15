@@ -1,0 +1,10 @@
+{
+    "browsertime": {
+        "browser": "firefox"
+    },
+    "budget": {
+        "configPath": "/sitespeed.io/config/budget.json",
+        "output": "junit"
+    },
+    "outputFolder": "results/firefox"
+}
