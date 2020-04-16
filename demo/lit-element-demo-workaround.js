@@ -7,7 +7,7 @@ import '../src/vl-rich-data-field.js';
 import '../src/vl-rich-data-table.js';
 import '../src/vl-rich-data-sorter.js';
 
-export class LitElementDemo extends LitElement {
+export class LitElementDemoWorkaround extends LitElement {
 
   constructor() {
     super();
@@ -45,4 +45,4 @@ export class LitElementDemo extends LitElement {
   }
 }
 
-define('lit-element-demo', LitElementDemo);
+define('lit-element-demo-workaround', LitElementDemoWorkaround);
