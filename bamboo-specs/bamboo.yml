@@ -7,6 +7,7 @@ plan:
 
 triggers:
   - polling: 130
+  - cron: 0 0 1,3,12,19,21 ? * * *
 
 variables:
   release_version: patch
