@@ -335,7 +335,7 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
     _renderHeaders() {
         this.__tableHeaderRow.innerHTML = '';
         this.__richDataFields.forEach(field => {
-            const headerTemplate = this._template(field.renderCellHeader());
+            const headerTemplate = field.headerTemplate();
             this.__tableHeaderRow.appendChild(headerTemplate);
         });
         this.__tableHeaderRow.querySelectorAll("th[data-vl-sortable] > a").forEach(th => {
@@ -349,11 +349,10 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
         if (this.data && this.data.data) {
             this.__tableBody.innerHTML = '';
             this.data.data.forEach(rowData => {
-                const rowTemplate = this._template(`<tr>
-                    ${this.__richDataFields
-                    .map(field => field.renderCellValue(rowData))
-                    .join('')}
-                </tr>`);
+                const rowTemplate = this._template(`<tr></tr>`);
+                this.__richDataFields.map(field => {
+                    rowTemplate.appendChild(field.valueTemplate(rowData));
+                });
                 this.__tableBody.appendChild(rowTemplate);
             });
         }
