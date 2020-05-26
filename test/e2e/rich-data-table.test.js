@@ -11,14 +11,14 @@ describe('vl-rich-data-table', async () => {
 
     it('Als gebruiker kan ik de hoofdingen van een rich data table zien', async () => {
         const vlRichDataTable = await vlRichDataTablePage.getRichDataTable();
-        await assertHeaders(vlRichDataTable, ["ID", "Naam", "Naam manager", "Eerste medewerker", "Project o.l.v. manager"]);
+        await assertHeaders(vlRichDataTable, ["ID", "Naam", "Naam manager", "Eerste medewerker", "Tweede medewerker", "Project o.l.v. manager"]);
     });
 
     it('Als gebruiker kan ik allerlei soorten selectoren gebruiken voor velden van een rich data table', async () => {
         const vlRichDataTable = await vlRichDataTablePage.getRichDataTable();
         await assertAantalRows(vlRichDataTable, 2);
-        await assertRow(vlRichDataTable, 0, [0, "Project #1", "Riquier", "Kleykens", "Project #1 o.l.v. Pascal Riquier"]);
-        await assertRow(vlRichDataTable, 1, [1, "Project #2", "Coemans", "Wauters", "Project #2 o.l.v. Tom Coemans"]);
+        await assertRow(vlRichDataTable, 0, [0, "Project #1", "Riquier", "Kleykens", "Tom Coemans", "Project #1 o.l.v. Pascal Riquier"]);
+        await assertRow(vlRichDataTable, 1, [1, "Project #2", "Coemans", "Wauters", "Tom Coemans", "Project #2 o.l.v. Tom Coemans"]);
     });
 
     it('Als gebruiker kan ik pagineren door de verschillende paginas van een rich data table', async () => {

@@ -140,16 +140,6 @@
             assert(spy.calledWith(sinon.match(value => value.outerHTML == td.outerHTML), sinon.match(data)));
         });
 
-        test('Indien er geen selector attribuut, geen template content slot en geen renderer functie aanwezig is, zal er een foutmelding komen bij het renderen', () => {
-            const field = fixture('vl-rich-data-field');
-            try {
-                field.valueTemplate();
-                should.fail();
-            } catch (error) {
-                should.exist(error);
-            }
-        });
-
         test('In de template content slot kan er gebruik gemaakt worden van de field data om de kolom te visualiseren', () => {
             const dataRow = {
                 foo: {
@@ -197,26 +187,31 @@
 
         test('Het aanpassen van de selector zorgt voor het afvuren van een event', (done) => {
             const field = fixture('vl-rich-data-field-fixture');
-
             field.addEventListener('change', event => {
                 event.detail.properties.should.deep.equal(['selector']);
                 field.selector.should.equal('bar');
                 done();
             });
-
             field.dataset.vlSelector = 'bar';
         });
 
         test('Het aanpassen van de label zorgt voor het afvuren van een event', (done) => {
             const field = fixture('vl-rich-data-field-fixture');
-
             field.addEventListener('change', event => {
                 event.detail.properties.should.deep.equal(['label']);
                 field.label.should.equal('Bar');
                 done();
             });
-
             field.dataset.vlLabel = 'Bar';
+        });
+
+        test('Het aanpassen van de renderer functie zorgt voor het afvuren van een event', (done) => {
+            const field = fixture('vl-rich-data-field-fixture');
+            field.addEventListener('change', event => {
+                event.detail.properties.should.deep.equal(['renderer']);
+                done();
+            });
+            field.renderer = () => {};
         });
     });
 </script>

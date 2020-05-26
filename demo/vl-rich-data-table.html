@@ -24,13 +24,14 @@
         <h2>Basis rich data table</h2>
         <pre>
             <code class="line-numbers language-markup">
-                &gt;&lt;vl-rich-data-table id="rich-data-table"
-                    data-vl-data='{"data": [{"id": 0, "name": "Project #1", "manager": {"firstName": "Pascal", "lastName": "Riquier"}, "medewerkers": [{"firstName": "Sander", "lastName": "Kleykens"}]}, 
-                        {"id": 1, "name": "Project #2", "manager": {"firstName": "Tom", "lastName": "Coemans"}, "medewerkers": [{"firstName": "Guy", "lastName": "Wauters"}]}]}'&gt;
+                &lt;vl-rich-data-table id="rich-data-table"
+                    data-vl-data='{"data": [{"id": 0, "name": "Project #1", "manager": {"firstName": "Pascal", "lastName": "Riquier"}, "medewerkers": [{"firstName": "Sander", "lastName": "Kleykens"}, {"firstName": "Tom", "lastName": "Coemans"}]}, 
+                        {"id": 1, "name": "Project #2", "manager": {"firstName": "Tom", "lastName": "Coemans"}, "medewerkers": [{"firstName": "Guy", "lastName": "Wauters"}, {"firstName": "Tom", "lastName": "Coemans"}]}]}'&gt;
                     &lt;vl-rich-data-field data-vl-label="ID" data-vl-selector="id"&gt;&lt;/vl-rich-data-field&gt;
                     &lt;vl-rich-data-field data-vl-label="Naam" data-vl-selector="name"&gt;&lt;/vl-rich-data-field&gt;
                     &lt;vl-rich-data-field data-vl-label="Naam manager" data-vl-selector="manager.lastName"&gt;&lt;/vl-rich-data-field&gt;
                     &lt;vl-rich-data-field data-vl-label="Eerste medewerker" data-vl-selector="medewerkers.0.lastName"&gt;&lt;/vl-rich-data-field&gt;
+                    &lt;vl-rich-data-field data-vl-label="Tweede medewerker"&gt;&lt;/vl-rich-data-field&gt;
                     &lt;vl-rich-data-field&gt;
                         &lt;template slot="label"&gt;
                             &lt;span style="font-weight: normal"&gt;Project o.l.v.&lt;/span&gt; &lt;strong&gt;manager&lt;/strong&gt;
@@ -41,16 +42,25 @@
                         &lt;/template&gt;
                     &lt;/vl-rich-data-field&gt;
                 &lt;/vl-rich-data-table&gt;
+                &lt;script&gt;
+                    customElements.whenDefined('vl-rich-data-field').then(() =&gt; {
+                        document.querySelector('[data-vl-label="Tweede medewerker"]').renderer = (element, item) =&gt; {
+                            const medewerker = item.medewerkers[1];
+                            element.textContent = `${medewerker.firstName} ${medewerker.lastName}`;
+                        };
+                    });
+                &lt;/script&gt;
             </code>
         </pre>
         <div class="demo">
             <vl-rich-data-table id="rich-data-table"
-                data-vl-data='{"data": [{"id": 0, "name": "Project #1", "manager": {"firstName": "Pascal", "lastName": "Riquier"}, "medewerkers": [{"firstName": "Sander", "lastName": "Kleykens"}]}, 
-                	{"id": 1, "name": "Project #2", "manager": {"firstName": "Tom", "lastName": "Coemans"}, "medewerkers": [{"firstName": "Guy", "lastName": "Wauters"}]}]}'>
+                data-vl-data='{"data": [{"id": 0, "name": "Project #1", "manager": {"firstName": "Pascal", "lastName": "Riquier"}, "medewerkers": [{"firstName": "Sander", "lastName": "Kleykens"}, {"firstName": "Tom", "lastName": "Coemans"}]}, 
+                	{"id": 1, "name": "Project #2", "manager": {"firstName": "Tom", "lastName": "Coemans"}, "medewerkers": [{"firstName": "Guy", "lastName": "Wauters"}, {"firstName": "Tom", "lastName": "Coemans"}]}]}'>
                 <vl-rich-data-field data-vl-label="ID" data-vl-selector="id"></vl-rich-data-field>
                 <vl-rich-data-field data-vl-label="Naam" data-vl-selector="name"></vl-rich-data-field>
                 <vl-rich-data-field data-vl-label="Naam manager" data-vl-selector="manager.lastName"></vl-rich-data-field>
                 <vl-rich-data-field data-vl-label="Eerste medewerker" data-vl-selector="medewerkers.0.lastName"></vl-rich-data-field>
+                <vl-rich-data-field id="rich-data-table-field-renderer" data-vl-label="Tweede medewerker"></vl-rich-data-field>
                 <vl-rich-data-field>
                     <template slot="label">
                         <span style="font-weight: normal">Project o.l.v.</span> <strong>manager</strong>
@@ -61,6 +71,14 @@
                     </template>
                 </vl-rich-data-field>
             </vl-rich-data-table>
+            <script>
+                customElements.whenDefined('vl-rich-data-field').then(() => {
+                    document.querySelector('[data-vl-label="Tweede medewerker"]').renderer = (element, item) => {
+                        const medewerker = item.medewerkers[1];
+                        element.textContent = `${medewerker.firstName} ${medewerker.lastName}`;
+                    };
+                });
+            </script>
         </div>
     </div>
 

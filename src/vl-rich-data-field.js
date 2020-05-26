@@ -25,7 +25,7 @@ export class VlRichDataField extends VlElement(HTMLElement) {
     }
 
     static get bodyAttributes() {
-        return ['selector'];
+        return ['selector', 'renderer'];
     }
 
     static get _observedAttributes() {
@@ -53,7 +53,7 @@ export class VlRichDataField extends VlElement(HTMLElement) {
         const element = this.__getValueContentElement(rowData);
         if (element) {
             td.appendChild(element);
-        } else {
+        } else if (this._renderer) {
             this._renderer(td, rowData);
         }
         return td;
@@ -117,6 +117,7 @@ export class VlRichDataField extends VlElement(HTMLElement) {
 
     set renderer(renderer) {
         this._renderer = renderer;
+        this._changed(['renderer']);
     }
 
     _nameChangedCallback(oldValue, newValue) {
