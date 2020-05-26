@@ -20,16 +20,12 @@ import {VlElement, define} from '/node_modules/vl-ui-core/dist/vl-core.js';
  *
  */
 export class VlRichDataField extends VlElement(HTMLElement) {
-    connectedCallback() {
-        this._changed(['connected']);
-    }
-
     static get headerAttributes() {
-        return ['connected', 'name', 'label', 'sortable', 'sorting-direction', 'sorting-priority'];
+        return ['name', 'label', 'sortable', 'sorting-direction', 'sorting-priority'];
     }
 
     static get bodyAttributes() {
-        return ['connected', 'selector'];
+        return ['selector'];
     }
 
     static get _observedAttributes() {
@@ -41,23 +37,21 @@ export class VlRichDataField extends VlElement(HTMLElement) {
     }
 
     headerTemplate() {
-        let template = this.label || `${this._labelSlotElement.innerHTML}`;
-        if (this.sortable) {
-            const direction = this.sortingDirection ? `data-vl-direction="${this.sortingDirection}"` : '';
-            const priority = this.sortingPriority ? `data-vl-priority="${this.sortingPriority}"` : '';
-            template += `<vl-rich-data-sorter data-vl-for="${this.name}" ${direction} ${priority}></vl-rich-data-sorter>`;
-            return this._template(`<th data-vl-sortable><a>${template}</a></th>`);
-        } else {
-            return this._template(`<th>${template}</th>`);
-        }
+        const th = document.createElement('th');
+        th.appendChild(this.__getHeaderContentElement());
+        return th;
     }
 
     valueTemplate(rowData) {
-        const title = this.label ? `data-title="${this.label}"` : '';
-        const td = this._template(`<td ${title}></td>`).firstElementChild;
-        const valueTemplate = this.__valueTemplate(td, rowData);
-        if (valueTemplate) {
-            td.appendChild(valueTemplate);
+        const td = document.createElement('td');
+        if (this.label) {
+            td.setAttribute('data-title', this.label);
+        }
+        const element = this.__getValueContentElement(rowData);
+        if (element) {
+            td.appendChild(element);
+        } else {
+            this._renderer(td, rowData);
         }
         return td;
     }
@@ -166,19 +160,25 @@ export class VlRichDataField extends VlElement(HTMLElement) {
         }));
     }
 
-    __template(literal, data) {
-        return ((literal, item) => new Function('item', 'return `' + literal + '`')(item)).call(this, literal, data);
+    __getHeaderContentElement() {
+        const text = this.label || `${this._labelSlotElement.innerHTML}`;
+        if (this.sortable) {
+            const direction = this.sortingDirection ? `data-vl-direction="${this.sortingDirection}"` : '';
+            const priority = this.sortingPriority ? `data-vl-priority="${this.sortingPriority}"` : '';
+            const sorter = `<vl-rich-data-sorter data-vl-for="${this.name}" ${direction} ${priority}></vl-rich-data-sorter>`;
+            return this._template(`<th data-vl-sortable><a>${text} ${sorter}</a></th>`);
+        } else {
+           return this._template(`${text}`);
+        }
     }
 
-    __valueTemplate(element, rowData) {
+    __getValueContentElement(data) {
         if (this.selector) {
-            return this._template(`${this.selector.split('.').reduce((prev, curr) => prev ? prev[curr] : null, rowData)}`);
+            return this._template(`${this.selector.split('.').reduce((prev, curr) => prev ? prev[curr] : null, data)}`);
+        } else if (this._contentSlotElement) {
+            return this._template((literal, item) => new Function('item', 'return `' + literal + '`')(item)).call(this, literal, data);
         } else {
-            if (this._contentSlotElement) {
-                return this._template(this.__template(this._contentSlotElement.innerHTML, rowData));
-            } else {
-                this._renderer(element, rowData);
-            }
+            return null;
         }
     }
 }
