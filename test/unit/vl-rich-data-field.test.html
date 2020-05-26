@@ -84,6 +84,8 @@
 <script>
     suite('<vl-rich-data-field>', () => {
         const should = chai.should();
+        const sandbox = sinon.sandbox.create();
+
         setup((done) => {
             customElements.whenDefined('vl-rich-data-field').then(() => {
                 done();
@@ -126,7 +128,19 @@
             field.valueTemplate().outerHTML.replace(/\s\s+/g, '').should.equal('<td data-title="Foo"><span>foo</span></td>');
         });
 
-        test('Indien er geen selector attribuut en geen template content slot aanwezig is, zal er een foutmelding komen bij het renderen', () => {
+        test('Indien er geen selector attribuut en geen template content slot aanwezig is, zal de renderer functie gebruikt worden', () => {
+            const field = fixture('vl-rich-data-field');
+            const spy = sandbox.spy();
+            const data = {
+                id: 1
+            };
+            field.renderer = spy;
+            field.valueTemplate(data);
+            const td = document.createElement('td');
+            assert(spy.calledWith(sinon.match(value => value.outerHTML == td.outerHTML), sinon.match(data)));
+        });
+
+        test('Indien er geen selector attribuut, geen template content slot en geen renderer functie aanwezig is, zal er een foutmelding komen bij het renderen', () => {
             const field = fixture('vl-rich-data-field');
             try {
                 field.valueTemplate();
