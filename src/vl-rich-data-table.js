@@ -348,7 +348,7 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
         if (this.data && this.data.data) {
             this.__tableBody.innerHTML = '';
             this.data.data.forEach(rowData => {
-                const rowTemplate = this._template(`<tr></tr>`);
+                const rowTemplate = this._template(`<tr></tr>`).firstElementChild;
                 this.__richDataFields.map(field => {
                     rowTemplate.appendChild(field.valueTemplate(rowData));
                 });

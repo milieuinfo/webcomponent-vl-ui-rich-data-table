@@ -39,6 +39,9 @@ export class VlRichDataField extends VlElement(HTMLElement) {
     headerTemplate() {
         const th = document.createElement('th');
         th.appendChild(this.__getHeaderContentElement());
+        if (this.sortable) {
+            th.setAttribute('data-vl-sortable', '');
+        }
         return th;
     }
 
@@ -166,7 +169,7 @@ export class VlRichDataField extends VlElement(HTMLElement) {
             const direction = this.sortingDirection ? `data-vl-direction="${this.sortingDirection}"` : '';
             const priority = this.sortingPriority ? `data-vl-priority="${this.sortingPriority}"` : '';
             const sorter = `<vl-rich-data-sorter data-vl-for="${this.name}" ${direction} ${priority}></vl-rich-data-sorter>`;
-            return this._template(`<th data-vl-sortable><a>${text} ${sorter}</a></th>`);
+            return this._template(`<a>${text}${sorter}</a>`);
         } else {
            return this._template(`${text}`);
         }
@@ -176,7 +179,9 @@ export class VlRichDataField extends VlElement(HTMLElement) {
         if (this.selector) {
             return this._template(`${this.selector.split('.').reduce((prev, curr) => prev ? prev[curr] : null, data)}`);
         } else if (this._contentSlotElement) {
-            return this._template((literal, item) => new Function('item', 'return `' + literal + '`')(item)).call(this, literal, data);
+            const literal = `${this.querySelector('template[slot="content"]').innerHTML}`;
+            const template = ((literal, item) => new Function('item', 'return `' + literal + '`')(item)).call(this, literal, data);
+            return this._template(template);
         } else {
             return null;
         }
