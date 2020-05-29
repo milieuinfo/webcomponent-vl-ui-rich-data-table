@@ -95,6 +95,7 @@
 <script>
     suite('vl-rich-data-table met filter', () => {
         const should = chai.should();
+        const sandbox = sinon.sandbox.create();
 
         test('Wanneer geen filterslot bestaat, zal er geen search filter aanwezig zijn', () => {
             const table = fixture('vl-rich-data-table-zonder-filter-fixture');
@@ -287,10 +288,11 @@
             expect(richTable.__filterModal._dialogElement.hasAttribute('open')).to.be.false;
             expect(richTable.__filterModal.querySelector('div[slot=content]')).to.be.null;
 
+            sandbox.spy(richTable.__filterModal, 'open');
             richTable.__filterOpenButton.click();
 
             expect(richTable.getAttribute('data-vl-filter-closed')).to.be.equal('');
-            expect(richTable.__filterModal._dialogElement.hasAttribute('open')).to.be.true;
+            assert(richTable.__filterModal.open.called);
             expect(richTable.__filterModal.querySelector('div[slot=content]')).to.not.be.null;
         });
 

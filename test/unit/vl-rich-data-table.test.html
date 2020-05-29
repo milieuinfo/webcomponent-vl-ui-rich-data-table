@@ -119,6 +119,22 @@
             assert.equal(pager.totalItems, value.paging.totalItems);
         });
 
+        test('De paginatie van een tabel kan toch gezet worden via de data setter als er geen data is', () => {
+            const richTable = fixture('vl-rich-data-table-pager-fixture');
+            const value = {
+                data: [],
+                paging: {
+                    totalItems: 0
+                }
+            };
+
+            richTable.data.should.deep.equal({data: []});
+            richTable.data = value;
+            richTable.data.should.deep.equal(value);
+            const pager = richTable.querySelector('vl-pager');
+            assert.equal(pager.totalItems, value.paging.totalItems);
+        });
+
         test('De data op een tabel kan enkel doorgegeven worden als Array', (done) => {
             const richTable = fixture('vl-rich-data-table-fixture');
 

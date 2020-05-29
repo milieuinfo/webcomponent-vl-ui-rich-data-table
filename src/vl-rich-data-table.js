@@ -283,13 +283,13 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
 
     set _paging(paging) {
         if (paging) {
-            if (paging.currentPage) {
+            if (paging.currentPage != null) {
                 this.__pager.setAttribute('current-page', paging.currentPage);
             }
-            if (paging.itemsPerPage) {
+            if (paging.itemsPerPage != null) {
                 this.__pager.setAttribute('items-per-page', paging.itemsPerPage);
             }
-            if (paging.totalItems) {
+            if (paging.totalItems != null) {
                 this.__pager.setAttribute('total-items', paging.totalItems);
             }
         }
