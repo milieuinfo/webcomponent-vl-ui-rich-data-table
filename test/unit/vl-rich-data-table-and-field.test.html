@@ -22,89 +22,87 @@
 
 <script>
     suite('<vl-rich-data-table> & <vl-rich-data-field>', () => {
-        const should = chai.should();
+      test('De tabel toont de kolomnamen en data', () => {
+        const richTable = fixture('vl-rich-data-table-fixture');
 
-        test('De tabel toont de kolomnamen en data', () => {
-            const richTable = fixture('vl-rich-data-table-fixture');
+        tableShouldHaveHeaders(richTable, 'ID', 'Naam');
+        tableShouldHaveDataRows(richTable, ['0', 'Foo'], ['1', 'Bar']);
+      });
 
-            tableShouldHaveHeaders(richTable, 'ID', 'Naam');
-            tableShouldHaveDataRows(richTable, ['0', 'Foo'], ['1', 'Bar']);
+      test('Een aanpassing van de data wordt zichtbaar in de tabel', () => {
+        const richTable = fixture('vl-rich-data-table-fixture');
+        richTable.data = {'data': [{'id': 3, 'name': 'Foobar'}]};
+
+        tableShouldHaveHeaders(richTable, 'ID', 'Naam');
+        tableShouldHaveDataRows(richTable, ['3', 'Foobar']);
+      });
+
+      test('Een aanpassing van de label van een field wordt zichtbaar in de tabel', () => {
+        const richTable = fixture('vl-rich-data-table-fixture');
+        const idField = richTable.querySelector('#id-field');
+        idField.dataset.vlLabel = 'Identifier';
+
+        tableShouldHaveHeaders(richTable, 'Identifier', 'Naam');
+        tableShouldHaveDataRows(richTable, ['0', 'Foo'], ['1', 'Bar']);
+      });
+
+      test('Een aanpassing van de selector van een field wordt zichtbaar in de tabel', () => {
+        const richTable = fixture('vl-rich-data-table-fixture');
+        const nameField = richTable.querySelector('#name-field');
+        nameField.dataset.vlSelector = 'extendedName';
+
+        tableShouldHaveHeaders(richTable, 'ID', 'Naam');
+        tableShouldHaveDataRows(richTable, ['0', 'Foobar'], ['1', 'Barfoo']);
+      });
+
+      test('Een field verwijderen zal ervoor zorgen dat deze kolom ook niet langer in de tabel getoond wordt', (done) => {
+        const richTable = fixture('vl-rich-data-table-fixture');
+        const idField = richTable.querySelector('#id-field');
+        idField.remove();
+
+        setTimeout(() => {
+          tableShouldHaveHeaders(richTable, 'Naam');
+          tableShouldHaveDataRows(richTable, ['Foo'], ['Bar']);
+          done();
         });
+      });
 
-        test('Een aanpassing van de data wordt zichtbaar in de tabel', () => {
-            const richTable = fixture('vl-rich-data-table-fixture');
-            richTable.data = {"data": [{"id": 3, "name": "Foobar"}]};
+      test('Een field toevoegen zal ervoor zorgen dat deze kolom in de tabel getoond wordt', (done) => {
+        const richTable = fixture('vl-rich-data-table-fixture');
+        const extendedNameField = document.createElement('vl-rich-data-field');
+        extendedNameField.dataset.vlLabel = 'Uitgebreide naam';
+        extendedNameField.dataset.vlSelector = 'extendedName';
+        richTable.appendChild(extendedNameField);
 
-            tableShouldHaveHeaders(richTable, 'ID', 'Naam');
-            tableShouldHaveDataRows(richTable, ['3', 'Foobar']);
+        setTimeout(() => {
+          tableShouldHaveHeaders(richTable, 'ID', 'Naam', 'Uitgebreide naam');
+          tableShouldHaveDataRows(richTable, ['0', 'Foo', 'Foobar'], ['1', 'Bar', 'Barfoo']);
+          done();
         });
+      });
 
-        test('Een aanpassing van de label van een field wordt zichtbaar in de tabel', () => {
-            const richTable = fixture('vl-rich-data-table-fixture');
-            const idField = richTable.querySelector('#id-field');
-            idField.dataset.vlLabel = 'Identifier';
-
-            tableShouldHaveHeaders(richTable, 'Identifier', 'Naam');
-            tableShouldHaveDataRows(richTable, ['0', 'Foo'], ['1', 'Bar']);
+      function tableShouldHaveHeaders(table, ...expectedHeaders) {
+        const headers = table.__tableHeaderRow.querySelectorAll('th');
+        headers.should.have.length(expectedHeaders.length);
+        headers.forEach((header, index) => {
+          const expectedHeader = expectedHeaders[index];
+          header.textContent.should.equal(expectedHeader);
         });
+      }
 
-        test('Een aanpassing van de selector van een field wordt zichtbaar in de tabel', () => {
-            const richTable = fixture('vl-rich-data-table-fixture');
-            const nameField = richTable.querySelector('#name-field');
-            nameField.dataset.vlSelector = 'extendedName';
-
-            tableShouldHaveHeaders(richTable, 'ID', 'Naam');
-            tableShouldHaveDataRows(richTable, ['0', 'Foobar'], ['1', 'Barfoo']);
+      function tableShouldHaveDataRows(table, ...expectedRows) {
+        const rows = table.__tableBody.querySelectorAll('tr');
+        rows.should.have.length(expectedRows.length);
+        rows.forEach((row, index) => {
+          const expectedRow = expectedRows[index];
+          const cells = row.querySelectorAll('td');
+          cells.should.have.length(expectedRow.length);
+          cells.forEach((cell, index) => {
+            const expectedCell = expectedRow[index];
+            cell.textContent.should.equal(expectedCell);
+          });
         });
-
-        test('Een field verwijderen zal ervoor zorgen dat deze kolom ook niet langer in de tabel getoond wordt', (done) => {
-            const richTable = fixture('vl-rich-data-table-fixture');
-            const idField = richTable.querySelector('#id-field');
-            idField.remove();
-
-            setTimeout(() => {
-                tableShouldHaveHeaders(richTable, 'Naam');
-                tableShouldHaveDataRows(richTable, ['Foo'], ['Bar']);
-                done();
-            });
-        });
-
-        test('Een field toevoegen zal ervoor zorgen dat deze kolom in de tabel getoond wordt', (done) => {
-            const richTable = fixture('vl-rich-data-table-fixture');
-            const extendedNameField = document.createElement('vl-rich-data-field');
-            extendedNameField.dataset.vlLabel = 'Uitgebreide naam';
-            extendedNameField.dataset.vlSelector = 'extendedName';
-            richTable.appendChild(extendedNameField);
-
-            setTimeout(() => {
-                tableShouldHaveHeaders(richTable, 'ID', 'Naam', 'Uitgebreide naam');
-                tableShouldHaveDataRows(richTable, ['0', 'Foo', 'Foobar'], ['1', 'Bar', 'Barfoo']);
-                done();
-            });
-        });
-
-        function tableShouldHaveHeaders(table, ...expectedHeaders) {
-            const headers = table.__tableHeaderRow.querySelectorAll('th');
-            headers.should.have.length(expectedHeaders.length);
-            headers.forEach((header, index) => {
-                const expectedHeader = expectedHeaders[index];
-                header.textContent.should.equal(expectedHeader);
-            });
-        }
-
-        function tableShouldHaveDataRows(table, ...expectedRows) {
-            const rows = table.__tableBody.querySelectorAll('tr');
-            rows.should.have.length(expectedRows.length);
-            rows.forEach((row, index) => {
-                const expectedRow = expectedRows[index];
-                const cells = row.querySelectorAll('td');
-                cells.should.have.length(expectedRow.length);
-                cells.forEach((cell, index) => {
-                    const expectedCell = expectedRow[index];
-                    cell.textContent.should.equal(expectedCell);
-                })
-            });
-        }
+      }
     });
 </script>
 </body>
