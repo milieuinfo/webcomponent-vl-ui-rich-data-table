@@ -1,11 +1,12 @@
-import {VlElement, define} from '/node_modules/vl-ui-core/dist/vl-core.js';
+import {vlElement, define} from '/node_modules/vl-ui-core/dist/vl-core.js';
 
 /**
  * VlRichDataField
  * @class
  * @classdesc De definitie van een rich data veld, onderdeel van een rich data table om een table header weer te geven.
  *
- * @extends VlElement
+ * @extends HTMLElement
+ * @mixin vlElement
  *
  * @property {string} data-vl-name - Een naam die gebruikt kan worden om het veld te benoemen. Dit wordt gebruikt voor de sortering.
  * @property {string} data-vl-label - Een naam die getoond kan worden aan de gebruiker.
@@ -19,147 +20,146 @@ import {VlElement, define} from '/node_modules/vl-ui-core/dist/vl-core.js';
  * @see {@link https://webcomponenten.omgeving.vlaanderen.be/demo/vl-rich-data-table.html|Demo}
  *
  */
-export class VlRichDataField extends VlElement(HTMLElement) {
+export class VlRichDataField extends vlElement(HTMLElement) {
+  static get headerAttributes() {
+    return ['name', 'label', 'sortable', 'sorting-direction', 'sorting-priority'];
+  }
 
-    static get headerAttributes() {
-        return ['name', 'label', 'sortable', 'sorting-direction', 'sorting-priority'];
-    }
+  static get bodyAttributes() {
+    return ['selector'];
+  }
 
-    static get bodyAttributes() {
-        return ['selector'];
-    }
+  static get _observedAttributes() {
+    return this.headerAttributes.concat(this.bodyAttributes);
+  }
 
-    static get _observedAttributes() {
-        return this.headerAttributes.concat(this.bodyAttributes);
-    }
+  static get is() {
+    return 'vl-rich-data-field';
+  }
 
-    static get is() {
-        return 'vl-rich-data-field';
+  __valueTemplate(rowData) {
+    if (this.selector) {
+      return this.selector.split('.').reduce((prev, curr) => {
+        return prev ? prev[curr] : null;
+      }, rowData);
+    } else {
+      return this.__template(`${this.querySelector('template[slot="content"]').innerHTML}`, rowData);
     }
+  }
 
-    __valueTemplate(rowData) {
-        if (this.selector) {
-            return this.selector.split('.').reduce((prev, curr) => {
-                return prev ? prev[curr] : null
-            }, rowData);
-        } else {
-            return this.__template(`${this.querySelector('template[slot="content"]').innerHTML}`, rowData);
-        }
+  renderCellHeader() {
+    let template = this.label || `${this.querySelector('template[slot="label"]').innerHTML}`;
+    if (this.sortable) {
+      const direction = this.sortingDirection ? `data-vl-direction="${this.sortingDirection}"` : '';
+      const priority = this.sortingPriority ? `data-vl-priority="${this.sortingPriority}"` : '';
+      template += `<vl-rich-data-sorter data-vl-for="${this.name}" ${direction} ${priority}></vl-rich-data-sorter>`;
+      return `<th data-vl-sortable><a>${template}</a></th>`;
+    } else {
+      return `<th>${template}</th>`;
     }
+  }
 
-    renderCellHeader() {
-        let template = this.label || `${this.querySelector('template[slot="label"]').innerHTML}`;
-        if (this.sortable) {
-            const direction = this.sortingDirection ? `data-vl-direction="${this.sortingDirection}"` : '';
-            const priority = this.sortingPriority ? `data-vl-priority="${this.sortingPriority}"` : '';
-            template += `<vl-rich-data-sorter data-vl-for="${this.name}" ${direction} ${priority}></vl-rich-data-sorter>`;
-            return `<th data-vl-sortable><a>${template}</a></th>`;
-        } else {
-            return `<th>${template}</th>`;
-        }
-    }
+  renderCellValue(rowData) {
+    const value = this.__valueTemplate(rowData);
+    const title = this.label ? ` data-title="${this.label}"` : '';
+    return `<td${title}>${value}</td>`;
+  }
 
-    renderCellValue(rowData) {
-        const value = this.__valueTemplate(rowData);
-        const title = this.label ? ` data-title="${this.label}"` : '';
-        return `<td${title}>${value}</td>`;
-    }
+  __template(literal, data) {
+    return ((literal, item) => new Function('item', 'return `' + literal + '`')(item)).call(this, literal, data);
+  }
 
-    __template(literal, data) {
-        return ((literal, item) => new Function('item', 'return `' + literal + '`')(item)).call(this, literal, data);
-    }
+  /**
+   * Geeft de naam terug die gebruikt wordt om het veld te identificeren.
+   * @return {string}
+   */
+  get name() {
+    return this.dataset.vlName;
+  }
 
-    /**
-     * Geeft de naam terug die gebruikt wordt om het veld te identificeren.
-     * @returns {string}
-     */
-    get name() {
-        return this.dataset.vlName;
-    }
+  /**
+   * Geeft de selector terug die gebruikt wordt om de juiste waarde uit de data te halen.
+   * @return {string}
+   */
+  get selector() {
+    return this.dataset.vlSelector;
+  }
 
-    /**
-     * Geeft de selector terug die gebruikt wordt om de juiste waarde uit de data te halen.
-     * @returns {string}
-     */
-    get selector() {
-        return this.dataset.vlSelector;
-    }
+  /**
+   * Geeft de naam terug die getoond kan worden aan de gebruiker.
+   * @return {string}
+   */
+  get label() {
+    return this.dataset.vlLabel;
+  }
 
-    /**
-     * Geeft de naam terug die getoond kan worden aan de gebruiker.
-     * @returns {string}
-     */
-    get label() {
-        return this.dataset.vlLabel;
-    }
+  /**
+   * Geeft terug of er op het veld gesorteerd kan worden.
+   * @return {boolean}
+   */
+  get sortable() {
+    return this.dataset.vlSortable !== undefined;
+  }
 
-    /**
-     * Geeft terug of er op het veld gesorteerd kan worden.
-     * @returns {boolean}
-     */
-    get sortable() {
-        return this.dataset.vlSortable !== undefined;
-    }
+  /**
+   * Geeft de sorteerrichting terug.
+   * @return {asc | desc}
+   */
+  get sortingDirection() {
+    return this.dataset.vlSortingDirection;
+  }
 
-    /**
-     * Geeft de sorteerrichting terug.
-     * @returns {asc | desc}
-     */
-    get sortingDirection() {
-        return this.dataset.vlSortingDirection;
-    }
+  /**
+   * Geeft de prioriteit van het sorteren terug.
+   * @return {number}
+   */
+  get sortingPriority() {
+    return this.dataset.vlSortingPriority;
+  }
 
-    /**
-     * Geeft de prioriteit van het sorteren terug.
-     * @returns {number}
-     */
-    get sortingPriority() {
-        return this.dataset.vlSortingPriority;
+  _nameChangedCallback(oldValue, newValue) {
+    if (oldValue !== newValue) {
+      this._changed(['name']);
     }
+  }
 
-    _nameChangedCallback(oldValue, newValue) {
-        if (oldValue !== newValue) {
-            this._changed(['name']);
-        }
+  _selectorChangedCallback(oldValue, newValue) {
+    if (oldValue !== newValue) {
+      this._changed(['selector']);
     }
+  }
 
-    _selectorChangedCallback(oldValue, newValue) {
-        if (oldValue !== newValue) {
-            this._changed(['selector']);
-        }
+  _labelChangedCallback(oldValue, newValue) {
+    if (oldValue !== newValue) {
+      this._changed(['label']);
     }
+  }
 
-    _labelChangedCallback(oldValue, newValue) {
-        if (oldValue !== newValue) {
-            this._changed(['label']);
-        }
+  _sortableChangedCallback(oldValue, newValue) {
+    if (oldValue !== newValue) {
+      this._changed(['sortable']);
     }
+  }
 
-    _sortableChangedCallback(oldValue, newValue) {
-        if (oldValue !== newValue) {
-            this._changed(['sortable']);
-        }
+  _sortingDirectionChangedCallback(oldValue, newValue) {
+    if (oldValue !== newValue) {
+      this._changed(['sorting-direction']);
     }
+  }
 
-    _sorting_directionChangedCallback(oldValue, newValue) {
-        if (oldValue !== newValue) {
-            this._changed(['sorting-direction']);
-        }
+  _sortingPriorityChangedCallback(oldValue, newValue) {
+    if (oldValue !== newValue) {
+      this._changed(['sorting-priority']);
     }
+  }
 
-    _sorting_priorityChangedCallback(oldValue, newValue) {
-        if (oldValue !== newValue) {
-            this._changed(['sorting-priority']);
-        }
-    }
-
-    _changed(properties) {
-        this.dispatchEvent(new CustomEvent('change', {
-            detail: {
-                properties: properties
-            }
-        }));
-    }
+  _changed(properties) {
+    this.dispatchEvent(new CustomEvent('change', {
+      detail: {
+        properties: properties,
+      },
+    }));
+  }
 }
 
 
