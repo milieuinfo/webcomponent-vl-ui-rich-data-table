@@ -71,7 +71,7 @@ export class VlRichDataTable extends VlElement(HTMLElement) {
                     </div>
                     <div id="search" is="vl-column" size="0" small-size="0">
                         <button id="close-filter-button" class="vl-filter__close" hidden type="button">
-                            <span is="vl-icon" dara-vl-icon="close"></span>
+                            <span is="vl-icon" data-vl-icon="close"></span>
                             <span class="vl-u-visually-hidden"><slot name="close-filter-button-text">Filter sluiten</slot></span>
                         </button>
                         <div id="filter-slot-container">
