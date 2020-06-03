@@ -26,7 +26,7 @@
 		"prepare": "npm update --dev vl-ui-util && npm run prepare:util",
 		"prepare:util": "npm explore vl-ui-util -- npm run util",
 		"test": "npm run test:unit && npm run test:e2e",
-		"test:unit": "wct --config-file ./wct.local.conf.json",
+		"test:unit": "wct --config-file ./wct.local.conf.json -p",
 		"test:e2e": "npm run test:server:start && npm run test:e2e:chrome && npm run test:e2e:firefox",
 		"test:e2e:grid": "npm run test:server:start && npm run test:e2e:chrome:grid && npm run test:e2e:firefox:grid",
 		"test:grid": "wct --config-file ./wct.docker.conf.json && npm run test:e2e:grid",
@@ -44,16 +44,16 @@
 		"demo": "http-server"
 	},
 	"dependencies": {
-		"vl-ui-button": "^5.0.1",
-		"vl-ui-core": "^5.1.2",
-		"vl-ui-data-table": "^3.1.0",
-		"vl-ui-grid": "^3.0.1",
-		"vl-ui-icon": "^5.0.0",
-		"vl-ui-modal": "^3.0.3"
+		"vl-ui-button": "5.0.2",
+		"vl-ui-core": "github:milieuinfo/webcomponent-vl-ui-core",
+		"vl-ui-data-table": "3.1.1",
+		"vl-ui-grid": "3.1.0",
+		"vl-ui-icon": "5.0.1",
+		"vl-ui-modal": "3.0.6"
 	},
 	"peerDependencies": {
 		"vl-ui-button": "^5.0.1",
-		"vl-ui-core": "^5.1.2",
+		"vl-ui-core": "github:milieuinfo/webcomponent-vl-ui-core",
 		"vl-ui-data-table": "^3.1.0",
 		"vl-ui-grid": "^3.0.1",
 		"vl-ui-icon": "^5.0.0",
@@ -61,11 +61,11 @@
 	},
 	"devDependencies": {
 		"@govflanders/vl-ui-util": "3.9.2",
-		"vl-ui-form-message": "^5.0.0",
-		"vl-ui-input-field": "^3.1.0",
-		"vl-ui-link": "^4.0.0",
-		"vl-ui-pager": "^3.0.1",
-		"vl-ui-search-filter": "^3.1.0",
-		"vl-ui-util": "^5.1.6"
+		"vl-ui-form-message": "5.0.1",
+		"vl-ui-input-field": "3.1.1",
+		"vl-ui-link": "4.0.1",
+		"vl-ui-pager": "3.0.2",
+		"vl-ui-search-filter": "3.1.1",
+		"vl-ui-util": "github:milieuinfo/webcomponent-vl-ui-util"
 	}
 }

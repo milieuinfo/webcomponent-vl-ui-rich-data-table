@@ -1,5 +1,5 @@
 module.exports = {
-    "full-trace": true,
+    "full-trace": false,
     "reporter": 'spec',
     "spec": ["test/**/*.test.js"],
     "timeout": '10000'

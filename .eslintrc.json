@@ -1,0 +1,44 @@
+{
+    "env": {
+      "browser": true,
+      "commonjs": true,
+      "es6": true,
+      "node": true,
+      "mocha": true
+    },
+    "extends": ["google"],
+    "globals": {
+      "Atomics": "readonly",
+      "SharedArrayBuffer": "readonly"
+    },
+    "ignorePatterns": [
+      "**/node_modules",
+      "**/sitespeed-result",
+      "**/dist",
+      "**/lib",
+      "CODEOWNERS",
+      "*.yml",
+      "*.md",
+      "package-lock.json"
+    ],
+    "overrides": [
+      {
+        "files": ["src/*.js", "demo/demo.js"],
+        "parserOptions": {
+          "sourceType": "module"
+        }
+      }
+    ],
+    "parserOptions": {
+      "ecmaVersion": 2020,
+      "sourceType": "module"
+    },
+    "plugins": [
+        "eslint-plugin-html"
+    ],
+    "rules": {
+      "require-jsdoc": "off",
+      "max-len": "off"
+    }
+  }
+  
