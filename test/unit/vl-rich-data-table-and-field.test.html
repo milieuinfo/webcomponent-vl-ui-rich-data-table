@@ -83,23 +83,23 @@
 
       function tableShouldHaveHeaders(table, ...expectedHeaders) {
         const headers = table.__tableHeaderRow.querySelectorAll('th');
-        headers.should.have.length(expectedHeaders.length);
+        assert.lengthOf(headers, expectedHeaders.length);
         headers.forEach((header, index) => {
           const expectedHeader = expectedHeaders[index];
-          header.textContent.should.equal(expectedHeader);
+          assert.equal(header.textContent, expectedHeader);
         });
       }
 
       function tableShouldHaveDataRows(table, ...expectedRows) {
         const rows = table.__tableBody.querySelectorAll('tr');
-        rows.should.have.length(expectedRows.length);
+        assert.lengthOf(rows, expectedRows.length);
         rows.forEach((row, index) => {
           const expectedRow = expectedRows[index];
           const cells = row.querySelectorAll('td');
-          cells.should.have.length(expectedRow.length);
+          assert.lengthOf(cells, expectedRow.length);
           cells.forEach((cell, index) => {
             const expectedCell = expectedRow[index];
-            cell.textContent.should.equal(expectedCell);
+            assert.equal(cell.textContent, expectedCell);
           });
         });
       }
