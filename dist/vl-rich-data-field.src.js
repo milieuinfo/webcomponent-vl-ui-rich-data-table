@@ -20,13 +20,12 @@ import {VlElement, define} from 'vl-ui-core';
  *
  */
 export class VlRichDataField extends VlElement(HTMLElement) {
-
     static get headerAttributes() {
         return ['name', 'label', 'sortable', 'sorting-direction', 'sorting-priority'];
     }
 
     static get bodyAttributes() {
-        return ['selector'];
+        return ['selector', 'renderer'];
     }
 
     static get _observedAttributes() {
@@ -37,36 +36,27 @@ export class VlRichDataField extends VlElement(HTMLElement) {
         return 'vl-rich-data-field';
     }
 
-    __valueTemplate(rowData) {
-        if (this.selector) {
-            return this.selector.split('.').reduce((prev, curr) => {
-                return prev ? prev[curr] : null
-            }, rowData);
-        } else {
-            return this.__template(`${this.querySelector('template[slot="content"]').innerHTML}`, rowData);
-        }
-    }
-
-    renderCellHeader() {
-        let template = this.label || `${this.querySelector('template[slot="label"]').innerHTML}`;
+    headerTemplate() {
+        const th = document.createElement('th');
+        th.appendChild(this.__getHeaderContentElement());
         if (this.sortable) {
-            const direction = this.sortingDirection ? `data-vl-direction="${this.sortingDirection}"` : '';
-            const priority = this.sortingPriority ? `data-vl-priority="${this.sortingPriority}"` : '';
-            template += `<vl-rich-data-sorter data-vl-for="${this.name}" ${direction} ${priority}></vl-rich-data-sorter>`;
-            return `<th data-vl-sortable><a>${template}</a></th>`;
-        } else {
-            return `<th>${template}</th>`;
+            th.setAttribute('data-vl-sortable', '');
         }
+        return th;
     }
 
-    renderCellValue(rowData) {
-        const value = this.__valueTemplate(rowData);
-        const title = this.label ? ` data-title="${this.label}"` : '';
-        return `<td${title}>${value}</td>`;
-    }
-
-    __template(literal, data) {
-        return ((literal, item) => new Function('item', 'return `' + literal + '`')(item)).call(this, literal, data);
+    valueTemplate(rowData) {
+        const td = document.createElement('td');
+        if (this.label) {
+            td.setAttribute('data-title', this.label);
+        }
+        const element = this.__getValueContentElement(rowData);
+        if (element) {
+            td.appendChild(element);
+        } else if (this._renderer) {
+            this._renderer(td, rowData);
+        }
+        return td;
     }
 
     /**
@@ -117,6 +107,19 @@ export class VlRichDataField extends VlElement(HTMLElement) {
         return this.dataset.vlSortingPriority;
     }
 
+    get _labelSlotElement() {
+        return this.querySelector('template[slot="label"]');
+    }
+
+    get _contentSlotElement() {
+        return this.querySelector('template[slot="content"]');
+    }
+
+    set renderer(renderer) {
+        this._renderer = renderer;
+        this._changed(['renderer']);
+    }
+
     _nameChangedCallback(oldValue, newValue) {
         if (oldValue !== newValue) {
             this._changed(['name']);
@@ -160,8 +163,31 @@ export class VlRichDataField extends VlElement(HTMLElement) {
             }
         }));
     }
-}
 
+    __getHeaderContentElement() {
+        const text = this.label || `${this._labelSlotElement.innerHTML}`;
+        if (this.sortable) {
+            const direction = this.sortingDirection ? `data-vl-direction="${this.sortingDirection}"` : '';
+            const priority = this.sortingPriority ? `data-vl-priority="${this.sortingPriority}"` : '';
+            const sorter = `<vl-rich-data-sorter data-vl-for="${this.name}" ${direction} ${priority}></vl-rich-data-sorter>`;
+            return this._template(`<a>${text}${sorter}</a>`);
+        } else {
+           return this._template(`${text}`);
+        }
+    }
+
+    __getValueContentElement(data) {
+        if (this.selector) {
+            return this._template(`${this.selector.split('.').reduce((prev, curr) => prev ? prev[curr] : null, data)}`);
+        } else if (this._contentSlotElement) {
+            const literal = `${this.querySelector('template[slot="content"]').innerHTML}`;
+            const template = ((literal, item) => new Function('item', 'return `' + literal + '`')(item)).call(this, literal, data);
+            return this._template(template);
+        } else {
+            return null;
+        }
+    }
+}
 
 /**
  * VlRichDataField change event

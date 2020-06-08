@@ -58,7 +58,7 @@ export class VlRichDataSorter extends VlElement(HTMLElement) {
 
             const directionIcon = this._directionIcon;
             if (directionIcon) {
-                this.__directionElement.setAttribute('icon', this._directionIcon);
+                this.__directionElement.setAttribute('data-vl-icon', this._directionIcon);
                 this.__containerElement.classList.remove('vl-u-visually-hidden');
             } else {
                 this.__containerElement.classList.add('vl-u-visually-hidden');
