@@ -98,65 +98,64 @@
 
             <script>
                 customElements.whenDefined('vl-rich-data-table').then(() => {
+                  const richDataTableFilter = document.querySelector('#rich-data-table-filter');
+                  const richDataTableFilterData = {
+                    'data': [{
+                      'id': 0,
+                      'name': 'Project #1',
+                      'manager': {'firstName': 'Pascal', 'lastName': 'Riquier'},
+                      'medewerkers': [{'firstName': 'Sander', 'lastName': 'Kleykens'}],
+                    }, {
+                      'id': 1, 'name':
+                                'Project #2',
+                      'manager': {'firstName': 'Tom', 'lastName': 'Coemans'},
+                      'medewerkers': [{'firstName': 'Guy', 'lastName': 'Wauters'}],
+                    }, {
+                      'id': 2,
+                      'name': 'Project #3',
+                      'manager': {'firstName': 'Pascal', 'lastName': 'Riquier'},
+                      'medewerkers': [{'firstName': 'Pieter', 'lastName': 'Beckers'}],
+                    }],
+                  };
+                  richDataTableFilter.data = richDataTableFilterData;
 
-                    const richDataTableFilter = document.querySelector('#rich-data-table-filter');
-                    const richDataTableFilterData = {
-                        "data": [{
-                            "id": 0,
-                            "name": "Project #1",
-                            "manager": { "firstName": "Pascal", "lastName": "Riquier" },
-                            "medewerkers": [{ "firstName": "Sander", "lastName": "Kleykens" }]
-                        }, {
-                            "id": 1, "name":
-                                "Project #2",
-                            "manager": { "firstName": "Tom", "lastName": "Coemans" },
-                            "medewerkers": [{ "firstName": "Guy", "lastName": "Wauters" }]
-                        }, {
-                            "id": 2,
-                            "name": "Project #3",
-                            "manager": { "firstName": "Pascal", "lastName": "Riquier" },
-                            "medewerkers": [{ "firstName": "Pieter", "lastName": "Beckers" }]
-                        }]
+                  richDataTableFilter.addEventListener('change', (e) => {
+                    let filteredData = richDataTableFilterData;
+                    if (e.detail.formData) {
+                      for (const entry of e.detail.formData.entries()) {
+                        filteredData = filter(filteredData, entry[0], entry[1]);
+                      }
+                    }
+                    richDataTableFilter.data = filteredData;
+                  });
+
+                  function filter({data}, pathToKey, value) {
+                    if (value === '') {
+                      return {
+                        data: data,
+                      };
+                    }
+                    return {
+                      data: data.filter((element) => {
+                        const valueByPath = findValueByPath(element, pathToKey);
+                        return valueByPath.includes(value);
+                      }),
                     };
-                    richDataTableFilter.data = richDataTableFilterData;
+                  }
 
-                    richDataTableFilter.addEventListener('change', (e) => {
-                        let filteredData = richDataTableFilterData;
-                        if (e.detail.formData) {
-                            for (let entry of e.detail.formData.entries()) {
-                                filteredData = filter(filteredData, entry[0], entry[1]);
-                            }
-                        }
-                        richDataTableFilter.data = filteredData;
-                    });
+                  function findValueByPath(element, pathToKey) {
+                    const keys = pathToKey.split('.');
 
-                    function filter({ data }, pathToKey, value) {
-                        if (value === "") {
-                            return {
-                                data: data
-                            };
-                        }
-                        return {
-                            data: data.filter(element => {
-                                const valueByPath = findValueByPath(element, pathToKey);
-                                return valueByPath.includes(value);
-                            })
-                        };
+                    let current = element;
+                    for (let i = 0; i < keys.length; i++) {
+                      if (current[keys[i]] !== undefined) {
+                        current = current[keys[i]];
+                      } else {
+                        return undefined;
+                      }
                     }
-
-                    function findValueByPath(element, pathToKey) {
-                        const keys = pathToKey.split('.');
-
-                        let current = element;
-                        for (let i = 0; i < keys.length; i++) {
-                            if (current[keys[i]] !== undefined) {
-                                current = current[keys[i]];
-                            } else {
-                                return undefined;
-                            }
-                        }
-                        return current.toString();
-                    }
+                    return current.toString();
+                  }
                 });
             </script>
         </vl-demo>
@@ -170,25 +169,25 @@
             </vl-rich-data-table>
             <script>
                 customElements.whenDefined('vl-rich-data-table').then(() => {
-                    const richDataTablePagingData = [];
-                    for (let i = 1; i <= 20; i++) {
-                        richDataTablePagingData.push({ "id": i, "name": `Project #${i}` })
-                    }
+                  const richDataTablePagingData = [];
+                  for (let i = 1; i <= 20; i++) {
+                    richDataTablePagingData.push({'id': i, 'name': `Project #${i}`});
+                  }
 
-                    function page(page, itemsPerPage, data) {
-                        const start = (page - 1) * itemsPerPage;
-                        const end = start + itemsPerPage;
-                        return {
-                            data: data.slice(start, end)
-                        };
-                    }
+                  function page(page, itemsPerPage, data) {
+                    const start = (page - 1) * itemsPerPage;
+                    const end = start + itemsPerPage;
+                    return {
+                      data: data.slice(start, end),
+                    };
+                  }
 
-                    const richDataTablePaging = document.querySelector("#rich-data-table-paging");
-                    richDataTablePaging.data = page(1, 5, richDataTablePagingData);
-                    richDataTablePaging.addEventListener('change', (e) => {
-                        const newPage = page(e.detail.paging.currentPage, e.detail.paging.itemsPerPage, richDataTablePagingData);
-                        richDataTablePaging.data = newPage;
-                    });
+                  const richDataTablePaging = document.querySelector('#rich-data-table-paging');
+                  richDataTablePaging.data = page(1, 5, richDataTablePagingData);
+                  richDataTablePaging.addEventListener('change', (e) => {
+                    const newPage = page(e.detail.paging.currentPage, e.detail.paging.itemsPerPage, richDataTablePagingData);
+                    richDataTablePaging.data = newPage;
+                  });
                 });
             </script>
         </vl-demo>
@@ -207,38 +206,38 @@
                 </vl-rich-data-field>
             </vl-rich-data-table>
             <script>
-                const tableSorter = table => {
-                    const originalTableData = [...table.data.data];
-                    return event => {
-                        const sorting = event.detail.sorting;
-                        const table = event.target;
-                        if (sorting) {
-                            table.data = {
-                                data: [...originalTableData].sort((firstEl, secondEl) => {
-                                    for (let i = 0; i < sorting.length; i++) {
-                                        const criteria = sorting[i];
-                                        const firstValue = firstEl[criteria.name];
-                                        const secondValue = secondEl[criteria.name];
-                                        const isAscending = criteria.direction === 'asc';
-                                        if (firstValue < secondValue) {
-                                            return isAscending ? -1 : 1;
-                                        } else if (firstValue > secondValue) {
-                                            return isAscending ? 1 : -1;
-                                        }
-                                    }
-                                    return 0;
-                                }),
-                                sorting: sorting
-                            };
-                        } else {
-                            table.data = originalTableData;
-                        }
-                    };
+                const tableSorter = (table) => {
+                  const originalTableData = [...table.data.data];
+                  return (event) => {
+                    const sorting = event.detail.sorting;
+                    const table = event.target;
+                    if (sorting) {
+                      table.data = {
+                        data: [...originalTableData].sort((firstEl, secondEl) => {
+                          for (let i = 0; i < sorting.length; i++) {
+                            const criteria = sorting[i];
+                            const firstValue = firstEl[criteria.name];
+                            const secondValue = secondEl[criteria.name];
+                            const isAscending = criteria.direction === 'asc';
+                            if (firstValue < secondValue) {
+                              return isAscending ? -1 : 1;
+                            } else if (firstValue > secondValue) {
+                              return isAscending ? 1 : -1;
+                            }
+                          }
+                          return 0;
+                        }),
+                        sorting: sorting,
+                      };
+                    } else {
+                      table.data = originalTableData;
+                    }
+                  };
                 };
 
                 customElements.whenDefined('vl-rich-data-table').then(() => {
-                    const table = document.querySelector('#rich-data-table-sorting');
-                    table.addEventListener('change', tableSorter(table));
+                  const table = document.querySelector('#rich-data-table-sorting');
+                  table.addEventListener('change', tableSorter(table));
                 });
             </script>
         </vl-demo>
@@ -257,8 +256,8 @@
             </vl-rich-data-table>
             <script>
                 customElements.whenDefined('vl-rich-data-table').then(() => {
-                    const table = document.querySelector('#rich-data-table-multi-sorting');
-                    table.addEventListener('change', tableSorter(table));
+                  const table = document.querySelector('#rich-data-table-multi-sorting');
+                  table.addEventListener('change', tableSorter(table));
                 });
             </script>
         </vl-demo>
@@ -353,222 +352,222 @@
 
             <script>
                 customElements.whenDefined('vl-rich-data-table').then(() => {
-                    const element = document.querySelector('#rich-data-table-filter-sorting-paging');
-                    const pager = element.querySelector('vl-pager');
+                  const element = document.querySelector('#rich-data-table-filter-sorting-paging');
+                  const pager = element.querySelector('vl-pager');
 
-                    const data = {
-                        "data": [{
-                            "id": 0,
-                            "name": "Project #1",
-                            "manager": { "firstName": "Pascal", "lastName": "Riquier" },
-                            "medewerkers": [{ "firstName": "Sander", "lastName": "Kleykens" }]
-                        }, {
-                            "id": 1,
-                            "name": "Project #2",
-                            "manager": { "firstName": "Tom", "lastName": "Coemans" },
-                            "medewerkers": [{ "firstName": "Guy", "lastName": "Wauters" }]
-                        }, {
-                            "id": 2,
-                            "name": "Project #3",
-                            "manager": { "firstName": "Tom", "lastName": "Coemans" },
-                            "medewerkers": [{ "firstName": "Guy", "lastName": "Wauters" }]
-                        }, {
-                            "id": 3,
-                            "name": "Project #4",
-                            "manager": { "firstName": "Pascal", "lastName": "Riquier" },
-                            "medewerkers": [{ "firstName": "Pieter", "lastName": "Beckers" }]
-                        }, {
-                            "id": 4,
-                            "name": "Project #5",
-                            "manager": { "firstName": "Pascal", "lastName": "Riquier" },
-                            "medewerkers": [{ "firstName": "Pieter", "lastName": "Beckers" }]
-                        }, {
-                            "id": 5,
-                            "name": "Project #6",
-                            "manager": { "firstName": "Pascal", "lastName": "Riquier" },
-                            "medewerkers": [{ "firstName": "Pieter", "lastName": "Beckers" }]
-                        }, {
-                            "id": 6,
-                            "name": "Project #7",
-                            "manager": { "firstName": "Pascal", "lastName": "Riquier" },
-                            "medewerkers": [{ "firstName": "Pieter", "lastName": "Beckers" }]
-                        }, {
-                            "id": 7,
-                            "name": "Project #8",
-                            "manager": { "firstName": "Pascal", "lastName": "Riquier" },
-                            "medewerkers": [{ "firstName": "Pieter", "lastName": "Beckers" }]
-                        }, {
-                            "id": 8,
-                            "name": "Project #9",
-                            "manager": { "firstName": "Pascal", "lastName": "Riquier" },
-                            "medewerkers": [{ "firstName": "Pieter", "lastName": "Beckers" }]
-                        }, {
-                            "id": 9,
-                            "name": "Project #10",
-                            "manager": { "firstName": "Pascal", "lastName": "Riquier" },
-                            "medewerkers": [{ "firstName": "Pieter", "lastName": "Beckers" }]
-                        }, {
-                            "id": 10,
-                            "name": "Project #11",
-                            "manager": { "firstName": "Pascal", "lastName": "Riquier" },
-                            "medewerkers": [{ "firstName": "Pieter", "lastName": "Beckers" }]
-                        }, {
-                            "id": 11,
-                            "name": "Project #12",
-                            "manager": { "firstName": "Pascal", "lastName": "Riquier" },
-                            "medewerkers": [{ "firstName": "Pieter", "lastName": "Beckers" }]
-                        }, {
-                            "id": 12,
-                            "name": "Project #13",
-                            "manager": { "firstName": "Pascal", "lastName": "Riquier" },
-                            "medewerkers": [{ "firstName": "Pieter", "lastName": "Beckers" }]
-                        }, {
-                            "id": 13,
-                            "name": "Project #14",
-                            "manager": { "firstName": "Pascal", "lastName": "Riquier" },
-                            "medewerkers": [{ "firstName": "Pieter", "lastName": "Beckers" }]
-                        }, {
-                            "id": 14,
-                            "name": "Project #15",
-                            "manager": { "firstName": "Pascal", "lastName": "Riquier" },
-                            "medewerkers": [{ "firstName": "Pieter", "lastName": "Beckers" }]
-                        }, {
-                            "id": 15,
-                            "name": "Project #15",
-                            "manager": { "firstName": "Pascal", "lastName": "Riquier" },
-                            "medewerkers": [{ "firstName": "Pieter", "lastName": "Beckers" }]
-                        }, {
-                            "id": 16,
-                            "name": "Project #16",
-                            "manager": { "firstName": "Pascal", "lastName": "Riquier" },
-                            "medewerkers": [{ "firstName": "Pieter", "lastName": "Beckers" }]
-                        }, {
-                            "id": 17,
-                            "name": "Project #17",
-                            "manager": { "firstName": "Pascal", "lastName": "Riquier" },
-                            "medewerkers": [{ "firstName": "Pieter", "lastName": "Beckers" }]
-                        }, {
-                            "id": 18,
-                            "name": "Project #18",
-                            "manager": { "firstName": "Pascal", "lastName": "Riquier" },
-                            "medewerkers": [{ "firstName": "Pieter", "lastName": "Beckers" }]
-                        }, {
-                            "id": 19,
-                            "name": "Project #19",
-                            "manager": { "firstName": "Pascal", "lastName": "Riquier" },
-                            "medewerkers": [{ "firstName": "Pieter", "lastName": "Beckers" }]
-                        }, {
-                            "id": 20,
-                            "name": "Project #20",
-                            "manager": { "firstName": "Pascal", "lastName": "Riquier" },
-                            "medewerkers": [{ "firstName": "Pieter", "lastName": "Beckers" }]
-                        }, {
-                            "id": 21,
-                            "name": "Project #21",
-                            "manager": { "firstName": "Pascal", "lastName": "Riquier" },
-                            "medewerkers": [{ "firstName": "Pieter", "lastName": "Beckers" }]
-                        }, {
-                            "id": 22,
-                            "name": "Project #22",
-                            "manager": { "firstName": "Pascal", "lastName": "Riquier" },
-                            "medewerkers": [{ "firstName": "Pieter", "lastName": "Beckers" }]
-                        }, {
-                            "id": 23,
-                            "name": "Project #23",
-                            "manager": { "firstName": "Pascal", "lastName": "Riquier" },
-                            "medewerkers": [{ "firstName": "Pieter", "lastName": "Beckers" }]
-                        }, {
-                            "id": 24,
-                            "name": "Project #24",
-                            "manager": { "firstName": "Pascal", "lastName": "Riquier" },
-                            "medewerkers": [{ "firstName": "Pieter", "lastName": "Beckers" }]
-                        }]
-                    };
+                  const data = {
+                    'data': [{
+                      'id': 0,
+                      'name': 'Project #1',
+                      'manager': {'firstName': 'Pascal', 'lastName': 'Riquier'},
+                      'medewerkers': [{'firstName': 'Sander', 'lastName': 'Kleykens'}],
+                    }, {
+                      'id': 1,
+                      'name': 'Project #2',
+                      'manager': {'firstName': 'Tom', 'lastName': 'Coemans'},
+                      'medewerkers': [{'firstName': 'Guy', 'lastName': 'Wauters'}],
+                    }, {
+                      'id': 2,
+                      'name': 'Project #3',
+                      'manager': {'firstName': 'Tom', 'lastName': 'Coemans'},
+                      'medewerkers': [{'firstName': 'Guy', 'lastName': 'Wauters'}],
+                    }, {
+                      'id': 3,
+                      'name': 'Project #4',
+                      'manager': {'firstName': 'Pascal', 'lastName': 'Riquier'},
+                      'medewerkers': [{'firstName': 'Pieter', 'lastName': 'Beckers'}],
+                    }, {
+                      'id': 4,
+                      'name': 'Project #5',
+                      'manager': {'firstName': 'Pascal', 'lastName': 'Riquier'},
+                      'medewerkers': [{'firstName': 'Pieter', 'lastName': 'Beckers'}],
+                    }, {
+                      'id': 5,
+                      'name': 'Project #6',
+                      'manager': {'firstName': 'Pascal', 'lastName': 'Riquier'},
+                      'medewerkers': [{'firstName': 'Pieter', 'lastName': 'Beckers'}],
+                    }, {
+                      'id': 6,
+                      'name': 'Project #7',
+                      'manager': {'firstName': 'Pascal', 'lastName': 'Riquier'},
+                      'medewerkers': [{'firstName': 'Pieter', 'lastName': 'Beckers'}],
+                    }, {
+                      'id': 7,
+                      'name': 'Project #8',
+                      'manager': {'firstName': 'Pascal', 'lastName': 'Riquier'},
+                      'medewerkers': [{'firstName': 'Pieter', 'lastName': 'Beckers'}],
+                    }, {
+                      'id': 8,
+                      'name': 'Project #9',
+                      'manager': {'firstName': 'Pascal', 'lastName': 'Riquier'},
+                      'medewerkers': [{'firstName': 'Pieter', 'lastName': 'Beckers'}],
+                    }, {
+                      'id': 9,
+                      'name': 'Project #10',
+                      'manager': {'firstName': 'Pascal', 'lastName': 'Riquier'},
+                      'medewerkers': [{'firstName': 'Pieter', 'lastName': 'Beckers'}],
+                    }, {
+                      'id': 10,
+                      'name': 'Project #11',
+                      'manager': {'firstName': 'Pascal', 'lastName': 'Riquier'},
+                      'medewerkers': [{'firstName': 'Pieter', 'lastName': 'Beckers'}],
+                    }, {
+                      'id': 11,
+                      'name': 'Project #12',
+                      'manager': {'firstName': 'Pascal', 'lastName': 'Riquier'},
+                      'medewerkers': [{'firstName': 'Pieter', 'lastName': 'Beckers'}],
+                    }, {
+                      'id': 12,
+                      'name': 'Project #13',
+                      'manager': {'firstName': 'Pascal', 'lastName': 'Riquier'},
+                      'medewerkers': [{'firstName': 'Pieter', 'lastName': 'Beckers'}],
+                    }, {
+                      'id': 13,
+                      'name': 'Project #14',
+                      'manager': {'firstName': 'Pascal', 'lastName': 'Riquier'},
+                      'medewerkers': [{'firstName': 'Pieter', 'lastName': 'Beckers'}],
+                    }, {
+                      'id': 14,
+                      'name': 'Project #15',
+                      'manager': {'firstName': 'Pascal', 'lastName': 'Riquier'},
+                      'medewerkers': [{'firstName': 'Pieter', 'lastName': 'Beckers'}],
+                    }, {
+                      'id': 15,
+                      'name': 'Project #15',
+                      'manager': {'firstName': 'Pascal', 'lastName': 'Riquier'},
+                      'medewerkers': [{'firstName': 'Pieter', 'lastName': 'Beckers'}],
+                    }, {
+                      'id': 16,
+                      'name': 'Project #16',
+                      'manager': {'firstName': 'Pascal', 'lastName': 'Riquier'},
+                      'medewerkers': [{'firstName': 'Pieter', 'lastName': 'Beckers'}],
+                    }, {
+                      'id': 17,
+                      'name': 'Project #17',
+                      'manager': {'firstName': 'Pascal', 'lastName': 'Riquier'},
+                      'medewerkers': [{'firstName': 'Pieter', 'lastName': 'Beckers'}],
+                    }, {
+                      'id': 18,
+                      'name': 'Project #18',
+                      'manager': {'firstName': 'Pascal', 'lastName': 'Riquier'},
+                      'medewerkers': [{'firstName': 'Pieter', 'lastName': 'Beckers'}],
+                    }, {
+                      'id': 19,
+                      'name': 'Project #19',
+                      'manager': {'firstName': 'Pascal', 'lastName': 'Riquier'},
+                      'medewerkers': [{'firstName': 'Pieter', 'lastName': 'Beckers'}],
+                    }, {
+                      'id': 20,
+                      'name': 'Project #20',
+                      'manager': {'firstName': 'Pascal', 'lastName': 'Riquier'},
+                      'medewerkers': [{'firstName': 'Pieter', 'lastName': 'Beckers'}],
+                    }, {
+                      'id': 21,
+                      'name': 'Project #21',
+                      'manager': {'firstName': 'Pascal', 'lastName': 'Riquier'},
+                      'medewerkers': [{'firstName': 'Pieter', 'lastName': 'Beckers'}],
+                    }, {
+                      'id': 22,
+                      'name': 'Project #22',
+                      'manager': {'firstName': 'Pascal', 'lastName': 'Riquier'},
+                      'medewerkers': [{'firstName': 'Pieter', 'lastName': 'Beckers'}],
+                    }, {
+                      'id': 23,
+                      'name': 'Project #23',
+                      'manager': {'firstName': 'Pascal', 'lastName': 'Riquier'},
+                      'medewerkers': [{'firstName': 'Pieter', 'lastName': 'Beckers'}],
+                    }, {
+                      'id': 24,
+                      'name': 'Project #24',
+                      'manager': {'firstName': 'Pascal', 'lastName': 'Riquier'},
+                      'medewerkers': [{'firstName': 'Pieter', 'lastName': 'Beckers'}],
+                    }],
+                  };
 
-                    element.addEventListener('change', (e) => {
-                        let newData = data.data;
-                        let totalItems = data.data.length;
+                  element.addEventListener('change', (e) => {
+                    let newData = data.data;
+                    let totalItems = data.data.length;
 
-                        let filterEntries = undefined;
-                        if (e.detail.formData) {
-                            filterEntries = [];
-                            for (let entry of e.detail.formData.entries()) {
-                                newData = filter(newData, entry[0], entry[1]);
-                                totalItems = newData.length;
-                                filterEntries.push({
-                                    name: entry[0],
-                                    value: entry[1]
-                                });
-                            }
+                    let filterEntries = undefined;
+                    if (e.detail.formData) {
+                      filterEntries = [];
+                      for (const entry of e.detail.formData.entries()) {
+                        newData = filter(newData, entry[0], entry[1]);
+                        totalItems = newData.length;
+                        filterEntries.push({
+                          name: entry[0],
+                          value: entry[1],
+                        });
+                      }
+                    }
+
+                    let sorting;
+                    if (e.detail.sorting) {
+                      sorting = e.detail.sorting;
+                      newData = [...newData].sort((firstEl, secondEl) => {
+                        for (let i = 0; i < sorting.length; i++) {
+                          const criteria = sorting[i];
+                          const firstValue = firstEl[criteria.name];
+                          const secondValue = secondEl[criteria.name];
+                          const isAscending = criteria.direction === 'asc';
+                          if (firstValue < secondValue) {
+                            return isAscending ? -1 : 1;
+                          } else if (firstValue > secondValue) {
+                            return isAscending ? 1 : -1;
+                          }
                         }
+                        return 0;
+                      });
+                    }
 
-                        let sorting;
-                        if (e.detail.sorting) {
-                            sorting = e.detail.sorting;
-                            newData = [...newData].sort((firstEl, secondEl) => {
-                                for (let i = 0; i < sorting.length; i++) {
-                                    const criteria = sorting[i];
-                                    const firstValue = firstEl[criteria.name];
-                                    const secondValue = secondEl[criteria.name];
-                                    const isAscending = criteria.direction === 'asc';
-                                    if (firstValue < secondValue) {
-                                        return isAscending ? -1 : 1;
-                                    } else if (firstValue > secondValue) {
-                                        return isAscending ? 1 : -1;
-                                    }
-                                }
-                                return 0;
-                            });
-                        }
-
-                        if (e.detail.paging) {
-                            newData = page(e.detail.paging.currentPage, pager.itemsPerPage, newData);
-                        }
-
-                        element.data = {
-                            data: newData,
-                            sorting: sorting,
-                            paging: {
-                                currentPage: e.detail.paging.currentPage,
-                                totalItems: totalItems,
-                            },
-                            filter: filterEntries
-                        };
-                    });
-
-                    function page(page, itemsPerPage, data) {
-                        const start = (page - 1) * itemsPerPage;
-                        const end = start + itemsPerPage;
-                        return data.slice(start, end);
+                    if (e.detail.paging) {
+                      newData = page(e.detail.paging.currentPage, pager.itemsPerPage, newData);
                     }
 
                     element.data = {
-                        data: page(1, 10, data.data)
+                      data: newData,
+                      sorting: sorting,
+                      paging: {
+                        currentPage: e.detail.paging.currentPage,
+                        totalItems: totalItems,
+                      },
+                      filter: filterEntries,
                     };
+                  });
 
-                    function filter(data, pathToKey, value) {
-                        if (value === "") {
-                            return data;
-                        }
-                        return data.filter(element => {
-                            const valueByPath = findValueByPath(element, pathToKey);
-                            return valueByPath.includes(value);
-                        });
+                  function page(page, itemsPerPage, data) {
+                    const start = (page - 1) * itemsPerPage;
+                    const end = start + itemsPerPage;
+                    return data.slice(start, end);
+                  }
+
+                  element.data = {
+                    data: page(1, 10, data.data),
+                  };
+
+                  function filter(data, pathToKey, value) {
+                    if (value === '') {
+                      return data;
                     }
+                    return data.filter((element) => {
+                      const valueByPath = findValueByPath(element, pathToKey);
+                      return valueByPath.includes(value);
+                    });
+                  }
 
-                    function findValueByPath(element, pathToKey) {
-                        var keys = pathToKey.split('.');
+                  function findValueByPath(element, pathToKey) {
+                    const keys = pathToKey.split('.');
 
-                        let current = element;
-                        for (let i = 0; i < keys.length; i++) {
-                            if (current[keys[i]] !== undefined) {
-                                current = current[keys[i]];
-                            } else {
-                                return undefined;
-                            }
-                        }
-                        return current.toString();
+                    let current = element;
+                    for (let i = 0; i < keys.length; i++) {
+                      if (current[keys[i]] !== undefined) {
+                        current = current[keys[i]];
+                      } else {
+                        return undefined;
+                      }
                     }
+                    return current.toString();
+                  }
                 });
             </script>
         </vl-demo>
