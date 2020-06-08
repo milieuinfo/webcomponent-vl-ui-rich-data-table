@@ -53,46 +53,46 @@ export class VlRichDataTable extends vlElement(HTMLElement) {
   constructor() {
     super(`
         <style>
-            @import "/src/style.css";
-            @import "/node_modules/vl-ui-icon/dist/style.css";
-            @import "/node_modules/vl-ui-button/dist/style.css";
-            @import "/node_modules/vl-ui-data-table/dist/style.css";
+          @import "/src/style.css";
+          @import "/node_modules/vl-ui-icon/dist/style.css";
+          @import "/node_modules/vl-ui-button/dist/style.css";
+          @import "/node_modules/vl-ui-data-table/dist/style.css";
         </style>
         <div>
-            <div is="vl-grid" is-stacked>
-                <div id="toggle-filter" is="vl-column" class="vl-u-align-right vl-u-hidden--s" hidden size="12">
-                    <button id="toggle-filter-button" is="vl-button-link" type="button" aria-label="Toon de filter">
-                        <span is="vl-icon" data-vl-icon="content-filter" data-vl-before></span><slot name="toggle-filter-button-text">Filter</slot>
-                    </button>
-                </div>
-                <div id="open-filter" is="vl-column" class="vl-u-align-right vl-u-hidden" hidden size="12">
-                    <button id="open-filter-button" is="vl-button-link" type="button" aria-label="Toon de filter">
-                        <span is="vl-icon" data-vl-icon="content-filter" data-vl-before></span><slot name="toggle-filter-button-text">Filter</slot>
-                    </button>
-                </div>
-                <div id="search" is="vl-column" size="0" small-size="0">
-                    <button id="close-filter-button" class="vl-filter__close" hidden type="button">
-                        <span is="vl-icon" data-vl-icon="close"></span>
-                        <span class="vl-u-visually-hidden"><slot name="close-filter-button-text">Filter sluiten</slot></span>
-                    </button>
-                    <div id="filter-slot-container">
-                        <slot id="filter-slot" name="filter"></slot>
-                    </div>
-                </div>
-                <div id="content" is="vl-column" size="12" small-size="12">
-                    <table is="vl-data-table">
-                        <thead>
-                            <tr></tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
-                <div id="pager" is="vl-column" size="12">
-                    <slot name="pager"></slot>
-                </div>
+          <div is="vl-grid" is-stacked>
+            <div id="toggle-filter" is="vl-column" class="vl-u-align-right vl-u-hidden--s" hidden size="12">
+              <button id="toggle-filter-button" is="vl-button-link" type="button" aria-label="Toon de filter">
+                <span is="vl-icon" data-vl-icon="content-filter" data-vl-before></span><slot name="toggle-filter-button-text">Filter</slot>
+              </button>
             </div>
-            <vl-modal id="filter-modal" closable not-cancellable></vl-modal>
+            <div id="open-filter" is="vl-column" class="vl-u-align-right vl-u-hidden" hidden size="12">
+              <button id="open-filter-button" is="vl-button-link" type="button" aria-label="Toon de filter">
+                <span is="vl-icon" data-vl-icon="content-filter" data-vl-before></span><slot name="toggle-filter-button-text">Filter</slot>
+              </button>
+            </div>
+            <div id="search" is="vl-column" size="0" small-size="0">
+              <button id="close-filter-button" class="vl-filter__close" hidden type="button">
+                <span is="vl-icon" data-vl-icon="close"></span>
+                <span class="vl-u-visually-hidden"><slot name="close-filter-button-text">Filter sluiten</slot></span>
+              </button>
+              <div id="filter-slot-container">
+                <slot id="filter-slot" name="filter"></slot>
+              </div>
+            </div>
+            <div id="content" is="vl-column" size="12" small-size="12">
+              <table is="vl-data-table">
+                <thead>
+                  <tr></tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+            <div id="pager" is="vl-column" size="12">
+              <slot name="pager"></slot>
+            </div>
         </div>
+        <vl-modal id="filter-modal" closable not-cancellable></vl-modal>
+      </div>
     `);
 
     this.__processSearchFilter();
@@ -259,9 +259,9 @@ export class VlRichDataTable extends vlElement(HTMLElement) {
   }
 
   /**
-     * Stelt in welke data de tabel moet tonen.
-     * @param {Object[]} object - Een Array van objecten die de data voorstellen.
-     */
+   * Stelt in welke data de tabel moet tonen.
+   * @param {Object[]} object - Een Array van objecten die de data voorstellen.
+   */
   set data(object) {
     if (this.__data !== object) {
       const {data, paging, sorting, filter} = object;
@@ -321,9 +321,9 @@ export class VlRichDataTable extends vlElement(HTMLElement) {
   }
 
   /**
-     * Geeft de data terug die in de tabel wordt getoond.
-     * @return {Object[]}
-     */
+   * Geeft de data terug die in de tabel wordt getoond.
+   * @return {Object[]}
+   */
   get data() {
     return this.__data || {data: []};
   }
@@ -336,8 +336,7 @@ export class VlRichDataTable extends vlElement(HTMLElement) {
   _renderHeaders() {
     this.__tableHeaderRow.innerHTML = '';
     this.__richDataFields.forEach((field) => {
-      const headerTemplate = this._template(field.renderCellHeader());
-      this.__tableHeaderRow.appendChild(headerTemplate);
+      this.__tableHeaderRow.appendChild(field.headerTemplate());
     });
     this.__tableHeaderRow.querySelectorAll('th[data-vl-sortable] > a').forEach((th) => {
       th.addEventListener('click', (e) => {
@@ -350,11 +349,10 @@ export class VlRichDataTable extends vlElement(HTMLElement) {
     if (this.data && this.data.data) {
       this.__tableBody.innerHTML = '';
       this.data.data.forEach((rowData) => {
-        const rowTemplate = this._template(`<tr>
-                    ${this.__richDataFields
-      .map((field) => field.renderCellValue(rowData))
-      .join('')}
-                </tr>`);
+        const rowTemplate = this._template(`<tr></tr>`).firstElementChild;
+        this.__richDataFields.map((field) => {
+          rowTemplate.appendChild(field.valueTemplate(rowData));
+        });
         this.__tableBody.appendChild(rowTemplate);
       });
     }
