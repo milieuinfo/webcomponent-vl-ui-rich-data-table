@@ -53,46 +53,46 @@ export class VlRichDataTable extends vlElement(HTMLElement) {
   constructor() {
     super(`
         <style>
-            @import "/src/style.css";
-            @import "/node_modules/vl-ui-icon/dist/style.css";
-            @import "/node_modules/vl-ui-button/dist/style.css";
-            @import "/node_modules/vl-ui-data-table/dist/style.css";
+          @import "/src/style.css";
+          @import "/node_modules/vl-ui-icon/dist/style.css";
+          @import "/node_modules/vl-ui-button/dist/style.css";
+          @import "/node_modules/vl-ui-data-table/dist/style.css";
         </style>
         <div>
-            <div is="vl-grid" is-stacked>
-                <div id="toggle-filter" is="vl-column" class="vl-u-align-right vl-u-hidden--s" hidden size="12">
-                    <button id="toggle-filter-button" is="vl-button-link" type="button" aria-label="Toon de filter">
-                        <span is="vl-icon" data-vl-icon="content-filter" data-vl-before></span><slot name="toggle-filter-button-text">Filter</slot>
-                    </button>
-                </div>
-                <div id="open-filter" is="vl-column" class="vl-u-align-right vl-u-hidden" hidden size="12">
-                    <button id="open-filter-button" is="vl-button-link" type="button" aria-label="Toon de filter">
-                        <span is="vl-icon" data-vl-icon="content-filter" data-vl-before></span><slot name="toggle-filter-button-text">Filter</slot>
-                    </button>
-                </div>
-                <div id="search" is="vl-column" size="0" small-size="0">
-                    <button id="close-filter-button" class="vl-filter__close" hidden type="button">
-                        <span is="vl-icon" data-vl-icon="close"></span>
-                        <span class="vl-u-visually-hidden"><slot name="close-filter-button-text">Filter sluiten</slot></span>
-                    </button>
-                    <div id="filter-slot-container">
-                        <slot id="filter-slot" name="filter"></slot>
-                    </div>
-                </div>
-                <div id="content" is="vl-column" size="12" small-size="12">
-                    <table is="vl-data-table">
-                        <thead>
-                            <tr></tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
-                <div id="pager" is="vl-column" size="12">
-                    <slot name="pager"></slot>
-                </div>
+          <div is="vl-grid" is-stacked>
+            <div id="toggle-filter" is="vl-column" class="vl-u-align-right vl-u-hidden--s" hidden size="12">
+              <button id="toggle-filter-button" is="vl-button-link" type="button" aria-label="Toon de filter">
+                <span is="vl-icon" data-vl-icon="content-filter" data-vl-before></span><slot name="toggle-filter-button-text">Filter</slot>
+              </button>
             </div>
-            <vl-modal id="filter-modal" closable not-cancellable></vl-modal>
+            <div id="open-filter" is="vl-column" class="vl-u-align-right vl-u-hidden" hidden size="12">
+              <button id="open-filter-button" is="vl-button-link" type="button" aria-label="Toon de filter">
+                <span is="vl-icon" data-vl-icon="content-filter" data-vl-before></span><slot name="toggle-filter-button-text">Filter</slot>
+              </button>
+            </div>
+            <div id="search" is="vl-column" size="0" small-size="0">
+              <button id="close-filter-button" class="vl-filter__close" hidden type="button">
+                <span is="vl-icon" data-vl-icon="close"></span>
+                <span class="vl-u-visually-hidden"><slot name="close-filter-button-text">Filter sluiten</slot></span>
+              </button>
+              <div id="filter-slot-container">
+                <slot id="filter-slot" name="filter"></slot>
+              </div>
+            </div>
+            <div id="content" is="vl-column" size="12" small-size="12">
+              <table is="vl-data-table">
+                <thead>
+                  <tr></tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+            <div id="pager" is="vl-column" size="12">
+              <slot name="pager"></slot>
+            </div>
         </div>
+        <vl-modal id="filter-modal" closable not-cancellable></vl-modal>
+      </div>
     `);
 
     this.__processSearchFilter();
@@ -259,9 +259,9 @@ export class VlRichDataTable extends vlElement(HTMLElement) {
   }
 
   /**
-     * Stelt in welke data de tabel moet tonen.
-     * @param {Object[]} object - Een Array van objecten die de data voorstellen.
-     */
+   * Stelt in welke data de tabel moet tonen.
+   * @param {Object[]} object - Een Array van objecten die de data voorstellen.
+   */
   set data(object) {
     if (this.__data !== object) {
       const {data, paging, sorting, filter} = object;
@@ -321,162 +321,90 @@ export class VlRichDataTable extends vlElement(HTMLElement) {
   }
 
   /**
-     * Geeft de data terug die in de tabel wordt getoond.
-     * @return {Object[]}
-     */
-    get data() {
-        return this.__data || {data: []};
-    }
+   * Geeft de data terug die in de tabel wordt getoond.
+   * @return {Object[]}
+   */
+  get data() {
+    return this.__data || {data: []};
+  }
 
-    _render() {
+  _render() {
+    this._renderHeaders();
+    this._renderBody();
+  }
+
+  _renderHeaders() {
+    this.__tableHeaderRow.innerHTML = '';
+    this.__richDataFields.forEach((field) => {
+      this.__tableHeaderRow.appendChild(field.headerTemplate());
+    });
+    this.__tableHeaderRow.querySelectorAll('th[data-vl-sortable] > a').forEach((th) => {
+      th.addEventListener('click', (e) => {
+        th.querySelector('vl-rich-data-sorter').nextDirection();
+      });
+    });
+  }
+
+  _renderBody() {
+    if (this.data && this.data.data) {
+      this.__tableBody.innerHTML = '';
+      this.data.data.forEach((rowData) => {
+        const rowTemplate = this._template(`<tr></tr>`).firstElementChild;
+        this.__richDataFields.map((field) => {
+          rowTemplate.appendChild(field.valueTemplate(rowData));
+        });
+        this.__tableBody.appendChild(rowTemplate);
+      });
+    }
+  }
+
+  _dataChangedCallback(oldValue, newValue) {
+    this.data = JSON.parse(newValue);
+  }
+
+  _filterClosableChangedCallback(oldValue, newValue) {
+    this.__filterCloseButton.hidden = newValue == null;
+    this.__filterToggleContainer.hidden = newValue == null;
+    this.__filterOpenContainer.hidden = newValue == null;
+    if (newValue == null) {
+      this.__filterOpenContainer.classList.remove('vl-u-visible--s');
+      this.__searchColumn.classList.remove('vl-u-hidden--s');
+    } else {
+      this.__filterOpenContainer.classList.add('vl-u-visible--s');
+      this.__searchColumn.classList.add('vl-u-hidden--s');
+    }
+  }
+
+  _filterClosedChangedCallback(oldValue, newValue) {
+    if (newValue == null) {
+      this.__showSearchColumn();
+    } else {
+      this.__hideSearchColumn();
+    }
+  }
+
+  __listenToFieldChanges(field) {
+    field.addEventListener('change', this.__fieldChanged.bind(this));
+  }
+
+  __stopListeningToFieldChanges(field) {
+    field.removeEventListener('change', this.__fieldChanged.bind(this));
+  }
+
+  __listenToSortChanges(sorter) {
+    sorter.addEventListener('change', this.__sortingChanged.bind(this));
+  }
+
+  __stopListeningToSortChanges(sorter) {
+    sorter.removeEventListener('change', this.__sortingChanged.bind(this));
+  }
+
+  __fieldChanged(event) {
+    const propertiesChanged = event.detail.properties;
+    if (propertiesChanged) {
+      if (propertiesChanged.some((property) => VlRichDataField.headerAttributes.includes(property))) {
         this._renderHeaders();
-        this._renderBody();
-    }
-
-    _renderHeaders() {
-        this.__tableHeaderRow.innerHTML = '';
-        this.__richDataFields.forEach(field => {
-            this.__tableHeaderRow.appendChild(field.headerTemplate());
-        });
-        this.__tableHeaderRow.querySelectorAll("th[data-vl-sortable] > a").forEach(th => {
-            th.addEventListener('click', e => {
-                th.querySelector("vl-rich-data-sorter").nextDirection();
-            })
-        });
-    }
-
-    _renderBody() {
-        if (this.data && this.data.data) {
-            this.__tableBody.innerHTML = '';
-            this.data.data.forEach(rowData => {
-                const rowTemplate = this._template(`<tr></tr>`).firstElementChild;
-                this.__richDataFields.map(field => {
-                    rowTemplate.appendChild(field.valueTemplate(rowData));
-                });
-                this.__tableBody.appendChild(rowTemplate);
-            });
-        }
-    }
-
-    _dataChangedCallback(oldValue, newValue) {
-        this.data = JSON.parse(newValue);
-    }
-
-    _filter_closableChangedCallback(oldValue, newValue) {
-        this.__filterCloseButton.hidden = newValue == null;
-        this.__filterToggleContainer.hidden = newValue == null;
-        this.__filterOpenContainer.hidden = newValue == null;
-        if (newValue == null) {
-            this.__filterOpenContainer.classList.remove('vl-u-visible--s');
-            this.__searchColumn.classList.remove('vl-u-hidden--s');
-        } else {
-            this.__filterOpenContainer.classList.add('vl-u-visible--s');
-            this.__searchColumn.classList.add('vl-u-hidden--s');
-        }
-    }
-
-    _filter_closedChangedCallback(oldValue, newValue) {
-        if (newValue == null) {
-            this.__showSearchColumn();
-        } else {
-            this.__hideSearchColumn();
-        }
-    }
-
-    __listenToFieldChanges(field) {
-        field.addEventListener('change', this.__fieldChanged.bind(this));
-    }
-
-    __stopListeningToFieldChanges(field) {
-        field.removeEventListener('change', this.__fieldChanged.bind(this));
-    }
-
-    __listenToSortChanges(sorter) {
-        sorter.addEventListener('change', this.__sortingChanged.bind(this));
-    }
-
-    __stopListeningToSortChanges(sorter) {
-        sorter.removeEventListener('change', this.__sortingChanged.bind(this));
-    }
-
-    __fieldChanged(event) {
-        const propertiesChanged = event.detail.properties;
-        if (propertiesChanged) {
-            if (propertiesChanged.some(property => VlRichDataField.headerAttributes.includes(property))) {
-                this._renderHeaders();
-            }
-
-            if (propertiesChanged.some(property => VlRichDataField.bodyAttributes.includes(property))) {
-                this._renderBody();
-            }
-        }
-    }
-
-    __sortingChanged(event) {
-        if (this._isMultisortingEnabled) {
-            this.__activeSorters.forEach((sorter, index) => sorter.priority = index + 1);
-        } else {
-            this.__activeSorters.filter(sorter => sorter !== event.target).forEach(sorter => sorter.direction = undefined);
-        }
-        this.__onStateChange(event);
-    }
-
-    __observeFields() {
-        this.__fields.forEach(this.__listenToFieldChanges.bind(this));
-        const observer = this.__createObserver(this.__listenToFieldChanges.bind(this), this.__stopListeningToFieldChanges.bind(this), true);
-        observer.observe(this, {childList: true});
-    }
-
-    __createObserver(doWhenNodeIsAdded, doWhenNodeIsRemoved, render) {
-        return new MutationObserver(mutationsList => {
-            let shouldRender = false;
-            mutationsList.forEach(mutation => {
-                if (mutation.addedNodes || mutation.removedNodes) {
-                    shouldRender = true;
-                    if (mutation.addedNodes) {
-                        mutation.addedNodes.forEach(doWhenNodeIsAdded);
-                    }
-                    if (mutation.removedNodes) {
-                        mutation.removedNodes.forEach(doWhenNodeIsRemoved);
-                    }
-                }
-            });
-            if (render && shouldRender) {
-                this._render();
-            }
-        });
-    }
-
-    __observeFilterButtons() {
-        this.__filterCloseButton.addEventListener('click', () => {
-            this.setAttribute('data-vl-filter-closed', '');
-        });
-        this.__filterToggleButton.addEventListener('click', () => {
-            this.__filterSlotContainer.removeAttribute('slot');
-            this.__searchColumn.appendChild(this.__filterSlotContainer);
-            this.__showHiddenInModalElements();
-            this.toggleAttribute('data-vl-filter-closed');
-        });
-        this.__filterOpenButton.addEventListener('click', () => {
-            this.setAttribute('data-vl-filter-closed', ''); // first close to make sure when resized that it doesn't show without proper slot
-            this.__filterSlotContainer.setAttribute('slot', 'content');
-            this.__filterModal.appendChild(this.__filterSlotContainer);
-            this.__hideHiddenInModalElements();
-            this.__filterModal.open();
-        });
-    }
-
-    __showHiddenInModalElements() {
-        this.__setHiddenInModalElements(false);
-    }
-
-    __hideHiddenInModalElements() {
-        this.__setHiddenInModalElements(true);
-    }
-
-    __setHiddenInModalElements(hidden) {
-        this.__filter.querySelectorAll('[data-vl-hidden-in-modal]').forEach(element => element.hidden = hidden);
-    }
+      }
 
       if (propertiesChanged.some((property) => VlRichDataField.bodyAttributes.includes(property))) {
         this._renderBody();

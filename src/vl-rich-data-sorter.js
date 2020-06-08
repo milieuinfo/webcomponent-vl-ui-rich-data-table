@@ -1,6 +1,7 @@
 import {vlElement, define} from '/node_modules/vl-ui-core/dist/vl-core.js';
 import '/node_modules/vl-ui-icon/dist/vl-icon.js';
 
+
 export class VlRichDataSorter extends vlElement(HTMLElement) {
   static get DIRECTIONS() {
     return {
@@ -19,27 +20,27 @@ export class VlRichDataSorter extends vlElement(HTMLElement) {
 
   constructor() {
     super(`
-            <style>
-                @import '/node_modules/vl-ui-icon/dist/style.css';
-                
-                div {
-                    display: inline;
-                }
-                
-                #direction {
-                    vertical-align: middle;
-                }
-                
-                #priority {
-                    font-size: x-small;
-                    vertical-align: super;
-                }
-            </style>
-            <div id="container" class="vl-u-visually-hidden">
-                <span id="direction" is="vl-icon"></span>
-                <label id="priority"></label>
-            </div>
-        `);
+      <style>
+        @import '/node_modules/vl-ui-icon/dist/style.css';
+        
+        div {
+            display: inline;
+        }
+        
+        #direction {
+            vertical-align: middle;
+        }
+        
+        #priority {
+            font-size: x-small;
+            vertical-align: super;
+        }
+      </style>
+      <div id="container" class="vl-u-visually-hidden">
+        <span id="direction" is="vl-icon"></span>
+        <label id="priority"></label>
+      </div>
+    `);
   }
 
   get for() {

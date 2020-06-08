@@ -20,7 +20,7 @@ import {vlElement, define} from '/node_modules/vl-ui-core/dist/vl-core.js';
  * @see {@link https://webcomponenten.omgeving.vlaanderen.be/demo/vl-rich-data-table.html|Demo}
  *
  */
-export class VlRichDataField extends VlElement(HTMLElement) {
+export class VlRichDataField extends vlElement(HTMLElement) {
   static get headerAttributes() {
     return ['name', 'label', 'sortable', 'sorting-direction', 'sorting-priority'];
   }
@@ -61,49 +61,49 @@ export class VlRichDataField extends VlElement(HTMLElement) {
   }
 
   /**
-     * Geeft de naam terug die gebruikt wordt om het veld te identificeren.
-     * @return {string}
-     */
+   * Geeft de naam terug die gebruikt wordt om het veld te identificeren.
+   * @return {string}
+   */
   get name() {
     return this.dataset.vlName;
   }
 
   /**
-     * Geeft de selector terug die gebruikt wordt om de juiste waarde uit de data te halen.
-     * @return {string}
-     */
+   * Geeft de selector terug die gebruikt wordt om de juiste waarde uit de data te halen.
+   * @return {string}
+   */
   get selector() {
     return this.dataset.vlSelector;
   }
 
   /**
-     * Geeft de naam terug die getoond kan worden aan de gebruiker.
-     * @return {string}
-     */
+   * Geeft de naam terug die getoond kan worden aan de gebruiker.
+   * @return {string}
+   */
   get label() {
     return this.dataset.vlLabel;
   }
 
   /**
-     * Geeft terug of er op het veld gesorteerd kan worden.
-     * @return {boolean}
-     */
+   * Geeft terug of er op het veld gesorteerd kan worden.
+   * @return {boolean}
+   */
   get sortable() {
     return this.dataset.vlSortable !== undefined;
   }
 
   /**
-     * Geeft de sorteerrichting terug.
-     * @return {asc | desc}
-     */
+   * Geeft de sorteerrichting terug.
+   * @return {asc | desc}
+   */
   get sortingDirection() {
     return this.dataset.vlSortingDirection;
   }
 
   /**
-     * Geeft de prioriteit van het sorteren terug.
-     * @return {number}
-     */
+   * Geeft de prioriteit van het sorteren terug.
+   * @return {number}
+   */
   get sortingPriority() {
     return this.dataset.vlSortingPriority;
   }
@@ -145,13 +145,13 @@ export class VlRichDataField extends VlElement(HTMLElement) {
     }
   }
 
-  _sorting_directionChangedCallback(oldValue, newValue) {
+  _sortingDirectionChangedCallback(oldValue, newValue) {
     if (oldValue !== newValue) {
       this._changed(['sorting-direction']);
     }
   }
 
-  _sorting_priorityChangedCallback(oldValue, newValue) {
+  _sortingPriorityChangedCallback(oldValue, newValue) {
     if (oldValue !== newValue) {
       this._changed(['sorting-priority']);
     }

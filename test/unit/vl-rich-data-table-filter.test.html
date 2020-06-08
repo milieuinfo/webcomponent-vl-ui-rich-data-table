@@ -94,68 +94,35 @@
 
 <script>
     suite('vl-rich-data-table met filter', () => {
-        const should = chai.should();
-        const sandbox = sinon.sandbox.create();
+      const should = chai.should();
+      const sandbox = sinon.sandbox.create();
 
-        test('Wanneer geen filterslot bestaat, zal er geen search filter aanwezig zijn', () => {
-            const table = fixture('vl-rich-data-table-zonder-filter-fixture');
-            should.not.exist(table.__searchFilter);
-        });
+      test('Wanneer geen filterslot bestaat, zal er geen search filter aanwezig zijn', () => {
+        const table = fixture('vl-rich-data-table-zonder-filter-fixture');
+        should.not.exist(table.__searchFilter);
+      });
 
-        test('Wanneer wel een filterslot bestaat, zal de search filter aanwezig zijn met alt variant', () => {
-            const table = fixture('vl-rich-data-table-met-filter-fixture');
-            const searchFilter = table.__searchFilter;
-            should.exist(searchFilter);
-            assert.isTrue(searchFilter.hasAttribute('alt'));
-        });
+      test('Wanneer wel een filterslot bestaat, zal de search filter aanwezig zijn met alt variant', () => {
+        const table = fixture('vl-rich-data-table-met-filter-fixture');
+        const searchFilter = table.__searchFilter;
+        should.exist(searchFilter);
+        assert.isTrue(searchFilter.hasAttribute('alt'));
+      });
 
-        test('Als er aan een input van de search filter iets wijzigt wordt er een event zonder sortering maar met formdata en paginatie gestuurd', (done) => {
-            const table = fixture('vl-rich-data-table-met-filter-fixture');
-            const pager = table.querySelector('vl-pager');
+      test('Als er aan een input van de search filter iets wijzigt wordt er een event zonder sortering maar met formdata en paginatie gestuurd', (done) => {
+        const table = fixture('vl-rich-data-table-met-filter-fixture');
+        const pager = table.querySelector('vl-pager');
 
-            table.addEventListener('change', (e) => {
-                expect(e.detail.formData.get('filter1')).to.equal('een beetje input');
-                expect(e.detail.sorting).to.be.undefined;
-                expect(e.detail.paging).to.deep.equal({
-                    currentPage: Number(pager.getAttribute('current-page')),
-                    totalPages: Number(4),
-                    itemsPerPage: Number(pager.getAttribute('items-per-page')),
-                    totalItems: Number(pager.getAttribute('total-items'))
-                });
-                done();
-            });
-
-            const searchFilter = table.__searchFilter;
-            setInputValue(searchFilter.querySelector('input'), 'een beetje input');
-        });
-
-        test('Als de filtering gereset wordt, zal er een event zonder formdata en sortering maar met paginatie gestuurd worden', (done) => {
-            const table = fixture('vl-rich-data-table-met-filter-fixture');
-            const pager = table.querySelector('vl-pager');
-            const searchFilter = table.__searchFilter;
-            const resetButton = searchFilter.querySelector('button[type="reset"]');
-
-            setInputValue(searchFilter.querySelector('input'), 'een beetje input');
-            table.addEventListener('change', (e) => {
-                expect(e.detail.formData).to.be.undefined;
-                expect(e.detail.sorting).to.be.undefined;
-                expect(e.detail.paging).to.deep.equal({
-                    currentPage: Number(pager.getAttribute('current-page')),
-                    totalPages: Number(4),
-                    itemsPerPage: Number(pager.getAttribute('items-per-page')),
-                    totalItems: Number(pager.getAttribute('total-items'))
-                });
-                done();
-            });
-            resetButton.click();
-        });
-
-        test('Als er geen searchfilter aanwezig is, wordt er geen plaats voor voorzien', () => {
-            const table = fixture('vl-rich-data-table-zonder-filter-fixture');
-            const content = table.shadowRoot.querySelector('#content');
-            const search = table.shadowRoot.querySelector('#search');
-            expect(content.getAttribute('size')).to.be.equal('12');
-            expect(search.getAttribute('size')).to.be.equal('0');
+        table.addEventListener('change', (e) => {
+          expect(e.detail.formData.get('filter1')).to.equal('een beetje input');
+          expect(e.detail.sorting).to.be.undefined;
+          expect(e.detail.paging).to.deep.equal({
+            currentPage: Number(pager.getAttribute('current-page')),
+            totalPages: Number(4),
+            itemsPerPage: Number(pager.getAttribute('items-per-page')),
+            totalItems: Number(pager.getAttribute('total-items')),
+          });
+          done();
         });
 
         const searchFilter = table.__searchFilter;
@@ -315,16 +282,17 @@
         expect(richTable.getAttribute('data-vl-filter-closed')).to.be.equal('');
       });
 
-            sandbox.spy(richTable.__filterModal, 'open');
-            richTable.__filterOpenButton.click();
+      test('Als op de openknop wordt geklikt, wordt het attribuut data-vl-filter-closed gezet en de filter modal geopend met de filter als content', () => {
+        const richTable = fixture('vl-rich-data-table-met-closable-filter-fixture');
+        expect(richTable.getAttribute('data-vl-filter-closed')).to.be.null;
+        expect(richTable.__filterModal._dialogElement.hasAttribute('open')).to.be.false;
+        expect(richTable.__filterModal.querySelector('div[slot=content]')).to.be.null;
 
-            expect(richTable.getAttribute('data-vl-filter-closed')).to.be.equal('');
-            assert(richTable.__filterModal.open.called);
-            expect(richTable.__filterModal.querySelector('div[slot=content]')).to.not.be.null;
-        });
+        sandbox.spy(richTable.__filterModal, 'open');
+        richTable.__filterOpenButton.click();
 
         expect(richTable.getAttribute('data-vl-filter-closed')).to.be.equal('');
-        expect(richTable.__filterModal._dialogElement.hasAttribute('open')).to.be.true;
+        assert(richTable.__filterModal.open.called);
         expect(richTable.__filterModal.querySelector('div[slot=content]')).to.not.be.null;
       });
 
