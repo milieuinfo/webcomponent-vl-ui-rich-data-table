@@ -23,7 +23,7 @@
 		"registry": "http://artifactory-pr-build.lb.cumuli.be:8081/artifactory/api/npm/acd-npm/"
 	},
 	"scripts": {
-		"prepare": "npm update --dev vl-ui-util && npm run prepare:util",
+		"prepare": "npm run prepare:util",
 		"prepare:util": "npm explore vl-ui-util -- npm run util",
 		"test": "npm run test:unit && npm run test:e2e",
 		"test:unit": "wct --config-file ./wct.local.conf.json",
