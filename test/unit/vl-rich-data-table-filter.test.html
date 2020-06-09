@@ -94,84 +94,84 @@
 
 <script>
     suite('vl-rich-data-table met filter', () => {
-        const should = chai.should();
-        const sandbox = sinon.sandbox.create();
+      const should = chai.should();
+      const sandbox = sinon.sandbox.create();
 
-        test('Wanneer geen filterslot bestaat, zal er geen search filter aanwezig zijn', () => {
-            const table = fixture('vl-rich-data-table-zonder-filter-fixture');
-            should.not.exist(table.__searchFilter);
+      test('Wanneer geen filterslot bestaat, zal er geen search filter aanwezig zijn', () => {
+        const table = fixture('vl-rich-data-table-zonder-filter-fixture');
+        should.not.exist(table.__searchFilter);
+      });
+
+      test('Wanneer wel een filterslot bestaat, zal de search filter aanwezig zijn met alt variant', () => {
+        const table = fixture('vl-rich-data-table-met-filter-fixture');
+        const searchFilter = table.__searchFilter;
+        should.exist(searchFilter);
+        assert.isTrue(searchFilter.hasAttribute('alt'));
+      });
+
+      test('Als er aan een input van de search filter iets wijzigt wordt er een event zonder sortering maar met formdata en paginatie gestuurd', (done) => {
+        const table = fixture('vl-rich-data-table-met-filter-fixture');
+        const pager = table.querySelector('vl-pager');
+
+        table.addEventListener('change', (e) => {
+          expect(e.detail.formData.get('filter1')).to.equal('een beetje input');
+          expect(e.detail.sorting).to.be.undefined;
+          expect(e.detail.paging).to.deep.equal({
+            currentPage: Number(pager.getAttribute('current-page')),
+            totalPages: Number(4),
+            itemsPerPage: Number(pager.getAttribute('items-per-page')),
+            totalItems: Number(pager.getAttribute('total-items')),
+          });
+          done();
         });
 
-        test('Wanneer wel een filterslot bestaat, zal de search filter aanwezig zijn met alt variant', () => {
-            const table = fixture('vl-rich-data-table-met-filter-fixture');
-            const searchFilter = table.__searchFilter;
-            should.exist(searchFilter);
-            assert.isTrue(searchFilter.hasAttribute('alt'));
+        const searchFilter = table.__searchFilter;
+        setInputValue(searchFilter.querySelector('input'), 'een beetje input');
+      });
+
+      test('Als de filtering gereset wordt, zal er een event zonder formdata en sortering maar met paginatie gestuurd worden', (done) => {
+        const table = fixture('vl-rich-data-table-met-filter-fixture');
+        const pager = table.querySelector('vl-pager');
+        const searchFilter = table.__searchFilter;
+        const resetButton = searchFilter.querySelector('button[type="reset"]');
+
+        setInputValue(searchFilter.querySelector('input'), 'een beetje input');
+        table.addEventListener('change', (e) => {
+          expect(e.detail.formData).to.be.undefined;
+          expect(e.detail.sorting).to.be.undefined;
+          expect(e.detail.paging).to.deep.equal({
+            currentPage: Number(pager.getAttribute('current-page')),
+            totalPages: Number(4),
+            itemsPerPage: Number(pager.getAttribute('items-per-page')),
+            totalItems: Number(pager.getAttribute('total-items')),
+          });
+          done();
         });
+        resetButton.click();
+      });
 
-        test('Als er aan een input van de search filter iets wijzigt wordt er een event zonder sortering maar met formdata en paginatie gestuurd', (done) => {
-            const table = fixture('vl-rich-data-table-met-filter-fixture');
-            const pager = table.querySelector('vl-pager');
+      test('Als er geen searchfilter aanwezig is, wordt er geen plaats voor voorzien', () => {
+        const table = fixture('vl-rich-data-table-zonder-filter-fixture');
+        const content = table.shadowRoot.querySelector('#content');
+        const search = table.shadowRoot.querySelector('#search');
+        expect(content.getAttribute('size')).to.be.equal('12');
+        expect(search.getAttribute('size')).to.be.equal('0');
+      });
 
-            table.addEventListener('change', (e) => {
-                expect(e.detail.formData.get('filter1')).to.equal('een beetje input');
-                expect(e.detail.sorting).to.be.undefined;
-                expect(e.detail.paging).to.deep.equal({
-                    currentPage: Number(pager.getAttribute('current-page')),
-                    totalPages: Number(4),
-                    itemsPerPage: Number(pager.getAttribute('items-per-page')),
-                    totalItems: Number(pager.getAttribute('total-items'))
-                });
-                done();
-            });
+      test('Als er een searchfilter aanwezig is, wordt er plaats voor voorzien', () => {
+        const table = fixture('vl-rich-data-table-met-filter-fixture');
+        const content = table.shadowRoot.querySelector('#content');
+        const search = table.shadowRoot.querySelector('#search');
+        expect(content.getAttribute('size')).to.be.equal('8');
+        expect(search.getAttribute('size')).to.be.equal('4');
+      });
 
-            const searchFilter = table.__searchFilter;
-            setInputValue(searchFilter.querySelector('input'), 'een beetje input');
-        });
+      test('Als er een searchfilter wordt toegevoegd, wordt er plaats voor voorzien', (done) => {
+        const table = fixture('vl-rich-data-table-zonder-filter-fixture');
 
-        test('Als de filtering gereset wordt, zal er een event zonder formdata en sortering maar met paginatie gestuurd worden', (done) => {
-            const table = fixture('vl-rich-data-table-met-filter-fixture');
-            const pager = table.querySelector('vl-pager');
-            const searchFilter = table.__searchFilter;
-            const resetButton = searchFilter.querySelector('button[type="reset"]');
-
-            setInputValue(searchFilter.querySelector('input'), 'een beetje input');
-            table.addEventListener('change', (e) => {
-                expect(e.detail.formData).to.be.undefined;
-                expect(e.detail.sorting).to.be.undefined;
-                expect(e.detail.paging).to.deep.equal({
-                    currentPage: Number(pager.getAttribute('current-page')),
-                    totalPages: Number(4),
-                    itemsPerPage: Number(pager.getAttribute('items-per-page')),
-                    totalItems: Number(pager.getAttribute('total-items'))
-                });
-                done();
-            });
-            resetButton.click();
-        });
-
-        test('Als er geen searchfilter aanwezig is, wordt er geen plaats voor voorzien', () => {
-            const table = fixture('vl-rich-data-table-zonder-filter-fixture');
-            const content = table.shadowRoot.querySelector('#content');
-            const search = table.shadowRoot.querySelector('#search');
-            expect(content.getAttribute('size')).to.be.equal('12');
-            expect(search.getAttribute('size')).to.be.equal('0');
-        });
-
-        test('Als er een searchfilter aanwezig is, wordt er plaats voor voorzien', () => {
-            const table = fixture('vl-rich-data-table-met-filter-fixture');
-            const content = table.shadowRoot.querySelector('#content');
-            const search = table.shadowRoot.querySelector('#search');
-            expect(content.getAttribute('size')).to.be.equal('8');
-            expect(search.getAttribute('size')).to.be.equal('4');
-        });
-
-        test('Als er een searchfilter wordt toegevoegd, wordt er plaats voor voorzien', (done) => {
-            const table = fixture('vl-rich-data-table-zonder-filter-fixture');
-
-            const filter = document.createElement('div');
-            filter.setAttribute('slot', 'filter');
-            filter.innerHTML = `
+        const filter = document.createElement('div');
+        filter.setAttribute('slot', 'filter');
+        filter.innerHTML = `
                 <div is="vl-search-filter">
                     <form id="form">
                         <label>Hier kunnen filtervelden komen</label>
@@ -181,174 +181,174 @@
                         <button is="vl-button-link" type="reset" form="form">Zoekopdracht verwijderen</button>
                     </div>
                 </div>`;
-            table.appendChild(filter);
+        table.appendChild(filter);
 
-            setTimeout(() => {
-                const content = table.shadowRoot.querySelector('#content');
-                const search = table.shadowRoot.querySelector('#search');
-                expect(content.getAttribute('size')).to.be.equal('8');
-                expect(search.getAttribute('size')).to.be.equal('4');
-                done();
-            });
+        setTimeout(() => {
+          const content = table.shadowRoot.querySelector('#content');
+          const search = table.shadowRoot.querySelector('#search');
+          expect(content.getAttribute('size')).to.be.equal('8');
+          expect(search.getAttribute('size')).to.be.equal('4');
+          done();
         });
+      });
 
-        test('Als de searchfilter leeg gemaakt wordt, neemt de content terug de volledige breedte in', (done) => {
-            const table = fixture('vl-rich-data-table-met-filter-fixture');
-            const filterSlot = table.querySelector("[slot=filter]");
-            filterSlot.innerHTML = '';
-            setTimeout(() => {
-                const content = table.shadowRoot.querySelector('#content');
-                const search = table.shadowRoot.querySelector('#search');
-                expect(content.getAttribute('size')).to.be.equal('12');
-                expect(search.getAttribute('size')).to.be.equal('0');
-                done();
-            });
+      test('Als de searchfilter leeg gemaakt wordt, neemt de content terug de volledige breedte in', (done) => {
+        const table = fixture('vl-rich-data-table-met-filter-fixture');
+        const filterSlot = table.querySelector('[slot=filter]');
+        filterSlot.innerHTML = '';
+        setTimeout(() => {
+          const content = table.shadowRoot.querySelector('#content');
+          const search = table.shadowRoot.querySelector('#search');
+          expect(content.getAttribute('size')).to.be.equal('12');
+          expect(search.getAttribute('size')).to.be.equal('0');
+          done();
         });
+      });
 
-        test('De filtering van een tabel kan gezet worden via de data setter', () => {
-            const richTable = fixture('vl-rich-data-table-met-filter-fixture');
-            const value = {
-                data: [{foo: 'bar'}],
-                filter: [{
-                    name: 'filter1',
-                    value: 'foobar'
-                }]
-            };
+      test('De filtering van een tabel kan gezet worden via de data setter', () => {
+        const richTable = fixture('vl-rich-data-table-met-filter-fixture');
+        const value = {
+          data: [{foo: 'bar'}],
+          filter: [{
+            name: 'filter1',
+            value: 'foobar',
+          }],
+        };
 
-            should.equal(richTable.data.filter, undefined);
-            richTable.data = value;
-            should.equal(richTable.data.filter, value.filter);
-            const searchFilter = richTable.__searchFilter;
-            expect(searchFilter.formData.get('filter1')).to.equal('foobar');
-            expect(searchFilter.querySelector('input').value).to.equal('foobar');
-        });
+        should.equal(richTable.data.filter, undefined);
+        richTable.data = value;
+        should.equal(richTable.data.filter, value.filter);
+        const searchFilter = richTable.__searchFilter;
+        expect(searchFilter.formData.get('filter1')).to.equal('foobar');
+        expect(searchFilter.querySelector('input').value).to.equal('foobar');
+      });
 
-        test('Als het data-vl-filter-closable attribuut wordt gezet, worden de sluit knop, open knop en filter container met filter knop getoond', () => {
-            const richTable = fixture('vl-rich-data-table-met-filter-fixture');
-            expect(richTable.__filterToggleContainer.hidden).to.be.true;
-            expect(richTable.__filterCloseButton.hidden).to.be.true;
-            expect(richTable.__filterOpenContainer.hidden).to.be.true;
+      test('Als het data-vl-filter-closable attribuut wordt gezet, worden de sluit knop, open knop en filter container met filter knop getoond', () => {
+        const richTable = fixture('vl-rich-data-table-met-filter-fixture');
+        expect(richTable.__filterToggleContainer.hidden).to.be.true;
+        expect(richTable.__filterCloseButton.hidden).to.be.true;
+        expect(richTable.__filterOpenContainer.hidden).to.be.true;
 
-            richTable.setAttribute('data-vl-filter-closable', '');
+        richTable.setAttribute('data-vl-filter-closable', '');
 
-            expect(richTable.__filterToggleContainer.hidden).to.be.false;
-            expect(richTable.__filterCloseButton.hidden).to.be.false;
-            expect(richTable.__filterOpenContainer.hidden).to.be.false;
-        });
+        expect(richTable.__filterToggleContainer.hidden).to.be.false;
+        expect(richTable.__filterCloseButton.hidden).to.be.false;
+        expect(richTable.__filterOpenContainer.hidden).to.be.false;
+      });
 
-        test('Als het data-vl-filter-closable attribuut wordt gezet, wordt de open knop enkel getoond bij een klein scherm en het zoekscherm verborgen', () => {
-            const richTable = fixture('vl-rich-data-table-met-filter-fixture');
-            assert.isFalse(richTable.__filterOpenContainer.classList.contains('vl-u-visible--s'));
-            assert.isFalse(richTable.__searchColumn.classList.contains('vl-u-hidden--s'));
+      test('Als het data-vl-filter-closable attribuut wordt gezet, wordt de open knop enkel getoond bij een klein scherm en het zoekscherm verborgen', () => {
+        const richTable = fixture('vl-rich-data-table-met-filter-fixture');
+        assert.isFalse(richTable.__filterOpenContainer.classList.contains('vl-u-visible--s'));
+        assert.isFalse(richTable.__searchColumn.classList.contains('vl-u-hidden--s'));
 
-            richTable.setAttribute('data-vl-filter-closable', '');
+        richTable.setAttribute('data-vl-filter-closable', '');
 
-            assert.isTrue(richTable.__filterOpenContainer.classList.contains('vl-u-visible--s'));
-            assert.isTrue(richTable.__searchColumn.classList.contains('vl-u-hidden--s'));
+        assert.isTrue(richTable.__filterOpenContainer.classList.contains('vl-u-visible--s'));
+        assert.isTrue(richTable.__searchColumn.classList.contains('vl-u-hidden--s'));
 
-            richTable.removeAttribute('data-vl-filter-closable');
+        richTable.removeAttribute('data-vl-filter-closable');
 
-            assert.isFalse(richTable.__filterOpenContainer.classList.contains('vl-u-visible--s'));
-            assert.isFalse(richTable.__searchColumn.classList.contains('vl-u-hidden--s'));
-        });
+        assert.isFalse(richTable.__filterOpenContainer.classList.contains('vl-u-visible--s'));
+        assert.isFalse(richTable.__searchColumn.classList.contains('vl-u-hidden--s'));
+      });
 
-        test('Door het attribuut data-vl-filter-closed te zetten, kan de filter gesloten worden', () => {
-            const richTable = fixture('vl-rich-data-table-met-closable-filter-fixture');
-            const content = richTable.shadowRoot.querySelector('#content');
-            const search = richTable.shadowRoot.querySelector('#search');
-            expect(content.getAttribute('size')).to.be.equal('8');
-            expect(search.getAttribute('size')).to.be.equal('4');
-            expect(search.hidden).to.be.false;
+      test('Door het attribuut data-vl-filter-closed te zetten, kan de filter gesloten worden', () => {
+        const richTable = fixture('vl-rich-data-table-met-closable-filter-fixture');
+        const content = richTable.shadowRoot.querySelector('#content');
+        const search = richTable.shadowRoot.querySelector('#search');
+        expect(content.getAttribute('size')).to.be.equal('8');
+        expect(search.getAttribute('size')).to.be.equal('4');
+        expect(search.hidden).to.be.false;
 
-            richTable.setAttribute('data-vl-filter-closed', '');
+        richTable.setAttribute('data-vl-filter-closed', '');
 
-            expect(content.getAttribute('size')).to.be.equal('12');
-            expect(search.getAttribute('size')).to.be.equal('0');
-            expect(search.hidden).to.be.true;
+        expect(content.getAttribute('size')).to.be.equal('12');
+        expect(search.getAttribute('size')).to.be.equal('0');
+        expect(search.hidden).to.be.true;
 
-            richTable.removeAttribute('data-vl-filter-closed');
+        richTable.removeAttribute('data-vl-filter-closed');
 
-            expect(content.getAttribute('size')).to.be.equal('8');
-            expect(search.getAttribute('size')).to.be.equal('4');
-            expect(search.hidden).to.be.false;
-        });
+        expect(content.getAttribute('size')).to.be.equal('8');
+        expect(search.getAttribute('size')).to.be.equal('4');
+        expect(search.hidden).to.be.false;
+      });
 
-        test('Als op de sluitknop wordt geklikt, wordt het attribuut data-vl-filter-closed gezet', () => {
-            const richTable = fixture('vl-rich-data-table-met-closable-filter-fixture');
-            expect(richTable.getAttribute('data-vl-filter-closed')).to.be.null;
+      test('Als op de sluitknop wordt geklikt, wordt het attribuut data-vl-filter-closed gezet', () => {
+        const richTable = fixture('vl-rich-data-table-met-closable-filter-fixture');
+        expect(richTable.getAttribute('data-vl-filter-closed')).to.be.null;
 
-            richTable.__filterCloseButton.click();
+        richTable.__filterCloseButton.click();
 
-            expect(richTable.getAttribute('data-vl-filter-closed')).to.be.equal('');
-        });
+        expect(richTable.getAttribute('data-vl-filter-closed')).to.be.equal('');
+      });
 
-        test('Als op de openknop wordt geklikt, wordt het attribuut data-vl-filter-closed gezet en de filter modal geopend met de filter als content', () => {
-            const richTable = fixture('vl-rich-data-table-met-closable-filter-fixture');
-            expect(richTable.getAttribute('data-vl-filter-closed')).to.be.null;
-            expect(richTable.__filterModal._dialogElement.hasAttribute('open')).to.be.false;
-            expect(richTable.__filterModal.querySelector('div[slot=content]')).to.be.null;
+      test('Als op de openknop wordt geklikt, wordt het attribuut data-vl-filter-closed gezet en de filter modal geopend met de filter als content', () => {
+        const richTable = fixture('vl-rich-data-table-met-closable-filter-fixture');
+        expect(richTable.getAttribute('data-vl-filter-closed')).to.be.null;
+        expect(richTable.__filterModal._dialogElement.hasAttribute('open')).to.be.false;
+        expect(richTable.__filterModal.querySelector('div[slot=content]')).to.be.null;
 
-            sandbox.spy(richTable.__filterModal, 'open');
-            richTable.__filterOpenButton.click();
+        sandbox.spy(richTable.__filterModal, 'open');
+        richTable.__filterOpenButton.click();
 
-            expect(richTable.getAttribute('data-vl-filter-closed')).to.be.equal('');
-            assert(richTable.__filterModal.open.called);
-            expect(richTable.__filterModal.querySelector('div[slot=content]')).to.not.be.null;
-        });
+        expect(richTable.getAttribute('data-vl-filter-closed')).to.be.equal('');
+        assert(richTable.__filterModal.open.called);
+        expect(richTable.__filterModal.querySelector('div[slot=content]')).to.not.be.null;
+      });
 
-        test('Als op de filter toggle knop tweemaal geklikt wordt, wordt het attribuut data-vl-filter-closed eerst gezet en dan terug afgehaald', () => {
-            const richTable = fixture('vl-rich-data-table-met-closable-filter-fixture');
-            expect(richTable.getAttribute('data-vl-filter-closed')).to.be.null;
+      test('Als op de filter toggle knop tweemaal geklikt wordt, wordt het attribuut data-vl-filter-closed eerst gezet en dan terug afgehaald', () => {
+        const richTable = fixture('vl-rich-data-table-met-closable-filter-fixture');
+        expect(richTable.getAttribute('data-vl-filter-closed')).to.be.null;
 
-            richTable.__filterToggleButton.click();
+        richTable.__filterToggleButton.click();
 
-            expect(richTable.getAttribute('data-vl-filter-closed')).to.be.equal('');
+        expect(richTable.getAttribute('data-vl-filter-closed')).to.be.equal('');
 
-            richTable.__filterToggleButton.click();
+        richTable.__filterToggleButton.click();
 
-            expect(richTable.getAttribute('data-vl-filter-closed')).to.be.null;
-        });
+        expect(richTable.getAttribute('data-vl-filter-closed')).to.be.null;
+      });
 
-        test('Als op de filter toggle knop wordt geklikt na het openen en sluiten van de modal, wordt de filter content terug op de search kolom gezet zonder slot content', () => {
-            const richTable = fixture('vl-rich-data-table-met-closable-filter-fixture');
-            richTable.__filterOpenButton.click();
-            richTable.__filterModal.close();
+      test('Als op de filter toggle knop wordt geklikt na het openen en sluiten van de modal, wordt de filter content terug op de search kolom gezet zonder slot content', () => {
+        const richTable = fixture('vl-rich-data-table-met-closable-filter-fixture');
+        richTable.__filterOpenButton.click();
+        richTable.__filterModal.close();
 
-            richTable.__filterToggleButton.click();
+        richTable.__filterToggleButton.click();
 
-            expect(richTable.__filterModal.querySelector('div[slot=content]')).to.be.null;
-            expect(richTable.__searchColumn.querySelector('slot[name=filter]')).to.not.be.null;
-            expect(richTable.__searchColumn.querySelector('div[slot=content]')).to.be.null;
-        });
+        expect(richTable.__filterModal.querySelector('div[slot=content]')).to.be.null;
+        expect(richTable.__searchColumn.querySelector('slot[name=filter]')).to.not.be.null;
+        expect(richTable.__searchColumn.querySelector('div[slot=content]')).to.be.null;
+      });
 
-        test('Als de filter modal wordt geopend, worden de velden met data-vl-hidden-in-modal niet getoond', () => {
-            const richTable = fixture('vl-rich-data-table-met-closable-filter-fixture');
-            expect(richTable.querySelector('#hidden-in-modal').hidden).to.be.false;
+      test('Als de filter modal wordt geopend, worden de velden met data-vl-hidden-in-modal niet getoond', () => {
+        const richTable = fixture('vl-rich-data-table-met-closable-filter-fixture');
+        expect(richTable.querySelector('#hidden-in-modal').hidden).to.be.false;
 
-            richTable.__filterOpenButton.click();
+        richTable.__filterOpenButton.click();
 
-            expect(richTable.querySelector('#hidden-in-modal').hidden).to.be.true;
-            richTable.__filterModal.close();
-            richTable.__filterToggleButton.click();
+        expect(richTable.querySelector('#hidden-in-modal').hidden).to.be.true;
+        richTable.__filterModal.close();
+        richTable.__filterToggleButton.click();
 
-            expect(richTable.querySelector('#hidden-in-modal').hidden).to.be.false;
-        });
+        expect(richTable.querySelector('#hidden-in-modal').hidden).to.be.false;
+      });
 
-        test('Door slots te zetten, kunnen de teksten van de filter en toggle knoppen gewijzigd worden', () => {
-            const richTable = fixture('vl-rich-data-table-met-andere-teksten');
-            const toggleButton = richTable.__filterToggleButton;
-            const filterCloseButton = richTable.__filterCloseButton;
-            const toggleText = toggleButton.querySelector('slot[name=toggle-filter-button-text]').assignedElements()[0].innerHTML;
-            const closeText = filterCloseButton.querySelector('slot[name=close-filter-button-text]').assignedElements()[0].innerHTML;
+      test('Door slots te zetten, kunnen de teksten van de filter en toggle knoppen gewijzigd worden', () => {
+        const richTable = fixture('vl-rich-data-table-met-andere-teksten');
+        const toggleButton = richTable.__filterToggleButton;
+        const filterCloseButton = richTable.__filterCloseButton;
+        const toggleText = toggleButton.querySelector('slot[name=toggle-filter-button-text]').assignedElements()[0].innerHTML;
+        const closeText = filterCloseButton.querySelector('slot[name=close-filter-button-text]').assignedElements()[0].innerHTML;
 
-            expect(toggleText).to.be.equal('Foo');
-            expect(closeText).to.be.equal('Bar');
-        });
+        expect(toggleText).to.be.equal('Foo');
+        expect(closeText).to.be.equal('Bar');
+      });
 
-        function setInputValue(input, value) {
-            input.value = value;
-            input.dispatchEvent(new CustomEvent('input', {detail: 'dummy-event', bubbles: true}));
-        }
+      function setInputValue(input, value) {
+        input.value = value;
+        input.dispatchEvent(new CustomEvent('input', {detail: 'dummy-event', bubbles: true}));
+      }
     });
 </script>
 </body>

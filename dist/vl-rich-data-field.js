@@ -1,11 +1,12 @@
-import {VlElement, define} from '/node_modules/vl-ui-core/dist/vl-core.js';
+import {vlElement, define} from '/node_modules/vl-ui-core/dist/vl-core.js';
 
 /**
  * VlRichDataField
  * @class
  * @classdesc De definitie van een rich data veld, onderdeel van een rich data table om een table header weer te geven.
  *
- * @extends VlElement
+ * @extends HTMLElement
+ * @mixin vlElement
  *
  * @property {string} data-vl-name - Een naam die gebruikt kan worden om het veld te benoemen. Dit wordt gebruikt voor de sortering.
  * @property {string} data-vl-label - Een naam die getoond kan worden aan de gebruiker.
@@ -19,149 +20,175 @@ import {VlElement, define} from '/node_modules/vl-ui-core/dist/vl-core.js';
  * @see {@link https://webcomponenten.omgeving.vlaanderen.be/demo/vl-rich-data-table.html|Demo}
  *
  */
-export class VlRichDataField extends VlElement(HTMLElement) {
+export class VlRichDataField extends vlElement(HTMLElement) {
+  static get headerAttributes() {
+    return ['name', 'label', 'sortable', 'sorting-direction', 'sorting-priority'];
+  }
 
-    static get headerAttributes() {
-        return ['name', 'label', 'sortable', 'sorting-direction', 'sorting-priority'];
-    }
+  static get bodyAttributes() {
+    return ['selector', 'renderer'];
+  }
 
-    static get bodyAttributes() {
-        return ['selector'];
-    }
+  static get _observedAttributes() {
+    return this.headerAttributes.concat(this.bodyAttributes);
+  }
 
-    static get _observedAttributes() {
-        return this.headerAttributes.concat(this.bodyAttributes);
-    }
+  static get is() {
+    return 'vl-rich-data-field';
+  }
 
-    static get is() {
-        return 'vl-rich-data-field';
+  headerTemplate() {
+    const th = document.createElement('th');
+    th.appendChild(this.__getHeaderContentElement());
+    if (this.sortable) {
+      th.setAttribute('data-vl-sortable', '');
     }
+    return th;
+  }
 
-    __valueTemplate(rowData) {
-        if (this.selector) {
-            return this.selector.split('.').reduce((prev, curr) => {
-                return prev ? prev[curr] : null
-            }, rowData);
-        } else {
-            return this.__template(`${this.querySelector('template[slot="content"]').innerHTML}`, rowData);
-        }
+  valueTemplate(rowData) {
+    const td = document.createElement('td');
+    if (this.label) {
+      td.setAttribute('data-title', this.label);
     }
+    const element = this.__getValueContentElement(rowData);
+    if (element) {
+      td.appendChild(element);
+    } else if (this._renderer) {
+      this._renderer(td, rowData);
+    }
+    return td;
+  }
 
-    renderCellHeader() {
-        let template = this.label || `${this.querySelector('template[slot="label"]').innerHTML}`;
-        if (this.sortable) {
-            const direction = this.sortingDirection ? `data-vl-direction="${this.sortingDirection}"` : '';
-            const priority = this.sortingPriority ? `data-vl-priority="${this.sortingPriority}"` : '';
-            template += `<vl-rich-data-sorter data-vl-for="${this.name}" ${direction} ${priority}></vl-rich-data-sorter>`;
-            return `<th data-vl-sortable><a>${template}</a></th>`;
-        } else {
-            return `<th>${template}</th>`;
-        }
-    }
+  /**
+   * Geeft de naam terug die gebruikt wordt om het veld te identificeren.
+   * @return {string}
+   */
+  get name() {
+    return this.dataset.vlName;
+  }
 
-    renderCellValue(rowData) {
-        const value = this.__valueTemplate(rowData);
-        const title = this.label ? ` data-title="${this.label}"` : '';
-        return `<td${title}>${value}</td>`;
-    }
+  /**
+   * Geeft de selector terug die gebruikt wordt om de juiste waarde uit de data te halen.
+   * @return {string}
+   */
+  get selector() {
+    return this.dataset.vlSelector;
+  }
 
-    __template(literal, data) {
-        return ((literal, item) => new Function('item', 'return `' + literal + '`')(item)).call(this, literal, data);
-    }
+  /**
+   * Geeft de naam terug die getoond kan worden aan de gebruiker.
+   * @return {string}
+   */
+  get label() {
+    return this.dataset.vlLabel;
+  }
 
-    /**
-     * Geeft de naam terug die gebruikt wordt om het veld te identificeren.
-     * @returns {string}
-     */
-    get name() {
-        return this.dataset.vlName;
-    }
+  /**
+   * Geeft terug of er op het veld gesorteerd kan worden.
+   * @return {boolean}
+   */
+  get sortable() {
+    return this.dataset.vlSortable !== undefined;
+  }
 
-    /**
-     * Geeft de selector terug die gebruikt wordt om de juiste waarde uit de data te halen.
-     * @returns {string}
-     */
-    get selector() {
-        return this.dataset.vlSelector;
-    }
+  /**
+   * Geeft de sorteerrichting terug.
+   * @return {asc | desc}
+   */
+  get sortingDirection() {
+    return this.dataset.vlSortingDirection;
+  }
 
-    /**
-     * Geeft de naam terug die getoond kan worden aan de gebruiker.
-     * @returns {string}
-     */
-    get label() {
-        return this.dataset.vlLabel;
-    }
+  /**
+   * Geeft de prioriteit van het sorteren terug.
+   * @return {number}
+   */
+  get sortingPriority() {
+    return this.dataset.vlSortingPriority;
+  }
 
-    /**
-     * Geeft terug of er op het veld gesorteerd kan worden.
-     * @returns {boolean}
-     */
-    get sortable() {
-        return this.dataset.vlSortable !== undefined;
-    }
+  get _labelSlotElement() {
+    return this.querySelector('template[slot="label"]');
+  }
 
-    /**
-     * Geeft de sorteerrichting terug.
-     * @returns {asc | desc}
-     */
-    get sortingDirection() {
-        return this.dataset.vlSortingDirection;
-    }
+  get _contentSlotElement() {
+    return this.querySelector('template[slot="content"]');
+  }
 
-    /**
-     * Geeft de prioriteit van het sorteren terug.
-     * @returns {number}
-     */
-    get sortingPriority() {
-        return this.dataset.vlSortingPriority;
-    }
+  set renderer(renderer) {
+    this._renderer = renderer;
+    this._changed(['renderer']);
+  }
 
-    _nameChangedCallback(oldValue, newValue) {
-        if (oldValue !== newValue) {
-            this._changed(['name']);
-        }
+  _nameChangedCallback(oldValue, newValue) {
+    if (oldValue !== newValue) {
+      this._changed(['name']);
     }
+  }
 
-    _selectorChangedCallback(oldValue, newValue) {
-        if (oldValue !== newValue) {
-            this._changed(['selector']);
-        }
+  _selectorChangedCallback(oldValue, newValue) {
+    if (oldValue !== newValue) {
+      this._changed(['selector']);
     }
+  }
 
-    _labelChangedCallback(oldValue, newValue) {
-        if (oldValue !== newValue) {
-            this._changed(['label']);
-        }
+  _labelChangedCallback(oldValue, newValue) {
+    if (oldValue !== newValue) {
+      this._changed(['label']);
     }
+  }
 
-    _sortableChangedCallback(oldValue, newValue) {
-        if (oldValue !== newValue) {
-            this._changed(['sortable']);
-        }
+  _sortableChangedCallback(oldValue, newValue) {
+    if (oldValue !== newValue) {
+      this._changed(['sortable']);
     }
+  }
 
-    _sorting_directionChangedCallback(oldValue, newValue) {
-        if (oldValue !== newValue) {
-            this._changed(['sorting-direction']);
-        }
+  _sortingDirectionChangedCallback(oldValue, newValue) {
+    if (oldValue !== newValue) {
+      this._changed(['sorting-direction']);
     }
+  }
 
-    _sorting_priorityChangedCallback(oldValue, newValue) {
-        if (oldValue !== newValue) {
-            this._changed(['sorting-priority']);
-        }
+  _sortingPriorityChangedCallback(oldValue, newValue) {
+    if (oldValue !== newValue) {
+      this._changed(['sorting-priority']);
     }
+  }
 
-    _changed(properties) {
-        this.dispatchEvent(new CustomEvent('change', {
-            detail: {
-                properties: properties
-            }
-        }));
+  _changed(properties) {
+    this.dispatchEvent(new CustomEvent('change', {
+      detail: {
+        properties: properties,
+      },
+    }));
+  }
+
+  __getHeaderContentElement() {
+    const text = this.label || `${this._labelSlotElement.innerHTML}`;
+    if (this.sortable) {
+      const direction = this.sortingDirection ? `data-vl-direction="${this.sortingDirection}"` : '';
+      const priority = this.sortingPriority ? `data-vl-priority="${this.sortingPriority}"` : '';
+      const sorter = `<vl-rich-data-sorter data-vl-for="${this.name}" ${direction} ${priority}></vl-rich-data-sorter>`;
+      return this._template(`<a>${text}${sorter}</a>`);
+    } else {
+      return this._template(`${text}`);
     }
+  }
+
+  __getValueContentElement(data) {
+    if (this.selector) {
+      return this._template(`${this.selector.split('.').reduce((prev, curr) => prev ? prev[curr] : null, data)}`);
+    } else if (this._contentSlotElement) {
+      const literal = `${this.querySelector('template[slot="content"]').innerHTML}`;
+      const template = ((literal, item) => new Function('item', 'return `' + literal + '`')(item)).call(this, literal, data);
+      return this._template(template);
+    } else {
+      return null;
+    }
+  }
 }
-
 
 /**
  * VlRichDataField change event
