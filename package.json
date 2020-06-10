@@ -45,7 +45,7 @@
 	},
 	"dependencies": {
 		"vl-ui-button": "^5.0.1",
-		"vl-ui-core": "^5.5.1",
+		"vl-ui-core": "^5.5.2",
 		"vl-ui-data-table": "^3.1.0",
 		"vl-ui-grid": "^3.0.1",
 		"vl-ui-icon": "^5.0.0",
@@ -53,7 +53,7 @@
 	},
 	"peerDependencies": {
 		"vl-ui-button": "^5.0.1",
-		"vl-ui-core": "^5.5.1",
+		"vl-ui-core": "^5.5.2",
 		"vl-ui-data-table": "^3.1.0",
 		"vl-ui-grid": "^3.0.1",
 		"vl-ui-icon": "^5.0.0",
@@ -66,6 +66,6 @@
 		"vl-ui-link": "^4.0.0",
 		"vl-ui-pager": "^3.0.1",
 		"vl-ui-search-filter": "^3.1.0",
-		"vl-ui-util": "^5.2.1"
+		"vl-ui-util": "^5.2.3"
 	}
 }
