@@ -133,7 +133,7 @@
       richTable.data.should.deep.equal(value);
       const pager = richTable.querySelector('vl-pager');
       assert.equal(pager.totalItems, value.paging.totalItems);
-      // todo test dat pager niet meer zichtbaar is..
+      assert.isTrue(pager.shadowRoot.querySelector('.vl-pager').hidden);
     });
 
     test('De data op een tabel kan enkel doorgegeven worden als Array', (done) => {
