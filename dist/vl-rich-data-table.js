@@ -12,7 +12,6 @@ import {VlRichDataSorter} from './vl-rich-data-sorter.js';
  * @classdesc Een tabel op basis van een dynamische lijst van data die uitgebreid kan worden met functionaliteiten die het consumeren van de data door een gebruiker kunnen verbeteren.
  *
  * @extends HTMLElement
- * @mixin vlElement
  *
  * @property {string} data-vl-data - De data die door de tabel getoond moet worden in JSON formaat.
  * @property {boolean} data-vl-collapsed-m - Vanaf een medium schermgrootte zullen de cellen van elke rij onder elkaar ipv naast elkaar getoond worden.

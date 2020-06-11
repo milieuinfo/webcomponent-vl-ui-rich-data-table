@@ -6,7 +6,6 @@ import {vlElement, define} from '/node_modules/vl-ui-core/dist/vl-core.js';
  * @classdesc De definitie van een rich data veld, onderdeel van een rich data table om een table header weer te geven.
  *
  * @extends HTMLElement
- * @mixin vlElement
  *
  * @property {string} data-vl-name - Een naam die gebruikt kan worden om het veld te benoemen. Dit wordt gebruikt voor de sortering.
  * @property {string} data-vl-label - Een naam die getoond kan worden aan de gebruiker.
