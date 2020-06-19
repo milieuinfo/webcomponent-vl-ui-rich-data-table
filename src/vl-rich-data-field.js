@@ -38,7 +38,10 @@ export class VlRichDataField extends vlElement(HTMLElement) {
 
   headerTemplate() {
     const th = document.createElement('th');
-    th.appendChild(this.__getHeaderContentElement());
+    const headerContent = this.__getHeaderContentElement();
+    if (headerContent) {
+      th.appendChild(headerContent);
+    }
     if (this.sortable) {
       th.setAttribute('data-vl-sortable', '');
     }
@@ -164,15 +167,21 @@ export class VlRichDataField extends vlElement(HTMLElement) {
     }));
   }
 
+  get __headerContent() {
+    return this.label || (this._labelSlotElement ? this._labelSlotElement.innerHTML : undefined);
+  }
+
   __getHeaderContentElement() {
-    const text = this.label || `${this._labelSlotElement.innerHTML}`;
-    if (this.sortable) {
-      const direction = this.sortingDirection ? `data-vl-direction="${this.sortingDirection}"` : '';
-      const priority = this.sortingPriority ? `data-vl-priority="${this.sortingPriority}"` : '';
-      const sorter = `<vl-rich-data-sorter data-vl-for="${this.name}" ${direction} ${priority}></vl-rich-data-sorter>`;
-      return this._template(`<a>${text}${sorter}</a>`);
-    } else {
-      return this._template(`${text}`);
+    const content = this.__headerContent;
+    if (content) {
+      if (this.sortable) {
+        const direction = this.sortingDirection ? `data-vl-direction="${this.sortingDirection}"` : '';
+        const priority = this.sortingPriority ? `data-vl-priority="${this.sortingPriority}"` : '';
+        const sorter = `<vl-rich-data-sorter data-vl-for="${this.name}" ${direction} ${priority}></vl-rich-data-sorter>`;
+        return this._template(`<a>${content}${sorter}</a>`);
+      } else {
+        return this._template(`${content}`);
+      }
     }
   }
 
