@@ -109,9 +109,9 @@
     });
 
     function tableShouldNotHaveHeaders(table) {
-        const headers = table.__tableHeaderRow.querySelectorAll('th');
-        assert.lengthOf(headers, 0);
-        assert.isTrue(table.__tableHeader.hasAttribute('hidden'));
+      const headers = table.__tableHeaderRow.querySelectorAll('th');
+      assert.lengthOf(headers, 0);
+      assert.isTrue(table.__tableHeader.hasAttribute('hidden'));
     }
 
     function tableShouldHaveHeaders(table, ...expectedHeaders) {

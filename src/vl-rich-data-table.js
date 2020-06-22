@@ -343,8 +343,8 @@ export class VlRichDataTable extends vlElement(HTMLElement) {
 
   _renderHeaders() {
     this.__tableHeaderRow.innerHTML = '';
-    const headerColumns = this.__richDataFields.map(field => field.headerTemplate());
-    const atLeastOneHeaderColumnHasContent = headerColumns.some(header => !!header.textContent);
+    const headerColumns = this.__richDataFields.map((field) => field.headerTemplate());
+    const atLeastOneHeaderColumnHasContent = headerColumns.some((header) => !!header.textContent);
     if (atLeastOneHeaderColumnHasContent) {
       headerColumns.forEach(this.__addHeaderColumn.bind(this));
       this.__showHeader();
