@@ -182,6 +182,8 @@ export class VlRichDataField extends vlElement(HTMLElement) {
       } else {
         return this._template(`${content}`);
       }
+    } else {
+      return undefined;
     }
   }
 

@@ -227,6 +227,8 @@ export class VlRichDataTable extends vlElement(HTMLElement) {
     const header = this.__tableHeader;
     if (header) {
       return header.querySelector('tr');
+    } else {
+      return undefined;
     }
   }
 
