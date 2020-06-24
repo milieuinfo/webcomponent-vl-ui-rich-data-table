@@ -25,27 +25,20 @@
 	"scripts": {
 		"prepare": "npm update --dev vl-ui-util && npm run prepare:util",
 		"prepare:util": "npm explore vl-ui-util -- npm run util",
-		"test": "npm run test:unit && npm run test:e2e",
-		"test:unit": "wct --config-file ./wct.local.conf.json",
-		"test:e2e": "npm run test:server:start && npm run test:e2e:chrome && npm run test:e2e:firefox",
-		"test:e2e:grid": "npm run test:server:start && npm run test:e2e:chrome:grid && npm run test:e2e:firefox:grid",
-		"test:grid": "wct --config-file ./wct.docker.conf.json && npm run test:e2e:grid",
-		"posttest:e2e": "pkill -f http-server",
-		"test:e2e:chrome": "mocha --chrome",
-		"test:e2e:chrome:grid": "mocha --chrome --grid",
-		"test:e2e:firefox": "mocha --firefox",
-		"test:e2e:firefox:grid": "mocha --firefox --grid",
-		"test:e2e:opera": "mocha --opera",
-		"test:e2e:safari": "mocha --safari",
-		"test:server:start": "http-server &",
-		"release": "np",
+		"test": "npm explore vl-ui-util -- npm run test:component",
+		"test:grid": "npm explore vl-ui-util -- npm run test:component:grid",
+		"test:unit": "npm explore vl-ui-util -- npm run test:component:unit",
+		"test:unit:grid": "npm explore vl-ui-util -- npm run test:component:unit:grid",
+		"test:e2e": "npm explore vl-ui-util -- npm run test:component:e2e",
+		"test:e2e:grid": "npm explore vl-ui-util -- npm run test:component:e2e:grid",
+		"release": "npm explore vl-ui-util -- npm run release",
 		"release:prepare": "npm explore vl-ui-util -- npm run release-component:prepare $(pwd) rich-data-table",
-		"release:testless": "np --yolo",
+		"release:testless": "npm explore vl-ui-util -- npm run release:testless",
 		"demo": "http-server"
 	},
 	"dependencies": {
 		"vl-ui-button": "^5.0.5",
-		"vl-ui-core": "^5.5.4",
+		"vl-ui-core": "^5.5.5",
 		"vl-ui-data-table": "^3.1.3",
 		"vl-ui-grid": "^3.1.2",
 		"vl-ui-icon": "^5.1.0",
@@ -53,7 +46,7 @@
 	},
 	"peerDependencies": {
 		"vl-ui-button": "^5.0.5",
-		"vl-ui-core": "^5.5.4",
+		"vl-ui-core": "^5.5.5",
 		"vl-ui-data-table": "^3.1.3",
 		"vl-ui-grid": "^3.1.2",
 		"vl-ui-icon": "^5.1.0",
@@ -66,6 +59,6 @@
 		"vl-ui-link": "^4.0.0",
 		"vl-ui-pager": "^3.0.1",
 		"vl-ui-search-filter": "^3.1.0",
-		"vl-ui-util": "^5.2.3"
+		"vl-ui-util": "^5.2.8"
 	}
 }

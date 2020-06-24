@@ -29,8 +29,8 @@ services:
       - no_proxy=${no_proxy},selenium-hub,tests
     shm_size: 2g
   tests:
-    image: ${DOCKER_REGISTRY}node:13
-    command: bash -c "cp -R /data/. /workdir && npm install && npm run test:grid"
+    image: ${DOCKER_REGISTRY}milieuinfo/ubuntu-node:14
+    command: bash -c "rsync -h -r --exclude 'node_modules' /data/. /workdir && npm install && npm run test:grid"
     depends_on:
       - selenium-hub
       - selenium-chrome
