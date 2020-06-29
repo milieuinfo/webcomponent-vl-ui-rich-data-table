@@ -15,7 +15,18 @@
         <vl-rich-data-table
                 data-vl-data='{"data": [{"id": 0, "name": "Foo", "extendedName": "Foobar"}, {"id": 1, "name": "Bar", "extendedName": "Barfoo"}]}'>
             <vl-rich-data-field id="id-field" data-vl-label="ID" data-vl-selector="id"></vl-rich-data-field>
-            <vl-rich-data-field id="name-field" data-vl-label="Naam" data-vl-selector="name"></vl-rich-data-field>
+            <vl-rich-data-field id="name-field" data-vl-label="Naam" data-vl-selector="name">
+                <template slot="label">Naam</template>
+            </vl-rich-data-field>
+        </vl-rich-data-table>
+    </template>
+</test-fixture>
+<test-fixture id="vl-rich-data-table-without-headers-fixture">
+    <template>
+        <vl-rich-data-table
+                data-vl-data='{"data": [{"id": 0, "name": "Foo", "extendedName": "Foobar"}, {"id": 1, "name": "Bar", "extendedName": "Barfoo"}]}'>
+            <vl-rich-data-field id="id-field" data-vl-selector="id"></vl-rich-data-field>
+            <vl-rich-data-field id="name-field" data-vl-selector="name"></vl-rich-data-field>
         </vl-rich-data-table>
     </template>
 </test-fixture>
@@ -80,6 +91,28 @@
         done();
       });
     });
+
+    test('De tabel toont geen headers indien alle velden geen labels hebben', () => {
+      const richTable = fixture('vl-rich-data-table-without-headers-fixture');
+
+      tableShouldNotHaveHeaders(richTable);
+      tableShouldHaveDataRows(richTable, ['0', 'Foo'], ['1', 'Bar']);
+    });
+
+    test('De tabel toont headers indien minstens 1 veld een label heeft', () => {
+      const richTable = fixture('vl-rich-data-table-without-headers-fixture');
+      const idField = richTable.querySelector('#id-field');
+      idField.dataset.vlLabel = 'Identifier';
+
+      tableShouldHaveHeaders(richTable, 'Identifier', '');
+      tableShouldHaveDataRows(richTable, ['0', 'Foo'], ['1', 'Bar']);
+    });
+
+    function tableShouldNotHaveHeaders(table) {
+      const headers = table.__tableHeaderRow.querySelectorAll('th');
+      assert.lengthOf(headers, 0);
+      assert.isTrue(table.__tableHeader.hasAttribute('hidden'));
+    }
 
     function tableShouldHaveHeaders(table, ...expectedHeaders) {
       const headers = table.__tableHeaderRow.querySelectorAll('th');

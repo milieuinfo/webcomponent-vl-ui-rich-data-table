@@ -18,8 +18,7 @@
 
 <test-fixture id="vl-rich-data-field-fixture-sortable">
     <template>
-        <vl-rich-data-field data-vl-selector="foo" data-vl-label="Foo" data-vl-name="Foo"
-                            data-vl-sortable></vl-rich-data-field>
+        <vl-rich-data-field data-vl-selector="foo" data-vl-label="Foo" data-vl-name="Foo" data-vl-sortable></vl-rich-data-field>
     </template>
 </test-fixture>
 
@@ -83,7 +82,6 @@
 
 <script>
   suite('<vl-rich-data-field>', () => {
-    const should = chai.should();
     const sandbox = sinon.sandbox.create();
 
     setup((done) => {
@@ -165,19 +163,14 @@
       field.headerTemplate().outerHTML.replace(/\s\s+/g, '').should.equal('<th><span>Foo</span></th>');
     });
 
-    test('Indien er geen label attribuut en geen template label slot aanwezig is, zal er een foutmelding komen', () => {
-      const field = fixture('vl-rich-data-field');
-      try {
-        field.headerTemplate();
-        should.fail();
-      } catch (error) {
-        should.exist(error);
-      }
-    });
-
     test('Indien er geen label attribuut aanwezig is, zal de template label slot gebruikt worden voor een sortable field om de header te visualiseren', () => {
       const field = fixture('vl-rich-data-field-label-template-fixture-sortable');
       field.headerTemplate().outerHTML.replace(/\s\s+/g, '').should.equal('<th data-vl-sortable=""><a><span>Foo</span><vl-rich-data-sorter data-vl-for="Foo"></vl-rich-data-sorter></a></th>');
+    });
+
+    test('Indien er zowel geen label attribuut als geen template label slot aanwezig is, bevat de header template geen text content', () => {
+      const field = fixture('vl-rich-data-field');
+      field.headerTemplate().outerHTML.replace(/\s\s+/g, '').should.equal('<th></th>');
     });
 
     test('Indien er geen label attribuut aanwezig is, zal dit ook niet als data-title gezet worden op de value cell', () => {
