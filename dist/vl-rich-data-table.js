@@ -219,8 +219,17 @@ export class VlRichDataTable extends vlElement(HTMLElement) {
     return this.shadowRoot.querySelector('table');
   }
 
+  get __tableHeader() {
+    return this.__table.querySelector('thead');
+  }
+
   get __tableHeaderRow() {
-    return this.__table.querySelector('thead > tr');
+    const header = this.__tableHeader;
+    if (header) {
+      return header.querySelector('tr');
+    } else {
+      return undefined;
+    }
   }
 
   get __tableBody() {
@@ -334,14 +343,36 @@ export class VlRichDataTable extends vlElement(HTMLElement) {
 
   _renderHeaders() {
     this.__tableHeaderRow.innerHTML = '';
-    this.__richDataFields.forEach((field) => {
-      this.__tableHeaderRow.appendChild(field.headerTemplate());
-    });
-    this.__tableHeaderRow.querySelectorAll('th[data-vl-sortable] > a').forEach((th) => {
-      th.addEventListener('click', (e) => {
-        th.querySelector('vl-rich-data-sorter').nextDirection();
+    const headerColumns = this.__richDataFields.map((field) => field.headerTemplate());
+    const atLeastOneHeaderColumnHasContent = headerColumns.some((header) => !!header.textContent);
+    if (atLeastOneHeaderColumnHasContent) {
+      headerColumns.forEach(this.__addHeaderColumn.bind(this));
+      this.__showHeader();
+    } else {
+      this.__hideHeader();
+    }
+  }
+
+  __addHeaderColumn(header) {
+    this.__initializeSortingOnHeaderColumn(header);
+    this.__tableHeaderRow.appendChild(header);
+  }
+
+  __initializeSortingOnHeaderColumn(header) {
+    const sorterButton = header.querySelector('th[data-vl-sortable] > a');
+    if (sorterButton) {
+      sorterButton.addEventListener('click', (e) => {
+        sorterButton.querySelector('vl-rich-data-sorter').nextDirection();
       });
-    });
+    }
+  }
+
+  __hideHeader() {
+    this.__tableHeader.setAttribute('hidden', '');
+  }
+
+  __showHeader() {
+    this.__tableHeader.removeAttribute('hidden');
   }
 
   _renderBody() {
