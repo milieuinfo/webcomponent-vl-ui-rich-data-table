@@ -262,11 +262,11 @@ describe('vl-rich-data-table', async () => {
     const richDataTable = await vlRichDataTablePage.getRichDataTableFilterSortingPaging();
     const searchFilter = await richDataTable.getSearchFilter();
     const filterIdVeld = await new VlInputField(driver, await searchFilter.findElement(By.css('[name="id"]')));
-    await filterIdVeld.setValue('0');
+    await filterIdVeld.setValue('1');
     const filterNameVeld = await new VlInputField(driver, await searchFilter.findElement(By.css('[name="name"]')));
     await filterNameVeld.setValue('20');
     await assertAantalRows(richDataTable, 1);
-    await assertRow(richDataTable, 0, [20, 'Project #20', 'Riquier', 'Beckers', 'Project #20 o.l.v. Pascal Riquier']);
+    await assertRow(richDataTable, 0, [19, 'Project #20', 'Riquier', 'Beckers', 'Project #20 o.l.v. Pascal Riquier']);
 
     const zoekOpdrachtenVerwijderen = await searchFilter.findElement(By.css('button[type="reset"]'));
     zoekOpdrachtenVerwijderen.click();
@@ -283,7 +283,7 @@ describe('vl-rich-data-table', async () => {
     await pager.goToPage(3);
     await richDataTable.toggleSortOfColumn('id');
     await assert.eventually.equal(pager.getCurrentPage(), 1);
-    await assertRow(richDataTable, 0, [24, 'Project #24', 'Riquier', 'Beckers', 'Project #24 o.l.v. Pascal Riquier']);
+    await assertRow(richDataTable, 0, [24, 'Project #25', 'Riquier', 'Beckers', 'Project #25 o.l.v. Pascal Riquier']);
   });
 
   it('Als gebruiker kan ik de filter sluiten met de sluit knop en terug openen met de filter knop', async () => {
@@ -318,13 +318,13 @@ describe('vl-rich-data-table', async () => {
 
     await richDataTable.openModalFilter();
     const filterIdVeld = await new VlInputField(driver, await filter.findElement(By.css('[name="id"]')));
-    await filterIdVeld.setValue('0');
+    await filterIdVeld.setValue('1');
     const filterNameVeld = await new VlInputField(driver, await filter.findElement(By.css('[name="name"]')));
     await filterNameVeld.setValue('20');
     await richDataTable.closeModalFilter();
 
     await assertAantalRows(richDataTable, 1);
-    await assertRow(richDataTable, 0, [20, 'Project #20', 'Riquier', 'Beckers', 'Project #20 o.l.v. Pascal Riquier']);
+    await assertRow(richDataTable, 0, [19, 'Project #20', 'Riquier', 'Beckers', 'Project #20 o.l.v. Pascal Riquier']);
   });
 
   async function assertHeaders(richDataTable, expectedHeaders) {
