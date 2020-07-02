@@ -1,7 +1,8 @@
-import {vlElement, define} from '/node_modules/vl-ui-core/dist/vl-core.js';
+import {define} from '/node_modules/vl-ui-core/dist/vl-core.js';
 import '/node_modules/vl-ui-data-table/dist/vl-data-table.js';
 import '/node_modules/vl-ui-grid/dist/vl-grid.js';
 import '/node_modules/vl-ui-modal/dist/vl-modal.js';
+import {VlRichData} from '/node_modules/vl-ui-rich-data/dist/vl-rich-data.js';
 
 import {VlRichDataField} from './vl-rich-data-field.js';
 import {VlRichDataSorter} from './vl-rich-data-sorter.js';
@@ -11,7 +12,7 @@ import {VlRichDataSorter} from './vl-rich-data-sorter.js';
  * @class
  * @classdesc Een tabel op basis van een dynamische lijst van data die uitgebreid kan worden met functionaliteiten die het consumeren van de data door een gebruiker kunnen verbeteren.
  *
- * @extends HTMLElement
+ * @extends VlRichData
  *
  * @property {string} data-vl-data - De data die door de tabel getoond moet worden in JSON formaat.
  * @property {boolean} data-vl-collapsed-m - Vanaf een medium schermgrootte zullen de cellen van elke rij onder elkaar ipv naast elkaar getoond worden.
@@ -19,22 +20,13 @@ import {VlRichDataSorter} from './vl-rich-data-sorter.js';
  * @property {boolean} data-vl-collapsed-xs - Vanaf een extra small schermgrootte zullen de cellen van elke rij onder elkaar ipv naast elkaar getoond worden.
  * @property {boolean} data-vl-multisort - Laat de gebruiker sorteren op meer dan 1 kolom.
  *
- * @slot filter - slot dat de velden bevat waarop gefilterd wordt. De formData van de search filter worden via een change event doorgegeven bij een wijziging.
- *
- * @property {boolean} data-vl-filter-closable - Attribuut dat de filter sluitbaar maakt en een knop getoond wordt om de filter te tonen en terug te verbergen. Op een klein scherm wordt een modal geopend bij het klikken op de filter knop ipv een de filter naast de tabel te tonen. Om elementen van de filter te verbergen enkel in de modal, kan het attribuut data-vl-hidden-in-modal gezet worden.
- * @property {boolean} data-vl-filter-closed - Attribuut dat aangeeft of dat de filter gesloten is.
- *
- * @slot toggle-filter-button-text - slot om de tekst te kunnen wijzigen van de toggle filter knop. Default: Filter.
- * @slot close-filter-button-text - slot om de onzichtbare tekst te kunnen wijzigen van de filter sluit knop. Default: Filter sluiten.
- *
  * @see {@link https://www.github.com/milieuinfo/webcomponent-vl-ui-rich-data-table/releases/latest|Release notes}
  * @see {@link https://www.github.com/milieuinfo/webcomponent-vl-ui-rich-data-table/issues|Issues}
  * @see {@link https://webcomponenten.omgeving.vlaanderen.be/demo/vl-rich-data-table.html|Demo}
- *
  */
-export class VlRichDataTable extends vlElement(HTMLElement) {
+export class VlRichDataTable extends VlRichData {
   static get _observedAttributes() {
-    return ['data', 'collapsed-m', 'collapsed-s', 'collapsed-xs', 'filter-closable', 'filter-closed'];
+    return super._observedAttributes.concat(['data', 'collapsed-m', 'collapsed-s', 'collapsed-xs']);
   }
 
   static get _tableAttributes() {
@@ -45,60 +37,26 @@ export class VlRichDataTable extends vlElement(HTMLElement) {
     return 'vl-rich-data-table';
   }
 
-  static get _defaultSearchColumnSize() {
-    return 4;
-  }
-
   constructor() {
     super(`
-        <style>
-          @import '/node_modules/vl-ui-rich-data-table/dist/style.css';
-          @import "/node_modules/vl-ui-icon/dist/style.css";
-          @import "/node_modules/vl-ui-button/dist/style.css";
-          @import "/node_modules/vl-ui-data-table/dist/style.css";
-        </style>
-        <div>
-          <div is="vl-grid" is-stacked>
-            <div id="toggle-filter" is="vl-column" class="vl-u-align-right vl-u-hidden--s" hidden size="12">
-              <button id="toggle-filter-button" is="vl-button-link" type="button" aria-label="Toon de filter">
-                <span is="vl-icon" data-vl-icon="content-filter" data-vl-before></span><slot name="toggle-filter-button-text">Filter</slot>
-              </button>
-            </div>
-            <div id="open-filter" is="vl-column" class="vl-u-align-right vl-u-hidden" hidden size="12">
-              <button id="open-filter-button" is="vl-button-link" type="button" aria-label="Toon de filter">
-                <span is="vl-icon" data-vl-icon="content-filter" data-vl-before></span><slot name="toggle-filter-button-text">Filter</slot>
-              </button>
-            </div>
-            <div id="search" is="vl-column" size="0" small-size="0">
-              <button id="close-filter-button" class="vl-filter__close" hidden type="button">
-                <span is="vl-icon" data-vl-icon="close"></span>
-                <span class="vl-u-visually-hidden"><slot name="close-filter-button-text">Filter sluiten</slot></span>
-              </button>
-              <div id="filter-slot-container">
-                <slot id="filter-slot" name="filter"></slot>
-              </div>
-            </div>
-            <div id="content" is="vl-column" size="12" small-size="12">
-              <table is="vl-data-table">
-                <thead>
-                  <tr></tr>
-                </thead>
-                <tbody></tbody>
-              </table>
-            </div>
-            <div id="pager" is="vl-column" size="12">
-              <slot name="pager"></slot>
-            </div>
-        </div>
-        <vl-modal id="filter-modal" closable not-cancellable></vl-modal>
-      </div>
+      <style>
+        @import "/node_modules/vl-ui-data-table/dist/style.css";
+      </style>`, `
+      <table is="vl-data-table" slot="content">
+        <thead>
+          <tr></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
     `);
 
-    this.__processSearchFilter();
-
     this.__observeSorters();
-    this.__observePager();
-    this.__observeFilterButtons();
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    this._render();
+    this.__observeFields();
   }
 
   attributeChangedCallback(attr, oldValue, newValue) {
@@ -107,6 +65,33 @@ export class VlRichDataTable extends vlElement(HTMLElement) {
       const withoutDataVlPrefix = attr.substring('data-vl-'.length);
       this.__table.toggleAttribute(withoutDataVlPrefix);
     }
+  }
+
+  /**
+   * Stelt in welke data de tabel moet tonen.
+   * @param {Object[]} object - Een Array van objecten die de data voorstellen.
+   */
+  set data(object) {
+    const previousData = this.data ? this.data.data : undefined;
+    super.data = object;
+    const hasNewData = previousData !== this.data.data;
+    if (hasNewData) {
+      try {
+        this._validate(this.data.data);
+        this._renderBody();
+      } catch (error) {
+        this.__data.data = [];
+        throw error;
+      }
+    }
+  }
+
+  /**
+   * Geeft de data terug die in de tabel wordt getoond.
+   * @return {Object[]}
+   */
+  get data() {
+    return super.data;
   }
 
   get __activeSorters() {
@@ -121,62 +106,6 @@ export class VlRichDataTable extends vlElement(HTMLElement) {
 
   get __fields() {
     return this.querySelectorAll(VlRichDataField.is);
-  }
-
-  get __filter() {
-    return this.querySelector('[slot=\'filter\']');
-  }
-
-  get __filterCloseButton() {
-    return this.shadowRoot.querySelector('#close-filter-button');
-  }
-
-  get __filterModal() {
-    return this.shadowRoot.querySelector('#filter-modal');
-  }
-
-  get __filterSlotContainer() {
-    return this.shadowRoot.querySelector('#filter-slot-container');
-  }
-
-  get __filterOpenContainer() {
-    return this.shadowRoot.querySelector('#open-filter');
-  }
-
-  get __filterOpenButton() {
-    return this.shadowRoot.querySelector('#open-filter-button');
-  }
-
-  get __filterToggleContainer() {
-    return this.shadowRoot.querySelector('#toggle-filter');
-  }
-
-  get __filterToggleButton() {
-    return this.shadowRoot.querySelector('#toggle-filter-button');
-  }
-
-  get __formDataState() {
-    if (this.__searchFilter && this.__searchFilter.formData) {
-      const hasFilterValue = [...this.__searchFilter.formData.values()].find(Boolean);
-      if (hasFilterValue) {
-        return this.__searchFilter.formData;
-      }
-    }
-  }
-
-  get __pager() {
-    return this.querySelector('[slot=\'pager\']');
-  }
-
-  get __pagingState() {
-    if (this.__pager) {
-      return {
-        currentPage: this.__pager.currentPage,
-        totalPages: this.__pager.totalPages,
-        itemsPerPage: this.__pager.itemsPerPage,
-        totalItems: this.__pager.totalItems,
-      };
-    }
   }
 
   get __richDataFields() {
@@ -196,22 +125,6 @@ export class VlRichDataTable extends vlElement(HTMLElement) {
           direction: criteria.direction,
         };
       });
-    }
-  }
-
-  get __searchColumn() {
-    return this.shadowRoot.querySelector('#search');
-  }
-
-  get __searchFilter() {
-    if (this.__filter) {
-      return this.__filter.querySelector('[is="vl-search-filter"]');
-    }
-  }
-
-  get __searchFilterForm() {
-    if (this.__searchFilter) {
-      return this.__searchFilter.querySelector('form');
     }
   }
 
@@ -236,23 +149,9 @@ export class VlRichDataTable extends vlElement(HTMLElement) {
     return this.__table.querySelector('tbody');
   }
 
-  __onStateChange(event, {paging = false} = {}) {
-    event.stopPropagation();
-    event.preventDefault();
-    this.dispatchEvent(new CustomEvent('change', {
-      detail: this.__getState({paging}),
-      bubbles: true,
-    }));
-  }
-
   __getState({paging}) {
-    const state = {};
+    const state = super.__getState({paging});
     state.sorting = this.__sortingState;
-    state.formData = this.__formDataState;
-    state.paging = this.__pagingState;
-    if (!paging && state.paging) {
-      state.paging.currentPage = 1;
-    }
     return state;
   }
 
@@ -260,46 +159,10 @@ export class VlRichDataTable extends vlElement(HTMLElement) {
     return this.dataset.vlMultisort !== undefined;
   }
 
-  connectedCallback() {
-    this._render();
-    this.__observeFields();
-    this.__observeSearchFilter();
-  }
-
-  /**
-   * Stelt in welke data de tabel moet tonen.
-   * @param {Object[]} object - Een Array van objecten die de data voorstellen.
-   */
-  set data(object) {
-    if (this.__data !== object) {
-      const {data, paging, sorting, filter} = object;
-      this._validate(data);
-      this._paging = paging;
-      this._sorting = sorting;
-      this._filter = filter;
-      this.__data = object;
-      this._renderBody();
-    }
-  }
-
   _validate(data) {
     if (data) {
       if (!Array.isArray(data)) {
         throw new Error('vl-rich-data-table verwacht een Array als data');
-      }
-    }
-  }
-
-  set _paging(paging) {
-    if (paging) {
-      if (paging.currentPage != null) {
-        this.__pager.setAttribute('current-page', paging.currentPage);
-      }
-      if (paging.itemsPerPage != null) {
-        this.__pager.setAttribute('items-per-page', paging.itemsPerPage);
-      }
-      if (paging.totalItems != null) {
-        this.__pager.setAttribute('total-items', paging.totalItems);
       }
     }
   }
@@ -312,28 +175,6 @@ export class VlRichDataTable extends vlElement(HTMLElement) {
         sorter.priority = matchedSorter ? matchedSorter.priority : undefined;
       });
     }
-  }
-
-  set _filter(filter) {
-    if (filter && this.__searchFilter) {
-      const form = this.__searchFilter.querySelector('form');
-      if (form) {
-        filter.forEach((entry) => {
-          const formElement = form.elements[entry.name];
-          if (formElement) {
-            formElement.value = entry.value;
-          }
-        });
-      }
-    }
-  }
-
-  /**
-   * Geeft de data terug die in de tabel wordt getoond.
-   * @return {Object[]}
-   */
-  get data() {
-    return this.__data || {data: []};
   }
 
   _render() {
@@ -358,6 +199,14 @@ export class VlRichDataTable extends vlElement(HTMLElement) {
     this.__tableHeaderRow.appendChild(header);
   }
 
+  __hideHeader() {
+    this.__tableHeader.setAttribute('hidden', '');
+  }
+
+  __showHeader() {
+    this.__tableHeader.removeAttribute('hidden');
+  }
+
   __initializeSortingOnHeaderColumn(header) {
     const sorterButton = header.querySelector('th[data-vl-sortable] > a');
     if (sorterButton) {
@@ -365,14 +214,6 @@ export class VlRichDataTable extends vlElement(HTMLElement) {
         sorterButton.querySelector('vl-rich-data-sorter').nextDirection();
       });
     }
-  }
-
-  __hideHeader() {
-    this.__tableHeader.setAttribute('hidden', '');
-  }
-
-  __showHeader() {
-    this.__tableHeader.removeAttribute('hidden');
   }
 
   _renderBody() {
@@ -390,27 +231,6 @@ export class VlRichDataTable extends vlElement(HTMLElement) {
 
   _dataChangedCallback(oldValue, newValue) {
     this.data = JSON.parse(newValue);
-  }
-
-  _filterClosableChangedCallback(oldValue, newValue) {
-    this.__filterCloseButton.hidden = newValue == null;
-    this.__filterToggleContainer.hidden = newValue == null;
-    this.__filterOpenContainer.hidden = newValue == null;
-    if (newValue == null) {
-      this.__filterOpenContainer.classList.remove('vl-u-visible--s');
-      this.__searchColumn.classList.remove('vl-u-hidden--s');
-    } else {
-      this.__filterOpenContainer.classList.add('vl-u-visible--s');
-      this.__searchColumn.classList.add('vl-u-hidden--s');
-    }
-  }
-
-  _filterClosedChangedCallback(oldValue, newValue) {
-    if (newValue == null) {
-      this.__showSearchColumn();
-    } else {
-      this.__hideSearchColumn();
-    }
   }
 
   __listenToFieldChanges(field) {
@@ -451,12 +271,6 @@ export class VlRichDataTable extends vlElement(HTMLElement) {
     this.__onStateChange(event);
   }
 
-  __observeFields() {
-    this.__fields.forEach(this.__listenToFieldChanges.bind(this));
-    const observer = this.__createObserver(this.__listenToFieldChanges.bind(this), this.__stopListeningToFieldChanges.bind(this), true);
-    observer.observe(this, {childList: true});
-  }
-
   __createObserver(doWhenNodeIsAdded, doWhenNodeIsRemoved, render) {
     return new MutationObserver((mutationsList) => {
       let shouldRender = false;
@@ -477,44 +291,10 @@ export class VlRichDataTable extends vlElement(HTMLElement) {
     });
   }
 
-  __observeFilterButtons() {
-    this.__filterCloseButton.addEventListener('click', () => {
-      this.setAttribute('data-vl-filter-closed', '');
-    });
-    this.__filterToggleButton.addEventListener('click', () => {
-      this.__filterSlotContainer.removeAttribute('slot');
-      this.__searchColumn.appendChild(this.__filterSlotContainer);
-      this.__showHiddenInModalElements();
-      this.toggleAttribute('data-vl-filter-closed');
-    });
-    this.__filterOpenButton.addEventListener('click', () => {
-      this.setAttribute('data-vl-filter-closed', ''); // first close to make sure when resized that it doesn't show without proper slot
-      this.__filterSlotContainer.setAttribute('slot', 'content');
-      this.__filterModal.appendChild(this.__filterSlotContainer);
-      this.__hideHiddenInModalElements();
-      this.__filterModal.open();
-    });
-  }
-
-  __showHiddenInModalElements() {
-    this.__setHiddenInModalElements(false);
-  }
-
-  __hideHiddenInModalElements() {
-    this.__setHiddenInModalElements(true);
-  }
-
-  __setHiddenInModalElements(hidden) {
-    this.__filter.querySelectorAll('[data-vl-hidden-in-modal]').forEach((element) => element.hidden = hidden);
-  }
-
-  __observePager() {
-    if (this.__pager) {
-      this.__pager.setAttribute('align-right', true);
-      this.__pager.addEventListener('change', (e) => {
-        this.__onStateChange(e, {paging: true});
-      });
-    }
+  __observeFields() {
+    this.__fields.forEach(this.__listenToFieldChanges.bind(this));
+    const observer = this.__createObserver(this.__listenToFieldChanges.bind(this), this.__stopListeningToFieldChanges.bind(this), true);
+    observer.observe(this, {childList: true});
   }
 
   __observeSorters() {
@@ -530,61 +310,6 @@ export class VlRichDataTable extends vlElement(HTMLElement) {
         nodeToSorter((sorter) => this.__listenToSortChanges(sorter)),
         nodeToSorter((sorter) => this.__stopListeningToSortChanges(sorter)),
     ).observe(this.__tableHeaderRow, {childList: true});
-  }
-
-  __observeSearchFilter() {
-    const observer = new MutationObserver(() => {
-      this.__processSearchFilter();
-    });
-    observer.observe(this, {childList: true, subtree: true});
-  }
-
-  __processSearchFilter() {
-    if (this.__searchFilter) {
-      this.__searchFilter.setAttribute('alt', '');
-      this.__showSearchColumn();
-      this.__addSearchFilterEventListeners();
-    } else {
-      this.__hideSearchColumn();
-    }
-  }
-
-  __hideSearchColumn() {
-    this.__searchColumn.hidden = true;
-    this.__setGridColumnWidth(0);
-  }
-
-  __showSearchColumn() {
-    this.__searchColumn.hidden = false;
-    this.__setGridColumnWidth(VlRichDataTable._defaultSearchColumnSize);
-  }
-
-  __setGridColumnWidth(width) {
-    this.__searchColumn.setAttribute('size', width);
-    this.__contentColumn.setAttribute('size', 12 - width);
-  }
-
-  __addSearchFilterEventListeners() {
-    this.__searchFilter.addEventListener('change', (e) => {
-      e.stopPropagation();
-      e.preventDefault();
-    });
-    this.__searchFilter.addEventListener('input', (e) => {
-      this.__onFilterFieldChanged(e);
-    });
-    if (this.__searchFilterForm) {
-      this.__searchFilterForm.addEventListener('reset', (e) => {
-        setTimeout(() => {
-          this.__onFilterFieldChanged(e);
-        });
-      });
-    }
-  }
-
-  __onFilterFieldChanged(event) {
-    event.stopPropagation();
-    event.preventDefault();
-    this.__onStateChange(event);
   }
 }
 
