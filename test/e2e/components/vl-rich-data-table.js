@@ -1,48 +1,13 @@
-const {VlElement} = require('vl-ui-core').Test;
 const {By} = require('vl-ui-core').Test.Setup;
-const {VlPager} = require('vl-ui-pager').Test;
+const {VlRichData} = require('vl-ui-rich-data').Test;
 const {VlDataTable} = require('vl-ui-data-table').Test;
-const {VlSearchFilter} = require('vl-ui-search-filter').Test;
-const {VlModal} = require('vl-ui-modal').Test;
 const VlRichDataSorter = require('./vl-rich-data-sorter');
 
-class VlRichDataTable extends VlElement {
-  async getPager() {
-    const slot = await this.shadowRoot.findElement(By.css('slot[name="pager"]'));
-    const assignedElements = await this.getAssignedElements(slot);
-    return new VlPager(this.driver, assignedElements[0]);
-  }
-
-  async getDataTable() {
-    const dataTable = await this.shadowRoot.findElement(By.css('[is=\'vl-data-table\']'));
-    return new VlDataTable(this.driver, dataTable);
-  }
-
+class VlRichDataTable extends VlRichData {
   async toggleSortOfColumn(field) {
     const sorter = await this.getSorter(field);
     const parent = await sorter.findElement(By.xpath('..'));
     return parent.click();
-  }
-
-  async closeFilter() {
-    const button = await this.shadowRoot.findElement(By.css('#close-filter-button'));
-    return button.click();
-  }
-
-  async toggleFilter() {
-    const button = await this.shadowRoot.findElement(By.css('#toggle-filter-button'));
-    return button.click();
-  }
-
-  async openModalFilter() {
-    const button = await this.shadowRoot.findElement(By.css('#open-filter-button'));
-    return button.click();
-  }
-
-  async closeModalFilter() {
-    const modalElement = await this.shadowRoot.findElement(By.css('#filter-modal'));
-    const modal = await new VlModal(this.driver, modalElement);
-    return modal.close();
   }
 
   async getSorter(field) {
@@ -66,9 +31,29 @@ class VlRichDataTable extends VlElement {
     return this.hasAttribute('data-vl-multisort');
   }
 
-  async getSearchFilter() {
-    const searchFilter = await this.findElement(By.css('[is=\'vl-search-filter\']'));
-    return new VlSearchFilter(this.driver, searchFilter);
+  async getHeader() {
+    const table = await this._getTable();
+    return table.getHeader();
+  }
+
+  async getHeaderRows() {
+    const header = await this.getHeader();
+    return header.getRows();
+  }
+
+  async getBody() {
+    const table = await this._getTable();
+    return table.getBody();
+  }
+
+  async getBodyRows() {
+    const body = await this.getBody();
+    return body.getRows();
+  }
+
+  async _getTable() {
+    const element = await this.shadowRoot.findElement(By.css('[is="vl-data-table"]'));
+    return new VlDataTable(this.driver, element);
   }
 }
 

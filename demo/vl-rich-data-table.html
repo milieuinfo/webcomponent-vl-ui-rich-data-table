@@ -127,7 +127,7 @@
             richDataTableFilter.data = filteredData;
           });
 
-          function filter({data}, pathToKey, value) {
+          const filter = ({data}, pathToKey, value) => {
             if (value === '') {
               return {
                 data: data,
@@ -139,9 +139,9 @@
                 return valueByPath.includes(value);
               }),
             };
-          }
+          };
 
-          function findValueByPath(element, pathToKey) {
+          const findValueByPath = (element, pathToKey) => {
             const keys = pathToKey.split('.');
 
             let current = element;
@@ -153,7 +153,7 @@
               }
             }
             return current.toString();
-          }
+          };
         });
       </script>
     </vl-demo>
@@ -171,13 +171,13 @@
             richDataTablePagingData.push({'id': i, 'name': `Project #${i}`});
           }
 
-          function page(page, itemsPerPage, data) {
+          const page = (page, itemsPerPage, data) => {
             const start = (page - 1) * itemsPerPage;
             const end = start + itemsPerPage;
             return {
               data: data.slice(start, end),
             };
-          }
+          };
 
           const richDataTablePaging = document.querySelector('#rich-data-table-paging');
           richDataTablePaging.data = page(1, 5, richDataTablePagingData);
@@ -509,17 +509,17 @@
             };
           });
 
-          function page(page, itemsPerPage, data) {
+          const page = (page, itemsPerPage, data) => {
             const start = (page - 1) * itemsPerPage;
             const end = start + itemsPerPage;
             return data.slice(start, end);
-          }
+          };
 
           element.data = {
             data: page(1, 10, data.data),
           };
 
-          function filter(data, pathToKey, value) {
+          const filter = (data, pathToKey, value) => {
             if (value === '') {
               return data;
             }
@@ -527,9 +527,9 @@
               const valueByPath = findValueByPath(element, pathToKey);
               return valueByPath.includes(value);
             });
-          }
+          };
 
-          function findValueByPath(element, pathToKey) {
+          const findValueByPath = (element, pathToKey) => {
             const keys = pathToKey.split('.');
 
             let current = element;
@@ -541,7 +541,7 @@
               }
             }
             return current.toString();
-          }
+          };
         });
       </script>
     </vl-demo>

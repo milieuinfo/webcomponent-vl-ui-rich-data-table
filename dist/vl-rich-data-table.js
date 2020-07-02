@@ -124,7 +124,7 @@ export class VlRichDataTable extends vlElement(HTMLElement) {
   }
 
   get __filter() {
-    return this.querySelector('[slot=\'filter\']');
+    return this.querySelector('[slot="filter"]');
   }
 
   get __filterCloseButton() {
@@ -165,7 +165,7 @@ export class VlRichDataTable extends vlElement(HTMLElement) {
   }
 
   get __pager() {
-    return this.querySelector('[slot=\'pager\']');
+    return this.querySelector('[slot="pager"]');
   }
 
   get __pagingState() {
