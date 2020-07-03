@@ -53,7 +53,7 @@
 		"vl-ui-modal": "^3.0.8"
 	},
 	"devDependencies": {
-		"@govflanders/vl-ui-util": "3.9.2",
+		"@govflanders/vl-ui-util": "3.10.1",
 		"vl-ui-form-message": "^5.0.0",
 		"vl-ui-input-field": "^3.1.0",
 		"vl-ui-link": "^4.0.0",
