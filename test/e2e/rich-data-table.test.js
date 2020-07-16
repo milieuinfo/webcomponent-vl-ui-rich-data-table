@@ -329,7 +329,7 @@ describe('vl-rich-data-table', async () => {
 
   async function assertHeaders(richDataTable, expectedHeaders) {
     const table = await richDataTable.getDataTable();
-    const headers = await table.getDataTableHeader();
+    const headers = await table.getHeader();
     const rows = await headers.getRows();
     const cells = await rows[0].getCells();
     await assertCells(cells, expectedHeaders);
@@ -337,13 +337,13 @@ describe('vl-rich-data-table', async () => {
 
   async function assertAantalRows(richDataTable, aantal) {
     const table = await richDataTable.getDataTable();
-    const body = await table.getDataTableBody();
+    const body = await table.getBody();
     await assert.eventually.lengthOf(body.getRows(), aantal);
   }
 
   async function assertRow(richDataTable, index, values) {
     const table = await richDataTable.getDataTable();
-    const body = await table.getDataTableBody();
+    const body = await table.getBody();
     const rows = await body.getRows();
     const cells = await rows[index].getCells();
     await assertCells(cells, values);
