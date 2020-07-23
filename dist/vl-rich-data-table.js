@@ -108,6 +108,62 @@ export class VlRichDataTable extends VlRichData {
     return this.querySelectorAll(VlRichDataField.is);
   }
 
+  get __filter() {
+    return this.querySelector('[slot="filter"]');
+  }
+
+  get __filterCloseButton() {
+    return this.shadowRoot.querySelector('#close-filter-button');
+  }
+
+  get __filterModal() {
+    return this.shadowRoot.querySelector('#filter-modal');
+  }
+
+  get __filterSlotContainer() {
+    return this.shadowRoot.querySelector('#filter-slot-container');
+  }
+
+  get __filterOpenContainer() {
+    return this.shadowRoot.querySelector('#open-filter');
+  }
+
+  get __filterOpenButton() {
+    return this.shadowRoot.querySelector('#open-filter-button');
+  }
+
+  get __filterToggleContainer() {
+    return this.shadowRoot.querySelector('#toggle-filter');
+  }
+
+  get __filterToggleButton() {
+    return this.shadowRoot.querySelector('#toggle-filter-button');
+  }
+
+  get __formDataState() {
+    if (this.__searchFilter && this.__searchFilter.formData) {
+      const hasFilterValue = [...this.__searchFilter.formData.values()].find(Boolean);
+      if (hasFilterValue) {
+        return this.__searchFilter.formData;
+      }
+    }
+  }
+
+  get __pager() {
+    return this.querySelector('[slot="pager"]');
+  }
+
+  get __pagingState() {
+    if (this.__pager) {
+      return {
+        currentPage: this.__pager.currentPage,
+        totalPages: this.__pager.totalPages,
+        itemsPerPage: this.__pager.itemsPerPage,
+        totalItems: this.__pager.totalItems,
+      };
+    }
+  }
+
   get __richDataFields() {
     return [...this.__fields].filter((field) => field.constructor === VlRichDataField);
   }
