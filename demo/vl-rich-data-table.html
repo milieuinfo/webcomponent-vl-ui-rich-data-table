@@ -92,13 +92,15 @@
             </div>
           </div>
         </div>
+        <vl-pager id="rich-data-table-filter-pager" slot="pager" total-items="3" items-per-page="10" current-page="1" align-center></vl-pager>
       </vl-rich-data-table>
 
       <script>
         customElements.whenDefined('vl-rich-data-table').then(() => {
-          const richDataTableFilter = document.querySelector('#rich-data-table-filter');
-          const richDataTableFilterData = {
-            'data': [{
+          const element = document.querySelector('#rich-data-table-filter');
+
+          const data = {
+            data: [{
               'id': 0,
               'name': 'Project #1',
               'manager': {'firstName': 'Pascal', 'lastName': 'Riquier'},
@@ -115,33 +117,36 @@
               'medewerkers': [{'firstName': 'Pieter', 'lastName': 'Beckers'}],
             }],
           };
-          richDataTableFilter.data = richDataTableFilterData;
+          element.data = data;
 
-          richDataTableFilter.addEventListener('change', (e) => {
-            let filteredData = richDataTableFilterData;
+          element.addEventListener('change', (e) => {
+            let filteredData = [...data.data];
             if (e.detail.formData) {
               for (const entry of e.detail.formData.entries()) {
                 filteredData = filter(filteredData, entry[0], entry[1]);
               }
             }
-            richDataTableFilter.data = filteredData;
+            element.data = {
+              data: filteredData,
+              paging: {
+                currentPage: 1,
+                totalItems: filteredData.length,
+              },
+            };
           });
 
-          function filter({data}, pathToKey, value) {
+          const filter = (data, pathToKey, value) => {
             if (value === '') {
-              return {
-                data: data,
-              };
-            }
-            return {
-              data: data.filter((element) => {
+              return data;
+            } else {
+              return data.filter((element) => {
                 const valueByPath = findValueByPath(element, pathToKey);
                 return valueByPath.includes(value);
-              }),
-            };
-          }
+              });
+            }
+          };
 
-          function findValueByPath(element, pathToKey) {
+          const findValueByPath = (element, pathToKey) => {
             const keys = pathToKey.split('.');
 
             let current = element;
@@ -153,7 +158,7 @@
               }
             }
             return current.toString();
-          }
+          };
         });
       </script>
     </vl-demo>
@@ -171,13 +176,13 @@
             richDataTablePagingData.push({'id': i, 'name': `Project #${i}`});
           }
 
-          function page(page, itemsPerPage, data) {
+          const page = (page, itemsPerPage, data) => {
             const start = (page - 1) * itemsPerPage;
             const end = start + itemsPerPage;
             return {
               data: data.slice(start, end),
             };
-          }
+          };
 
           const richDataTablePaging = document.querySelector('#rich-data-table-paging');
           richDataTablePaging.data = page(1, 5, richDataTablePagingData);
@@ -407,52 +412,52 @@
               'medewerkers': [{'firstName': 'Pieter', 'lastName': 'Beckers'}],
             }, {
               'id': 15,
-              'name': 'Project #15',
-              'manager': {'firstName': 'Pascal', 'lastName': 'Riquier'},
-              'medewerkers': [{'firstName': 'Pieter', 'lastName': 'Beckers'}],
-            }, {
-              'id': 16,
               'name': 'Project #16',
               'manager': {'firstName': 'Pascal', 'lastName': 'Riquier'},
               'medewerkers': [{'firstName': 'Pieter', 'lastName': 'Beckers'}],
             }, {
-              'id': 17,
+              'id': 16,
               'name': 'Project #17',
               'manager': {'firstName': 'Pascal', 'lastName': 'Riquier'},
               'medewerkers': [{'firstName': 'Pieter', 'lastName': 'Beckers'}],
             }, {
-              'id': 18,
+              'id': 17,
               'name': 'Project #18',
               'manager': {'firstName': 'Pascal', 'lastName': 'Riquier'},
               'medewerkers': [{'firstName': 'Pieter', 'lastName': 'Beckers'}],
             }, {
-              'id': 19,
+              'id': 18,
               'name': 'Project #19',
               'manager': {'firstName': 'Pascal', 'lastName': 'Riquier'},
               'medewerkers': [{'firstName': 'Pieter', 'lastName': 'Beckers'}],
             }, {
-              'id': 20,
+              'id': 19,
               'name': 'Project #20',
               'manager': {'firstName': 'Pascal', 'lastName': 'Riquier'},
               'medewerkers': [{'firstName': 'Pieter', 'lastName': 'Beckers'}],
             }, {
-              'id': 21,
+              'id': 20,
               'name': 'Project #21',
               'manager': {'firstName': 'Pascal', 'lastName': 'Riquier'},
               'medewerkers': [{'firstName': 'Pieter', 'lastName': 'Beckers'}],
             }, {
-              'id': 22,
+              'id': 21,
               'name': 'Project #22',
               'manager': {'firstName': 'Pascal', 'lastName': 'Riquier'},
               'medewerkers': [{'firstName': 'Pieter', 'lastName': 'Beckers'}],
             }, {
-              'id': 23,
+              'id': 22,
               'name': 'Project #23',
               'manager': {'firstName': 'Pascal', 'lastName': 'Riquier'},
               'medewerkers': [{'firstName': 'Pieter', 'lastName': 'Beckers'}],
             }, {
-              'id': 24,
+              'id': 23,
               'name': 'Project #24',
+              'manager': {'firstName': 'Pascal', 'lastName': 'Riquier'},
+              'medewerkers': [{'firstName': 'Pieter', 'lastName': 'Beckers'}],
+            }, {
+              'id': 24,
+              'name': 'Project #25',
               'manager': {'firstName': 'Pascal', 'lastName': 'Riquier'},
               'medewerkers': [{'firstName': 'Pieter', 'lastName': 'Beckers'}],
             }],
@@ -509,17 +514,17 @@
             };
           });
 
-          function page(page, itemsPerPage, data) {
+          const page = (page, itemsPerPage, data) => {
             const start = (page - 1) * itemsPerPage;
             const end = start + itemsPerPage;
             return data.slice(start, end);
-          }
+          };
 
           element.data = {
             data: page(1, 10, data.data),
           };
 
-          function filter(data, pathToKey, value) {
+          const filter = (data, pathToKey, value) => {
             if (value === '') {
               return data;
             }
@@ -527,9 +532,9 @@
               const valueByPath = findValueByPath(element, pathToKey);
               return valueByPath.includes(value);
             });
-          }
+          };
 
-          function findValueByPath(element, pathToKey) {
+          const findValueByPath = (element, pathToKey) => {
             const keys = pathToKey.split('.');
 
             let current = element;
@@ -541,7 +546,7 @@
               }
             }
             return current.toString();
-          }
+          };
         });
       </script>
     </vl-demo>
