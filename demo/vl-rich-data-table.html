@@ -92,13 +92,15 @@
             </div>
           </div>
         </div>
+        <vl-pager id="rich-data-table-filter-pager" slot="pager" total-items="3" items-per-page="10" current-page="1" align-center></vl-pager>
       </vl-rich-data-table>
 
       <script>
         customElements.whenDefined('vl-rich-data-table').then(() => {
-          const richDataTableFilter = document.querySelector('#rich-data-table-filter');
-          const richDataTableFilterData = {
-            'data': [{
+          const element = document.querySelector('#rich-data-table-filter');
+
+          const data = {
+            data: [{
               'id': 0,
               'name': 'Project #1',
               'manager': {'firstName': 'Pascal', 'lastName': 'Riquier'},
@@ -115,30 +117,33 @@
               'medewerkers': [{'firstName': 'Pieter', 'lastName': 'Beckers'}],
             }],
           };
-          richDataTableFilter.data = richDataTableFilterData;
+          element.data = data;
 
-          richDataTableFilter.addEventListener('change', (e) => {
-            let filteredData = richDataTableFilterData;
+          element.addEventListener('change', (e) => {
+            let filteredData = [...data.data];
             if (e.detail.formData) {
               for (const entry of e.detail.formData.entries()) {
                 filteredData = filter(filteredData, entry[0], entry[1]);
               }
             }
-            richDataTableFilter.data = filteredData;
+            element.data = {
+              data: filteredData,
+              paging: {
+                currentPage: 1,
+                totalItems: filteredData.length,
+              },
+            };
           });
 
-          const filter = ({data}, pathToKey, value) => {
+          const filter = (data, pathToKey, value) => {
             if (value === '') {
-              return {
-                data: data,
-              };
-            }
-            return {
-              data: data.filter((element) => {
+              return data;
+            } else {
+              return data.filter((element) => {
                 const valueByPath = findValueByPath(element, pathToKey);
                 return valueByPath.includes(value);
-              }),
-            };
+              });
+            }
           };
 
           const findValueByPath = (element, pathToKey) => {

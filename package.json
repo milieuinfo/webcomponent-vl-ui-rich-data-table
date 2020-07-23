@@ -39,20 +39,20 @@
 	"dependencies": {
 		"vl-ui-button": "^5.0.5",
 		"vl-ui-core": "^5.5.5",
-		"vl-ui-data-table": "github:milieuinfo/webcomponent-vl-ui-data-table#e2e-improvements",
+		"vl-ui-data-table": "^4.0.0",
 		"vl-ui-grid": "^3.1.2",
 		"vl-ui-icon": "^5.1.0",
 		"vl-ui-modal": "^3.0.8",
-		"vl-ui-rich-data": "github:milieuinfo/webcomponent-vl-ui-rich-data#setup"
+		"vl-ui-rich-data": "^1.0.1"
 	},
 	"peerDependencies": {
 		"vl-ui-button": "^5.0.5",
 		"vl-ui-core": "^5.5.5",
-		"vl-ui-data-table": "milieuinfo/webcomponent-vl-ui-data-table#e2e-improvements",
+		"vl-ui-data-table": "^4.0.0",
 		"vl-ui-grid": "^3.1.2",
 		"vl-ui-icon": "^5.1.0",
 		"vl-ui-modal": "^3.0.8",
-		"vl-ui-rich-data": "milieuinfo/webcomponent-vl-ui-rich-data#setup"
+		"vl-ui-rich-data": "^1.0.1"
 	},
 	"devDependencies": {
 		"@govflanders/vl-ui-util": "^3.10.1",
@@ -61,6 +61,7 @@
 		"vl-ui-link": "^4.0.0",
 		"vl-ui-pager": "^3.0.1",
 		"vl-ui-search-filter": "^3.1.0",
-		"vl-ui-util": "^5.2.8"
+		"vl-ui-select": "^4.1.0",
+		"vl-ui-util": "^5.2.10"
 	}
 }
