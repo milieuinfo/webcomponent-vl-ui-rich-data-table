@@ -55,7 +55,7 @@
 		"vl-ui-rich-data": "^1.0.1"
 	},
 	"devDependencies": {
-		"@govflanders/vl-ui-util": "3.10.1",
+		"@govflanders/vl-ui-util": "3.11.5",
 		"vl-ui-form-message": "^5.0.0",
 		"vl-ui-input-field": "^3.2.0",
 		"vl-ui-link": "^4.0.0",
