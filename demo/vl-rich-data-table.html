@@ -4,24 +4,25 @@
 <head>
     <title>vl-rich-data-table voorbeeld</title>
     <script type="module" src="/node_modules/vl-ui-demo/dist/vl-demo-all.js"></script>
-
-    <script type="module" src="/src/vl-rich-data-table.js"></script>
-    <script type="module" src="/src/vl-rich-data-field.js"></script>
+    <script type="module" src="/node_modules/vl-ui-body/dist/vl-body.js"></script>
     <script type="module" src="/node_modules/vl-ui-pager/dist/vl-pager.js"></script>
     <script type="module" src="/node_modules/vl-ui-input-field/dist/vl-input-field.js"></script>
     <script type="module" src="/node_modules/vl-ui-form-message/dist/vl-form-message.js"></script>
     <script type="module" src="/node_modules/vl-ui-search-filter/dist/vl-search-filter.js"></script>
     <script type="module" src="/node_modules/vl-ui-button/dist/vl-button.js"></script>
 
+    <script type="module" src="/src/vl-rich-data-table.js"></script>
+    <script type="module" src="/src/vl-rich-data-field.js"></script>
+    
+    <link rel="stylesheet" type="text/css" href="/node_modules/vl-ui-body/dist/style.css" />
     <link rel="stylesheet" type="text/css" href="/node_modules/vl-ui-input-field/dist/style.css" />
     <link rel="stylesheet" type="text/css" href="/node_modules/vl-ui-form-message/dist/style.css" />
     <link rel="stylesheet" type="text/css" href="/node_modules/vl-ui-search-filter/dist/style.css" />
     <link rel="stylesheet" type="text/css" href="/node_modules/vl-ui-button/dist/style.css" />
-    <link rel="stylesheet" type="text/css" href="/node_modules/vl-ui-core/dist/style.css" />
 </head>
 
-<body>
-  <vl-demo-page data-vl-webcomponent="vl-rich-data-table">
+<body is="vl-body">
+  <vl-demo-page data-vl-webcomponent="vl-rich-data-table" data-vl-size="12" data-vl-medium-size="12" data-vl-small-size="12" data-vl-extra-small-size="12">
     <vl-demo data-vl-title="Basis rich data table">
       <vl-rich-data-table id="rich-data-table" data-vl-data='{"data": [{"id": 0, "name": "Project #1", "manager": {"firstName": "Pascal", "lastName": "Riquier"}, "medewerkers": [{"firstName": "Sander", "lastName": "Kleykens"}, {"firstName": "Tom", "lastName": "Coemans"}]}, {"id": 1, "name": "Project #2", "manager": {"firstName": "Tom", "lastName": "Coemans"}, "medewerkers": [{"firstName": "Guy", "lastName": "Wauters"}, {"firstName": "Tom", "lastName": "Coemans"}]}]}'>
         <vl-rich-data-field data-vl-label="ID" data-vl-selector="id"></vl-rich-data-field>
