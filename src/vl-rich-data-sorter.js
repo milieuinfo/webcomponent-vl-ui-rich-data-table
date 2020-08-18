@@ -24,16 +24,16 @@ export class VlRichDataSorter extends vlElement(HTMLElement) {
         @import '/node_modules/vl-ui-icon/dist/style.css';
         
         div {
-            display: inline;
+          display: inline;
         }
         
         #direction {
-            vertical-align: middle;
+          vertical-align: middle;
         }
         
         #priority {
-            font-size: x-small;
-            vertical-align: super;
+          font-size: x-small;
+          vertical-align: super;
         }
       </style>
       <div id="container" class="vl-u-visually-hidden">

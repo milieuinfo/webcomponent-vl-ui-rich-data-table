@@ -1,7 +1,5 @@
 import {define} from '/node_modules/vl-ui-core/dist/vl-core.js';
 import '/node_modules/vl-ui-data-table/dist/vl-data-table.js';
-import '/node_modules/vl-ui-grid/dist/vl-grid.js';
-import '/node_modules/vl-ui-modal/dist/vl-modal.js';
 import {VlRichData} from '/node_modules/vl-ui-rich-data/dist/vl-rich-data.js';
 
 import {VlRichDataField} from './vl-rich-data-field.js';

@@ -4,24 +4,25 @@
 <head>
     <title>vl-rich-data-table voorbeeld</title>
     <script type="module" src="/node_modules/vl-ui-demo/dist/vl-demo-all.js"></script>
-
-    <script type="module" src="/src/vl-rich-data-table.js"></script>
-    <script type="module" src="/src/vl-rich-data-field.js"></script>
+    <script type="module" src="/node_modules/vl-ui-body/dist/vl-body.js"></script>
     <script type="module" src="/node_modules/vl-ui-pager/dist/vl-pager.js"></script>
     <script type="module" src="/node_modules/vl-ui-input-field/dist/vl-input-field.js"></script>
     <script type="module" src="/node_modules/vl-ui-form-message/dist/vl-form-message.js"></script>
     <script type="module" src="/node_modules/vl-ui-search-filter/dist/vl-search-filter.js"></script>
     <script type="module" src="/node_modules/vl-ui-button/dist/vl-button.js"></script>
 
+    <script type="module" src="/src/vl-rich-data-table.js"></script>
+    <script type="module" src="/src/vl-rich-data-field.js"></script>
+    
+    <link rel="stylesheet" type="text/css" href="/node_modules/vl-ui-body/dist/style.css" />
     <link rel="stylesheet" type="text/css" href="/node_modules/vl-ui-input-field/dist/style.css" />
     <link rel="stylesheet" type="text/css" href="/node_modules/vl-ui-form-message/dist/style.css" />
     <link rel="stylesheet" type="text/css" href="/node_modules/vl-ui-search-filter/dist/style.css" />
     <link rel="stylesheet" type="text/css" href="/node_modules/vl-ui-button/dist/style.css" />
-    <link rel="stylesheet" type="text/css" href="/node_modules/vl-ui-core/dist/style.css" />
 </head>
 
-<body>
-  <vl-demo-page data-vl-webcomponent="vl-button">
+<body is="vl-body">
+  <vl-demo-page data-vl-webcomponent="vl-rich-data-table" data-vl-size="12" data-vl-medium-size="12" data-vl-small-size="12" data-vl-extra-small-size="12">
     <vl-demo data-vl-title="Basis rich data table">
       <vl-rich-data-table id="rich-data-table" data-vl-data='{"data": [{"id": 0, "name": "Project #1", "manager": {"firstName": "Pascal", "lastName": "Riquier"}, "medewerkers": [{"firstName": "Sander", "lastName": "Kleykens"}, {"firstName": "Tom", "lastName": "Coemans"}]}, {"id": 1, "name": "Project #2", "manager": {"firstName": "Tom", "lastName": "Coemans"}, "medewerkers": [{"firstName": "Guy", "lastName": "Wauters"}, {"firstName": "Tom", "lastName": "Coemans"}]}]}'>
         <vl-rich-data-field data-vl-label="ID" data-vl-selector="id"></vl-rich-data-field>
@@ -69,18 +70,18 @@
                 <h2>Doorzoek projecten</h2>
                 <div>
                   <p is="vl-form-annotation" for="filterOpId">Project id</p>
-                  <input is="vl-input-field" id="filterOpId" type="text" name="id" value="" block />
+                  <input is="vl-input-field" id="filterOpId" type="text" name="id" value="" data-vl-block />
                 </div>
               </section>
               <section>
                 <h2>Project details</h2>
                 <div>
                   <p is="vl-form-annotation" for="filterOpNaamProject">Project naam</p>
-                  <input is="vl-input-field" id="filterOpNaamProject" type="text" name="name" value="" block />
+                  <input is="vl-input-field" id="filterOpNaamProject" type="text" name="name" value="" data-vl-block />
                 </div>
                 <div>
                   <p is="vl-form-annotation" for="filterOpNaamManager">Manager familienaam</p>
-                  <input is="vl-input-field" id="filterOpNaamManager" type="text" name="manager.lastName" value="" block />
+                  <input is="vl-input-field" id="filterOpNaamManager" type="text" name="manager.lastName" value="" data-vl-block />
                 </div>
               </section>
               <div>
@@ -92,7 +93,7 @@
             </div>
           </div>
         </div>
-        <vl-pager id="rich-data-table-filter-pager" slot="pager" total-items="3" items-per-page="10" current-page="1" align-center></vl-pager>
+        <vl-pager id="rich-data-table-filter-pager" slot="pager" data-vl-total-items="3" data-vl-items-per-page="10" data-vl-current-page="1" data-vl-align-center></vl-pager>
       </vl-rich-data-table>
 
       <script>
@@ -167,7 +168,7 @@
       <vl-rich-data-table id="rich-data-table-paging">
         <vl-rich-data-field data-vl-label="ID" data-vl-selector="id"></vl-rich-data-field>
         <vl-rich-data-field data-vl-label="Naam" data-vl-selector="name"></vl-rich-data-field>
-        <vl-pager id="rich-data-table-paging-pager" slot="pager" total-items="20" items-per-page="5" current-page="1" align-center></vl-pager>
+        <vl-pager id="rich-data-table-paging-pager" slot="pager" data-vl-total-items="20" data-vl-items-per-page="5" data-vl-current-page="1" data-vl-align-center></vl-pager>
       </vl-rich-data-table>
       <script>
         customElements.whenDefined('vl-rich-data-table').then(() => {
@@ -297,24 +298,24 @@
           </template>
         </vl-rich-data-field>
         <div slot="filter">
-          <div is="vl-search-filter" alt>
+          <div is="vl-search-filter" data-vl-alt>
             <form id="rich-data-table-filter-sorting-paging-form" novalidate>
               <section>
                 <h2>Doorzoek projecten</h2>
                 <div>
                   <p is="vl-form-annotation" for="filterOpId">Project id</p>
-                  <input is="vl-input-field" id="filterOpId" type="text" name="id" value="" block />
+                  <input is="vl-input-field" id="filterOpId" type="text" name="id" value="" data-vl-block />
                 </div>
               </section>
               <section>
                 <h2>Project details</h2>
                 <div>
                   <p is="vl-form-annotation" for="filterOpNaamProject">Project naam</p>
-                  <input is="vl-input-field" id="filterOpNaamProject" type="text" name="name" value="" block />
+                  <input is="vl-input-field" id="filterOpNaamProject" type="text" name="name" value="" data-vl-block />
                 </div>
                 <div>
                   <p is="vl-form-annotation" for="filterOpNaamManager">Manager familienaam</p>
-                  <input is="vl-input-field" id="filterOpNaamManager" type="text" name="manager.lastName" value="" block />
+                  <input is="vl-input-field" id="filterOpNaamManager" type="text" name="manager.lastName" value="" data-vl-block />
                 </div>
               </section>
               <div data-vl-hidden-in-modal>
@@ -326,7 +327,7 @@
             </div>
           </div>
         </div>
-        <vl-pager id="rich-data-table-filter-sorting-paging-pager" slot="pager" total-items="25" items-per-page="10" current-page="1" align-center></vl-pager>
+        <vl-pager id="rich-data-table-filter-sorting-paging-pager" slot="pager" data-vl-total-items="25" data-vl-items-per-page="10" data-vl-current-page="1" data-vl-align-center></vl-pager>
       </vl-rich-data-table>
 
       <script>
