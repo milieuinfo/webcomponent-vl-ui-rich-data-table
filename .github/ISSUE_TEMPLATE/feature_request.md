@@ -3,7 +3,7 @@ name: Feature request
 about: Stel een nieuwe feature voor
 title: "[FEATURE] - "
 labels: enhancement
-assignees: kevcraey
+assignees: coemans
 
 ---
 

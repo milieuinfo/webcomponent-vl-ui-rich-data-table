@@ -1,1 +1,13 @@
-bamboo-specs
+.settings/
+.eclipse/
+.project/
+.vscode/
+*.iml
+.idea
+bamboo-specs/
+test/
+!test/e2e/components/
+sass_cache/
+.dockerignore
+renovate.json
+CODE_OWNERS

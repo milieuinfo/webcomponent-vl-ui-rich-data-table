@@ -3,7 +3,7 @@ name: Bug report
 about: Meld een probleem
 title: "[BUG] - titel"
 labels: bug
-assignees: kevcraey
+assignees: coemans
 
 ---
 
