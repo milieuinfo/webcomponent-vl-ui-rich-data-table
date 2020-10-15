@@ -30,6 +30,10 @@ Build:
         docker-compose -f test/docker-compose.yml up --scale selenium-chrome=3 --scale selenium-firefox=3 --exit-code-from tests --force-recreate
   final-tasks:
     - script: /opt/scripts/docker/stop-docker-containers.sh
+    - test-parser:
+        type: junit
+        test-results:
+          - test
   requirements:
     - REMOTE_ONLY
 

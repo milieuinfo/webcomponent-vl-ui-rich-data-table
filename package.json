@@ -50,12 +50,12 @@
 	},
 	"devDependencies": {
 		"@govflanders/vl-ui-util": "3.11.5",
+		"vl-ui-body": "^1.0.3",
 		"vl-ui-form-message": "^5.0.5",
 		"vl-ui-input-field": "^3.2.3",
 		"vl-ui-pager": "^3.0.6",
 		"vl-ui-search-filter": "^3.1.5",
 		"vl-ui-select": "^4.1.2",
-		"vl-ui-body": "^1.0.3",
-		"vl-ui-util": "^5.2.13"
+		"vl-ui-util": "^5.2.15"
 	}
 }
