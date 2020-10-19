@@ -42,6 +42,8 @@ services:
       - HTTP_PROXY=${http_proxy}
       - HTTPS_PROXY=${https_proxy}
       - NO_PROXY=${no_proxy},selenium-hub,tests
+      - NOSELENIUM=1
+      - SKIP_WCT_SAUCE_POSTINSTALL_DOWNLOAD=1
     extra_hosts:
       - "repository.milieuinfo.be:${REPOSITORY_FIXED_IP}"
     working_dir: /data
