@@ -30,14 +30,14 @@
 		"test:unit": "npm explore vl-ui-util -- npm run test:component:unit",
 		"test:unit:grid": "npm explore vl-ui-util -- npm run test:component:unit:grid",
 		"test:e2e": "npm explore vl-ui-util -- npm run test:component:e2e",
-		"test:e2e:grid": "npm explore vl-ui-util -- npm run test:component:e2e:grid",
+		"test:e2e:grid": "npm explore vl-ui-util -- npm run test:component:e2e:browserstack",
 		"release": "npm explore vl-ui-util -- npm run release",
 		"release:prepare": "npm explore vl-ui-util -- npm run release-component:prepare $(pwd) rich-data-table",
 		"release:testless": "np --yolo",
 		"demo": "http-server"
 	},
 	"dependencies": {
-		"vl-ui-core": "^6.0.0",
+		"vl-ui-core": "^6.2.3",
 		"vl-ui-data-table": "^4.0.1",
 		"vl-ui-icon": "^5.2.0",
 		"vl-ui-rich-data": "^1.0.2"
@@ -50,12 +50,12 @@
 	},
 	"devDependencies": {
 		"@govflanders/vl-ui-util": "3.11.5",
-		"vl-ui-body": "^1.0.3",
+		"vl-ui-body": "^1.0.5",
 		"vl-ui-form-message": "^5.0.5",
-		"vl-ui-input-field": "^3.2.3",
-		"vl-ui-pager": "^3.0.6",
+		"vl-ui-input-field": "^3.2.5",
+		"vl-ui-pager": "^3.0.9",
 		"vl-ui-search-filter": "^3.1.5",
-		"vl-ui-select": "^4.1.2",
-		"vl-ui-util": "^5.2.19"
+		"vl-ui-select": "^4.1.5",
+		"vl-ui-util": "^5.3.1"
 	}
 }
