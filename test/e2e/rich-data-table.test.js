@@ -1,12 +1,15 @@
-const {assert, driver, By} = require('vl-ui-core').Test.Setup;
+const {assert, getDriver, By} = require('vl-ui-core').Test.Setup;
 const VlRichDataTablePage = require('./pages/vl-rich-data-table.page');
 const {VlInputField} = require('vl-ui-input-field').Test;
 
 describe('vl-rich-data-table', async () => {
-  const vlRichDataTablePage = new VlRichDataTablePage(driver);
+  let driver;
+  let vlRichDataTablePage;
   let originalWindowWidth;
 
   before(() => {
+    driver = getDriver();
+    vlRichDataTablePage = new VlRichDataTablePage(driver);
     return vlRichDataTablePage.load();
   });
 
@@ -18,13 +21,13 @@ describe('vl-rich-data-table', async () => {
     }
   });
 
-  it('Als gebruiker kan ik de hoofdingen van een rich data table zien', async () => {
+  it('als gebruiker kan ik de hoofdingen van een rich data table zien', async () => {
     const richDataTable = await vlRichDataTablePage.getRichDataTable();
     const headerRows = await richDataTable.getHeaderRows();
     await headerRows[0].assertValues(['ID', 'Naam', 'Naam manager', 'Eerste medewerker', 'Tweede medewerker', 'Project o.l.v. manager']);
   });
 
-  it('Als gebruiker kan ik allerlei soorten selectoren gebruiken voor velden van een rich data table', async () => {
+  it('als gebruiker kan ik allerlei soorten selectoren gebruiken voor velden van een rich data table', async () => {
     const richDataTable = await vlRichDataTablePage.getRichDataTable();
     const bodyRows = await richDataTable.getBodyRows();
     assert.lengthOf(bodyRows, 2);
@@ -32,7 +35,7 @@ describe('vl-rich-data-table', async () => {
     await bodyRows[1].assertValues([1, 'Project #2', 'Coemans', 'Wauters', 'Tom Coemans', 'Project #2 o.l.v. Tom Coemans']);
   });
 
-  it('Als gebruiker kan ik pagineren door de verschillende paginas van een rich data table', async () => {
+  it('als gebruiker kan ik pagineren door de verschillende paginas van een rich data table', async () => {
     const richDataTable = await vlRichDataTablePage.getRichDataTablePaging();
     let bodyRows = await richDataTable.getBodyRows();
     const pager = await richDataTable.getPager();
@@ -49,7 +52,7 @@ describe('vl-rich-data-table', async () => {
     await bodyRows[0].assertValues([1, 'Project #1']);
   });
 
-  it('Als gebruiker kan ik sorteren op de kolommen van een single sort rich data table', async () => {
+  it('als gebruiker kan ik sorteren op de kolommen van een single sort rich data table', async () => {
     const richDataTable = await vlRichDataTablePage.getRichDataTableSorting();
     await assert.eventually.isFalse(richDataTable.isMultisortingEnabled());
 
@@ -82,7 +85,7 @@ describe('vl-rich-data-table', async () => {
     await assert.eventually.isTrue(nameSorter.isDescending());
   });
 
-  it('Als gebruiker kan ik sorteren op de kolommen van een multisort rich data table', async () => {
+  it('als gebruiker kan ik sorteren op de kolommen van een multisort rich data table', async () => {
     const richDataTable = await vlRichDataTablePage.getRichDataTableMultiSorting();
     await assert.eventually.isTrue(richDataTable.isMultisortingEnabled());
 
@@ -171,28 +174,28 @@ describe('vl-rich-data-table', async () => {
     await assert.eventually.equal(nameSorter.getPriority(), '2');
   });
 
-  it('Als gebruiker zie ik het onderscheid tussen een collapsed-medium rich-data-table en een zonder', async () => {
+  it('als gebruiker zie ik het onderscheid tussen een collapsed-medium rich-data-table en een zonder', async () => {
     const richDataTable = await vlRichDataTablePage.getRichDataTableCollapsedMedium();
     await assert.eventually.isTrue(richDataTable.isCollapsedMedium());
     const richDatatableWithoutCollapsedMedium = await vlRichDataTablePage.getRichDataTablePaging();
     await assert.eventually.isFalse(richDatatableWithoutCollapsedMedium.isCollapsedMedium());
   });
 
-  it('Als gebruiker zie ik het onderscheid tussen een collapsed-small rich-data-table en een zonder', async () => {
+  it('als gebruiker zie ik het onderscheid tussen een collapsed-small rich-data-table en een zonder', async () => {
     const richDataTable = await vlRichDataTablePage.getRichDataTableCollapsedSmall();
     await assert.eventually.isTrue(richDataTable.isCollapsedSmall());
     const richDatatableWithoutCollapsedSmall = await vlRichDataTablePage.getRichDataTablePaging();
     await assert.eventually.isFalse(richDatatableWithoutCollapsedSmall.isCollapsedSmall());
   });
 
-  it('Als gebruiker zie ik het onderscheid tussen een collapsed-extra-small rich-data-table en een zonder', async () => {
+  it('als gebruiker zie ik het onderscheid tussen een collapsed-extra-small rich-data-table en een zonder', async () => {
     const richDataTable = await vlRichDataTablePage.getRichDataTableCollapsedExtraSmall();
     await assert.eventually.isTrue(richDataTable.isCollapsedExtraSmall());
     const richDatatableWithoutCollapsedExtraSmall = await vlRichDataTablePage.getRichDataTablePaging();
     await assert.eventually.isFalse(richDatatableWithoutCollapsedExtraSmall.isCollapsedExtraSmall());
   });
 
-  it('Als gebruiker kan ik op verschillende velden filteren', async () => {
+  it('als gebruiker kan ik op verschillende velden filteren', async () => {
     const richDataTable = await vlRichDataTablePage.getRichDataTableFilter();
     const searchFilter = await richDataTable.getSearchFilter();
     const filterManagerLastNameVeld = await new VlInputField(driver, await searchFilter.findElement(By.css('[name="manager.lastName"]')));
@@ -224,7 +227,7 @@ describe('vl-rich-data-table', async () => {
     await bodyRows[2].assertValues([2, 'Project #3', 'Riquier', 'Beckers', 'Project #3 o.l.v. Pascal Riquier']);
   });
 
-  it('Als gebruiker zal ik altijd naar de eerste pagina doorverwezen worden bij het filteren en kan ik indien mogelijk pagineren binnen de zoekresultaten', async () => {
+  it('als gebruiker zal ik altijd naar de eerste pagina doorverwezen worden bij het filteren en kan ik indien mogelijk pagineren binnen de zoekresultaten', async () => {
     const richDataTable = await vlRichDataTablePage.getRichDataTableFilterSortingPaging();
     const searchFilter = await richDataTable.getSearchFilter();
     const filterManagerLastNameVeld = await new VlInputField(driver, await searchFilter.findElement(By.css('[name="manager.lastName"]')));
@@ -252,7 +255,7 @@ describe('vl-rich-data-table', async () => {
     await filterManagerLastNameVeld.clear();
   });
 
-  it('Als gebruiker zal ik de originele lijst te zien krijgen wanneer ik een filter verwijder', async () => {
+  it('als gebruiker zal ik de originele lijst te zien krijgen wanneer ik een filter verwijder', async () => {
     const richDataTable = await vlRichDataTablePage.getRichDataTableFilterSortingPaging();
     const searchFilter = await richDataTable.getSearchFilter();
     const filterManagerLastNameVeld = await new VlInputField(driver, await searchFilter.findElement(By.css('[name="manager.lastName"]')));
@@ -285,7 +288,7 @@ describe('vl-rich-data-table', async () => {
     await assert.eventually.equal(pager.getTotalItems(), 25);
   });
 
-  it('Als gebruiker zal ik de originele lijst te zien krijgen wanneer ik de volledige zoekopdracht verwijder', async () => {
+  it('als gebruiker zal ik de originele lijst te zien krijgen wanneer ik de volledige zoekopdracht verwijder', async () => {
     const richDataTable = await vlRichDataTablePage.getRichDataTableFilterSortingPaging();
     const searchFilter = await richDataTable.getSearchFilter();
     const filterIdVeld = await new VlInputField(driver, await searchFilter.findElement(By.css('[name="id"]')));
@@ -302,7 +305,7 @@ describe('vl-rich-data-table', async () => {
     await assert.eventually.lengthOf(richDataTable.getBodyRows(), 10);
   });
 
-  it('Als gebruiker zal ik altijd naar de eerste pagina doorverwezen worden bij het sorteren', async () => {
+  it('als gebruiker zal ik altijd naar de eerste pagina doorverwezen worden bij het sorteren', async () => {
     const richDataTable = await vlRichDataTablePage.getRichDataTableFilterSortingPaging();
     const pager = await richDataTable.getPager();
 
@@ -316,7 +319,7 @@ describe('vl-rich-data-table', async () => {
     await bodyRows[0].assertValues([24, 'Project #25', 'Riquier', 'Beckers', 'Project #25 o.l.v. Pascal Riquier']);
   });
 
-  it('Als gebruiker kan ik de filter sluiten met de sluit knop en terug openen met de filter knop', async () => {
+  it('als gebruiker kan ik de filter sluiten met de sluit knop en terug openen met de filter knop', async () => {
     const richDataTable = await vlRichDataTablePage.getRichDataTableFilterSortingPaging();
     const filter = await richDataTable.getSearchFilter();
     await assert.eventually.isTrue(filter.isDisplayed());
@@ -329,7 +332,7 @@ describe('vl-rich-data-table', async () => {
     await assert.eventually.isTrue(filter.isDisplayed());
   });
 
-  it('Als gebruiker kan ik de filter sluiten en terug openen met de filter knop', async () => {
+  it('als gebruiker kan ik de filter sluiten en terug openen met de filter knop', async () => {
     const richDataTable = await vlRichDataTablePage.getRichDataTableFilterSortingPaging();
     const filter = await richDataTable.getSearchFilter();
     await assert.eventually.isTrue(filter.isDisplayed());
@@ -341,7 +344,7 @@ describe('vl-rich-data-table', async () => {
     await assert.eventually.isTrue(filter.isDisplayed());
   });
 
-  it('Als gebruiker met een klein scherm, kan ik de filter openen als modal, gebruiken en terug sluiten', async () => {
+  it('als gebruiker met een klein scherm, kan ik de filter openen als modal, gebruiken en terug sluiten', async () => {
     await changeWindowWidth(750);
     const richDataTable = await vlRichDataTablePage.getRichDataTableFilterSortingPaging();
     const filter = await richDataTable.getSearchFilter();
