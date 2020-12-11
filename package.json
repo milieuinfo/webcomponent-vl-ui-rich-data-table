@@ -40,13 +40,13 @@
 		"vl-ui-core": "^7.0.1",
 		"vl-ui-data-table": "^4.0.2",
 		"vl-ui-icon": "^5.2.1",
-		"vl-ui-rich-data": "^1.0.2"
+		"vl-ui-rich-data": "^1.0.3"
 	},
 	"peerDependencies": {
 		"vl-ui-core": "^7.0.0",
 		"vl-ui-data-table": "^4.0.2",
 		"vl-ui-icon": "^5.2.1",
-		"vl-ui-rich-data": "^1.0.2"
+		"vl-ui-rich-data": "^1.0.3"
 	},
 	"devDependencies": {
 		"@govflanders/vl-ui-core": "^4.1.3",
