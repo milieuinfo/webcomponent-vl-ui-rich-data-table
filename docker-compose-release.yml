@@ -11,5 +11,6 @@ services:
       - NO_PROXY=${no_proxy}
       - GIT_REPO=${git_repo}
       - RELEASE_VERSION=${release_version}
+      - SKIP_WCT_SAUCE_POSTINSTALL_DOWNLOAD=1
     extra_hosts:
       - "repository.milieuinfo.be:${REPOSITORY_FIXED_IP}"
