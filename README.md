@@ -18,7 +18,7 @@ $ npm run demo
 ```
 
 ## Testen
-De webcomponent bevat verschillende unit testen die bij elke commit geautomatiseerd in Chrome en Firefox draaien. Hierdoor kunnen we bij elke release een minimum aan kwaliteit garanderen. Later zullen er ook nog UI testen toegevoegd worden zodat al de functionaliteit uitgebreid getest wordt.
+De webcomponent bevat verschillende unit en UI testen die bij elke commit geautomatiseerd in Chrome, Edge en Firefox draaien. Hierdoor kunnen we bij elke release een minimum aan kwaliteit garanderen.
 
 De testen kunnen lokaal opgestart worden met onderstaand [NPM](https://www.npmjs.com) script.
 ``` bash
@@ -32,9 +32,9 @@ Indien je nood hebt aan extra feature of een bug gevonden hebt, mag je hiervoor 
 3. Task
 
 Uiteraard is het ook toegelaten om mee te ontwikkelen door gebruik te maken van Pull Requests (PR). Gelieve volgende conventies te respecteren:
-1. Bug issue best linken aan een branch met een test die het probleem illustreert zodat de bug opgelost kan worden
-2. Elke commit die betrekking heeft tot een issue moet een verwijzing hiernaar hebben vb. #33 fix uitlijning header
-3. Elke PR moet een issue verwijzing hebben, zodat deze automatisch opgenomen kan worden in de release notes
+1. Bug issue best linken aan een branch met een test die het probleem illustreert
+2. Elke commit die betrekking heeft tot een issue moet een verwijzing hiernaar hebben
+3. Elke PR moet een issue verwijzing hebben, zodat deze opgenomen wordt in de release notes
 
 ## Versionering
 We gebruiken [Semantic Versioning](https://semver.org) en voorzien elke release van release notes, zie een overzicht van de [releases](https://github.com/milieuinfo/webcomponent-vl-ui-rich-data-table/releases).

@@ -37,13 +37,13 @@
 		"demo": "http-server"
 	},
 	"dependencies": {
-		"vl-ui-core": "^7.0.1",
+		"vl-ui-core": "^7.1.0",
 		"vl-ui-data-table": "^4.0.2",
 		"vl-ui-icon": "^5.2.1",
 		"vl-ui-rich-data": "^1.0.3"
 	},
 	"peerDependencies": {
-		"vl-ui-core": "^7.0.0",
+		"vl-ui-core": "^7.1.0",
 		"vl-ui-data-table": "^4.0.2",
 		"vl-ui-icon": "^5.2.1",
 		"vl-ui-rich-data": "^1.0.3"
@@ -53,10 +53,10 @@
 		"@govflanders/vl-ui-util": "^3.12.3",
 		"vl-ui-body": "^1.0.7",
 		"vl-ui-form-message": "^5.0.6",
-		"vl-ui-input-field": "^3.2.6",
+		"vl-ui-input-field": "^3.2.7",
 		"vl-ui-pager": "^3.0.10",
 		"vl-ui-search-filter": "^3.1.6",
-		"vl-ui-select": "^4.1.6",
-		"vl-ui-util": "^5.3.4"
+		"vl-ui-select": "^4.2.0",
+		"vl-ui-util": "^5.3.7"
 	}
 }
