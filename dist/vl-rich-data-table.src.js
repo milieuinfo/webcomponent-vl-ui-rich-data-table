@@ -2,8 +2,8 @@ import {define} from 'vl-ui-core';
 import 'vl-ui-data-table';
 import {VlRichData} from 'vl-ui-rich-data';
 
-import {VlRichDataField} from 'vl-ui-rich-data-table/dist/vl-rich-data-field.src.js';
-import {VlRichDataSorter} from 'vl-ui-rich-data-table/dist/vl-rich-data-sorter.src.js';
+import {VlRichDataField} from '../dist/vl-rich-data-field.src.js';
+import {VlRichDataSorter} from '../dist/vl-rich-data-sorter.src.js';
 
 /**
  * VlRichDataTable
