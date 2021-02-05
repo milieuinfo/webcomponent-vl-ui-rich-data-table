@@ -38,9 +38,9 @@
 	},
 	"dependencies": {
 		"vl-ui-core": "^7.1.1",
-		"vl-ui-data-table": "^4.0.2",
-		"vl-ui-icon": "^5.2.1",
-		"vl-ui-rich-data": "^1.0.3"
+		"vl-ui-data-table": "^4.0.3",
+		"vl-ui-icon": "^5.2.2",
+		"vl-ui-rich-data": "^1.0.4"
 	},
 	"peerDependencies": {
 		"vl-ui-core": "^7.1.0",
