@@ -354,7 +354,7 @@ describe('vl-rich-data-table', async () => {
     await filterIdVeld.setValue('1');
     const filterNameVeld = await new VlInputField(driver, await filter.findElement(By.css('[name="name"]')));
     await filterNameVeld.setValue('20');
-    await richDataTable.closeModalSearchFilter();
+    await vlRichDataTablePage.submitSearchFilter(filter);
 
     const bodyRows = await richDataTable.getBodyRows();
     assert.lengthOf(bodyRows, 1);

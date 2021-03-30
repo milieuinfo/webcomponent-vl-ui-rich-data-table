@@ -1,5 +1,6 @@
-const VlRichDataTable = require('../components/vl-rich-data-table');
 const {Page, Config} = require('vl-ui-core').Test;
+const {By} = require('vl-ui-core').Test.Setup;
+const VlRichDataTable = require('../components/vl-rich-data-table');
 
 class VlRichDataTablePage extends Page {
   async _getRichDataTable(selector) {
@@ -40,6 +41,11 @@ class VlRichDataTablePage extends Page {
 
   async getRichDataTableFilterSortingPaging() {
     return this._getRichDataTable('#rich-data-table-filter-sorting-paging');
+  }
+
+  async submitSearchFilter(searchFilter) {
+    const button = await searchFilter.findElement(By.css('button[type="button"]'));
+    await button.click();
   }
 
   async load() {
