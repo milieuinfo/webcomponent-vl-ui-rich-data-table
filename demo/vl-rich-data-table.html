@@ -64,34 +64,32 @@
             <span>${item.name}</span> o.l.v. <strong>${item.manager.firstName} ${item.manager.lastName}</strong>
           </template>
         </vl-rich-data-field>
-        <div slot="filter">
-          <div is="vl-search-filter" alt>
-            <form id="rich-data-table-filter-form" novalidate>
-              <section>
-                <h2>Doorzoek projecten</h2>
-                <div>
-                  <p is="vl-form-annotation" for="filterOpId">Project id</p>
-                  <input is="vl-input-field" id="filterOpId" type="text" name="id" value="" data-vl-block />
-                </div>
-              </section>
-              <section>
-                <h2>Project details</h2>
-                <div>
-                  <p is="vl-form-annotation" for="filterOpNaamProject">Project naam</p>
-                  <input is="vl-input-field" id="filterOpNaamProject" type="text" name="name" value="" data-vl-block />
-                </div>
-                <div>
-                  <p is="vl-form-annotation" for="filterOpNaamManager">Manager familienaam</p>
-                  <input is="vl-input-field" id="filterOpNaamManager" type="text" name="manager.lastName" value="" data-vl-block />
-                </div>
-              </section>
+        <div is="vl-search-filter" slot="filter" data-vl-alt>
+          <form id="rich-data-table-filter-form" novalidate>
+            <section>
+              <h2>Doorzoek projecten</h2>
               <div>
-                <button is="vl-button" type="button">Zoeken</button>
+                <p is="vl-form-annotation" for="filterOpId">Project id</p>
+                <input is="vl-input-field" id="filterOpId" type="text" name="id" value="" data-vl-block />
               </div>
-            </form>
+            </section>
+            <section>
+              <h2>Project details</h2>
+              <div>
+                <p is="vl-form-annotation" for="filterOpNaamProject">Project naam</p>
+                <input is="vl-input-field" id="filterOpNaamProject" type="text" name="name" value="" data-vl-block />
+              </div>
+              <div>
+                <p is="vl-form-annotation" for="filterOpNaamManager">Manager familienaam</p>
+                <input is="vl-input-field" id="filterOpNaamManager" type="text" name="manager.lastName" value="" data-vl-block />
+              </div>
+            </section>
             <div>
-              <button is="vl-button-link" type="reset" form="rich-data-table-filter-form">Zoekopdracht verwijderen</button>
+              <button is="vl-button" type="button">Zoeken</button>
             </div>
+          </form>
+          <div>
+            <button is="vl-button-link" type="reset" form="rich-data-table-filter-form">Zoekopdracht verwijderen</button>
           </div>
         </div>
         <vl-pager id="rich-data-table-filter-pager" slot="pager" data-vl-total-items="3" data-vl-items-per-page="10" data-vl-current-page="1" data-vl-align-center></vl-pager>
@@ -298,34 +296,32 @@
             <span>${item.name}</span> o.l.v. <strong>${item.manager.firstName} ${item.manager.lastName}</strong>
           </template>
         </vl-rich-data-field>
-        <div slot="filter">
-          <div is="vl-search-filter" data-vl-alt>
-            <form id="rich-data-table-filter-sorting-paging-form" novalidate>
-              <section>
-                <h2>Doorzoek projecten</h2>
-                <div>
-                  <p is="vl-form-annotation" for="filterOpId">Project id</p>
-                  <input is="vl-input-field" id="filterOpId" type="text" name="id" value="" data-vl-block />
-                </div>
-              </section>
-              <section>
-                <h2>Project details</h2>
-                <div>
-                  <p is="vl-form-annotation" for="filterOpNaamProject">Project naam</p>
-                  <input is="vl-input-field" id="filterOpNaamProject" type="text" name="name" value="" data-vl-block />
-                </div>
-                <div>
-                  <p is="vl-form-annotation" for="filterOpNaamManager">Manager familienaam</p>
-                  <input is="vl-input-field" id="filterOpNaamManager" type="text" name="manager.lastName" value="" data-vl-block />
-                </div>
-              </section>
-              <div data-vl-hidden-in-modal>
-                <button is="vl-button" type="button">Zoeken</button>
+        <div is="vl-search-filter" slot="filter" data-vl-alt>
+          <form id="rich-data-table-filter-sorting-paging-form" novalidate>
+            <section>
+              <h2>Doorzoek projecten</h2>
+              <div>
+                <p is="vl-form-annotation" for="filterOpId">Project id</p>
+                <input is="vl-input-field" id="filterOpId" type="text" name="id" value="" data-vl-block />
               </div>
-            </form>
-            <div>
-              <button is="vl-button-link" type="reset" form="rich-data-table-filter-sorting-paging-form">Zoekopdracht verwijderen</button>
+            </section>
+            <section>
+              <h2>Project details</h2>
+              <div>
+                <p is="vl-form-annotation" for="filterOpNaamProject">Project naam</p>
+                <input is="vl-input-field" id="filterOpNaamProject" type="text" name="name" value="" data-vl-block />
+              </div>
+              <div>
+                <p is="vl-form-annotation" for="filterOpNaamManager">Manager familienaam</p>
+                <input is="vl-input-field" id="filterOpNaamManager" type="text" name="manager.lastName" value="" data-vl-block />
+              </div>
+            </section>
+            <div data-vl-hidden-in-modal>
+              <button is="vl-button" type="button">Zoeken</button>
             </div>
+          </form>
+          <div>
+            <button is="vl-button-link" type="reset" form="rich-data-table-filter-sorting-paging-form">Zoekopdracht verwijderen</button>
           </div>
         </div>
         <vl-pager id="rich-data-table-filter-sorting-paging-pager" slot="pager" data-vl-total-items="25" data-vl-items-per-page="10" data-vl-current-page="1" data-vl-align-center></vl-pager>
