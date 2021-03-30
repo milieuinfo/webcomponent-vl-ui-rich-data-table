@@ -344,7 +344,7 @@ describe('vl-rich-data-table', async () => {
     await assert.eventually.isTrue(filter.isDisplayed());
   });
 
-  it('als gebruiker met een klein scherm, kan ik de filter openen als modal, gebruiken en terug sluiten', async () => {
+  it('als gebruiker met een klein scherm, kan ik de filter openen, gebruiken en terug sluiten', async () => {
     await changeWindowWidth(750);
     const richDataTable = await vlRichDataTablePage.getRichDataTableFilterSortingPaging();
     const filter = await richDataTable.getSearchFilter();
