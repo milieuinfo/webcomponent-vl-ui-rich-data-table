@@ -40,7 +40,7 @@
 		"vl-ui-core": "^7.2.1",
 		"vl-ui-data-table": "^4.0.4",
 		"vl-ui-icon": "^5.2.2",
-		"vl-ui-rich-data": "^2.0.0"
+		"vl-ui-rich-data": "^2.1.1"
 	},
 	"peerDependencies": {
 		"vl-ui-core": "^7.1.0",
@@ -55,8 +55,8 @@
 		"vl-ui-form-message": "^5.0.8",
 		"vl-ui-input-field": "^3.2.7",
 		"vl-ui-pager": "^3.0.10",
-		"vl-ui-search-filter": "^3.2.0",
+		"vl-ui-search-filter": "^3.3.4",
 		"vl-ui-select": "^4.2.0",
-		"vl-ui-util": "^5.3.10"
+		"vl-ui-util": "^5.4.3"
 	}
 }
