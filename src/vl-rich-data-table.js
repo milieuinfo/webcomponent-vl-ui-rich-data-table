@@ -78,7 +78,7 @@ export class VlRichDataTable extends VlRichData {
         this._validate(this.data.data);
         this._renderBody();
       } catch (error) {
-        this._data = [];
+        this._data.data = [];
         throw error;
       }
     }
