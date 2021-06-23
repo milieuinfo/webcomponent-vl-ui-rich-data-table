@@ -7,6 +7,7 @@
     <script type="module" src="/node_modules/vl-ui-body/dist/vl-body.js"></script>
     <script type="module" src="/node_modules/vl-ui-pager/dist/vl-pager.js"></script>
     <script type="module" src="/node_modules/vl-ui-input-field/dist/vl-input-field.js"></script>
+    <script type="module" src="/node_modules/vl-ui-form/dist/vl-form-all.js"></script>
     <script type="module" src="/node_modules/vl-ui-form-message/dist/vl-form-message.js"></script>
     <script type="module" src="/node_modules/vl-ui-search-filter/dist/vl-search-filter.js"></script>
     <script type="module" src="/node_modules/vl-ui-button/dist/vl-button.js"></script>
@@ -17,6 +18,7 @@
     <link rel="stylesheet" type="text/css" href="/node_modules/vl-ui-body/dist/style.css" />
     <link rel="stylesheet" type="text/css" href="/node_modules/vl-ui-demo/dist/style.css" />
     <link rel="stylesheet" type="text/css" href="/node_modules/vl-ui-input-field/dist/style.css" />
+    <link rel="stylesheet" type="text/css" href="/node_modules/vl-ui-form/dist/style.css" />
     <link rel="stylesheet" type="text/css" href="/node_modules/vl-ui-form-message/dist/style.css" />
     <link rel="stylesheet" type="text/css" href="/node_modules/vl-ui-search-filter/dist/style.css" />
     <link rel="stylesheet" type="text/css" href="/node_modules/vl-ui-button/dist/style.css" />
@@ -65,27 +67,27 @@
           </template>
         </vl-rich-data-field>
         <div is="vl-search-filter" slot="filter" data-vl-alt>
-          <form id="rich-data-table-filter-form" novalidate>
+          <form is="vl-form" id="rich-data-table-filter-form">
             <section>
               <h2>Doorzoek projecten</h2>
               <div>
-                <p is="vl-form-annotation" for="filterOpId">Project id</p>
+                <label is="vl-form-label" for="filterOpId">Project id</label>
                 <input is="vl-input-field" id="filterOpId" type="text" name="id" value="" data-vl-block />
               </div>
             </section>
             <section>
               <h2>Project details</h2>
               <div>
-                <p is="vl-form-annotation" for="filterOpNaamProject">Project naam</p>
+                <label is="vl-form-label" for="filterOpNaamProject">Project naam</label>
                 <input is="vl-input-field" id="filterOpNaamProject" type="text" name="name" value="" data-vl-block />
               </div>
               <div>
-                <p is="vl-form-annotation" for="filterOpNaamManager">Manager familienaam</p>
+                <label is="vl-form-label" for="filterOpNaamManager">Manager familienaam</label>
                 <input is="vl-input-field" id="filterOpNaamManager" type="text" name="manager.lastName" value="" data-vl-block />
               </div>
             </section>
             <div>
-              <button is="vl-button" type="button">Zoeken</button>
+              <button is="vl-button" type="submit">Zoeken</button>
             </div>
           </form>
           <div>
@@ -297,27 +299,27 @@
           </template>
         </vl-rich-data-field>
         <div is="vl-search-filter" slot="filter" data-vl-alt>
-          <form id="rich-data-table-filter-sorting-paging-form" novalidate>
+          <form is="vl-form" id="rich-data-table-filter-sorting-paging-form">
             <section>
               <h2>Doorzoek projecten</h2>
               <div>
-                <p is="vl-form-annotation" for="filterOpId">Project id</p>
+                <label is="vl-form-label" for="filterOpId">Project id</label>
                 <input is="vl-input-field" id="filterOpId" type="text" name="id" value="" data-vl-block />
               </div>
             </section>
             <section>
               <h2>Project details</h2>
               <div>
-                <p is="vl-form-annotation" for="filterOpNaamProject">Project naam</p>
+                <label is="vl-form-label" for="filterOpNaamProject">Project naam</label>
                 <input is="vl-input-field" id="filterOpNaamProject" type="text" name="name" value="" data-vl-block />
               </div>
               <div>
-                <p is="vl-form-annotation" for="filterOpNaamManager">Manager familienaam</p>
+                <label is="vl-form-label" for="filterOpNaamManager">Manager familienaam</label>
                 <input is="vl-input-field" id="filterOpNaamManager" type="text" name="manager.lastName" value="" data-vl-block />
               </div>
             </section>
             <div data-vl-hidden-in-modal>
-              <button is="vl-button" type="button">Zoeken</button>
+              <button is="vl-button" type="submit">Zoeken</button>
             </div>
           </form>
           <div>

@@ -78,7 +78,7 @@ export class VlRichDataTable extends VlRichData {
         this._validate(this.data.data);
         this._renderBody();
       } catch (error) {
-        this.__data.data = [];
+        this._data.data = [];
         throw error;
       }
     }
@@ -173,6 +173,10 @@ export class VlRichDataTable extends VlRichData {
         sorter.priority = matchedSorter ? matchedSorter.priority : undefined;
       });
     }
+  }
+
+  get _hasResults() {
+    return this._data;
   }
 
   _render() {

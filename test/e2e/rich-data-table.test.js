@@ -319,19 +319,6 @@ describe('vl-rich-data-table', async () => {
     await bodyRows[0].assertValues([24, 'Project #25', 'Riquier', 'Beckers', 'Project #25 o.l.v. Pascal Riquier']);
   });
 
-  it('als gebruiker kan ik de filter sluiten met de sluit knop en terug openen met de filter knop', async () => {
-    const richDataTable = await vlRichDataTablePage.getRichDataTableFilterSortingPaging();
-    const filter = await richDataTable.getSearchFilter();
-    await assert.eventually.isTrue(filter.isDisplayed());
-
-    await richDataTable.closeSearchFilter();
-
-    await assert.eventually.isFalse(filter.isDisplayed());
-
-    await richDataTable.toggleSearchFilter();
-    await assert.eventually.isTrue(filter.isDisplayed());
-  });
-
   it('als gebruiker kan ik de filter sluiten en terug openen met de filter knop', async () => {
     const richDataTable = await vlRichDataTablePage.getRichDataTableFilterSortingPaging();
     const filter = await richDataTable.getSearchFilter();

@@ -44,7 +44,7 @@ class VlRichDataTablePage extends Page {
   }
 
   async submitSearchFilter(searchFilter) {
-    const button = await searchFilter.findElement(By.css('button[type="button"]'));
+    const button = await searchFilter.findElement(By.css('button[type="submit"]'));
     await button.click();
   }
 
