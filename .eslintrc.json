@@ -6,7 +6,7 @@
       "node": true,
       "mocha": true
     },
-    "extends": ["google"],
+    "extends": ["google", "prettier"],
     "globals": {
       "Atomics": "readonly",
       "SharedArrayBuffer": "readonly"
