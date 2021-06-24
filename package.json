@@ -1,6 +1,6 @@
 {
 	"name": "vl-ui-rich-data-table",
-	"version": "2.0.0",
+	"version": "2.0.1",
 	"description": "Een configureerbare data-table met paginering, sortering en zoeken op basis van een dynamische lijst van data.",
 	"author": "DIDM",
 	"license": "MIT",
