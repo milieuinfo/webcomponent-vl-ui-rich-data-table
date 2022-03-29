@@ -57,7 +57,7 @@
 		"vl-ui-input-field": "^3.2.12",
 		"vl-ui-pager": "^3.0.12",
 		"vl-ui-search-filter": "^3.3.4",
-		"vl-ui-select": "^4.3.2",
+		"vl-ui-select": "^1.0.0-art-external1",
 		"vl-ui-util": "^5.4.3"
 	}
 }
